@@ -140,6 +140,20 @@
   .cru-block .cru-head{ font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
     color:var(--blue); margin-bottom:3px; }
   .cru-block .cru-list{ font-size:13px; color:var(--ink); font-weight:600; }
+  .plan-ref-grid{display:grid;grid-template-columns:1fr;gap:8px;margin:8px 0 12px;}
+  .plan-ref-box{border-radius:10px;padding:8px 10px;border:1.5px solid rgba(5,104,174,.18);background:rgba(5,104,174,.045);}
+  .plan-ref-box.consumer{background:rgba(5,104,174,.045);}
+  .plan-ref-box.cru{background:rgba(5,104,174,.085);border-color:rgba(5,104,174,.30);}
+  .plan-ref-box.firstnet{background:rgba(59,192,240,.105);border-color:rgba(59,192,240,.35);}
+  .plan-ref-head{font-size:9.5px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#4a6378;margin-bottom:3px;}
+  .plan-ref-box.cru .plan-ref-head{color:var(--blue);}
+  .plan-ref-box.firstnet .plan-ref-head{color:#034b80;}
+  .plan-ref-list{font-size:11px;line-height:1.35;font-weight:800;color:var(--ink);}
+  .plan-ref-box.cru .plan-ref-list{color:var(--blue);}
+  .plan-ref-box.firstnet .plan-ref-list{color:#034b80;}
+  .plan-ref-compact{font-size:11px;line-height:1.45;color:var(--ink);margin:0;}
+  .plan-ref-compact strong{font-size:10.5px;}
+  @media (min-width:620px){.plan-ref-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
   .d-label{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#7fb6dd;}
   .d-amount{font-size:clamp(46px,11vw,66px); font-weight:800; letter-spacing:-.03em; line-height:1.02; margin:6px 0 2px;
     color:var(--cyan); font-variant-numeric:tabular-nums; transition:color .18s ease; display:flex; flex-direction:column; align-items:flex-start;}
@@ -201,24 +215,25 @@
   .chip.recent-pick[aria-pressed="true"] .recent-badge{background:#034b80;}
 
 
-  /* selected plan examples — quick type/reveal animation in the top plan box */
-  .typed-plan-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;align-items:stretch;}
-  .typed-plan{display:flex;align-items:center;width:100%;max-width:0;overflow:hidden;white-space:nowrap;opacity:0;
-    border-left:4px solid rgba(5,104,174,.34);background:rgba(5,104,174,.055);color:var(--ink);
-    border-radius:8px;padding:7px 0;font-size:12.75px;font-weight:800;line-height:1.15;
-    box-shadow:inset 0 0 0 1px rgba(5,104,174,.08);
-    animation:planTypeIn .50s cubic-bezier(.18,.84,.32,1) forwards;
-    animation-delay:calc(var(--i,0) * 48ms);
-  }
-  .typed-plan span{padding:0 10px;}
-  .typed-plan.cru{border-left-color:rgba(5,104,174,.78);background:rgba(5,104,174,.095);color:var(--blue);}
-  .typed-plan.firstnet{border-left-color:rgba(59,192,240,.80);background:rgba(59,192,240,.115);color:#034b80;}
-  @keyframes planTypeIn{
-    0%{max-width:0;opacity:0;transform:translateX(-4px);}
-    24%{opacity:1;}
-    100%{max-width:100%;opacity:1;transform:translateX(0);}
-  }
-  @media (prefers-reduced-motion: reduce){.typed-plan{animation:none;max-width:100%;opacity:1;}}
+  /* selected plan examples — compact type/reveal boxes in the top plan area */
+  .typed-plan-list{display:grid;grid-template-columns:1fr;gap:7px;margin-top:8px;align-items:stretch;}
+  .typed-plan-box{min-width:0;border-radius:9px;padding:7px 9px;border:1.5px solid rgba(5,104,174,.18);
+    background:rgba(5,104,174,.045);box-shadow:inset 0 0 0 1px rgba(5,104,174,.035);opacity:0;
+    transform:translateY(4px);animation:planBoxPop .34s cubic-bezier(.18,.84,.32,1) forwards;animation-delay:calc(var(--i,0) * 55ms);}
+  .typed-plan-box.consumer{border-color:rgba(5,104,174,.20);background:rgba(5,104,174,.045);}
+  .typed-plan-box.cru{border-color:rgba(5,104,174,.32);background:rgba(5,104,174,.085);}
+  .typed-plan-box.firstnet{border-color:rgba(59,192,240,.38);background:rgba(59,192,240,.105);}
+  .typed-plan-head{font-size:9.5px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;margin-bottom:3px;color:#4a6378;}
+  .typed-plan-box.cru .typed-plan-head{color:var(--blue);}
+  .typed-plan-box.firstnet .typed-plan-head{color:#034b80;}
+  .typed-plan-line{display:block;font-size:11px;line-height:1.35;font-weight:800;color:var(--ink);white-space:normal;overflow:hidden;
+    clip-path:inset(0 100% 0 0);animation:planTextReveal .72s steps(36,end) forwards;animation-delay:calc((var(--i,0) * 55ms) + 80ms);}
+  .typed-plan-box.cru .typed-plan-line{color:var(--blue);}
+  .typed-plan-box.firstnet .typed-plan-line{color:#034b80;}
+  @keyframes planBoxPop{0%{opacity:0;transform:translateY(4px) scale(.985);}100%{opacity:1;transform:translateY(0) scale(1);}}
+  @keyframes planTextReveal{0%{clip-path:inset(0 100% 0 0);}100%{clip-path:inset(0 0 0 0);}}
+  @media (min-width:560px){.typed-plan-list{grid-template-columns:repeat(3,minmax(0,1fr));}}
+  @media (prefers-reduced-motion: reduce){.typed-plan-box{animation:none;opacity:1;transform:none}.typed-plan-line{animation:none;clip-path:none;}}
 
   .tradein-btn{display:inline-flex; align-items:center; gap:7px; margin-top:10px; padding:10px 14px; border-radius:11px; background:#e8f4fd; border:1.5px solid #b3d9f5; color:var(--blue); font-size:13px; font-weight:700; text-decoration:none; cursor:pointer;}
   .tradein-btn:hover{background:#d0eafb; border-color:#8cc8f0;}
@@ -466,37 +481,37 @@
 
       <details class="card" style="padding:14px 16px;">
         <summary style="font-weight:700; cursor:pointer; color:var(--ink); font-size:14px;">Which plans are in each group?</summary>
-        <div style="font-size:13px; color:var(--ink); margin-top:12px; line-height:1.6;">
-          <div style="margin:0 0 14px;">
-            <strong>Premium</strong><br>
-            <strong>Elite 2.0</strong> · <strong>Premium 2.0</strong> · <strong>Extra 2.0</strong> · <strong>Elite w/ HBO Max</strong> · <strong>Premium PL</strong> · <strong>Extra EL</strong> · <strong>FirstNet Elite</strong> · <strong>FirstNet Premium</strong> · <strong>FirstNet Extra</strong>
-            <div class="cru-block">
-              <div class="cru-head">CRU Plans</div>
-              <div class="cru-list"><strong>Business Unlimited Premium 3.0</strong> · <strong>Business Unlimited Advanced 3.0</strong> · <strong>Business Unlimited Premium 2.0</strong> · <strong>Business Unlimited Advanced 2.0</strong></div>
+        <div style="font-size:12px; color:var(--ink); margin-top:12px; line-height:1.45;">
+          <div style="margin:0 0 12px;">
+            <strong>Premium</strong>
+            <div class="plan-ref-grid">
+              <div class="plan-ref-box consumer"><div class="plan-ref-head">Consumer</div><div class="plan-ref-list"><strong>Elite 2.0</strong> · <strong>Premium 2.0</strong> · <strong>Extra 2.0</strong> · <strong>Elite w/ HBO Max</strong> · <strong>Premium PL</strong> · <strong>Extra EL</strong></div></div>
+              <div class="plan-ref-box cru"><div class="plan-ref-head">CRU</div><div class="plan-ref-list"><strong>Business Unlimited Premium 3.0</strong> · <strong>Business Unlimited Advanced 3.0</strong> · <strong>Business Unlimited Premium 2.0</strong> · <strong>Business Unlimited Advanced 2.0</strong></div></div>
+              <div class="plan-ref-box firstnet"><div class="plan-ref-head">FirstNet</div><div class="plan-ref-list"><strong>FirstNet Elite</strong> · <strong>FirstNet Premium</strong> · <strong>FirstNet Extra</strong></div></div>
             </div>
           </div>
 
-          <div style="margin:0 0 14px;">
-            <strong>Starter</strong><br>
-            <strong>Starter SL</strong> · <strong>Starter</strong> · <strong>FirstNet Starter</strong>
-            <div class="cru-block">
-              <div class="cru-head">CRU Plans</div>
-              <div class="cru-list"><strong>Business Unlimited Standard 2.0</strong> · <strong>Business Unlimited Standard</strong></div>
+          <div style="margin:0 0 12px;">
+            <strong>Starter</strong>
+            <div class="plan-ref-grid">
+              <div class="plan-ref-box consumer"><div class="plan-ref-head">Consumer</div><div class="plan-ref-list"><strong>Starter SL</strong> · <strong>Starter</strong></div></div>
+              <div class="plan-ref-box cru"><div class="plan-ref-head">CRU</div><div class="plan-ref-list"><strong>Business Unlimited Standard 2.0</strong> · <strong>Business Unlimited Standard</strong></div></div>
+              <div class="plan-ref-box firstnet"><div class="plan-ref-head">FirstNet</div><div class="plan-ref-list"><strong>FirstNet Starter</strong></div></div>
             </div>
           </div>
 
-          <div style="margin:0 0 14px;">
-            <strong>Value</strong><br>
-            <strong>Value 2.0</strong> · <strong>FirstNet Value 2.0</strong>
-            <div class="cru-block">
-              <div class="cru-head">CRU Plans</div>
-              <div class="cru-list"><strong>Business Unlimited Standard 3.0</strong></div>
+          <div style="margin:0 0 12px;">
+            <strong>Value</strong>
+            <div class="plan-ref-grid">
+              <div class="plan-ref-box consumer"><div class="plan-ref-head">Consumer</div><div class="plan-ref-list"><strong>Value 2.0</strong></div></div>
+              <div class="plan-ref-box cru"><div class="plan-ref-head">CRU</div><div class="plan-ref-list"><strong>Business Unlimited Standard 3.0</strong></div></div>
+              <div class="plan-ref-box firstnet"><div class="plan-ref-head">FirstNet</div><div class="plan-ref-list"><strong>FirstNet Value 2.0</strong></div></div>
             </div>
           </div>
 
-          <p style="margin:0 0 12px;"><strong style="color:#6b7b8c">Legacy eligible / searchable reference</strong><br>Unlimited Elite · Unlimited Extra · Unlimited Starter · Unlimited Premium · Unlimited Plus · Unlimited Plus Enhanced · Unlimited Choice · Unlimited Choice Enhanced · Unlimited Choice II · Unlimited &amp;More · Unlimited &amp;More Premium · Unlimited Your Way · Unlimited Value Plan · Complete Connect · Legacy Unlimited Plans · Legacy CRU Plans · Legacy FirstNet Plans</p>
-          <p style="margin:0;"><strong style="color:#6b7b8c">Not eligible / rerate recommended</strong><br>Value Plus VL · Mobile Share · Mobile Share Value · Mobile Share Advantage · Mobile Share Flex · Mobile Share Plus · Mobile Share Data · Nation 450 · Nation 900 · Nation 1350 · FamilyTalk · FamilyTalk Nation · Individual Nation · Nation with Rollover · Senior Nation · Unity · Unity FamilyTalk · Grandfathered iPhone Unlimited Data · Business Mobile Share · Business Mobile Share Plus · Business Mobile Share Advantage · AT&amp;T Mobile Share for Business · Business Pooled Nation · Business Nation · BusinessTalk</p>
-          <p style="margin:10px 0 0; color:var(--slate); font-size:12.5px;">Always verify eligible and non-eligible plans in CCKM before quoting.</p>
+          <p class="plan-ref-compact"><strong style="color:#6b7b8c">Legacy eligible / searchable reference</strong><br>Unlimited Elite · Unlimited Extra · Unlimited Starter · Unlimited Premium · Unlimited Plus · Unlimited Plus Enhanced · Unlimited Choice · Unlimited Choice II · Unlimited &amp;More · Unlimited &amp;More Premium · Unlimited Your Way · Complete Connect · Legacy Unlimited / CRU / FirstNet Plans</p>
+          <p class="plan-ref-compact" style="margin-top:8px;"><strong style="color:#6b7b8c">Not eligible / rerate recommended</strong><br>Value Plus VL · Mobile Share / Value / Advantage / Flex / Plus / Data · Nation 450 / 900 / 1350 · FamilyTalk · Individual Nation · Nation w/ Rollover · Senior Nation · Unity · Grandfathered iPhone Unlimited Data · Business Mobile Share · Business Pooled Nation · Business Nation · BusinessTalk</p>
+          <p style="margin:10px 0 0; color:var(--slate); font-size:11px;">Always verify eligible and non-eligible plans in CCKM before quoting.</p>
         </div>
       </details>
 
@@ -778,16 +793,20 @@
   function escapeHtml(str){
     return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   }
-  function typedPlanChips(names, cls, startIndex){
-    return (names || []).map((name, idx) => '<span class="typed-plan '+(cls||'')+'" style="--i:'+(startIndex+idx)+'"><span>'+escapeHtml(name)+'</span></span>').join('');
+  function typedPlanBox(label, names, cls, index){
+    if(!names || !names.length) return '';
+    return '<div class="typed-plan-box '+(cls||'consumer')+'" style="--i:'+index+'">' +
+      '<div class="typed-plan-head">'+escapeHtml(label)+'</div>' +
+      '<span class="typed-plan-line">'+names.map(escapeHtml).join(' · ')+'</span>' +
+      '</div>';
   }
   function renderPlanHelp(key){
     const pm = PLAN_MEMBERS[key] || { regular:[], cru:null, firstnet:null };
     let i = 0;
     let html = '<div class="typed-plan-list">';
-    html += typedPlanChips(pm.regular, '', i); i += (pm.regular || []).length;
-    html += typedPlanChips(pm.cru, 'cru', i); i += (pm.cru || []).length;
-    html += typedPlanChips(pm.firstnet, 'firstnet', i);
+    html += typedPlanBox('Consumer', pm.regular, 'consumer', i++);
+    html += typedPlanBox('CRU', pm.cru, 'cru', i++);
+    html += typedPlanBox('FirstNet', pm.firstnet, 'firstnet', i++);
     html += '</div>';
     if(key === 'valueplus_mobile'){
       html += '<div style="margin-top:8px; font-size:13px; color:#6b7b8c; font-weight:700;">Not eligible / rerate recommended.</div>';
