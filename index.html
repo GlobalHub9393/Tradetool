@@ -339,7 +339,7 @@
         <p class="label"><span class="step">1</span>What plan are they on?</p>
 
         <div class="plan-search" aria-hidden="false">
-          <input id="planSearch" placeholder="Search plan keywords (e.g. 'Premium 3.0', 'Unlimited Choice')" aria-autocomplete="list" aria-controls="planSuggestions" aria-expanded="false" />
+          <input id="planSearch" placeholder="Search plan keywords (e.g. 'Business Unlimited Premium 3.0', 'Unlimited Choice')" aria-autocomplete="list" aria-controls="planSuggestions" aria-expanded="false" />
           <button id="planClearSearch" title="Clear search">Clear</button>
           <div id="planSuggestions" class="suggestions" role="listbox" aria-label="Plan suggestions">
             <ul id="planSuggestionsList"></ul>
@@ -445,7 +445,7 @@
             Elite 2.0 · Prem 2.0 · Extra 2.0 · Unlimited Premium PL · Unlimited Extra EL · Legacy Elite · Unlimited Your Way · Unlimited Choice · Complete Connect · legacy Unlimited plans · FirstNet Plans (excluding Value 2.0)
             <div class="cru-block">
               <div class="cru-head">CRU Plans</div>
-              <div class="cru-list">Premium 3.0 · Advance 3.0 · Legacy CRU Plans (excluding Standard &amp; Standard 2.0)</div>
+              <div class="cru-list">Business Unlimited Premium 3.0 · Business Unlimited Advanced 3.0 · Legacy Business Unlimited Plans (excluding Business Unlimited Standard &amp; Business Unlimited Standard 2.0)</div>
             </div>
           </div>
 
@@ -454,7 +454,7 @@
             Starter SL · Legacy Starter
             <div class="cru-block">
               <div class="cru-head">CRU Plans</div>
-              <div class="cru-list">Standard 2.0 · Standard</div>
+              <div class="cru-list">Business Unlimited Standard 2.0 · Business Unlimited Standard</div>
             </div>
           </div>
 
@@ -463,7 +463,7 @@
             Value 2.0 · FirstNet Value 2.0
             <div class="cru-block">
               <div class="cru-head">CRU Plans</div>
-              <div class="cru-list">Standard 3.0</div>
+              <div class="cru-list">Business Unlimited Standard 3.0</div>
             </div>
           </div>
 
@@ -736,9 +736,9 @@
   const PROMO_CATEGORY_KEYS = ['iphonePro','iphoneBase','samsung','pixelXL','pixelPro','razr'];
   const PLAN_MEMBERS = {
     premium:{ regular:"Elite 2.0 · Prem 2.0 · Extra 2.0 · Unlimited Premium PL · Unlimited Extra EL · Legacy Elite · Unlimited Your Way · Unlimited Choice · Complete Connect · legacy Unlimited plans · FirstNet Plans (excluding Value 2.0)",
-              cru:"Premium 3.0 · Advance 3.0 · Legacy CRU Plans (excluding Standard &amp; Standard 2.0)" },
-    starter:{ regular:"Starter SL · Legacy Starter", cru:"Standard 2.0 · Standard" },
-    value:{ regular:"Value 2.0 · FirstNet Value 2.0", cru:"Standard 3.0" },
+              cru:"Business Unlimited Premium 3.0 · Business Unlimited Advanced 3.0 · Legacy Business Unlimited Plans (excluding Business Unlimited Standard &amp; Business Unlimited Standard 2.0)" },
+    starter:{ regular:"Starter SL · Legacy Starter", cru:"Business Unlimited Standard 2.0 · Business Unlimited Standard" },
+    value:{ regular:"Value 2.0 · FirstNet Value 2.0", cru:"Business Unlimited Standard 3.0" },
     '55plus':{ regular:"55+ — eligible for tiered offers", cru:null },
     valueplus_mobile:{ regular:"Value Plus VL / Mobile Share — not eligible", cru:null }
   };
@@ -970,8 +970,8 @@
     { name:'Extra 2.0',                  group:'premium' },
     { name:'Unlimited Premium PL',       group:'premium', alt:'Premium PL' },
     { name:'Unlimited Extra EL',         group:'premium', alt:'Extra EL' },
-    { name:'Premium 3.0',                group:'premium', cru:true },
-    { name:'Advance 3.0',                group:'premium', cru:true },
+    { name:'Business Unlimited Premium 3.0', group:'premium', cru:true, alt:'Premium 3.0 BU Premium' },
+    { name:'Business Unlimited Advanced 3.0', group:'premium', cru:true, alt:'Advance 3.0 Advanced 3.0 BU Advanced' },
     // Premium group — legacy Unlimited plans
     { name:'Unlimited Elite',            group:'premium' },
     { name:'Unlimited Elite w/ HBO Max', group:'premium' },
@@ -987,7 +987,7 @@
     { name:'Unlimited Value Plan',       group:'premium' },
     { name:'Unlimited Your Way',         group:'premium' },
     { name:'Legacy Elite',               group:'premium' },
-    { name:'Legacy CRU',                 group:'premium', cru:true },
+    { name:'Legacy Business Unlimited',      group:'premium', cru:true, alt:'Legacy CRU Legacy BU' },
     { name:'Complete Connect',           group:'premium' },
     // Premium group — FirstNet
     { name:'FirstNet Premium',           group:'premium', alt:'FN Premium' },
@@ -997,12 +997,12 @@
     // Starter group
     { name:'Starter SL',                 group:'starter' },
     { name:'Legacy Starter',             group:'starter' },
-    { name:'Standard 2.0',              group:'starter', cru:true },
-    { name:'Standard',                   group:'starter', cru:true },
+    { name:'Business Unlimited Standard 2.0', group:'starter', cru:true, alt:'Standard 2.0 BU Standard 2.0' },
+    { name:'Business Unlimited Standard',    group:'starter', cru:true, alt:'Standard BU Standard' },
     // Value group
     { name:'Value 2.0',                  group:'value' },
     { name:'FirstNet Value 2.0',         group:'value',   alt:'FN Value 2.0' },
-    { name:'Standard 3.0',              group:'value', cru:true },
+    { name:'Business Unlimited Standard 3.0', group:'value', cru:true, alt:'Standard 3.0 BU Standard 3.0' },
     // 55+
     { name:'55+',                        group:'55plus' },
     // Not eligible
@@ -1547,7 +1547,7 @@
     'Storage tier changes the retail price — always confirm the exact SKU.',
     'Check that the customer is on the correct plan group before promising a promo.',
     'Value Plus and Mobile Share can block trade-in promos — confirm the plan before checkout.',
-    'CRU plan names may map differently than consumer plans — search the plan name if unsure.',
+    'Business Unlimited / CRU plan names may map differently than consumer plans — search the OPUS plan name if unsure.',
     'FirstNet Value 2.0 follows the Value group in this tool — verify in CCKM if anything looks off.',
     'Trade-in condition still matters. Cracked screens, activation lock, or battery issues can change value.',
     'Make sure Find My iPhone or FRP lock is removed before completing a trade-in.',
