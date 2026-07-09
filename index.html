@@ -322,7 +322,7 @@
         <h1>Monthly Credit Tool</h1>
       </div>
       <div style="margin-left:auto; text-align:right;">
-        <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/8/2026</div>
+        <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/9/2026</div>
         <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
@@ -618,17 +618,18 @@
       <div id="adminCheckContent"></div>
     </section>
     <section class="admin-section" data-section="howto">
-      <p class="admin-note"><b>Purpose:</b> step-by-step guide for updating GlobalTradeTool.com through ChatGPT and Cloudflare Pages.</p>
-      <div class="admin-subhead">Cloudflare Login</div>
-      <div class="tool-subcard"><b>Email:</b> Ts8686@cmcnj.com<br><b>Password:</b> Stored separately</div>
-      <div class="admin-subhead">Quick Guide</div>
-      <details class="tool-subcard"><summary><b>1. Upload the current code to ChatGPT</b></summary><p>Upload the latest <b>index.html</b> or Global Trade Tool HTML file. Tell ChatGPT the exact date, that it is still <b>Live Version 1</b>, and list the promo, phone, tiered offer, layout, or wording changes needed. Ask for a Cloudflare-ready ZIP folder.</p></details>
-      <details class="tool-subcard"><summary><b>2. Download the ZIP from ChatGPT</b></summary><p>Download the ZIP file ChatGPT gives back. It should unzip into a folder named <b>GlobalTradeToolUpload</b>. Inside that folder should be exactly one main site file: <b>index.html</b>.</p></details>
-      <details class="tool-subcard"><summary><b>3. Save and unzip in Files</b></summary><p>Open the iPad Files app, tap the ZIP, and confirm it creates a folder. Open the folder and make sure the file is named <b>index.html</b>. Stop if it says <b>index.html.txt</b>, has no <b>.html</b>, or opens as raw text.</p></details>
-      <details class="tool-subcard"><summary><b>4. Open Cloudflare</b></summary><p>Go to Cloudflare, log in, open <b>Workers &amp; Pages</b>, select the Pages project connected to <b>globaltradetool.com</b>, then open <b>Deployments</b>.</p></details>
-      <details class="tool-subcard"><summary><b>5. Create deployment</b></summary><p>Tap <b>Create deployment</b>. Upload the whole <b>GlobalTradeToolUpload</b> folder, not a random loose file. Wait for the deployment to finish before closing Cloudflare.</p></details>
-      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1</b>, the date is correct, the calculator works, the trade value field works, More opens, Tools opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
-      <details class="tool-subcard"><summary><b>7. If something goes wrong</b></summary><p>Do not keep uploading renamed files. Take a screenshot, go back to Cloudflare Deployments, use the previous successful deployment if needed, then send ChatGPT the screenshot, current file, and what went wrong.</p></details>
+      <p class="admin-note"><b>Purpose:</b> step-by-step guide for updating GlobalTradeTool.com using the new GitHub workflow. Once Cloudflare is connected to GitHub, code changes should be pushed to GitHub first and Cloudflare will deploy from there.</p>
+      <div class="admin-subhead">Accounts</div>
+      <div class="tool-subcard"><b>GitHub repo:</b> GlobalHub9393 / Tradetool<br><b>Cloudflare email:</b> Ts8686@cmcnj.com<br><b>Cloudflare password:</b> Stored separately</div>
+      <div class="admin-subhead">Quick Guide — GitHub First</div>
+      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
+      <details class="tool-subcard"><summary><b>2. Download the updated index.html</b></summary><p>Download the updated file from ChatGPT. The main site file must be named exactly <b>index.html</b>. If the file name becomes <b>index.html.txt</b>, <b>GlobalTradeTool_v1_DEV</b>, or anything else, rename it or ask for a corrected file before uploading to GitHub.</p></details>
+      <details class="tool-subcard"><summary><b>3. Upload index.html to GitHub</b></summary><p>Open GitHub, go to <b>GlobalHub9393 / Tradetool</b>, tap <b>Add file</b>, then upload the updated <b>index.html</b>. If GitHub asks whether to replace the existing file, replace it. Commit directly to the <b>main</b> branch.</p></details>
+      <details class="tool-subcard"><summary><b>4. Commit the change</b></summary><p>Use a simple commit message like <b>Update Global Trade Tool 7/9/2026</b>. Tap <b>Commit changes</b>. GitHub should now show the latest <b>index.html</b> in the file list.</p></details>
+      <details class="tool-subcard"><summary><b>5. Cloudflare deployment after GitHub is connected</b></summary><p>Once Cloudflare Pages is linked to this GitHub repo, Cloudflare should automatically create a new deployment from the <b>main</b> branch after every GitHub commit. Go to Cloudflare → <b>Workers &amp; Pages</b> → the Global Trade Tool project → <b>Deployments</b> to confirm the newest deployment completed successfully.</p></details>
+      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1</b>, the date is correct, the calculator works, More opens, Tools opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
+      <details class="tool-subcard"><summary><b>7. If Cloudflare is not connected yet</b></summary><p>Use the old ZIP/folder upload only as a fallback. Download the Cloudflare folder ZIP from ChatGPT, unzip it in Files, confirm the folder contains <b>index.html</b>, then upload the unzipped folder through Cloudflare Pages → <b>Create deployment</b>.</p></details>
+      <details class="tool-subcard"><summary><b>8. If something goes wrong</b></summary><p>Stop and take a screenshot. Check GitHub to confirm <b>index.html</b> was replaced correctly. Then check Cloudflare Deployments for errors or use the previous successful deployment if needed. Send ChatGPT the screenshot, current file, and what went wrong.</p></details>
     </section>
     <section class="admin-section" data-section="release">
       <p class="admin-note"><b>Local testing only:</b> changes here affect this browser/device. They do not publish to Cloudflare.</p>
@@ -718,7 +719,7 @@
   const ADMIN_PASSWORD = 'wire9393';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0708';
   const HISTORY_KEY = 'globalTradeToolHistory_v1';
-  let releaseInfo = { version:'Live Version 1', month:'July 2026', updated:'7/8/2026' };
+  let releaseInfo = { version:'Live Version 1', month:'July 2026', updated:'7/9/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
@@ -819,16 +820,12 @@
     { id:'s26-256', name:'Galaxy S26', storage:'256GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:12.99, tieredMonthlyUpgrade:12.99 },
     { id:'s26-512', name:'Galaxy S26', storage:'512GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:19.99, tieredMonthlyUpgrade:19.99 },
 
-    // Galaxy Z Flip7 — CONFIRMED new lines only per CCKM (N. Martin, 6/29/26). Upgrade = null → full retail.
-    { id:'zflip7-256', name:'Galaxy Z Flip7', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:null },
-    { id:'zflip7-512', name:'Galaxy Z Flip7', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:null },
-
     // Galaxy S25 Edge — flat price, same for New or Upgrade
     { id:'s25edge-256', name:'Galaxy S25 Edge', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:15.99 },
     { id:'s25edge-512', name:'Galaxy S25 Edge', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:20.99 },
 
-    // amiGO Jr. wasn't in TJ's pulled list — flagged in chat, left as-is pending confirmation
-    { id:'amigojr', name:'amiGO Jr. Phone', storage:'128GB', retail:209.99, tieredOffer:true, tieredMonthlyNew:5.84, tieredMonthlyUpgrade:5.84 }
+    // amiGO Jr. Phone — no current promo; remains searchable as full retail only.
+    { id:'amigojr', name:'amiGO Jr. Phone', storage:'128GB', retail:209.99, tieredOffer:false }
   ];
 
   const money = n => "$" + Number(n).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
@@ -1187,7 +1184,7 @@
     if(Array.isArray(data.tips)){ TIPS.splice(0, TIPS.length, ...data.tips); }
     const vb = el('versionBadge'), rm = el('releaseMeta');
     if(vb) vb.textContent = releaseInfo.version || VERSION;
-    if(rm) rm.textContent = `${releaseInfo.month || 'July 2026'} · Last Updated ${releaseInfo.updated || '7/8/2026'}`;
+    if(rm) rm.textContent = `${releaseInfo.month || 'July 2026'} · Last Updated ${releaseInfo.updated || '7/9/2026'}`;
   }
 
   const PIXEL_FLOOR = { premium:1050, starter:1050, value:500 };
@@ -1278,8 +1275,8 @@
       return 'iphoneBase'; // plain Pixel / Pixel a — no dedicated ladder, falls back like before
     }
     if(name.indexOf('razr') !== -1) return 'razr';
-    // Any Samsung Galaxy device (S-series, Z Fold, Z Flip, A-series) uses the Samsung ladder.
-    // Note: "galaxy s" alone missed "Galaxy Z Fold7" / "Galaxy Z Flip7" — check 'galaxy' and 'fold'/'flip' too.
+    // Any Samsung Galaxy device (S-series, Z Fold, A-series) uses the Samsung ladder.
+    // Note: "galaxy s" alone missed "Galaxy Z Fold7" — check 'galaxy' and 'fold' too.
     if(name.indexOf('galaxy') !== -1 || name.indexOf('fold') !== -1 || name.indexOf('flip') !== -1) return 'samsung';
     if(name.indexOf('pro max') !== -1 || name.indexOf('pro') !== -1) return 'iphonePro';
     return 'iphoneBase';
@@ -1816,7 +1813,7 @@
     const phones = PHONES.map(p=>`<tr><td><b>${p.name}${p.storage?' '+p.storage:''}</b><br><small>${p.id}</small></td><td>${money(p.retail||0)}</td><td>${p.tieredOffer?'Tiered':(PROMO_CATEGORY_LABEL[inferPhoneCategoryForAdmin(p)]||inferPhoneCategoryForAdmin(p))}</td></tr>`).join('');
     const tips = TIPS.map((t,i)=>`<li><b>${i+1}.</b> ${t}</li>`).join('');
     box.innerHTML = `
-      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'July 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'7/8/2026'}</div>
+      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'July 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'7/9/2026'}</div>
       <details class="tool-subcard" open><summary><b>Promo Ladder Check</b></summary>${promoHtml}</details>
       <details class="tool-subcard"><summary><b>Tiered Offer Check (${PHONES.filter(p=>p.tieredOffer).length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>New Line</th><th>Upgrade</th></tr></thead><tbody>${tiered}</tbody></table></details>
       <details class="tool-subcard"><summary><b>Phone Check (${PHONES.length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>MSRP</th><th>Promo Type</th></tr></thead><tbody>${phones}</tbody></table></details>
@@ -1827,7 +1824,7 @@
   function adminFill(){
     el('adminVersionInput').value = releaseInfo.version || VERSION;
     el('adminMonthInput').value = releaseInfo.month || 'July 2026';
-    el('adminUpdatedInput').value = releaseInfo.updated || '7/8/2026';
+    el('adminUpdatedInput').value = releaseInfo.updated || '7/9/2026';
     el('adminPhones').value = JSON.stringify(PHONES, null, 2);
     buildAdminPhoneSelect();
     el('adminPromos').value = JSON.stringify(LADDERS, null, 2);
@@ -1945,7 +1942,7 @@
     try{ const val = JSON.parse(el(id).value); persistAdminData({[key]:val}); apply(val); adminFill(); alert('Saved.'); }
     catch(e){ alert('Invalid JSON: '+e.message); }
   }
-  el('saveRelease').addEventListener('click',()=>{ releaseInfo={version:el('adminVersionInput').value||VERSION, month:el('adminMonthInput').value||'July 2026', updated:el('adminUpdatedInput').value||'7/8/2026'}; persistAdminData({release:releaseInfo}); applyAdminData(); adminFill(); });
+  el('saveRelease').addEventListener('click',()=>{ releaseInfo={version:el('adminVersionInput').value||VERSION, month:el('adminMonthInput').value||'July 2026', updated:el('adminUpdatedInput').value||'7/9/2026'}; persistAdminData({release:releaseInfo}); applyAdminData(); adminFill(); });
   el('savePhones').addEventListener('click',()=>saveJsonTextarea('adminPhones','phones',val=>{PHONES.splice(0,PHONES.length,...val); buildQuickChips(); buildCompareOptions(); renderCompare(); render(); buildAdminPhoneSelect();}));
   el('savePromos').addEventListener('click',()=>saveJsonTextarea('adminPromos','ladders',val=>{Object.keys(LADDERS).forEach(k=>delete LADDERS[k]); Object.assign(LADDERS,val); render(); renderCompare(); buildAdminPromoEditor();}));
   el('saveTips').addEventListener('click',()=>{ TIPS = el('adminTips').value.split(/\n+/).map(x=>x.trim()).filter(Boolean); persistAdminData({tips:TIPS}); tipIdx=0; tipText.textContent=TIPS[0]||''; adminFill(); });
