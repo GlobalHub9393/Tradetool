@@ -193,6 +193,25 @@
   .chip.recent-pick .recent-badge{position:absolute; top:-7px; right:-4px; background:var(--blue); color:#fff; font-size:9px; font-weight:800; letter-spacing:.04em; border-radius:6px; padding:1px 5px; text-transform:uppercase;}
   .chip.recent-pick[aria-pressed="true"] .recent-badge{background:#034b80;}
 
+
+  /* selected plan examples — quick type/reveal animation in the top plan box */
+  .typed-plan-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px;align-items:center;}
+  .typed-plan{display:inline-flex;align-items:center;max-width:0;overflow:hidden;white-space:nowrap;opacity:0;
+    border:1px solid rgba(5,104,174,.20);background:rgba(5,104,174,.055);color:var(--ink);
+    border-radius:999px;padding:5px 0;font-size:12.5px;font-weight:800;line-height:1.1;
+    animation:planTypeIn .52s cubic-bezier(.18,.84,.32,1) forwards;
+    animation-delay:calc(var(--i,0) * 55ms);
+  }
+  .typed-plan span{padding:0 9px;}
+  .typed-plan.cru{border-color:rgba(5,104,174,.28);background:rgba(5,104,174,.09);color:var(--blue);}
+  .typed-plan.firstnet{border-color:rgba(59,192,240,.28);background:rgba(59,192,240,.11);color:#034b80;}
+  @keyframes planTypeIn{
+    0%{max-width:0;opacity:0;transform:translateY(3px);}
+    24%{opacity:1;}
+    100%{max-width:360px;opacity:1;transform:translateY(0);}
+  }
+  @media (prefers-reduced-motion: reduce){.typed-plan{animation:none;max-width:360px;opacity:1;}}
+
   .tradein-btn{display:inline-flex; align-items:center; gap:7px; margin-top:10px; padding:10px 14px; border-radius:11px; background:#e8f4fd; border:1.5px solid #b3d9f5; color:var(--blue); font-size:13px; font-weight:700; text-decoration:none; cursor:pointer;}
   .tradein-btn:hover{background:#d0eafb; border-color:#8cc8f0;}
   .tradein-btn svg{flex:0 0 auto;}
@@ -442,32 +461,34 @@
         <div style="font-size:13px; color:var(--ink); margin-top:12px; line-height:1.6;">
           <div style="margin:0 0 14px;">
             <strong>Premium</strong><br>
-            Elite 2.0 · Prem 2.0 · Extra 2.0 · Unlimited Premium PL · Unlimited Extra EL · Legacy Elite · Unlimited Your Way · Unlimited Choice · Complete Connect · legacy Unlimited plans · FirstNet Plans (excluding Value 2.0)
+            <strong>Elite 2.0</strong> · <strong>Premium 2.0</strong> · <strong>Extra 2.0</strong> · <strong>Elite w/ HBO Max</strong> · <strong>Premium PL</strong> · <strong>Extra EL</strong> · <strong>FirstNet Elite</strong> · <strong>FirstNet Premium</strong> · <strong>FirstNet Extra</strong>
             <div class="cru-block">
               <div class="cru-head">CRU Plans</div>
-              <div class="cru-list">Business Unlimited Premium 3.0 · Business Unlimited Advanced 3.0 · Legacy Business Unlimited Plans (excluding Business Unlimited Standard &amp; Business Unlimited Standard 2.0)</div>
+              <div class="cru-list"><strong>Business Unlimited Premium 3.0</strong> · <strong>Business Unlimited Advanced 3.0</strong> · <strong>Business Unlimited Premium 2.0</strong> · <strong>Business Unlimited Advanced 2.0</strong></div>
             </div>
           </div>
 
           <div style="margin:0 0 14px;">
             <strong>Starter</strong><br>
-            Starter SL · Legacy Starter
+            <strong>Starter SL</strong> · <strong>Starter</strong> · <strong>FirstNet Starter</strong>
             <div class="cru-block">
               <div class="cru-head">CRU Plans</div>
-              <div class="cru-list">Business Unlimited Standard 2.0 · Business Unlimited Standard</div>
+              <div class="cru-list"><strong>Business Unlimited Standard 2.0</strong> · <strong>Business Unlimited Standard</strong></div>
             </div>
           </div>
 
           <div style="margin:0 0 14px;">
             <strong>Value</strong><br>
-            Value 2.0 · FirstNet Value 2.0
+            <strong>Value 2.0</strong> · <strong>FirstNet Value 2.0</strong>
             <div class="cru-block">
               <div class="cru-head">CRU Plans</div>
-              <div class="cru-list">Business Unlimited Standard 3.0</div>
+              <div class="cru-list"><strong>Business Unlimited Standard 3.0</strong></div>
             </div>
           </div>
 
-          <p style="margin:0;"><strong style="color:#6b7b8c">Not eligible</strong><br>Value Plus VL, Mobile Share &mdash; no promo credit (see note when selected)</p>
+          <p style="margin:0 0 12px;"><strong style="color:#6b7b8c">Legacy eligible / searchable reference</strong><br>Unlimited Elite · Unlimited Extra · Unlimited Starter · Unlimited Premium · Unlimited Plus · Unlimited Plus Enhanced · Unlimited Choice · Unlimited Choice Enhanced · Unlimited Choice II · Unlimited &amp;More · Unlimited &amp;More Premium · Unlimited Your Way · Unlimited Value Plan · Complete Connect · Legacy Unlimited Plans · Legacy CRU Plans · Legacy FirstNet Plans</p>
+          <p style="margin:0;"><strong style="color:#6b7b8c">Not eligible / rerate recommended</strong><br>Value Plus VL · Mobile Share · Mobile Share Value · Mobile Share Advantage · Mobile Share Flex · Mobile Share Plus · Mobile Share Data · Nation 450 · Nation 900 · Nation 1350 · FamilyTalk · FamilyTalk Nation · Individual Nation · Nation with Rollover · Senior Nation · Unity · Unity FamilyTalk · Grandfathered iPhone Unlimited Data · Business Mobile Share · Business Mobile Share Plus · Business Mobile Share Advantage · AT&amp;T Mobile Share for Business · Business Pooled Nation · Business Nation · BusinessTalk</p>
+          <p style="margin:10px 0 0; color:var(--slate); font-size:12.5px;">Always verify eligible and non-eligible plans in CCKM before quoting.</p>
         </div>
       </details>
 
@@ -735,13 +756,37 @@
   };
   const PROMO_CATEGORY_KEYS = ['iphonePro','iphoneBase','samsung','pixelXL','pixelPro','razr'];
   const PLAN_MEMBERS = {
-    premium:{ regular:"Elite 2.0 · Prem 2.0 · Extra 2.0 · Unlimited Premium PL · Unlimited Extra EL · Legacy Elite · Unlimited Your Way · Unlimited Choice · Complete Connect · legacy Unlimited plans · FirstNet Plans (excluding Value 2.0)",
-              cru:"Business Unlimited Premium 3.0 · Business Unlimited Advanced 3.0 · Legacy Business Unlimited Plans (excluding Business Unlimited Standard &amp; Business Unlimited Standard 2.0)" },
-    starter:{ regular:"Starter SL · Legacy Starter", cru:"Business Unlimited Standard 2.0 · Business Unlimited Standard" },
-    value:{ regular:"Value 2.0 · FirstNet Value 2.0", cru:"Business Unlimited Standard 3.0" },
-    '55plus':{ regular:"55+ — eligible for tiered offers", cru:null },
-    valueplus_mobile:{ regular:"Value Plus VL / Mobile Share — not eligible", cru:null }
+    premium:{
+      regular:['Elite 2.0','Premium 2.0','Extra 2.0','Elite w/ HBO Max','Premium PL','Extra EL'],
+      cru:['Business Unlimited Premium 3.0','Business Unlimited Advanced 3.0','Business Unlimited Premium 2.0','Business Unlimited Advanced 2.0'],
+      firstnet:['FirstNet Elite','FirstNet Premium','FirstNet Extra']
+    },
+    starter:{ regular:['Starter SL','Starter'], cru:['Business Unlimited Standard 2.0','Business Unlimited Standard'], firstnet:['FirstNet Starter'] },
+    value:{ regular:['Value 2.0'], cru:['Business Unlimited Standard 3.0'], firstnet:['FirstNet Value 2.0'] },
+    '55plus':{ regular:['55+'], cru:null, firstnet:null },
+    valueplus_mobile:{ regular:['Value Plus VL','Mobile Share','Mobile Share Value','Mobile Share Advantage','Mobile Share Flex','Mobile Share Plus','Mobile Share Data','Nation 450','Nation 900','Nation 1350','FamilyTalk','FamilyTalk Nation','Individual Nation','Nation with Rollover','Senior Nation','Unity','Unity FamilyTalk'], cru:null, firstnet:null }
   };
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  }
+  function typedPlanChips(names, cls, startIndex){
+    return (names || []).map((name, idx) => '<span class="typed-plan '+(cls||'')+'" style="--i:'+(startIndex+idx)+'"><span>'+escapeHtml(name)+'</span></span>').join('');
+  }
+  function renderPlanHelp(key){
+    const pm = PLAN_MEMBERS[key] || { regular:[], cru:null, firstnet:null };
+    let i = 0;
+    let html = '<div class="typed-plan-list">';
+    html += typedPlanChips(pm.regular, '', i); i += (pm.regular || []).length;
+    html += typedPlanChips(pm.cru, 'cru', i); i += (pm.cru || []).length;
+    html += typedPlanChips(pm.firstnet, 'firstnet', i);
+    html += '</div>';
+    if(key === 'valueplus_mobile'){
+      html += '<div style="margin-top:8px; font-size:13px; color:#6b7b8c; font-weight:700;">Not eligible / rerate recommended.</div>';
+    }
+    html += '<div style="margin-top:8px; font-size:13px;">Confirm promos in <a href="' + CCKM + '" target="_blank" rel="noopener noreferrer" style="color:#0568AE;">CCKM</a>.</div>';
+    return html;
+  }
 
   // Phone catalog (visible set + searchable extras). tieredMonthlyNew / Upgrade where known.
   // retail = full MSRP for that exact storage SKU. Verified against Apple/Samsung/Google + AT&T retail pages, June 2026.
@@ -949,13 +994,7 @@
       state.tierAction = null;
       document.querySelectorAll('#plans .chip').forEach(x=>x.setAttribute('aria-pressed', x===b ? 'true' : 'false'));
       planHelp.style.display = 'block';
-      const pm = PLAN_MEMBERS[key] || { regular:'', cru:null };
-      let helpHtml = pm.regular || '';
-      if(pm.cru){
-        helpHtml += '<div class="cru-block" style="margin-top:9px;"><div class="cru-head">CRU Plans</div><div class="cru-list">' + pm.cru + '</div></div>';
-      }
-      helpHtml += '<div style="margin-top:8px; font-size:13px;">Confirm promos in <a href="' + CCKM + '" target="_blank" rel="noopener noreferrer" style="color:#0568AE;">CCKM</a>.</div>';
-      planHelp.innerHTML = helpHtml;
+      planHelp.innerHTML = renderPlanHelp(key);
       updateControlsAfterSelection();
       render();
     });
@@ -964,20 +1003,25 @@
   // Full individual plan index — every searchable plan name mapped to its group key.
   // alt: alternate search terms that match this entry without creating a duplicate suggestion.
   const PLAN_INDEX = [
-    // Premium group — current 3.0 / 2.0 plans
+    // Premium group — current/recent consumer unlimited plans
     { name:'Elite 2.0',                  group:'premium' },
-    { name:'Prem 2.0',                   group:'premium' },
+    { name:'Premium 2.0',                group:'premium', alt:'Prem 2.0' },
     { name:'Extra 2.0',                  group:'premium' },
-    { name:'Unlimited Premium PL',       group:'premium', alt:'Premium PL' },
-    { name:'Unlimited Extra EL',         group:'premium', alt:'Extra EL' },
-    { name:'Business Unlimited Premium 3.0', group:'premium', cru:true, alt:'Premium 3.0 BU Premium' },
-    { name:'Business Unlimited Advanced 3.0', group:'premium', cru:true, alt:'Advance 3.0 Advanced 3.0 BU Advanced' },
-    // Premium group — legacy Unlimited plans
+    { name:'Premium PL',                 group:'premium', alt:'Unlimited Premium PL' },
+    { name:'Extra EL',                   group:'premium', alt:'Unlimited Extra EL' },
+    { name:'Elite w/ HBO Max',           group:'premium', alt:'Unlimited Elite w/ HBO Max HBO Max Elite' },
+
+    // Premium group — CRU / Business Unlimited plans as shown in OPUS
+    { name:'Business Unlimited Premium 3.0',  group:'premium', cru:true, alt:'Premium 3.0 BU Premium CRU' },
+    { name:'Business Unlimited Advanced 3.0', group:'premium', cru:true, alt:'Advanced 3.0 Advance 3.0 BU Advanced CRU' },
+    { name:'Business Unlimited Premium 2.0',  group:'premium', cru:true, alt:'Premium 2.0 BU Premium CRU' },
+    { name:'Business Unlimited Advanced 2.0', group:'premium', cru:true, alt:'Advanced 2.0 Advance 2.0 BU Advanced CRU' },
+
+    // Premium group — legacy unlimited / eligible legacy search terms
     { name:'Unlimited Elite',            group:'premium' },
-    { name:'Unlimited Elite w/ HBO Max', group:'premium' },
     { name:'Unlimited Extra',            group:'premium' },
-    { name:'Unlimited &More Premium',    group:'premium' },
-    { name:'Unlimited &More',            group:'premium' },
+    { name:'Unlimited &More Premium',    group:'premium', alt:'Unlimited and More Premium' },
+    { name:'Unlimited &More',            group:'premium', alt:'Unlimited and More' },
     { name:'Unlimited Plus',             group:'premium' },
     { name:'Unlimited Plus Enhanced',    group:'premium' },
     { name:'Unlimited Choice',           group:'premium' },
@@ -987,29 +1031,57 @@
     { name:'Unlimited Value Plan',       group:'premium' },
     { name:'Unlimited Your Way',         group:'premium' },
     { name:'Legacy Elite',               group:'premium' },
-    { name:'Legacy Business Unlimited',      group:'premium', cru:true, alt:'Legacy CRU Legacy BU' },
+    { name:'Legacy Unlimited',           group:'premium', alt:'eligible legacy unlimited legacy plans' },
     { name:'Complete Connect',           group:'premium' },
-    // Premium group — FirstNet
-    { name:'FirstNet Premium',           group:'premium', alt:'FN Premium' },
-    { name:'FirstNet Elite',             group:'premium', alt:'FN Elite' },
-    { name:'FirstNet Extra',             group:'premium', alt:'FN Extra' },
+
+    // Premium group — FirstNet equivalents
+    { name:'FirstNet Premium',           group:'premium', alt:'FN Premium FirstNet & Family Premium' },
+    { name:'FirstNet Elite',             group:'premium', alt:'FN Elite FirstNet & Family Elite' },
+    { name:'FirstNet Extra',             group:'premium', alt:'FN Extra FirstNet & Family Extra' },
     { name:'Legacy FirstNet',            group:'premium', alt:'FN Legacy' },
+
     // Starter group
     { name:'Starter SL',                 group:'starter' },
-    { name:'Legacy Starter',             group:'starter' },
-    { name:'Business Unlimited Standard 2.0', group:'starter', cru:true, alt:'Standard 2.0 BU Standard 2.0' },
-    { name:'Business Unlimited Standard',    group:'starter', cru:true, alt:'Standard BU Standard' },
+    { name:'Starter',                    group:'starter', alt:'Unlimited Starter Legacy Starter' },
+    { name:'FirstNet Starter',           group:'starter', alt:'FN Starter FirstNet Starter SL FirstNet & Family Starter' },
+    { name:'Business Unlimited Standard 2.0', group:'starter', cru:true, alt:'Standard 2.0 BU Standard 2.0 CRU' },
+    { name:'Business Unlimited Standard',     group:'starter', cru:true, alt:'Standard BU Standard CRU' },
+
     // Value group
     { name:'Value 2.0',                  group:'value' },
-    { name:'FirstNet Value 2.0',         group:'value',   alt:'FN Value 2.0' },
-    { name:'Business Unlimited Standard 3.0', group:'value', cru:true, alt:'Standard 3.0 BU Standard 3.0' },
-    // 55+
-    { name:'55+',                        group:'55plus' },
-    // Not eligible
-    { name:'Value Plus VL',              group:'valueplus_mobile' },
-    { name:'Mobile Share',               group:'valueplus_mobile' },
-  ];
+    { name:'FirstNet Value 2.0',         group:'value', alt:'FN Value 2.0 FirstNet & Family Value' },
+    { name:'Business Unlimited Standard 3.0', group:'value', cru:true, alt:'Standard 3.0 BU Standard 3.0 CRU' },
 
+    // 55+
+    { name:'55+',                        group:'55plus', alt:'55 plus senior' },
+
+    // Not eligible / rerate recommended — old consumer, shared data, minute bucket, and retired plans
+    { name:'Value Plus VL',              group:'valueplus_mobile', alt:'Value Plus' },
+    { name:'Mobile Share',               group:'valueplus_mobile' },
+    { name:'Mobile Share Value',         group:'valueplus_mobile' },
+    { name:'Mobile Share Advantage',     group:'valueplus_mobile' },
+    { name:'Mobile Share Flex',          group:'valueplus_mobile' },
+    { name:'Mobile Share Plus',          group:'valueplus_mobile' },
+    { name:'Mobile Share Data',          group:'valueplus_mobile' },
+    { name:'Nation 450',                 group:'valueplus_mobile', alt:'Nation 450 with Rollover' },
+    { name:'Nation 900',                 group:'valueplus_mobile' },
+    { name:'Nation 1350',                group:'valueplus_mobile' },
+    { name:'FamilyTalk',                 group:'valueplus_mobile' },
+    { name:'FamilyTalk Nation',          group:'valueplus_mobile' },
+    { name:'Individual Nation',          group:'valueplus_mobile' },
+    { name:'Nation with Rollover',       group:'valueplus_mobile', alt:'Rollover Nation' },
+    { name:'Senior Nation',              group:'valueplus_mobile' },
+    { name:'Unity',                      group:'valueplus_mobile' },
+    { name:'Unity FamilyTalk',           group:'valueplus_mobile' },
+    { name:'Grandfathered iPhone Unlimited Data', group:'valueplus_mobile', alt:'iPhone unlimited data add-on grandfathered unlimited data' },
+    { name:'Business Mobile Share',       group:'valueplus_mobile', alt:'CRU Mobile Share for Business' },
+    { name:'Business Mobile Share Plus',  group:'valueplus_mobile' },
+    { name:'Business Mobile Share Advantage', group:'valueplus_mobile' },
+    { name:'AT&T Mobile Share for Business', group:'valueplus_mobile', alt:'ATT Mobile Share for Business' },
+    { name:'Business Pooled Nation',      group:'valueplus_mobile' },
+    { name:'Business Nation',             group:'valueplus_mobile' },
+    { name:'BusinessTalk',                group:'valueplus_mobile' },
+  ];
   // Plan search — shows individual plan names + which group they fall under
   planSearch.addEventListener('input', ()=>{
     const q = planSearch.value.trim().toLowerCase();
