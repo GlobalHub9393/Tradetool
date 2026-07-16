@@ -364,7 +364,7 @@
         <h1>Monthly Credit Tool</h1>
       </div>
       <div style="margin-left:auto; text-align:right;">
-        <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/9/2026</div>
+        <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/16/2026</div>
         <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
@@ -459,23 +459,31 @@
 
       <!-- NEXT UP -->
       <section id="nextUpCard" class="card">
-        <p class="label"><span class="step">4</span>Next Up Turn in?</p>
+        <p class="label"><span class="step">4</span>Next Up / Next Up Anytime?</p>
         <div style="display:flex; align-items:center; gap:12px;">
           <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
             <input type="checkbox" id="nextUpChk">
-            <span style="font-weight:700;">Yes</span>
+            <span style="font-weight:700;">Turn-in upgrade</span>
           </label>
           <div style="margin-left:auto; color:var(--slate); font-size:13px;">(optional)</div>
         </div>
 
-        <div id="nextPaidRow" style="margin-top:12px; display:none;">
-          <div class="group-title" style="margin:6px 0 8px;">Is the device at least 33% paid off?</div>
-          <div class="chips" id="nextPaidChips">
-            <button class="chip" data-paid="yes" aria-pressed="false">Yes — ≥33% paid</button>
-            <button class="chip" data-paid="no" aria-pressed="false">No — less than 33% paid</button>
+        <div id="nextTypeRow" style="margin-top:10px; display:none;">
+          <div class="group-title" style="margin:6px 0 8px;">Which feature is on the bill?</div>
+          <div class="chips" id="nextTypeChips">
+            <button class="chip" data-next-type="anytime" aria-pressed="true">Next Up Anytime</button>
+            <button class="chip" data-next-type="legacy" aria-pressed="false">Legacy Next Up</button>
           </div>
         </div>
-        <p id="nextUpHelp" style="margin-top:12px; color:var(--slate); font-size:13px;">If they have Next Up but the device is less than 33% paid, promos do not apply — AT&amp;T will pay off the remaining device balance.</p>
+
+        <div id="nextPaidRow" style="margin-top:12px; display:none;">
+          <div class="group-title" style="margin:6px 0 8px;">Is the device at least 50% paid off?</div>
+          <div class="chips" id="nextPaidChips">
+            <button class="chip" data-paid="yes" aria-pressed="false">Yes — ≥50% paid</button>
+            <button class="chip" data-paid="no" aria-pressed="false">No — less than 50% paid</button>
+          </div>
+        </div>
+        <p id="nextUpHelp" style="margin-top:12px; color:var(--slate); font-size:13px;">Choose the feature shown on the customer's bill so the promo path is labeled correctly. Device generally must be at least 50% paid and in turn-in condition. Verify in OPUS/CCKM.</p>
         <p id="nextUpDisabledNote" style="margin-top:10px; color:#a32b2b; font-weight:600; font-size:13px; display:none;">Not available — Next Up requires turning in a device on an existing line, not a new line activation.</p>
       </section>
 
@@ -631,9 +639,11 @@
 
         <details class="tool-subcard"><summary><b>8. Can damaged or destroyed phones still qualify?</b></summary><p>Sometimes, yes. Damaged and sometimes even destroyed phones can still qualify depending on the current promotion and the value returned by the approved trade flow. Do not assume based on appearance alone — check the trade system before quoting.</p></details>
 
-        <details class="tool-subcard"><summary><b>9. How does Next Up Anytime work?</b></summary><p>Next Up Anytime allows a customer to upgrade after paying one cycle with the new device. After <b>12 months</b> or <b>33% paid</b>, the customer can receive eligible promotions based on trade value, pays the remaining installments, and keeps the turned-in phone process tied to the offer. Before 12 months or 33% paid, AT&amp;T pays the remaining installments and takes the phone. The device <b>must be in perfect condition</b>. Check with a manager and/or CCKM before quoting.</p></details>
+        <details class="tool-subcard"><summary><b>9. How can I tell the difference between Next Up Anytime and legacy Next Up on a customer's bill?</b></summary><p>Check the feature name and monthly feature charge on the bill or in OPUS. <b>Next Up Anytime</b> usually shows as <b>$10/mo</b>. Legacy <b>Next Up</b> may show as <b>$6/mo</b>. In the main tool, choose the matching feature so the summary labels the promo path correctly. For any Next Up promo, verify the feature, payoff percentage, device condition, and offer eligibility in OPUS/CCKM. The phone generally needs to be at least <b>50% paid off</b> before the customer can use the upgrade promo path.</p></details>
 
-        <details class="tool-subcard"><summary><b>10. What should reps double-check before submitting the order?</b></summary><p>Confirm the correct plan group, promo, device SKU/storage, trade value, trade deadline, Next Up status, customer expectations, and OPUS/CCKM eligibility before quoting or completing the sale.</p></details>
+        <details class="tool-subcard"><summary><b>10. Do legacy Next Up lines get promos?</b></summary><p>Yes, if the offer allows it. This tool treats <b>Next Up Anytime</b> and legacy <b>Next Up</b> as eligible turn-in upgrade paths when the selected device has a loaded Next Up promo and the phone is at least <b>50% paid</b>. Always verify in OPUS/CCKM before quoting.</p></details>
+
+        <details class="tool-subcard"><summary><b>11. What should reps double-check before submitting the order?</b></summary><p>Confirm the correct plan group, promo, device SKU/storage, trade value, trade deadline, Next Up status, customer expectations, and OPUS/CCKM eligibility before quoting or completing the sale.</p></details>
       </section>
     </div>
   </div>
@@ -763,7 +773,7 @@
   const ADMIN_PASSWORD = 'wire9393';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0708';
   const HISTORY_KEY = 'globalTradeToolHistory_v1';
-  let releaseInfo = { version:'Live Version 1', month:'July 2026', updated:'7/9/2026' };
+  let releaseInfo = { version:'Live Version 1', month:'July 2026', updated:'7/16/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
@@ -911,7 +921,7 @@
   };
   const monthly = n => (Math.ceil(n/36*100)/100).toFixed(2);
 
-  const state = { plan:null, phone:null, value:null, pixel:false, nextUp:false, nextPaid:null, tierAction:null };
+  const state = { plan:null, phone:null, value:null, pixel:false, nextUp:false, nextUpType:'anytime', nextPaid:null, tierAction:null };
 
   const el = id => document.getElementById(id);
   const planSearch = el('planSearch'), planSuggestions = el('planSuggestions'), planSuggestionsList = el('planSuggestionsList');
@@ -1227,9 +1237,24 @@
   const nextUpChk = el('nextUpChk');
   nextUpChk.addEventListener('change', ()=> {
     state.nextUp = nextUpChk.checked;
+    el('nextTypeRow').style.display = state.nextUp ? 'block' : 'none';
     el('nextPaidRow').style.display = state.nextUp ? 'block' : 'none';
-    if(!state.nextUp){ state.nextPaid = null; document.querySelectorAll('#nextPaidChips [data-paid]').forEach(x=>x.setAttribute('aria-pressed','false')); }
+    if(state.nextUp && !state.nextUpType) state.nextUpType = 'anytime';
+    if(!state.nextUp){
+      state.nextPaid = null;
+      state.nextUpType = 'anytime';
+      document.querySelectorAll('#nextPaidChips [data-paid]').forEach(x=>x.setAttribute('aria-pressed','false'));
+      document.querySelectorAll('#nextTypeChips [data-next-type]').forEach(x=>x.setAttribute('aria-pressed', x.dataset.nextType === 'anytime' ? 'true' : 'false'));
+    }
     render();
+  });
+  document.querySelectorAll('#nextTypeChips [data-next-type]').forEach(b=>{
+    b.addEventListener('click', ()=> {
+      if(!state.nextUp) return;
+      state.nextUpType = b.dataset.nextType;
+      document.querySelectorAll('#nextTypeChips [data-next-type]').forEach(x=>x.setAttribute('aria-pressed', x===b ? 'true' : 'false'));
+      render();
+    });
   });
   document.querySelectorAll('#nextPaidChips [data-paid]').forEach(b=>{
     b.addEventListener('click', ()=> {
@@ -1242,10 +1267,11 @@
 
   // clear all & clear trade
   document.getElementById('clearAll').addEventListener('click', ()=> {
-    state.plan = null; state.phone = null; state.value = null; state.pixel = false; state.nextUp = false; state.nextPaid = null; state.tierAction = null;
+    state.plan = null; state.phone = null; state.value = null; state.pixel = false; state.nextUp = false; state.nextUpType = 'anytime'; state.nextPaid = null; state.tierAction = null;
     document.querySelectorAll('#plans .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
     document.querySelectorAll('#phonesQuick .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
     document.querySelectorAll('#nextPaidChips .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
+    document.querySelectorAll('#nextTypeChips .chip').forEach(x=>x.setAttribute('aria-pressed', x.dataset.nextType === 'anytime' ? 'true' : 'false'));
     recentPicks = []; buildRecentChips();
     planSearch.value=''; planSuggestions.classList.remove('open');
     phoneSearch.value=''; phoneSuggestions.classList.remove('open');
@@ -1253,7 +1279,7 @@
     document.querySelectorAll('#quick .chip').forEach(x=>x.disabled=false);
     pixelChk.checked=false;
     pixelToggleEl.classList.remove('show');
-    nextUpChk.checked=false; el('nextPaidRow').style.display='none';
+    nextUpChk.checked=false; el('nextTypeRow').style.display='none'; el('nextPaidRow').style.display='none';
     planHelp.style.display='none'; planHelp.innerHTML='';
     tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true');
     updateTradeHelp();
@@ -1288,7 +1314,7 @@
     if(Array.isArray(data.tips)){ TIPS.splice(0, TIPS.length, ...data.tips); }
     const vb = el('versionBadge'), rm = el('releaseMeta');
     if(vb) vb.textContent = releaseInfo.version || VERSION;
-    if(rm) rm.textContent = `${releaseInfo.month || 'July 2026'} · Last Updated ${releaseInfo.updated || '7/9/2026'}`;
+    if(rm) rm.textContent = `${releaseInfo.month || 'July 2026'} · Last Updated ${releaseInfo.updated || '7/16/2026'}`;
   }
 
   const PIXEL_FLOOR = { premium:1050, starter:1050, value:500 };
@@ -1321,6 +1347,7 @@
       if(state.nextUp){
         state.nextUp = false; state.nextPaid = null;
         nextUpChk.checked = false;
+        el('nextTypeRow').style.display = 'none';
         el('nextPaidRow').style.display = 'none';
         document.querySelectorAll('#nextPaidChips [data-paid]').forEach(x=>x.setAttribute('aria-pressed','false'));
       }
@@ -1386,6 +1413,42 @@
     return 'iphoneBase';
   }
 
+  function nextUpFeatureLabel(){
+    return state.nextUpType === 'legacy' ? 'Legacy Next Up' : 'Next Up Anytime';
+  }
+
+  function nextUpPromoCredit(phone){
+    if(!phone) return 0;
+    const id = phone.id || '';
+    const n = (phone.name + ' ' + (phone.storage || '')).toLowerCase();
+    // Current Next Up / legacy Next Up upgrade offer reference. Verify in CCKM before quoting.
+    if(id.startsWith('pxl') || id.startsWith('ppro')) return 500; // Pixel 10 Pro / Pro XL
+    if(id.startsWith('ip17pm') || id.startsWith('ip17p')) return 500; // iPhone 17 Pro / Pro Max
+    if(id.startsWith('ip17') || id.startsWith('ipair')) return 350; // iPhone 17 / iPhone Air
+    if(id.startsWith('s26u') || id.startsWith('s26p') || id.startsWith('zfold7')) return 350;
+    if(id === 'razr') return 350;
+    return 0;
+  }
+
+  function datedPromoNoteHtml(){
+    if(!state.phone) return '';
+    const id = state.phone.id || '';
+    const now = new Date();
+    const samsungStart = new Date(2026, 6, 17); // July 17, 2026
+    const airEnd = new Date(2026, 6, 16, 23, 59, 59);
+    if(id.startsWith('ipair')){
+      const status = now <= airEnd ? 'Promo ending 7/16' : 'Promo ended 7/16';
+      return `<div class="d-rule"><b>${status}:</b> iPhone Air leaves listed trade-in / Next Up offers after 7/16. Verify current eligibility in CCKM before quoting.</div>`;
+    }
+    if(id.startsWith('s26u') || id.startsWith('s26p')){
+      if(now >= samsungStart){
+        return `<div class="d-rule"><b>Samsung Any Condition active 7/17:</b> For S26+ / S26 Ultra, verify qualifying any-condition Galaxy turn-in rules in CCKM. Current guide: $1,100 with eligible premium/legacy plan + S22+/Z Flip4/Z Fold3+ or $95+ value; $900 with Starter/SL or Extra 2.0+ + S10/Note10/Z Flip3+ or $35-$94 value; $500 with Value 2.0 + S10/Note10/Z Flip3+ or $35+ value.</div>`;
+      }
+      return `<div class="d-rule"><b>Samsung Any Condition starts 7/17:</b> S26+ / S26 Ultra any-condition turn-in rules are scheduled to start 7/17. Until then, verify the active offer in CCKM before quoting.</div>`;
+    }
+    return '';
+  }
+
   // pixel "any Google Pixel trade-in" toggle
   pixelChk.addEventListener('change', ()=> {
     state.pixel = pixelChk.checked;
@@ -1412,13 +1475,17 @@
 
   // getResult returns outcome object describing current state
   function getResult(){
-    if(state.nextUp){
-      if(state.nextPaid === null) return { state:'needNextPaid' };
-      if(state.nextPaid === false) return { state:'nextup_no_payoff' };
-    }
     if(!state.plan || !state.phone) return { state:'incomplete' };
 
     if(state.plan === 'valueplus_mobile') return { state:'full_retail_rerate' };
+
+    if(state.nextUp){
+      if(state.nextPaid === null) return { state:'needNextPaid' };
+      if(state.nextPaid === false) return { state:'nextup_no_payoff' };
+      const nextCredit = nextUpPromoCredit(state.phone);
+      if(nextCredit > 0) return { state:'nextup_promo', credit: nextCredit, monthly: (Math.ceil(nextCredit/36*100)/100).toFixed(2) };
+      return { state:'nextup_not_eligible' };
+    }
 
     const tierPlans = ['premium','starter','value','55plus'];
 
@@ -1453,8 +1520,16 @@
   // build summary text
   function buildSummary(){
     const r = getResult();
-    if(r.state === 'needNextPaid') return 'Next Up selected — confirm whether the device is at least 33% paid off.';
-    if(r.state === 'nextup_no_payoff') return 'Customer has Next Up and the device is less than 33% paid — AT&T device payoff applies; no promo credit.';
+    if(r.state === 'needNextPaid') return 'Next Up selected — confirm whether the device is at least 50% paid off.';
+    if(r.state === 'nextup_no_payoff') return 'Customer has Next Up and the device is less than 50% paid — promo credit does not apply in the tool. Verify payoff/upgrade options in OPUS.';
+    if(r.state === 'nextup_promo'){
+      const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
+      return `Customer is using ${nextUpFeatureLabel()} for a ${phoneLabel} on ${PLAN_LABEL[state.plan]} — estimated Next Up upgrade credit is ${moneyWhole(r.credit)} over 36 months. Verify feature, payoff percentage, device condition, and promo eligibility in OPUS/CCKM.`;
+    }
+    if(r.state === 'nextup_not_eligible'){
+      const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
+      return `${phoneLabel} does not have a Next Up promo loaded in this tool. Verify in CCKM before quoting.`;
+    }
     if(r.state === 'incomplete') return 'Incomplete: select a plan and a phone to generate the summary.';
     if(r.state === 'full_retail_rerate'){
       const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
@@ -1510,9 +1585,10 @@
   // Determine where the current credit sits within the full ladder for this combo,
   // then return the appropriate display color class.
   function getCreditColorClass(r){
+    if(r.state === 'nextup_promo') return 'result-green';
     if(r.state === 'tiered_final') return 'result-tiered';
     if(r.state === 'tiered_action_needed' || r.state === 'tiered_confirm_cckm' || r.state === 'tier_action_needed') return 'result-tiered';
-    if(r.state === 'zero' || r.state === 'full_retail' || r.state === 'full_retail_rerate' || r.state === 'nextup_no_payoff') return 'result-red';
+    if(r.state === 'zero' || r.state === 'full_retail' || r.state === 'full_retail_rerate' || r.state === 'nextup_no_payoff' || r.state === 'nextup_not_eligible') return 'result-red';
     if(r.state !== 'promo') return '';
 
     const cat = phoneCategory(state.phone);
@@ -1573,6 +1649,7 @@
     const r = getResult();
     if(!state.plan || !state.phone) return 'Pick a plan, phone, and trade-in value.';
     const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
+    if(r.state === 'nextup_promo') return `${phoneLabel}: ${moneyWhole(r.credit)} Next Up credit.`;
     if(r.state === 'promo'){
       const netMo = Math.max(0, parseFloat(monthly(state.phone.retail)) - parseFloat(r.monthly)).toFixed(2);
       return `${phoneLabel}: ${moneyWhole(r.credit)} off • about $${netMo}/mo after credits.`;
@@ -1580,8 +1657,9 @@
     if(r.state === 'tiered_final') return `${phoneLabel}: tiered price $${r.monthly}/mo.`;
     if(r.state === 'tier_action_needed') return `${phoneLabel}: choose New Line or Upgrade.`;
     if(r.state === 'needValue') return `${phoneLabel}: enter trade value.`;
-    if(r.state === 'needNextPaid') return 'Next Up: confirm 33% payoff.';
-    if(r.state === 'nextup_no_payoff') return 'Next Up under 33%: payoff path, no promo credit.';
+    if(r.state === 'needNextPaid') return 'Next Up: confirm 50% payoff.';
+    if(r.state === 'nextup_no_payoff') return 'Next Up under 50%: no promo credit.';
+    if(r.state === 'nextup_not_eligible') return 'No Next Up promo loaded for this phone.';
     if(r.state === 'full_retail_rerate') return `${phoneLabel}: full retail on ${PLAN_LABEL[state.plan]}; check rerate.`;
     if(r.state === 'tiered_not_offered' || r.state === 'full_retail' || r.state === 'zero') return `${phoneLabel}: no recurring promo showing.`;
     if(r.state === 'tiered_confirm_cckm') return `${phoneLabel}: confirm tiered price in CCKM.`;
@@ -1593,6 +1671,7 @@
     const baseVerify = 'I will still verify the exact promotion in OPUS/CCKM before we complete everything.';
     if(!state.plan || !state.phone) return 'Once I select the plan and phone, I can explain the estimated promo and monthly device cost.';
     const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
+    if(r.state === 'nextup_promo') return `This line shows ${nextUpFeatureLabel()}, and the device is marked at least 50% paid. The ${phoneLabel} is estimated to receive ${moneyWhole(r.credit)} in Next Up bill credits over 36 months. ${baseVerify}`;
     if(r.state === 'promo'){
       const deviceMo = monthly(state.phone.retail);
       const netMo = Math.max(0, parseFloat(deviceMo) - parseFloat(r.monthly)).toFixed(2);
@@ -1601,7 +1680,8 @@
     if(r.state === 'tiered_final') return `This ${phoneLabel} has an estimated tiered promo price of $${r.monthly}/mo for 36 months before taxes. ${baseVerify}`;
     if(r.state === 'full_retail_rerate') return `This plan does not show a promo credit in the tool, so I would review plan options before quoting the final device cost. ${baseVerify}`;
     if(r.state === 'zero' || r.state === 'full_retail') return `With the current information, this device is estimated at full retail in the tool. ${baseVerify}`;
-    if(r.state === 'nextup_no_payoff') return `Because the Next Up device is not at least 33% paid off, the promo credit is not applying in the tool. ${baseVerify}`;
+    if(r.state === 'nextup_no_payoff') return `Because the Next Up device is not at least 50% paid off, the promo credit is not applying in the tool. ${baseVerify}`;
+    if(r.state === 'nextup_not_eligible') return `This phone does not have a Next Up promo loaded in this tool. ${baseVerify}`;
     return `${buildSummary()} ${baseVerify}`;
   }
 
@@ -1643,8 +1723,8 @@
     'Verify the trade-in value before quoting the final monthly credit.',
     'Use OPUS as the final source of truth before completing the transaction.',
     'Any Google Pixel trades in — any year, any condition — for Pixel Pro promos.',
-    'Next Up requires the device to be at least 33% paid off, and only on upgrades.',
-    'If Next Up is under 33% paid, promo credits usually do not apply — review payoff options.',
+    'Next Up / Next Up Anytime generally requires the device to be at least 50% paid off, and only on upgrades.',
+    'If Next Up is under 50% paid, promo credits usually do not apply — review payoff options.',
     'Tiered offers do not need a trade-in — the low monthly is the promo itself.',
     'For tiered devices, confirm whether the promo is New Line only, Upgrade only, or both.',
     'Higher trade-in value can unlock a higher credit tier. Check tradein.att.com.',
@@ -1737,15 +1817,15 @@
   function currentHistoryEntry(r){
     if(!state.plan || !state.phone) return null;
     const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
-    return { t:Date.now(), plan:state.plan, phoneId:state.phone.id, value:state.value, pixel:state.pixel, nextUp:state.nextUp, nextPaid:state.nextPaid, tierAction:state.tierAction, label:`${phoneLabel} · ${PLAN_LABEL[state.plan]}`, detail: buildSummary(), result:r.state==='promo'?moneyWhole(r.credit):(r.state==='tiered_final'?'$'+Number(r.monthly).toFixed(2)+'/mo':r.state) };
+    return { t:Date.now(), plan:state.plan, phoneId:state.phone.id, value:state.value, pixel:state.pixel, nextUp:state.nextUp, nextUpType:state.nextUpType, nextPaid:state.nextPaid, tierAction:state.tierAction, label:`${phoneLabel} · ${PLAN_LABEL[state.plan]}`, detail: buildSummary(), result:r.state==='promo'?moneyWhole(r.credit):(r.state==='tiered_final'?'$'+Number(r.monthly).toFixed(2)+'/mo':r.state) };
   }
   let lastHistoryKey = '';
   function maybeSaveHistory(r){
     if(!['promo','tiered_final','full_retail','full_retail_rerate','zero','tiered_not_offered'].includes(r.state)) return;
     const entry = currentHistoryEntry(r); if(!entry) return;
-    const key = JSON.stringify([entry.plan,entry.phoneId,entry.value,entry.pixel,entry.nextUp,entry.nextPaid,entry.tierAction,entry.result]);
+    const key = JSON.stringify([entry.plan,entry.phoneId,entry.value,entry.pixel,entry.nextUp,entry.nextUpType,entry.nextPaid,entry.tierAction,entry.result]);
     if(key === lastHistoryKey) return; lastHistoryKey = key;
-    const items = getHistory().filter(x => JSON.stringify([x.plan,x.phoneId,x.value,x.pixel,x.nextUp,x.nextPaid,x.tierAction,x.result]) !== key);
+    const items = getHistory().filter(x => JSON.stringify([x.plan,x.phoneId,x.value,x.pixel,x.nextUp,x.nextUpType,x.nextPaid,x.tierAction,x.result]) !== key);
     saveHistory([entry, ...items]); renderHistory();
   }
   function renderHistory(){
@@ -1755,12 +1835,13 @@
     box.querySelectorAll('.history-item').forEach(btn=>btn.addEventListener('click',()=>restoreHistory(items[btn.dataset.i])));
   }
   function restoreHistory(x){
-    state.plan=x.plan; state.phone=PHONES.find(p=>p.id===x.phoneId)||null; state.value=x.value; state.pixel=!!x.pixel; state.nextUp=!!x.nextUp; state.nextPaid=x.nextPaid; state.tierAction=x.tierAction||null;
+    state.plan=x.plan; state.phone=PHONES.find(p=>p.id===x.phoneId)||null; state.value=x.value; state.pixel=!!x.pixel; state.nextUp=!!x.nextUp; state.nextUpType=x.nextUpType||'anytime'; state.nextPaid=x.nextPaid; state.tierAction=x.tierAction||null;
     document.querySelectorAll('#plans .chip').forEach(b=>b.setAttribute('aria-pressed', b.dataset.plan===state.plan?'true':'false'));
     document.querySelectorAll('#phonesQuick .chip').forEach(b=>b.setAttribute('aria-pressed', state.phone&&b.dataset.phone===state.phone.id?'true':'false'));
     phoneSearch.value = state.phone ? state.phone.name + (state.phone.storage?' '+state.phone.storage:'') : '';
     tradeEl.value = state.value==null ? '' : new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(state.value);
-    pixelChk.checked = state.pixel; nextUpChk.checked = state.nextUp; el('nextPaidRow').style.display = state.nextUp ? 'block' : 'none';
+    pixelChk.checked = state.pixel; nextUpChk.checked = state.nextUp; el('nextTypeRow').style.display = state.nextUp ? 'block' : 'none'; el('nextPaidRow').style.display = state.nextUp ? 'block' : 'none';
+    document.querySelectorAll('#nextTypeChips [data-next-type]').forEach(btn=>btn.setAttribute('aria-pressed', btn.dataset.nextType === state.nextUpType ? 'true' : 'false'));
     document.querySelectorAll('#nextPaidChips [data-paid]').forEach(b=>b.setAttribute('aria-pressed', (state.nextPaid===true&&b.dataset.paid==='yes')||(state.nextPaid===false&&b.dataset.paid==='no')?'true':'false'));
     updateControlsAfterSelection(); render();
   }
@@ -1917,7 +1998,7 @@
     const phones = PHONES.map(p=>`<tr><td><b>${p.name}${p.storage?' '+p.storage:''}</b><br><small>${p.id}</small></td><td>${money(p.retail||0)}</td><td>${p.tieredOffer?'Tiered':(PROMO_CATEGORY_LABEL[inferPhoneCategoryForAdmin(p)]||inferPhoneCategoryForAdmin(p))}</td></tr>`).join('');
     const tips = TIPS.map((t,i)=>`<li><b>${i+1}.</b> ${t}</li>`).join('');
     box.innerHTML = `
-      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'July 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'7/9/2026'}</div>
+      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'July 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'7/16/2026'}</div>
       <details class="tool-subcard" open><summary><b>Promo Ladder Check</b></summary>${promoHtml}</details>
       <details class="tool-subcard"><summary><b>Tiered Offer Check (${PHONES.filter(p=>p.tieredOffer).length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>New Line</th><th>Upgrade</th></tr></thead><tbody>${tiered}</tbody></table></details>
       <details class="tool-subcard"><summary><b>Phone Check (${PHONES.length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>MSRP</th><th>Promo Type</th></tr></thead><tbody>${phones}</tbody></table></details>
@@ -1928,7 +2009,7 @@
   function adminFill(){
     el('adminVersionInput').value = releaseInfo.version || VERSION;
     el('adminMonthInput').value = releaseInfo.month || 'July 2026';
-    el('adminUpdatedInput').value = releaseInfo.updated || '7/9/2026';
+    el('adminUpdatedInput').value = releaseInfo.updated || '7/16/2026';
     el('adminPhones').value = JSON.stringify(PHONES, null, 2);
     buildAdminPhoneSelect();
     el('adminPromos').value = JSON.stringify(LADDERS, null, 2);
@@ -2046,7 +2127,7 @@
     try{ const val = JSON.parse(el(id).value); persistAdminData({[key]:val}); apply(val); adminFill(); alert('Saved.'); }
     catch(e){ alert('Invalid JSON: '+e.message); }
   }
-  el('saveRelease').addEventListener('click',()=>{ releaseInfo={version:el('adminVersionInput').value||VERSION, month:el('adminMonthInput').value||'July 2026', updated:el('adminUpdatedInput').value||'7/9/2026'}; persistAdminData({release:releaseInfo}); applyAdminData(); adminFill(); });
+  el('saveRelease').addEventListener('click',()=>{ releaseInfo={version:el('adminVersionInput').value||VERSION, month:el('adminMonthInput').value||'July 2026', updated:el('adminUpdatedInput').value||'7/16/2026'}; persistAdminData({release:releaseInfo}); applyAdminData(); adminFill(); });
   el('savePhones').addEventListener('click',()=>saveJsonTextarea('adminPhones','phones',val=>{PHONES.splice(0,PHONES.length,...val); buildQuickChips(); buildCompareOptions(); renderCompare(); render(); buildAdminPhoneSelect();}));
   el('savePromos').addEventListener('click',()=>saveJsonTextarea('adminPromos','ladders',val=>{Object.keys(LADDERS).forEach(k=>delete LADDERS[k]); Object.assign(LADDERS,val); render(); renderCompare(); buildAdminPromoEditor();}));
   el('saveTips').addEventListener('click',()=>{ TIPS = el('adminTips').value.split(/\n+/).map(x=>x.trim()).filter(Boolean); persistAdminData({tips:TIPS}); tipIdx=0; tipText.textContent=TIPS[0]||''; adminFill(); });
@@ -2104,7 +2185,7 @@
     tradeAppliedNote.setAttribute('aria-hidden','true');
 
     // Reset the count-up tracker whenever we're not showing a promo credit
-    if(r.state !== 'promo') lastShownCredit = null;
+    if(r.state !== 'promo' && r.state !== 'nextup_promo') lastShownCredit = null;
 
     if(r.state === 'promo'){
       const cat = phoneCategory(state.phone);
@@ -2119,6 +2200,17 @@
       }
       lastShownCredit = r.credit;
       detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>You pay: <b style="color:#fff;">$${netMo}/mo</b> after credit</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.plan, r.credit)}`;
+    } else if(r.state === 'nextup_promo'){
+      const deviceMo = monthly(state.phone.retail);
+      const netMo = Math.max(0, parseFloat(deviceMo) - parseFloat(r.monthly)).toFixed(2);
+      if(lastShownCredit !== r.credit){
+        animateAmount(r.credit, '$', '<span class="off">off</span>');
+        popAmount();
+      } else {
+        amountEl.innerHTML = moneyWhole(r.credit) + '<span class="off">off</span>';
+      }
+      lastShownCredit = r.credit;
+      detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>${nextUpFeatureLabel()} upgrade offer. Device must be at least <b>50% paid</b> and in eligible turn-in condition.<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>Estimated after credit: <b style="color:#fff;">$${netMo}/mo</b></div><div class="d-rule">Verify the feature name, payoff percentage, device condition, and offer eligibility in OPUS/CCKM before quoting.</div>`;
     } else if(r.state === 'tiered_final'){
       amountEl.innerHTML = `<span class="monthly-primary">$${r.monthly}/mo</span><span class="off">${money(r.total)} final</span>`;
       detailEl.innerHTML = `<div class="d-monthly">Total: ${money(r.total)} spread over 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]} &middot; Tiered Offer<br>Device retail: ${money(state.phone.retail)}</div>`;
@@ -2158,7 +2250,10 @@
       }
     } else if(r.state === 'nextup_no_payoff'){
       amountEl.innerHTML = '$0';
-      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">Next Up selected and device is less than 33% paid — promo credits do not apply in this path. AT&amp;T payoff applies; verify details in OPUS/CCKM.</div>`;
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">Next Up selected and device is less than 50% paid — promo credits do not apply in this path. Verify payoff/upgrade options in OPUS/CCKM.</div>`;
+    } else if(r.state === 'nextup_not_eligible'){
+      amountEl.innerHTML = '$0';
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> does not have a Next Up / legacy Next Up promo loaded in this tool. Verify the device and offer in CCKM before quoting.</div>`;
     } else if(r.state === 'full_retail_rerate'){
       const cat = phoneCategory(state.phone);
       amountEl.innerHTML = '$0';
@@ -2186,7 +2281,7 @@
       detailEl.innerHTML = `<div class="d-prompt">Enter the trade-in value.</div>`;
     } else if(r.state === 'needNextPaid'){
       amountEl.innerHTML = '$&mdash;';
-      detailEl.innerHTML = `<div class="d-prompt">Next Up selected — confirm if device is at least 33% paid off.</div>`;
+      detailEl.innerHTML = `<div class="d-prompt">Next Up selected — confirm if device is at least 50% paid off.</div>`;
     } else {
       amountEl.innerHTML = '$&mdash;';
       detailEl.innerHTML = `<div class="d-prompt">Pick a plan, a phone, and a trade-in value.</div>`;
@@ -2195,6 +2290,11 @@
     const newBtn = document.getElementById('tierNew'), upBtn = document.getElementById('tierUp');
     if(newBtn) newBtn.setAttribute('aria-pressed', state.tierAction === 'new' ? 'true' : 'false');
     if(upBtn) upBtn.setAttribute('aria-pressed', state.tierAction === 'upgrade' ? 'true' : 'false');
+
+    const datedNote = datedPromoNoteHtml();
+    if(datedNote && state.phone && !['incomplete','full_retail_rerate'].includes(r.state)){
+      detailEl.insertAdjacentHTML('beforeend', datedNote);
+    }
 
     updateNextUpAvailability();
     updateTradeHelp();
