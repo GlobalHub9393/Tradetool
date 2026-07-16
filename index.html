@@ -639,9 +639,9 @@
 
         <details class="tool-subcard"><summary><b>8. Can damaged or destroyed phones still qualify?</b></summary><p>Sometimes, yes. Damaged and sometimes even destroyed phones can still qualify depending on the current promotion and the value returned by the approved trade flow. Do not assume based on appearance alone — check the trade system before quoting.</p></details>
 
-        <details class="tool-subcard"><summary><b>9. How can I tell the difference between Next Up Anytime and legacy Next Up on a customer's bill?</b></summary><p>Check the feature name and monthly feature charge on the bill or in OPUS. <b>Next Up Anytime</b> usually shows as <b>$10/mo</b>. Legacy <b>Next Up</b> may show as <b>$6/mo</b>. In the main tool, choose the matching feature so the promo path calculates correctly. <b>Next Up Anytime</b> uses the <b>33% paid</b> path. Legacy <b>Next Up</b> uses the <b>50% paid</b> path. Verify the feature, payoff percentage, device condition, and offer eligibility in OPUS/CCKM.</p></details>
+        <details class="tool-subcard"><summary><b>9. How can I tell the difference between Next Up Anytime and legacy Next Up on a customer's bill?</b></summary><p>Check the feature name and monthly feature charge on the bill or in OPUS. <b>Next Up Anytime</b> usually shows as <b>$10/mo</b>. Legacy <b>Next Up</b> may show as <b>$6/mo</b>. In the main tool, choose the matching feature so the promo path calculates correctly. <b>Next Up Anytime</b> uses the <b>33% paid</b> path: if it is 33%+ paid, use the normal promo path; if it is under 33%, AT&T can still pay off the remaining installments for the upgrade path, but no new phone promo applies. Legacy <b>Next Up</b> uses the <b>50% paid</b> path. Verify the feature, payoff percentage, device condition, and offer eligibility in OPUS/CCKM.</p></details>
 
-        <details class="tool-subcard"><summary><b>10. Do legacy Next Up lines get promos?</b></summary><p>Yes, if the offer allows it. Legacy <b>Next Up</b> uses a <b>50% paid</b> check. If the customer is under 50%, they generally need to pay the installment balance up to 50% first, then they can use the legacy Next Up upgrade path. <b>Next Up Anytime</b> stays on the <b>33% paid</b> path. Always verify in OPUS/CCKM before quoting.</p></details>
+        <details class="tool-subcard"><summary><b>10. Do legacy Next Up lines get promos?</b></summary><p>Yes, if the offer allows it. Legacy <b>Next Up</b> uses a <b>50% paid</b> check. If the customer is under 50%, they generally need to pay the installment balance up to 50% first, then they can use the legacy Next Up upgrade path. <b>Next Up Anytime</b> is different: at 33%+ paid, use the normal promo path; under 33%, AT&T payoff path only and no new phone promo applies. Always verify in OPUS/CCKM before quoting.</p></details>
 
         <details class="tool-subcard"><summary><b>11. What should reps double-check before submitting the order?</b></summary><p>Confirm the correct plan group, promo, device SKU/storage, trade value, trade deadline, Next Up status, customer expectations, and OPUS/CCKM eligibility before quoting or completing the sale.</p></details>
       </section>
@@ -1437,7 +1437,7 @@
     if(help){
       help.innerHTML = state.nextUpType === 'legacy'
         ? 'Legacy Next Up uses the 50% paid path. If the device is under 50%, the customer generally must pay up to 50% first, then they can upgrade. Verify in OPUS/CCKM.'
-        : 'Next Up Anytime uses the 33% paid path. If the device is under 33%, AT&T may still allow an early upgrade/payoff path, but promo credits generally do not apply. Verify in OPUS/CCKM.';
+        : 'Next Up Anytime uses the 33% paid path. If the device is at least 33% paid, use the normal promo path. If it is under 33%, AT&T can still pay off the remaining installments for the upgrade path, but no new phone promo applies. Verify in OPUS/CCKM.';
     }
   }
 
@@ -1506,9 +1506,14 @@
     if(state.nextUp){
       if(state.nextPaid === null) return { state:'needNextPaid' };
       if(state.nextPaid === false) return { state:'nextup_no_payoff' };
-      const nextCredit = nextUpPromoCredit(state.phone);
-      if(nextCredit > 0) return { state:'nextup_promo', credit: nextCredit, monthly: (Math.ceil(nextCredit/36*100)/100).toFixed(2) };
-      return { state:'nextup_not_eligible' };
+      if(state.nextUpType === 'legacy'){
+        const nextCredit = nextUpPromoCredit(state.phone);
+        if(nextCredit > 0) return { state:'nextup_promo', credit: nextCredit, monthly: (Math.ceil(nextCredit/36*100)/100).toFixed(2) };
+        return { state:'nextup_not_eligible' };
+      }
+      // Next Up Anytime at 33%+ follows the normal promo path below.
+      // If it is under 33%, AT&T can still pay off the remaining installments for an upgrade path,
+      // but no new phone promo applies in this tool.
     }
 
     const tierPlans = ['premium','starter','value','55plus'];
@@ -1545,7 +1550,7 @@
   function buildSummary(){
     const r = getResult();
     if(r.state === 'needNextPaid') return `Next Up selected — confirm whether the device is at least ${nextUpThresholdPct()}% paid off.`;
-    if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? 'Legacy Next Up selected — customer is under 50% paid. Customer must pay up to 50%, then they can upgrade. Verify payoff/upgrade options in OPUS.' : 'Next Up Anytime selected — customer is under 33% paid. AT&T may allow the early upgrade/payoff path, but promo credit does not apply in the tool. Verify in OPUS/CCKM.';
+    if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? 'Legacy Next Up selected — customer is under 50% paid. Customer must pay up to 50%, then they can upgrade. Verify payoff/upgrade options in OPUS.' : 'Next Up Anytime selected — customer is under 33% paid. AT&T can still pay off the remaining installments for the upgrade path, but no new phone promo applies. Verify in OPUS/CCKM.';
     if(r.state === 'nextup_promo'){
       const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
       return `Customer is using ${nextUpFeatureLabel()} for a ${phoneLabel} on ${PLAN_LABEL[state.plan]} — estimated Next Up upgrade credit is ${moneyWhole(r.credit)} over 36 months. Verify feature, payoff percentage, device condition, and promo eligibility in OPUS/CCKM.`;
@@ -1682,7 +1687,7 @@
     if(r.state === 'tier_action_needed') return `${phoneLabel}: choose New Line or Upgrade.`;
     if(r.state === 'needValue') return `${phoneLabel}: enter trade value.`;
     if(r.state === 'needNextPaid') return `Next Up: confirm ${nextUpThresholdPct()}% payoff.`;
-    if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? 'Legacy Next Up under 50%: pay to 50% first.' : 'Next Up Anytime under 33%: payoff path, no promo credit.';
+    if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? 'Legacy Next Up under 50%: pay to 50% first.' : 'Next Up Anytime under 33%: AT&T payoff path, no new promo.';
     if(r.state === 'nextup_not_eligible') return 'No Next Up promo loaded for this phone.';
     if(r.state === 'full_retail_rerate') return `${phoneLabel}: full retail on ${PLAN_LABEL[state.plan]}; check rerate.`;
     if(r.state === 'tiered_not_offered' || r.state === 'full_retail' || r.state === 'zero') return `${phoneLabel}: no recurring promo showing.`;
@@ -1704,7 +1709,7 @@
     if(r.state === 'tiered_final') return `This ${phoneLabel} has an estimated tiered promo price of $${r.monthly}/mo for 36 months before taxes. ${baseVerify}`;
     if(r.state === 'full_retail_rerate') return `This plan does not show a promo credit in the tool, so I would review plan options before quoting the final device cost. ${baseVerify}`;
     if(r.state === 'zero' || r.state === 'full_retail') return `With the current information, this device is estimated at full retail in the tool. ${baseVerify}`;
-    if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? `Because the legacy Next Up device is not at least 50% paid off, the customer generally needs to pay up to 50% first, then they can upgrade. ${baseVerify}` : `Because the Next Up Anytime device is not at least 33% paid off, the promo credit is not applying in the tool. AT&T may still allow the early upgrade/payoff path. ${baseVerify}`;
+    if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? `Because the legacy Next Up device is not at least 50% paid off, the customer generally needs to pay up to 50% first, then they can upgrade. ${baseVerify}` : `Because the Next Up Anytime device is not at least 33% paid off, AT&T can still pay off the remaining installments for the upgrade path, but no new phone promo applies. ${baseVerify}`;
     if(r.state === 'nextup_not_eligible') return `This phone does not have a Next Up promo loaded in this tool. ${baseVerify}`;
     return `${buildSummary()} ${baseVerify}`;
   }
@@ -1747,7 +1752,7 @@
     'Verify the trade-in value before quoting the final monthly credit.',
     'Use OPUS as the final source of truth before completing the transaction.',
     'Any Google Pixel trades in — any year, any condition — for Pixel Pro promos.',
-    'Next Up Anytime uses 33% paid. Legacy Next Up uses 50% paid. Both are only for upgrades.',
+    'Next Up Anytime uses 33% paid. At 33%+, it follows the normal promo path. Under 33%, AT&T payoff path only — no new phone promo. Legacy Next Up uses 50% paid.',
     'If legacy Next Up is under 50% paid, customer generally pays up to 50% first, then can upgrade.',
     'Tiered offers do not need a trade-in — the low monthly is the promo itself.',
     'For tiered devices, confirm whether the promo is New Line only, Upgrade only, or both.',
@@ -2275,7 +2280,7 @@
       }
     } else if(r.state === 'nextup_no_payoff'){
       amountEl.innerHTML = '$0';
-      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">${state.nextUpType === 'legacy' ? 'Legacy Next Up selected and device is less than 50% paid — customer generally must pay up to 50%, then they can upgrade. Verify payoff/upgrade options in OPUS/CCKM.' : 'Next Up Anytime selected and device is less than 33% paid — AT&T may allow the early upgrade/payoff path, but promo credits do not apply in this path. Verify in OPUS/CCKM.'}</div>`;
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">${state.nextUpType === 'legacy' ? 'Legacy Next Up selected and device is less than 50% paid — customer generally must pay up to 50%, then they can upgrade. Verify payoff/upgrade options in OPUS/CCKM.' : 'Next Up Anytime selected and device is less than 33% paid — AT&T can pay off the remaining installments for the upgrade path, but no new phone promo applies. Verify in OPUS/CCKM.'}</div>`;
     } else if(r.state === 'nextup_not_eligible'){
       amountEl.innerHTML = '$0';
       detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> does not have a Next Up / legacy Next Up promo loaded in this tool. Verify the device and offer in CCKM before quoting.</div>`;
