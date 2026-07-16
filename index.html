@@ -477,13 +477,13 @@
         </div>
 
         <div id="nextPaidRow" style="margin-top:12px; display:none;">
-          <div class="group-title" style="margin:6px 0 8px;">Is the device at least 50% paid off?</div>
+          <div class="group-title" id="nextPaidQuestion" style="margin:6px 0 8px;">Is the device at least 33% paid off?</div>
           <div class="chips" id="nextPaidChips">
-            <button class="chip" data-paid="yes" aria-pressed="false">Yes — ≥50% paid</button>
-            <button class="chip" data-paid="no" aria-pressed="false">No — less than 50% paid</button>
+            <button class="chip" data-paid="yes" id="nextPaidYes" aria-pressed="false">Yes — ≥33% paid</button>
+            <button class="chip" data-paid="no" id="nextPaidNo" aria-pressed="false">No — less than 33% paid</button>
           </div>
         </div>
-        <p id="nextUpHelp" style="margin-top:12px; color:var(--slate); font-size:13px;">Choose the feature shown on the customer's bill so the promo path is labeled correctly. Device generally must be at least 50% paid and in turn-in condition. Verify in OPUS/CCKM.</p>
+        <p id="nextUpHelp" style="margin-top:12px; color:var(--slate); font-size:13px;">Choose the feature shown on the customer's bill so the promo path is calculated correctly. Next Up Anytime uses the 33% path. Legacy Next Up uses the 50% path. Verify in OPUS/CCKM.</p>
         <p id="nextUpDisabledNote" style="margin-top:10px; color:#a32b2b; font-weight:600; font-size:13px; display:none;">Not available — Next Up requires turning in a device on an existing line, not a new line activation.</p>
       </section>
 
@@ -639,9 +639,9 @@
 
         <details class="tool-subcard"><summary><b>8. Can damaged or destroyed phones still qualify?</b></summary><p>Sometimes, yes. Damaged and sometimes even destroyed phones can still qualify depending on the current promotion and the value returned by the approved trade flow. Do not assume based on appearance alone — check the trade system before quoting.</p></details>
 
-        <details class="tool-subcard"><summary><b>9. How can I tell the difference between Next Up Anytime and legacy Next Up on a customer's bill?</b></summary><p>Check the feature name and monthly feature charge on the bill or in OPUS. <b>Next Up Anytime</b> usually shows as <b>$10/mo</b>. Legacy <b>Next Up</b> may show as <b>$6/mo</b>. In the main tool, choose the matching feature so the summary labels the promo path correctly. For any Next Up promo, verify the feature, payoff percentage, device condition, and offer eligibility in OPUS/CCKM. The phone generally needs to be at least <b>50% paid off</b> before the customer can use the upgrade promo path.</p></details>
+        <details class="tool-subcard"><summary><b>9. How can I tell the difference between Next Up Anytime and legacy Next Up on a customer's bill?</b></summary><p>Check the feature name and monthly feature charge on the bill or in OPUS. <b>Next Up Anytime</b> usually shows as <b>$10/mo</b>. Legacy <b>Next Up</b> may show as <b>$6/mo</b>. In the main tool, choose the matching feature so the promo path calculates correctly. <b>Next Up Anytime</b> uses the <b>33% paid</b> path. Legacy <b>Next Up</b> uses the <b>50% paid</b> path. Verify the feature, payoff percentage, device condition, and offer eligibility in OPUS/CCKM.</p></details>
 
-        <details class="tool-subcard"><summary><b>10. Do legacy Next Up lines get promos?</b></summary><p>Yes, if the offer allows it. This tool treats <b>Next Up Anytime</b> and legacy <b>Next Up</b> as eligible turn-in upgrade paths when the selected device has a loaded Next Up promo and the phone is at least <b>50% paid</b>. Always verify in OPUS/CCKM before quoting.</p></details>
+        <details class="tool-subcard"><summary><b>10. Do legacy Next Up lines get promos?</b></summary><p>Yes, if the offer allows it. Legacy <b>Next Up</b> uses a <b>50% paid</b> check. If the customer is under 50%, they generally need to pay the installment balance up to 50% first, then they can use the legacy Next Up upgrade path. <b>Next Up Anytime</b> stays on the <b>33% paid</b> path. Always verify in OPUS/CCKM before quoting.</p></details>
 
         <details class="tool-subcard"><summary><b>11. What should reps double-check before submitting the order?</b></summary><p>Confirm the correct plan group, promo, device SKU/storage, trade value, trade deadline, Next Up status, customer expectations, and OPUS/CCKM eligibility before quoting or completing the sale.</p></details>
       </section>
@@ -1240,6 +1240,7 @@
     el('nextTypeRow').style.display = state.nextUp ? 'block' : 'none';
     el('nextPaidRow').style.display = state.nextUp ? 'block' : 'none';
     if(state.nextUp && !state.nextUpType) state.nextUpType = 'anytime';
+    updateNextUpCopy();
     if(!state.nextUp){
       state.nextPaid = null;
       state.nextUpType = 'anytime';
@@ -1252,7 +1253,10 @@
     b.addEventListener('click', ()=> {
       if(!state.nextUp) return;
       state.nextUpType = b.dataset.nextType;
+      state.nextPaid = null;
+      document.querySelectorAll('#nextPaidChips [data-paid]').forEach(x=>x.setAttribute('aria-pressed','false'));
       document.querySelectorAll('#nextTypeChips [data-next-type]').forEach(x=>x.setAttribute('aria-pressed', x===b ? 'true' : 'false'));
+      updateNextUpCopy();
       render();
     });
   });
@@ -1279,7 +1283,7 @@
     document.querySelectorAll('#quick .chip').forEach(x=>x.disabled=false);
     pixelChk.checked=false;
     pixelToggleEl.classList.remove('show');
-    nextUpChk.checked=false; el('nextTypeRow').style.display='none'; el('nextPaidRow').style.display='none';
+    nextUpChk.checked=false; el('nextTypeRow').style.display='none'; el('nextPaidRow').style.display='none'; updateNextUpCopy();
     planHelp.style.display='none'; planHelp.innerHTML='';
     tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true');
     updateTradeHelp();
@@ -1417,6 +1421,26 @@
     return state.nextUpType === 'legacy' ? 'Legacy Next Up' : 'Next Up Anytime';
   }
 
+  function nextUpThresholdPct(){
+    return state.nextUpType === 'legacy' ? 50 : 33;
+  }
+
+  function updateNextUpCopy(){
+    const pct = nextUpThresholdPct();
+    const q = el('nextPaidQuestion');
+    const yes = el('nextPaidYes');
+    const no = el('nextPaidNo');
+    const help = el('nextUpHelp');
+    if(q) q.textContent = `Is the device at least ${pct}% paid off?`;
+    if(yes) yes.textContent = `Yes — ≥${pct}% paid`;
+    if(no) no.textContent = `No — less than ${pct}% paid`;
+    if(help){
+      help.innerHTML = state.nextUpType === 'legacy'
+        ? 'Legacy Next Up uses the 50% paid path. If the device is under 50%, the customer generally must pay up to 50% first, then they can upgrade. Verify in OPUS/CCKM.'
+        : 'Next Up Anytime uses the 33% paid path. If the device is under 33%, AT&T may still allow an early upgrade/payoff path, but promo credits generally do not apply. Verify in OPUS/CCKM.';
+    }
+  }
+
   function nextUpPromoCredit(phone){
     if(!phone) return 0;
     const id = phone.id || '';
@@ -1520,8 +1544,8 @@
   // build summary text
   function buildSummary(){
     const r = getResult();
-    if(r.state === 'needNextPaid') return 'Next Up selected — confirm whether the device is at least 50% paid off.';
-    if(r.state === 'nextup_no_payoff') return 'Customer has Next Up and the device is less than 50% paid — promo credit does not apply in the tool. Verify payoff/upgrade options in OPUS.';
+    if(r.state === 'needNextPaid') return `Next Up selected — confirm whether the device is at least ${nextUpThresholdPct()}% paid off.`;
+    if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? 'Legacy Next Up selected — customer is under 50% paid. Customer must pay up to 50%, then they can upgrade. Verify payoff/upgrade options in OPUS.' : 'Next Up Anytime selected — customer is under 33% paid. AT&T may allow the early upgrade/payoff path, but promo credit does not apply in the tool. Verify in OPUS/CCKM.';
     if(r.state === 'nextup_promo'){
       const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
       return `Customer is using ${nextUpFeatureLabel()} for a ${phoneLabel} on ${PLAN_LABEL[state.plan]} — estimated Next Up upgrade credit is ${moneyWhole(r.credit)} over 36 months. Verify feature, payoff percentage, device condition, and promo eligibility in OPUS/CCKM.`;
@@ -1657,8 +1681,8 @@
     if(r.state === 'tiered_final') return `${phoneLabel}: tiered price $${r.monthly}/mo.`;
     if(r.state === 'tier_action_needed') return `${phoneLabel}: choose New Line or Upgrade.`;
     if(r.state === 'needValue') return `${phoneLabel}: enter trade value.`;
-    if(r.state === 'needNextPaid') return 'Next Up: confirm 50% payoff.';
-    if(r.state === 'nextup_no_payoff') return 'Next Up under 50%: no promo credit.';
+    if(r.state === 'needNextPaid') return `Next Up: confirm ${nextUpThresholdPct()}% payoff.`;
+    if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? 'Legacy Next Up under 50%: pay to 50% first.' : 'Next Up Anytime under 33%: payoff path, no promo credit.';
     if(r.state === 'nextup_not_eligible') return 'No Next Up promo loaded for this phone.';
     if(r.state === 'full_retail_rerate') return `${phoneLabel}: full retail on ${PLAN_LABEL[state.plan]}; check rerate.`;
     if(r.state === 'tiered_not_offered' || r.state === 'full_retail' || r.state === 'zero') return `${phoneLabel}: no recurring promo showing.`;
@@ -1671,7 +1695,7 @@
     const baseVerify = 'I will still verify the exact promotion in OPUS/CCKM before we complete everything.';
     if(!state.plan || !state.phone) return 'Once I select the plan and phone, I can explain the estimated promo and monthly device cost.';
     const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
-    if(r.state === 'nextup_promo') return `This line shows ${nextUpFeatureLabel()}, and the device is marked at least 50% paid. The ${phoneLabel} is estimated to receive ${moneyWhole(r.credit)} in Next Up bill credits over 36 months. ${baseVerify}`;
+    if(r.state === 'nextup_promo') return `This line shows ${nextUpFeatureLabel()}, and the device is marked at least ${nextUpThresholdPct()}% paid. The ${phoneLabel} is estimated to receive ${moneyWhole(r.credit)} in Next Up bill credits over 36 months. ${baseVerify}`;
     if(r.state === 'promo'){
       const deviceMo = monthly(state.phone.retail);
       const netMo = Math.max(0, parseFloat(deviceMo) - parseFloat(r.monthly)).toFixed(2);
@@ -1680,7 +1704,7 @@
     if(r.state === 'tiered_final') return `This ${phoneLabel} has an estimated tiered promo price of $${r.monthly}/mo for 36 months before taxes. ${baseVerify}`;
     if(r.state === 'full_retail_rerate') return `This plan does not show a promo credit in the tool, so I would review plan options before quoting the final device cost. ${baseVerify}`;
     if(r.state === 'zero' || r.state === 'full_retail') return `With the current information, this device is estimated at full retail in the tool. ${baseVerify}`;
-    if(r.state === 'nextup_no_payoff') return `Because the Next Up device is not at least 50% paid off, the promo credit is not applying in the tool. ${baseVerify}`;
+    if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? `Because the legacy Next Up device is not at least 50% paid off, the customer generally needs to pay up to 50% first, then they can upgrade. ${baseVerify}` : `Because the Next Up Anytime device is not at least 33% paid off, the promo credit is not applying in the tool. AT&T may still allow the early upgrade/payoff path. ${baseVerify}`;
     if(r.state === 'nextup_not_eligible') return `This phone does not have a Next Up promo loaded in this tool. ${baseVerify}`;
     return `${buildSummary()} ${baseVerify}`;
   }
@@ -1723,8 +1747,8 @@
     'Verify the trade-in value before quoting the final monthly credit.',
     'Use OPUS as the final source of truth before completing the transaction.',
     'Any Google Pixel trades in — any year, any condition — for Pixel Pro promos.',
-    'Next Up / Next Up Anytime generally requires the device to be at least 50% paid off, and only on upgrades.',
-    'If Next Up is under 50% paid, promo credits usually do not apply — review payoff options.',
+    'Next Up Anytime uses 33% paid. Legacy Next Up uses 50% paid. Both are only for upgrades.',
+    'If legacy Next Up is under 50% paid, customer generally pays up to 50% first, then can upgrade.',
     'Tiered offers do not need a trade-in — the low monthly is the promo itself.',
     'For tiered devices, confirm whether the promo is New Line only, Upgrade only, or both.',
     'Higher trade-in value can unlock a higher credit tier. Check tradein.att.com.',
@@ -1842,6 +1866,7 @@
     tradeEl.value = state.value==null ? '' : new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(state.value);
     pixelChk.checked = state.pixel; nextUpChk.checked = state.nextUp; el('nextTypeRow').style.display = state.nextUp ? 'block' : 'none'; el('nextPaidRow').style.display = state.nextUp ? 'block' : 'none';
     document.querySelectorAll('#nextTypeChips [data-next-type]').forEach(btn=>btn.setAttribute('aria-pressed', btn.dataset.nextType === state.nextUpType ? 'true' : 'false'));
+    updateNextUpCopy();
     document.querySelectorAll('#nextPaidChips [data-paid]').forEach(b=>b.setAttribute('aria-pressed', (state.nextPaid===true&&b.dataset.paid==='yes')||(state.nextPaid===false&&b.dataset.paid==='no')?'true':'false'));
     updateControlsAfterSelection(); render();
   }
@@ -2210,7 +2235,7 @@
         amountEl.innerHTML = moneyWhole(r.credit) + '<span class="off">off</span>';
       }
       lastShownCredit = r.credit;
-      detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>${nextUpFeatureLabel()} upgrade offer. Device must be at least <b>50% paid</b> and in eligible turn-in condition.<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>Estimated after credit: <b style="color:#fff;">$${netMo}/mo</b></div><div class="d-rule">Verify the feature name, payoff percentage, device condition, and offer eligibility in OPUS/CCKM before quoting.</div>`;
+      detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>${nextUpFeatureLabel()} upgrade offer. Device must be at least <b>${nextUpThresholdPct()}% paid</b> and in eligible turn-in condition.<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>Estimated after credit: <b style="color:#fff;">$${netMo}/mo</b></div><div class="d-rule">Verify the feature name, payoff percentage, device condition, and offer eligibility in OPUS/CCKM before quoting.</div>`;
     } else if(r.state === 'tiered_final'){
       amountEl.innerHTML = `<span class="monthly-primary">$${r.monthly}/mo</span><span class="off">${money(r.total)} final</span>`;
       detailEl.innerHTML = `<div class="d-monthly">Total: ${money(r.total)} spread over 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]} &middot; Tiered Offer<br>Device retail: ${money(state.phone.retail)}</div>`;
@@ -2250,7 +2275,7 @@
       }
     } else if(r.state === 'nextup_no_payoff'){
       amountEl.innerHTML = '$0';
-      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">Next Up selected and device is less than 50% paid — promo credits do not apply in this path. Verify payoff/upgrade options in OPUS/CCKM.</div>`;
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">${state.nextUpType === 'legacy' ? 'Legacy Next Up selected and device is less than 50% paid — customer generally must pay up to 50%, then they can upgrade. Verify payoff/upgrade options in OPUS/CCKM.' : 'Next Up Anytime selected and device is less than 33% paid — AT&T may allow the early upgrade/payoff path, but promo credits do not apply in this path. Verify in OPUS/CCKM.'}</div>`;
     } else if(r.state === 'nextup_not_eligible'){
       amountEl.innerHTML = '$0';
       detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> does not have a Next Up / legacy Next Up promo loaded in this tool. Verify the device and offer in CCKM before quoting.</div>`;
@@ -2281,7 +2306,7 @@
       detailEl.innerHTML = `<div class="d-prompt">Enter the trade-in value.</div>`;
     } else if(r.state === 'needNextPaid'){
       amountEl.innerHTML = '$&mdash;';
-      detailEl.innerHTML = `<div class="d-prompt">Next Up selected — confirm if device is at least 50% paid off.</div>`;
+      detailEl.innerHTML = `<div class="d-prompt">Next Up selected — confirm if device is at least ${nextUpThresholdPct()}% paid off.</div>`;
     } else {
       amountEl.innerHTML = '$&mdash;';
       detailEl.innerHTML = `<div class="d-prompt">Pick a plan, a phone, and a trade-in value.</div>`;
