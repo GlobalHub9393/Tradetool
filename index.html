@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Monthly Credit Tool — v1.06</title>
+<title>Global Trade Tool — v1.07</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -102,6 +102,16 @@
   .trade-preset-copy{font-size:12px;color:#5f7180;font-weight:600;}
   .trade-reference-link{display:inline-flex;align-items:center;gap:6px;margin-top:9px;font-size:12.5px;}
   .trade-preset-note{display:none;margin-top:9px;padding:9px 10px;border-radius:9px;background:#fff8e8;border:1px solid #f2d28d;color:#6c4b00;font-size:12.5px;font-weight:700;line-height:1.35;}
+  .trade-special-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:9px;}
+  .trade-special-row .trade-preset-copy{font-size:12px;color:#5f7180;font-weight:600;}
+  #tradeCard.preset-16e .dollar,
+  #tradeCard.preset-16e #quick,
+  #tradeCard.preset-16e #tradeSpecialRow,
+  #tradeCard.preset-16e #tradeHelp,
+  #tradeCard.preset-16e #tradeError,
+  #tradeCard.preset-16e .trade-verify-note{display:none !important;}
+  #tradeCard.preset-16e .tradewrap{justify-content:flex-end;}
+  #tradeCard.preset-16e #clearTrade{margin-left:0;background:#eef7ff;border:1px solid #b9dcf5;border-radius:9px;color:var(--blue);padding:8px 12px;}
   .trade-applied-note{margin-top:8px; font-size:13px; color:#0f3b24; background:#ebfff5; border:1px solid #c9f0d6; padding:10px; border-radius:8px; display:none;}
 
   .trade-verify-note{margin:10px 0 0;font-size:12.5px;color:var(--slate);font-weight:700;line-height:1.4;}
@@ -420,11 +430,11 @@
     <div class="header-row">
       <div style="display:flex; flex-direction:column;">
         <div class="eyebrow">AT&amp;T Authorized Retailer</div>
-        <h1>Monthly Credit Tool</h1>
+        <h1>Global Trade Tool</h1>
       </div>
       <div style="margin-left:auto; text-align:right;">
         <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/17/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.06</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.07</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -505,11 +515,7 @@
         </div>
 
         <div id="tradeHelp" class="trade-help" aria-hidden="true">
-          <div class="trade-help-warning"><strong>In-store reminder:</strong> Confirm the device&rsquo;s trade value using designated AT&amp;T trade tools before quoting or submitting the trade. This calculator estimates promotional eligibility only.</div>
-          <div class="trade-help-actions">
-            <button type="button" id="tradePresetIphone16e" class="chip qchip trade-preset-chip">Trading in iPhone 16e</button>
-            <span class="trade-preset-copy">Defaults to the lowest available trade tier.</span>
-          </div>
+          <div class="trade-help-warning"><strong>In-store requirement:</strong> Confirm trade-in values using designated AT&amp;T trade tools before quoting or submitting a trade. Do not use this calculator or tradein.att.com as the default in-store valuation source.</div>
           <a class="trade-reference-link" href="https://tradein.att.com/" target="_blank" rel="noopener noreferrer">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             Open tradein.att.com as a reference
@@ -527,6 +533,10 @@
           <button class="chip qchip" data-v="200">$200</button>
           <button class="chip qchip" data-v="290">$290</button>
           <button class="chip qchip" data-v="400">$400+</button>
+        </div>
+        <div class="trade-special-row" id="tradeSpecialRow">
+          <button type="button" id="tradePresetIphone16e" class="chip qchip trade-preset-chip">Trading in iPhone 16e</button>
+          <span class="trade-preset-copy">Use this special option instead of selecting a trade value.</span>
         </div>
 
         <p class="trade-verify-note">While in store, confirm the trade value using designated AT&amp;T trade tools. Do not use this calculator or the reference link as the final source of value.</p>
@@ -755,12 +765,12 @@
       <div class="admin-subhead">Accounts</div>
       <div class="tool-subcard"><b>GitHub repo:</b> GlobalHub9393 / Tradetool<br><b>Cloudflare email:</b> Ts8686@cmcnj.com<br><b>Cloudflare password:</b> Stored separately</div>
       <div class="admin-subhead">Quick Guide — GitHub First</div>
-      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.06</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
+      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.07</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
       <details class="tool-subcard"><summary><b>2. Download the updated index.html</b></summary><p>Download the updated file from ChatGPT. The main site file must be named exactly <b>index.html</b>. If the file name becomes <b>index.html.txt</b>, <b>GlobalTradeTool_v1_DEV</b>, or anything else, rename it or ask for a corrected file before uploading to GitHub.</p></details>
       <details class="tool-subcard"><summary><b>3. Upload index.html to GitHub</b></summary><p>Open GitHub, go to <b>GlobalHub9393 / Tradetool</b>, tap <b>Add file</b>, then upload the updated <b>index.html</b>. If GitHub asks whether to replace the existing file, replace it. Commit directly to the <b>main</b> branch.</p></details>
       <details class="tool-subcard"><summary><b>4. Commit the change</b></summary><p>Use a simple commit message like <b>Update Global Trade Tool 7/9/2026</b>. Tap <b>Commit changes</b>. GitHub should now show the latest <b>index.html</b> in the file list.</p></details>
       <details class="tool-subcard"><summary><b>5. Cloudflare deployment after GitHub is connected</b></summary><p>Once Cloudflare Pages is linked to this GitHub repo, Cloudflare should automatically create a new deployment from the <b>main</b> branch after every GitHub commit. Go to Cloudflare → <b>Workers &amp; Pages</b> → the Global Trade Tool project → <b>Deployments</b> to confirm the newest deployment completed successfully.</p></details>
-      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.06</b>, the date is correct, the calculator works, More opens, Tools opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
+      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.07</b>, the date is correct, the calculator works, More opens, Tools opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
       <details class="tool-subcard"><summary><b>7. If Cloudflare is not connected yet</b></summary><p>Use the old ZIP/folder upload only as a fallback. Download the Cloudflare folder ZIP from ChatGPT, unzip it in Files, confirm the folder contains <b>index.html</b>, then upload the unzipped folder through Cloudflare Pages → <b>Create deployment</b>.</p></details>
       <details class="tool-subcard"><summary><b>8. If something goes wrong</b></summary><p>Stop and take a screenshot. Check GitHub to confirm <b>index.html</b> was replaced correctly. Then check Cloudflare Deployments for errors or use the previous successful deployment if needed. Send ChatGPT the screenshot, current file, and what went wrong.</p></details>
     </section>
@@ -848,11 +858,11 @@
 
 <script>
 (function(){
-  const VERSION = 'Live Version 1.06';
+  const VERSION = 'Live Version 1.07';
   const ADMIN_PASSWORD = 'wire9393';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0717';
   const HISTORY_KEY = 'globalTradeToolHistory_v1';
-  let releaseInfo = { version:'Live Version 1.06', month:'July 2026', updated:'7/17/2026' };
+  let releaseInfo = { version:'Live Version 1.07', month:'July 2026', updated:'7/17/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
@@ -1283,8 +1293,10 @@
   document.getElementById('phoneClear').addEventListener('click', ()=> { phoneSearch.value=''; phoneSuggestions.classList.remove('open'); phoneSearch.setAttribute('aria-expanded','false'); });
 
   function updateTradePresetNote(){
-    if(state.tradePreset === 'iphone16e'){
-      tradePresetNote.innerHTML = '<strong>iPhone 16e selected:</strong> lowest available trade tier applied. Confirm the actual device value using designated in-store trade tools.';
+    const isIphone16e = state.tradePreset === 'iphone16e';
+    el('tradeCard').classList.toggle('preset-16e', isIphone16e);
+    if(isIphone16e){
+      tradePresetNote.innerHTML = '<strong>iPhone 16e selected:</strong> the special $350 trade-in promotion tier is applied. Tap <b>Clear</b> or reset the form to choose a different trade.';
       tradePresetNote.style.display = 'block';
       tradePresetNote.setAttribute('aria-hidden','false');
     } else {
@@ -1310,7 +1322,7 @@
     tradePresetIphone16e.addEventListener('click', ()=>{
       state.tradePreset = 'iphone16e';
       state.value = 35;
-      tradeEl.value = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(state.value);
+      tradeEl.value = '';
       tradeError.style.display = 'none';
       updateTradePresetNote();
       updateTradeHelp();
@@ -1335,7 +1347,7 @@
 
   function updateTradeHelp(forceFocus){
     const focused = document.activeElement === tradeEl;
-    const show = focused || state.value === null;
+    const show = state.tradePreset !== 'iphone16e' && (focused || state.value === null);
     tradeHelp.style.display = show ? 'block' : 'none';
     tradeHelp.setAttribute('aria-hidden', show ? 'false' : 'true');
   }
@@ -1394,7 +1406,7 @@
     galaxyAnyToggleEl.classList.remove('show');
     nextUpChk.checked=false; el('nextTypeRow').style.display='none'; el('nextPaidRow').style.display='none'; updateNextUpCopy();
     planHelp.style.display='none'; planHelp.innerHTML='';
-    tradePresetNote.style.display='none'; tradePresetNote.setAttribute('aria-hidden','true'); tradePresetNote.textContent='';
+    updateTradePresetNote();
     tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true');
     updateTradeHelp();
     lastResultSnapshot = null;
