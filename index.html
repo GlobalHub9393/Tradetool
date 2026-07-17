@@ -30,8 +30,22 @@
   .layout{display:flex; flex-direction:column; gap:16px; align-items:stretch;}
   .inputs{flex:1; display:flex; flex-direction:column; gap:14px; min-width:0;}
 
-  .card{background:var(--card); border-radius:16px; box-shadow:var(--shadow); padding:16px 16px 18px;}
+  .card{background:var(--card); border-radius:16px; box-shadow:var(--shadow); padding:16px 16px 18px;
+    position:relative; transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease, opacity .28s ease;}
   .card.needs-choice{box-shadow:0 8px 30px rgba(5,104,174,.09); border:1.5px solid rgba(5,104,174,.18);}
+  .card.step-complete{border-left:3px solid rgba(34,197,94,.58);}
+  .card.step-complete .step{background:#16a34a; box-shadow:0 0 0 3px rgba(34,197,94,.11);}
+  .card.step-awake{animation:sectionWake .62s cubic-bezier(.18,.84,.32,1);}
+  @keyframes sectionWake{
+    0%{transform:translateY(7px);box-shadow:var(--shadow);}
+    38%{transform:translateY(-2px);box-shadow:0 0 0 4px rgba(59,192,240,.13),0 12px 30px rgba(5,104,174,.16);}
+    100%{transform:translateY(0);box-shadow:var(--shadow);}
+  }
+  .inputs.resetting .card{animation:resetCardSweep .26s ease both;}
+  .inputs.resetting .card:nth-of-type(2){animation-delay:24ms;}
+  .inputs.resetting .card:nth-of-type(3){animation-delay:48ms;}
+  .inputs.resetting .card:nth-of-type(4){animation-delay:72ms;}
+  @keyframes resetCardSweep{0%{opacity:1;transform:translateY(0) scale(1);}55%{opacity:.42;transform:translateY(4px) scale(.992);}100%{opacity:1;transform:translateY(0) scale(1);}}
   .label{font-size:12px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--blue); margin:0 0 11px;}
   .step{display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%;
     background:var(--blue); color:#fff; font-size:11px; font-weight:800; margin-right:8px; vertical-align:1px;}
@@ -109,6 +123,25 @@
   .display.result-red .d-amount { color:#fca5a5; }
   .display.result-tiered { border-left-color:#3bc0f0; animation: pulse-blue 2.4s ease-in-out infinite; }
   .display.result-tiered .monthly-primary { color: var(--cyan); }
+
+  /* maximum promo: brighter green halo that reaches full intensity, then settles back */
+  .display.result-max{border-left-color:#65ff9f;animation:maxPromoPulse .92s ease-in-out infinite;}
+  .display.result-max::before{content:"";position:absolute;inset:-22% -12% auto auto;width:230px;height:230px;border-radius:50%;
+    background:radial-gradient(circle,rgba(84,255,148,.22) 0%,rgba(34,197,94,.08) 38%,rgba(34,197,94,0) 70%);
+    pointer-events:none;z-index:0;animation:maxHalo 1.2s ease-in-out infinite;}
+  .display.result-max > *{position:relative;z-index:1;}
+  .display.result-max .d-amount,.display.result-max .monthly-primary{color:#7dffad;text-shadow:0 0 8px rgba(101,255,159,.68),0 0 20px rgba(34,197,94,.55),0 0 38px rgba(34,197,94,.30);}
+  @keyframes maxPromoPulse{
+    0%,100%{box-shadow:0 10px 30px rgba(7,28,52,.30),-3px 0 14px rgba(34,197,94,.35);border-left-color:#32d875;}
+    50%{box-shadow:0 10px 30px rgba(7,28,52,.30),-8px 0 34px rgba(72,255,137,.95),0 0 42px rgba(34,197,94,.48);border-left-color:#8bffb7;}
+  }
+  @keyframes maxHalo{0%,100%{opacity:.45;transform:scale(.94);}50%{opacity:1;transform:scale(1.08);}}
+
+  /* one-time light sweep whenever a calculated result changes */
+  .display::after{content:"";position:absolute;top:-35%;bottom:-35%;left:-42%;width:28%;transform:skewX(-18deg);
+    background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.28),rgba(255,255,255,0));opacity:0;pointer-events:none;z-index:3;}
+  .display.promo-shimmer::after{animation:resultShimmer .82s cubic-bezier(.18,.75,.24,1);}
+  @keyframes resultShimmer{0%{left:-42%;opacity:0;}16%{opacity:.8;}100%{left:118%;opacity:0;}}
 
   @keyframes pulse-green  { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30), 0 0 0 rgba(34,197,94,0);   border-left-color:#16a34a; } 50%{ box-shadow:0 10px 30px rgba(7,28,52,.30), -6px 0 22px rgba(34,197,94,.55); border-left-color:#4ade80; } }
   @keyframes pulse-yellow { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30), 0 0 0 rgba(234,179,8,0);   border-left-color:#ca8a04; } 50%{ box-shadow:0 10px 30px rgba(7,28,52,.30), -6px 0 22px rgba(234,179,8,.55); border-left-color:#fde047; } }
@@ -232,11 +265,11 @@
   .typed-plan-box.cru .typed-plan-head{color:var(--blue);}
   .typed-plan-box.firstnet .typed-plan-head{color:#034b80;}
   .typed-plan-line{display:block;font-size:11px;line-height:1.35;font-weight:800;color:var(--ink);white-space:normal;overflow:hidden;
-    clip-path:inset(0 100% 0 0);animation:planTextReveal .72s steps(36,end) forwards;animation-delay:calc((var(--i,0) * 55ms) + 80ms);}
+    opacity:0;filter:blur(.35px);clip-path:inset(0 100% 0 0);animation:planTextReveal .72s steps(36,end) forwards;animation-delay:calc((var(--i,0) * 55ms) + 80ms);}
   .typed-plan-box.cru .typed-plan-line{color:var(--blue);}
   .typed-plan-box.firstnet .typed-plan-line{color:#034b80;}
   @keyframes planBoxPop{0%{opacity:0;transform:translateY(4px) scale(.985);}100%{opacity:1;transform:translateY(0) scale(1);}}
-  @keyframes planTextReveal{0%{clip-path:inset(0 100% 0 0);}100%{clip-path:inset(0 0 0 0);}}
+  @keyframes planTextReveal{0%{opacity:.18;filter:blur(.35px);clip-path:inset(0 100% 0 0);}18%{opacity:.82;}100%{opacity:1;filter:blur(0);clip-path:inset(0 0 0 0);}}
   @media (min-width:560px){.typed-plan-list{grid-template-columns:repeat(3,minmax(0,1fr));}}
   @media (prefers-reduced-motion: reduce){.typed-plan-box{animation:none;opacity:1;transform:none}.typed-plan-line{animation:none;clip-path:none;}}
 
@@ -357,7 +390,11 @@
     .display{width:420px; flex:0 0 420px; position:sticky; top:18px; bottom:auto;}
     main.inputs{flex:1;}
   }
-  @media (prefers-reduced-motion:reduce){ *{transition:none !important;} }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;}
+    .display,.display.result-max,.display.result-green,.display.result-yellow,.display.result-orange,.display.result-red,.display.result-tiered,
+    .display.result-max::before,.display.promo-shimmer::after,.card.step-awake,.inputs.resetting .card{animation:none !important;}
+  }
 </style>
 </head>
 <body>
@@ -370,7 +407,7 @@
       </div>
       <div style="margin-left:auto; text-align:right;">
         <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/17/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.01</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -691,12 +728,12 @@
       <div class="admin-subhead">Accounts</div>
       <div class="tool-subcard"><b>GitHub repo:</b> GlobalHub9393 / Tradetool<br><b>Cloudflare email:</b> Ts8686@cmcnj.com<br><b>Cloudflare password:</b> Stored separately</div>
       <div class="admin-subhead">Quick Guide — GitHub First</div>
-      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
+      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.01</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
       <details class="tool-subcard"><summary><b>2. Download the updated index.html</b></summary><p>Download the updated file from ChatGPT. The main site file must be named exactly <b>index.html</b>. If the file name becomes <b>index.html.txt</b>, <b>GlobalTradeTool_v1_DEV</b>, or anything else, rename it or ask for a corrected file before uploading to GitHub.</p></details>
       <details class="tool-subcard"><summary><b>3. Upload index.html to GitHub</b></summary><p>Open GitHub, go to <b>GlobalHub9393 / Tradetool</b>, tap <b>Add file</b>, then upload the updated <b>index.html</b>. If GitHub asks whether to replace the existing file, replace it. Commit directly to the <b>main</b> branch.</p></details>
       <details class="tool-subcard"><summary><b>4. Commit the change</b></summary><p>Use a simple commit message like <b>Update Global Trade Tool 7/9/2026</b>. Tap <b>Commit changes</b>. GitHub should now show the latest <b>index.html</b> in the file list.</p></details>
       <details class="tool-subcard"><summary><b>5. Cloudflare deployment after GitHub is connected</b></summary><p>Once Cloudflare Pages is linked to this GitHub repo, Cloudflare should automatically create a new deployment from the <b>main</b> branch after every GitHub commit. Go to Cloudflare → <b>Workers &amp; Pages</b> → the Global Trade Tool project → <b>Deployments</b> to confirm the newest deployment completed successfully.</p></details>
-      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1</b>, the date is correct, the calculator works, More opens, Tools opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
+      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.01</b>, the date is correct, the calculator works, More opens, Tools opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
       <details class="tool-subcard"><summary><b>7. If Cloudflare is not connected yet</b></summary><p>Use the old ZIP/folder upload only as a fallback. Download the Cloudflare folder ZIP from ChatGPT, unzip it in Files, confirm the folder contains <b>index.html</b>, then upload the unzipped folder through Cloudflare Pages → <b>Create deployment</b>.</p></details>
       <details class="tool-subcard"><summary><b>8. If something goes wrong</b></summary><p>Stop and take a screenshot. Check GitHub to confirm <b>index.html</b> was replaced correctly. Then check Cloudflare Deployments for errors or use the previous successful deployment if needed. Send ChatGPT the screenshot, current file, and what went wrong.</p></details>
     </section>
@@ -784,11 +821,11 @@
 
 <script>
 (function(){
-  const VERSION = 'Live Version 1';
+  const VERSION = 'Live Version 1.01';
   const ADMIN_PASSWORD = 'wire9393';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0717';
   const HISTORY_KEY = 'globalTradeToolHistory_v1';
-  let releaseInfo = { version:'Live Version 1', month:'July 2026', updated:'7/17/2026' };
+  let releaseInfo = { version:'Live Version 1.01', month:'July 2026', updated:'7/17/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
@@ -1286,7 +1323,7 @@
   });
 
   // clear all & clear trade
-  document.getElementById('clearAll').addEventListener('click', ()=> {
+  function resetAllFields(){
     state.plan = null; state.phone = null; state.value = null; state.pixel = false; state.galaxyAny = 'none'; state.nextUp = false; state.nextUpType = 'anytime'; state.nextPaid = null; state.tierAction = null;
     document.querySelectorAll('#plans .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
     document.querySelectorAll('#phonesQuick .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
@@ -1305,7 +1342,19 @@
     planHelp.style.display='none'; planHelp.innerHTML='';
     tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true');
     updateTradeHelp();
+    lastResultSnapshot = null;
+    lastProgressStep = -1;
     render();
+  }
+  document.getElementById('clearAll').addEventListener('click', ()=> {
+    const inputsEl = document.querySelector('main.inputs');
+    inputsEl.classList.remove('resetting');
+    void inputsEl.offsetWidth;
+    inputsEl.classList.add('resetting');
+    if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      el('display').animate([{transform:'scale(1)',opacity:1},{transform:'scale(.985)',opacity:.62},{transform:'scale(1)',opacity:1}],{duration:300,easing:'ease-out'});
+    }
+    setTimeout(()=>{ resetAllFields(); inputsEl.classList.remove('resetting'); }, 155);
   });
 
   document.getElementById('clearTrade').addEventListener('click', ()=> {
@@ -1515,8 +1564,10 @@
     render();
   });
 
+  let pendingGalaxyFlash = false;
   galaxyAnySelect.addEventListener('change', ()=> {
     state.galaxyAny = galaxyAnySelect.value || 'none';
+    pendingGalaxyFlash = state.galaxyAny !== 'none';
     render();
     renderCompare();
   });
@@ -1721,6 +1772,80 @@
     amountEl.classList.remove('pop');
     void amountEl.offsetWidth; // reflow to restart animation
     amountEl.classList.add('pop');
+  }
+
+  let lastResultSnapshot = null;
+  let lastProgressStep = -1;
+  let shimmerTimer = null;
+  function resultSignature(r){
+    return [r.state,r.credit ?? '',r.monthly ?? '',r.total ?? '',state.plan,state.phone && state.phone.id,state.value,state.pixel,state.galaxyAny,state.nextUp,state.nextUpType,state.nextPaid,state.tierAction].join('|');
+  }
+  function isReadyResult(r){
+    return ['promo','nextup_promo','tiered_final','zero','full_retail','full_retail_rerate','nextup_no_payoff'].includes(r.state);
+  }
+  function playResultAnimations(r, colorClass){
+    const displayEl = el('display');
+    const signature = resultSignature(r);
+    const changed = !lastResultSnapshot || lastResultSnapshot.signature !== signature;
+    const sameCombo = !!(lastResultSnapshot && lastResultSnapshot.plan === state.plan && lastResultSnapshot.phoneId === (state.phone && state.phone.id));
+    const previousCredit = lastResultSnapshot && Number(lastResultSnapshot.credit || 0);
+    const currentCredit = Number(r.credit || 0);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if(changed && isReadyResult(r) && !reduceMotion){
+      displayEl.classList.remove('promo-shimmer');
+      void displayEl.offsetWidth;
+      displayEl.classList.add('promo-shimmer');
+      clearTimeout(shimmerTimer);
+      shimmerTimer = setTimeout(()=>displayEl.classList.remove('promo-shimmer'), 900);
+      displayEl.animate([
+        {transform:'translateY(3px) scale(.988)'},
+        {transform:'translateY(-2px) scale(1.012)',offset:.52},
+        {transform:'translateY(0) scale(1)'}
+      ],{duration:560,easing:'cubic-bezier(.18,.84,.32,1)'});
+    }
+
+    // A higher threshold was crossed: make the price jump and brighten once.
+    if(changed && sameCombo && currentCredit > previousCredit && currentCredit > 0 && !reduceMotion){
+      amountEl.animate([
+        {transform:'scale(1)',filter:'brightness(1)'},
+        {transform:'scale(1.12)',filter:'brightness(1.55)',offset:.42},
+        {transform:'scale(1)',filter:'brightness(1)'}
+      ],{duration:620,easing:'cubic-bezier(.16,.84,.26,1)'});
+    }
+
+    // Any-condition Samsung selection gets a short AT&T-blue to promo-green confirmation flash.
+    if(pendingGalaxyFlash && r.state === 'promo' && !reduceMotion){
+      displayEl.animate([
+        {boxShadow:'0 10px 30px rgba(7,28,52,.30),0 0 0 rgba(59,192,240,0)',borderLeftColor:'#3bc0f0'},
+        {boxShadow:'0 10px 30px rgba(7,28,52,.30),-7px 0 34px rgba(59,192,240,.92),0 0 28px rgba(59,192,240,.40)',borderLeftColor:'#7dd8f7',offset:.38},
+        {boxShadow:'0 10px 30px rgba(7,28,52,.30),-8px 0 36px rgba(34,197,94,.88),0 0 30px rgba(34,197,94,.38)',borderLeftColor:'#65ff9f',offset:.72},
+        {boxShadow:'0 10px 30px rgba(7,28,52,.30)',borderLeftColor:colorClass === 'result-green' ? '#22c55e' : '#eab308'}
+      ],{duration:900,easing:'ease-out'});
+    }
+    pendingGalaxyFlash = false;
+
+    lastResultSnapshot = {signature,credit:currentCredit,plan:state.plan,phoneId:state.phone && state.phone.id};
+  }
+  function updateSectionProgress(){
+    const cards = [el('plansCard'),el('phonesCard'),el('tradeCard'),el('nextUpCard')];
+    cards.forEach(c=>c && c.classList.remove('step-complete'));
+    if(state.plan) cards[0].classList.add('step-complete');
+    if(state.phone) cards[1].classList.add('step-complete');
+    if(state.value !== null || state.pixel || state.galaxyAny !== 'none' || (state.phone && state.phone.tieredOffer)) cards[2].classList.add('step-complete');
+    if(state.nextUp && state.nextPaid !== null) cards[3].classList.add('step-complete');
+
+    let next = 0;
+    if(state.plan) next = 1;
+    if(state.plan && state.phone) next = 2;
+    if(state.plan && state.phone && (state.value !== null || state.pixel || state.galaxyAny !== 'none' || state.phone.tieredOffer)) next = 3;
+    if(next !== lastProgressStep && cards[next]){
+      cards[next].classList.remove('step-awake');
+      void cards[next].offsetWidth;
+      cards[next].classList.add('step-awake');
+      setTimeout(()=>cards[next] && cards[next].classList.remove('step-awake'), 680);
+      lastProgressStep = next;
+    }
   }
 
   // ---- Best-case scenario line ----
@@ -2260,9 +2385,10 @@
     const displayEl = el('display');
 
     // Clear all result color classes then apply the correct one
-    displayEl.classList.remove('result-green','result-yellow','result-orange','result-red','result-tiered');
+    displayEl.classList.remove('result-green','result-yellow','result-orange','result-red','result-tiered','result-max');
     const colorClass = getCreditColorClass(r);
     if(colorClass) displayEl.classList.add(colorClass);
+    if(r.state === 'promo' && colorClass === 'result-green') displayEl.classList.add('result-max');
 
     // Best-case line
     const bestCaseEl = el('bestCase');
@@ -2392,6 +2518,8 @@
 
     updateNextUpAvailability();
     updateTradeHelp();
+    updateSectionProgress();
+    playResultAnimations(r, colorClass);
     renderCompare();
     maybeSaveHistory(r);
   }
