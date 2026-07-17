@@ -87,6 +87,11 @@
   .switch input:checked + .track::after{transform:translateX(19px);}
   .pixel-toggle .pt-text{font-size:14px; font-weight:600;}
   .pixel-toggle .pt-sub{font-size:12px; color:var(--slate); font-weight:500;}
+  .galaxy-any-toggle{display:none; margin-top:10px; padding:10px 12px; border-radius:11px; border:1px solid rgba(0,159,219,.28); background:rgba(0,159,219,.07);}
+  .galaxy-any-toggle.show{display:block;}
+  .galaxy-any-toggle label{display:block; font-size:13px; font-weight:800; color:var(--ink); margin-bottom:6px;}
+  .galaxy-any-toggle select{width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px; background:#fff; color:var(--ink); font-size:12px; font-weight:700;}
+  .galaxy-any-toggle small{display:block; margin-top:6px; color:var(--slate); font-size:11px; line-height:1.35;}
 
   /* display panel */
   .display{background:linear-gradient(160deg,var(--navy1),var(--navy2)); color:#eaf3fb; border-radius:18px;
@@ -364,7 +369,7 @@
         <h1>Monthly Credit Tool</h1>
       </div>
       <div style="margin-left:auto; text-align:right;">
-        <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/16/2026</div>
+        <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/17/2026</div>
         <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
@@ -425,6 +430,16 @@
             <span class="pt-sub">Any year, any condition &mdash; qualifies even with low value</span>
           </span>
         </label>
+
+        <div class="galaxy-any-toggle" id="galaxyAnyToggle">
+          <label for="galaxyAnySelect">Qualifying any-condition Galaxy trade-in</label>
+          <select id="galaxyAnySelect">
+            <option value="none">No — use the trade-in value</option>
+            <option value="base">Galaxy S10 / Note10 / Z Flip3 or newer</option>
+            <option value="high">Galaxy S22 / Z Flip4 / Z Fold3 or newer</option>
+          </select>
+          <small>For Galaxy S26+ / S26 Ultra offers effective 7/17. Device can be in any condition; verify the exact model in CCKM.</small>
+        </div>
       </section>
 
       <!-- TRADE-IN -->
@@ -771,9 +786,9 @@
 (function(){
   const VERSION = 'Live Version 1';
   const ADMIN_PASSWORD = 'wire9393';
-  const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0708';
+  const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0717';
   const HISTORY_KEY = 'globalTradeToolHistory_v1';
-  let releaseInfo = { version:'Live Version 1', month:'July 2026', updated:'7/16/2026' };
+  let releaseInfo = { version:'Live Version 1', month:'July 2026', updated:'7/17/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
@@ -844,9 +859,9 @@
     { id:'ip17-512', name:'iPhone 17', storage:'512GB', retail:1029.99, tieredOffer:false },
 
     // iPhone Air (256/512/1TB) — category iphoneBase
-    { id:'ipair', name:'iPhone Air', storage:'256GB', retail:999.99, tieredOffer:false },
-    { id:'ipair-512', name:'iPhone Air', storage:'512GB', retail:1199.99, tieredOffer:false },
-    { id:'ipair-1tb', name:'iPhone Air', storage:'1TB', retail:1399.99, tieredOffer:false },
+    { id:'ipair', name:'iPhone Air', storage:'256GB', retail:999.99, tieredOffer:true, tieredMonthlyNew:9.99, tieredMonthlyUpgrade:9.99 },
+    { id:'ipair-512', name:'iPhone Air', storage:'512GB', retail:1199.99, tieredOffer:true, tieredMonthlyNew:14.99, tieredMonthlyUpgrade:14.99 },
+    { id:'ipair-1tb', name:'iPhone Air', storage:'1TB', retail:1399.99, tieredOffer:true, tieredMonthlyNew:19.99, tieredMonthlyUpgrade:19.99 },
 
     // Galaxy S26 Ultra (256/512/1TB) — category samsung
     { id:'s26u', name:'Galaxy S26 Ultra', storage:'256GB', retail:1299.99, tieredOffer:false },
@@ -880,9 +895,9 @@
     { id:'i17e-512', name:'iPhone 17e', storage:'512GB', retail:799.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:11.99 },
 
     // S25 FE: New Line only — no upgrade tiered price
-    { id:'s25fe', name:'Galaxy S25 FE', storage:'', retail:649.99, tieredOffer:true, tieredMonthlyNew:13.99, tieredMonthlyUpgrade:null },
+    { id:'s25fe', name:'Galaxy S25 FE', storage:'128GB', retail:649.99, tieredOffer:true, tieredMonthlyNew:13.99, tieredMonthlyUpgrade:null },
     // Galaxy A17 5G — upgrade tiered offer ended 7/1. New line $0/mo only going forward.
-    { id:'a17', name:'Galaxy A17 5G', storage:'', retail:199.99, tieredOffer:true, tieredMonthlyNew:0.00, tieredMonthlyUpgrade:null },
+    { id:'a17', name:'Galaxy A17 5G', storage:'', retail:249.99, tieredOffer:true, tieredMonthlyNew:0.00, tieredMonthlyUpgrade:null },
     { id:'a37', name:'Galaxy A37', storage:'', retail:449.99, tieredOffer:true, tieredMonthlyNew:2.99, tieredMonthlyUpgrade:7.99 },
 
     { id:'pxl10-128', name:'Pixel 10', storage:'128GB', retail:849.99, tieredOffer:true, tieredMonthlyNew:10.99, tieredMonthlyUpgrade:10.99 },
@@ -893,9 +908,9 @@
 
     // iPhone 16 — Updated 7/2/2026: all tiers now flat new/upgrade
     // 128GB $7.99 (was $2.99 new/$7.99 upgrade), 256GB $12.99 (was $7.99/$12.99), 512GB $17.99 (was $12.99/$17.99)
-    { id:'ip16-128', name:'iPhone 16', storage:'128GB', retail:799.99, tieredOffer:true, tieredMonthlyNew:7.99, tieredMonthlyUpgrade:7.99 },
-    { id:'ip16-256', name:'iPhone 16', storage:'256GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:12.99, tieredMonthlyUpgrade:12.99 },
-    { id:'ip16-512', name:'iPhone 16', storage:'512GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:17.99, tieredMonthlyUpgrade:17.99 },
+    { id:'ip16-128', name:'iPhone 16', storage:'128GB', retail:729.99, tieredOffer:true, tieredMonthlyNew:7.99, tieredMonthlyUpgrade:7.99 },
+    { id:'ip16-256', name:'iPhone 16', storage:'256GB', retail:829.99, tieredOffer:true, tieredMonthlyNew:12.99, tieredMonthlyUpgrade:12.99 },
+    { id:'ip16-512', name:'iPhone 16', storage:'512GB', retail:1029.99, tieredOffer:true, tieredMonthlyNew:17.99, tieredMonthlyUpgrade:17.99 },
 
     // Galaxy S26 (base model, distinct from S26+/Ultra which stay on the ladder) — flat price, same for New or Upgrade
     // Updated 7/2/2026: 256GB $12.99, 512GB $19.99 (was $10.99/$15.99)
@@ -904,7 +919,7 @@
 
     // Galaxy S25 Edge — flat price, same for New or Upgrade
     { id:'s25edge-256', name:'Galaxy S25 Edge', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:15.99 },
-    { id:'s25edge-512', name:'Galaxy S25 Edge', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:20.99 },
+    { id:'s25edge-512', name:'Galaxy S25 Edge', storage:'512GB', retail:1219.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:20.99 },
 
     // amiGO Jr. Phone — no current promo; remains searchable as full retail only.
     { id:'amigojr', name:'amiGO Jr. Phone', storage:'128GB', retail:209.99, tieredOffer:false }
@@ -921,7 +936,7 @@
   };
   const monthly = n => (Math.ceil(n/36*100)/100).toFixed(2);
 
-  const state = { plan:null, phone:null, value:null, pixel:false, nextUp:false, nextUpType:'anytime', nextPaid:null, tierAction:null };
+  const state = { plan:null, phone:null, value:null, pixel:false, galaxyAny:'none', nextUp:false, nextUpType:'anytime', nextPaid:null, tierAction:null };
 
   const el = id => document.getElementById(id);
   const planSearch = el('planSearch'), planSuggestions = el('planSuggestions'), planSuggestionsList = el('planSuggestionsList');
@@ -929,7 +944,7 @@
   const phonesQuick = el('phonesQuick');
   const tradeEl = el('trade'), tradeHelp = el('tradeHelp'), tradeError = el('tradeError'), tradeAppliedNote = el('tradeAppliedNote');
   const amountEl = el('amount'), detailEl = el('detail'), summaryEl = el('summaryText');
-  const pixelChk = el('pixelChk'), planHelp = el('planHelp'), pixelToggleEl = el('pixelToggle');
+  const pixelChk = el('pixelChk'), planHelp = el('planHelp'), pixelToggleEl = el('pixelToggle'), galaxyAnyToggleEl = el('galaxyAnyToggle'), galaxyAnySelect = el('galaxyAnySelect');
 
   const VISIBLE_PHONE_IDS = ['ip17pm','ip17p','ip17','ipair','s26u','s26p','zfold7','pxl','ppro','razr'];
 
@@ -998,7 +1013,8 @@
       li.dataset.phone = p.id;
       const left = document.createElement('span'); left.className='left'; left.textContent = p.name + (p.storage ? ' ' + p.storage : '');
       const right = document.createElement('span'); right.className='right';
-      const priceText = p.tieredOffer ? (p.tieredMonthlyNew || p.tieredMonthlyUpgrade ? 'tiered promo available' : 'tiered — confirm in CCKM') : (p.retail ? money(p.retail) + ' · $' + monthly(p.retail) + '/mo' : '');
+      const hasKnownTier = (p.tieredMonthlyNew !== undefined && p.tieredMonthlyNew !== null) || (p.tieredMonthlyUpgrade !== undefined && p.tieredMonthlyUpgrade !== null);
+      const priceText = p.tieredOffer ? (hasKnownTier ? 'tiered promo available' : 'tiered — confirm in CCKM') : (p.retail ? money(p.retail) + ' · $' + monthly(p.retail) + '/mo' : '');
       right.textContent = priceText;
       li.appendChild(left); li.appendChild(right);
       li.addEventListener('click', ()=> choosePhone(p.id));
@@ -1271,7 +1287,7 @@
 
   // clear all & clear trade
   document.getElementById('clearAll').addEventListener('click', ()=> {
-    state.plan = null; state.phone = null; state.value = null; state.pixel = false; state.nextUp = false; state.nextUpType = 'anytime'; state.nextPaid = null; state.tierAction = null;
+    state.plan = null; state.phone = null; state.value = null; state.pixel = false; state.galaxyAny = 'none'; state.nextUp = false; state.nextUpType = 'anytime'; state.nextPaid = null; state.tierAction = null;
     document.querySelectorAll('#plans .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
     document.querySelectorAll('#phonesQuick .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
     document.querySelectorAll('#nextPaidChips .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
@@ -1282,7 +1298,9 @@
     tradeEl.value=''; tradeEl.disabled=false; tradeError.style.display='none';
     document.querySelectorAll('#quick .chip').forEach(x=>x.disabled=false);
     pixelChk.checked=false;
+    galaxyAnySelect.value = 'none';
     pixelToggleEl.classList.remove('show');
+    galaxyAnyToggleEl.classList.remove('show');
     nextUpChk.checked=false; el('nextTypeRow').style.display='none'; el('nextPaidRow').style.display='none'; updateNextUpCopy();
     planHelp.style.display='none'; planHelp.innerHTML='';
     tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true');
@@ -1294,11 +1312,13 @@
     tradeEl.value=''; state.value=null; tradeError.style.display='none'; tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true'); updateTradeHelp(); render();
   });
 
-  // ladders unchanged
+  // Promo ladders effective 7/17/2026.
   const LADDERS = {
-    // Effective 7/6/2026 — Samsung changes: Premium $35-94 tier raised $500→$900; Starter now flat $35+→$900 (two-tier collapsed)
-    premium:{ iphonePro:[{min:290,credit:1100},{min:130,credit:700},{min:35,credit:350}], iphoneBase:[{min:130,credit:700},{min:35,credit:350}], samsung:[{min:95,credit:1100},{min:35,credit:900}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
-    starter:{ iphonePro:[{min:290,credit:830},{min:130,credit:700},{min:35,credit:350}], iphoneBase:[{min:290,credit:830},{min:130,credit:700},{min:35,credit:350}], samsung:[{min:35,credit:900}], pixelXL:[{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:35,credit:1000}] },
+    // iPhone 17 / 17 Pro / 17 Pro Max: the $130+ Premium/Starter tier increased from $700 to $830.
+    // iPhone Air left the trade-in ladders after 7/16 and is handled as a tiered device.
+    // Samsung value ladders remain in place; qualifying any-condition Galaxy devices are applied as floors below.
+    premium:{ iphonePro:[{min:290,credit:1100},{min:130,credit:830},{min:35,credit:350}], iphoneBase:[{min:130,credit:830},{min:35,credit:350}], samsung:[{min:95,credit:1100},{min:35,credit:900}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
+    starter:{ iphonePro:[{min:130,credit:830},{min:35,credit:350}], iphoneBase:[{min:130,credit:830},{min:35,credit:350}], samsung:[{min:35,credit:900}], pixelXL:[{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:35,credit:1000}] },
     value:{ iphonePro:[{min:130,credit:500},{min:35,credit:350}], iphoneBase:[{min:130,credit:500},{min:35,credit:350}], samsung:[{min:35,credit:500}], pixelXL:[{min:35,credit:500}], pixelPro:[{min:35,credit:500}], razr:[{min:35,credit:500}] }
   };
   function savedAdminData(){
@@ -1318,7 +1338,7 @@
     if(Array.isArray(data.tips)){ TIPS.splice(0, TIPS.length, ...data.tips); }
     const vb = el('versionBadge'), rm = el('releaseMeta');
     if(vb) vb.textContent = releaseInfo.version || VERSION;
-    if(rm) rm.textContent = `${releaseInfo.month || 'July 2026'} · Last Updated ${releaseInfo.updated || '7/16/2026'}`;
+    if(rm) rm.textContent = `${releaseInfo.month || 'July 2026'} · Last Updated ${releaseInfo.updated || '7/17/2026'}`;
   }
 
   const PIXEL_FLOOR = { premium:1050, starter:1050, value:500 };
@@ -1366,13 +1386,31 @@
       note.style.display = 'none';
     }
   }
-  function computeCredit(plan, cat, value, isPixelTrade){
+  function isSamsungAnyConditionPhone(phone){
+    if(!phone) return false;
+    const id = phone.id || '';
+    return id.startsWith('s26u') || id.startsWith('s26p');
+  }
+  function samsungAnyConditionFloor(plan, phone, galaxyAny){
+    if(!isSamsungAnyConditionPhone(phone) || !galaxyAny || galaxyAny === 'none') return 0;
+    if(plan === 'premium') return galaxyAny === 'high' ? 1100 : 900;
+    if(plan === 'starter') return 900;
+    if(plan === 'value') return 500;
+    return 0;
+  }
+  function samsungAnyConditionLabel(){
+    if(state.galaxyAny === 'high') return 'a qualifying any-condition Galaxy S22 / Z Flip4 / Z Fold3 or newer';
+    if(state.galaxyAny === 'base') return 'a qualifying any-condition Galaxy S10 / Note10 / Z Flip3 or newer';
+    return '';
+  }
+  function computeCredit(plan, cat, value, isPixelTrade, phone, galaxyAny){
     if(plan==='valueplus_mobile') return 0;
     if(!plan || plan==='other') return 0;
     const ladder = LADDERS[plan] && LADDERS[plan][cat] ? LADDERS[plan][cat] : [];
     let c = 0;
     if(value!==null && !isNaN(value)) for(const t of ladder) if(value >= t.min){ c = t.credit; break; }
     if(isPixelCat(cat) && isPixelTrade) c = Math.max(c, PIXEL_FLOOR[plan]||0);
+    c = Math.max(c, samsungAnyConditionFloor(plan, phone, galaxyAny));
     return c;
   }
 
@@ -1381,17 +1419,17 @@
   // surface it as a small hint. Only compares the three ladder-based plan groups —
   // tiered-offer pricing doesn't vary by plan in this tool, so it's skipped there.
   const LADDER_PLAN_GROUPS = ['premium','starter','value'];
-  function betterPlanHint(cat, value, isPixelTrade, currentPlan, currentCredit){
+  function betterPlanHint(cat, value, isPixelTrade, phone, galaxyAny, currentPlan, currentCredit){
     let bestPlan = null, bestCredit = currentCredit;
     LADDER_PLAN_GROUPS.forEach(p=>{
       if(p === currentPlan) return;
-      const c = computeCredit(p, cat, value, isPixelTrade);
+      const c = computeCredit(p, cat, value, isPixelTrade, phone, galaxyAny);
       if(c > bestCredit){ bestCredit = c; bestPlan = p; }
     });
     return bestPlan ? { plan: bestPlan, credit: bestCredit } : null;
   }
-  function betterPlanHintHtml(cat, value, isPixelTrade, currentPlan, currentCredit){
-    const hint = betterPlanHint(cat, value, isPixelTrade, currentPlan, currentCredit);
+  function betterPlanHintHtml(cat, value, isPixelTrade, phone, galaxyAny, currentPlan, currentCredit){
+    const hint = betterPlanHint(cat, value, isPixelTrade, phone, galaxyAny, currentPlan, currentCredit);
     if(!hint) return '';
     return `<div class="bump">You'll get <b>${money(hint.credit)}</b> if the plan was one of the ${PLAN_LABEL[hint.plan]} eligible plans.</div>`;
   }
@@ -1448,7 +1486,7 @@
     // Current Next Up / legacy Next Up upgrade offer reference. Verify in CCKM before quoting.
     if(id.startsWith('pxl') || id.startsWith('ppro')) return 500; // Pixel 10 Pro / Pro XL
     if(id.startsWith('ip17pm') || id.startsWith('ip17p')) return 500; // iPhone 17 Pro / Pro Max
-    if(id.startsWith('ip17') || id.startsWith('ipair')) return 350; // iPhone 17 / iPhone Air
+    if(id.startsWith('ip17')) return 350; // iPhone 17 (iPhone Air legacy Next Up offer ended 7/16)
     if(id.startsWith('s26u') || id.startsWith('s26p') || id.startsWith('zfold7')) return 350;
     if(id === 'razr') return 350;
     return 0;
@@ -1459,10 +1497,8 @@
     const id = state.phone.id || '';
     const now = new Date();
     const samsungStart = new Date(2026, 6, 17); // July 17, 2026
-    const airEnd = new Date(2026, 6, 16, 23, 59, 59);
     if(id.startsWith('ipair')){
-      const status = now <= airEnd ? 'Promo ending 7/16' : 'Promo ended 7/16';
-      return `<div class="d-rule"><b>${status}:</b> iPhone Air leaves listed trade-in / Next Up offers after 7/16. Verify current eligibility in CCKM before quoting.</div>`;
+      return `<div class="d-rule"><b>iPhone Air update effective 7/17:</b> Premium trade-in and prior Next Up offers ended 7/16. Air is now tiered at $9.99/mo (256GB), $14.99/mo (512GB), or $19.99/mo (1TB). Verify in CCKM before quoting.</div>`;
     }
     if(id.startsWith('s26u') || id.startsWith('s26p')){
       if(now >= samsungStart){
@@ -1477,6 +1513,12 @@
   pixelChk.addEventListener('change', ()=> {
     state.pixel = pixelChk.checked;
     render();
+  });
+
+  galaxyAnySelect.addEventListener('change', ()=> {
+    state.galaxyAny = galaxyAnySelect.value || 'none';
+    render();
+    renderCompare();
   });
 
   // update controls after selection - trades always allowed (as one-time bill/accessory credit)
@@ -1494,6 +1536,16 @@
     } else {
       pixelToggleEl.classList.remove('show');
       if(state.pixel){ state.pixel = false; pixelChk.checked = false; }
+    }
+
+    const samsungAnyEligible = isSamsungAnyConditionPhone(state.phone);
+    if(samsungAnyEligible){
+      galaxyAnyToggleEl.classList.add('show');
+      galaxyAnySelect.value = state.galaxyAny || 'none';
+    } else {
+      galaxyAnyToggleEl.classList.remove('show');
+      if(state.galaxyAny !== 'none') state.galaxyAny = 'none';
+      galaxyAnySelect.value = 'none';
     }
   }
 
@@ -1519,12 +1571,21 @@
     const tierPlans = ['premium','starter','value','55plus'];
 
     if(state.phone.tieredOffer && tierPlans.includes(state.plan)){
+      const newVal = state.phone.tieredMonthlyNew;
+      const upVal = state.phone.tieredMonthlyUpgrade;
+      const sameKnownPrice = newVal !== undefined && newVal !== null && upVal !== undefined && upVal !== null && Number(newVal) === Number(upVal);
+      // When New Line and Upgrade are the same price, show the answer immediately.
+      // Only ask activation type when the price or eligibility actually differs.
+      if(!state.tierAction && sameKnownPrice){
+        const total = Math.round(Number(newVal) * 36 * 100)/100;
+        return { state:'tiered_final', monthly:Number(newVal), total:total, showAction:false };
+      }
       if(!state.tierAction) return { state:'tier_action_needed' };
       const key = state.tierAction === 'new' ? 'tieredMonthlyNew' : 'tieredMonthlyUpgrade';
       const val = state.phone[key];
       if(val !== undefined && val !== null){
         const total = Math.round(val * 36 * 100)/100;
-        return { state:'tiered_final', monthly:val, total: total };
+        return { state:'tiered_final', monthly:val, total: total, showAction:!sameKnownPrice };
       } else if(val === null){
         // explicitly no tiered price for this activation type — falls back to full retail, not "unknown"
         return { state:'tiered_not_offered' };
@@ -1539,9 +1600,10 @@
 
     const hasValue = (state.value !== null && !isNaN(state.value));
     const pix = state.pixel && (cat === 'pixelXL' || cat === 'pixelPro');
-    if(!hasValue && !pix) return { state:'needValue' };
+    const samsungAny = isSamsungAnyConditionPhone(state.phone) && state.galaxyAny !== 'none';
+    if(!hasValue && !pix && !samsungAny) return { state:'needValue' };
 
-    const credit = computeCredit(state.plan, cat, state.value, state.pixel);
+    const credit = computeCredit(state.plan, cat, state.value, state.pixel, state.phone, state.galaxyAny);
     if(credit === 0) return { state:'zero' };
     return { state:'promo', credit: credit, monthly: (Math.ceil(credit/36*100)/100).toFixed(2) };
   }
@@ -1598,14 +1660,14 @@
     if(r.state === 'needValue') return `Enter the trade-in value to compute promo credit for ${state.phone.name} on ${PLAN_LABEL[state.plan]}.`;
     if(r.state === 'promo'){
       const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
-      const tradeDesc = (state.value !== null && !isNaN(state.value)) ? moneyWhole(state.value) : (state.pixel ? 'an eligible Google Pixel' : 'a trade-in device');
+      const tradeDesc = samsungAnyConditionLabel() || ((state.value !== null && !isNaN(state.value)) ? moneyWhole(state.value) : (state.pixel ? 'an eligible Google Pixel' : 'a trade-in device'));
       const deviceMo = monthly(state.phone.retail);
       const netMo = Math.max(0, parseFloat(deviceMo) - parseFloat(r.monthly)).toFixed(2);
       return `Customer is getting a ${phoneLabel} on ${PLAN_LABEL[state.plan]} — retail ${money(state.phone.retail)} ($${deviceMo}/mo) — trading in a device worth ${tradeDesc} for ${moneyWhole(r.credit)} total ($${r.monthly}/mo over 36 months). They pay $${netMo}/mo after the credit.`;
     }
     if(r.state === 'zero'){
       const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
-      const tradeDesc = (state.value !== null && !isNaN(state.value)) ? moneyWhole(state.value) : (state.pixel ? 'an eligible Google Pixel' : 'a low-value trade-in');
+      const tradeDesc = samsungAnyConditionLabel() || ((state.value !== null && !isNaN(state.value)) ? moneyWhole(state.value) : (state.pixel ? 'an eligible Google Pixel' : 'a low-value trade-in'));
       return `Customer is getting a ${phoneLabel} on ${PLAN_LABEL[state.plan]} — retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo) — trading in a device worth ${tradeDesc} and getting no promo credit.`;
     }
     return 'Summary unavailable — complete required fields.';
@@ -1629,6 +1691,8 @@
       const floor = PIXEL_FLOOR[state.plan] || 0;
       if(!amounts.includes(floor)) amounts = [...new Set([...amounts, floor])].sort((a,b) => b - a);
     }
+    const samsungFloor = samsungAnyConditionFloor(state.plan, state.phone, state.galaxyAny);
+    if(samsungFloor && !amounts.includes(samsungFloor)) amounts = [...new Set([...amounts, samsungFloor])].sort((a,b) => b - a);
     if(amounts.length === 0) return '';
     const idx = amounts.indexOf(r.credit);
     if(idx === -1) return '';
@@ -1836,7 +1900,7 @@
       const estText = est.includes('/mo') || est === 'Select activation' ? est : est + '/mo';
       return `<tr><td><b>${ph.name}${ph.storage?' '+ph.storage:''}</b></td><td>${money(ph.retail)}</td><td>${promo}</td><td><b>${estText}</b></td></tr>`;
     }).join('');
-    box.innerHTML = `<table class="compare-table"><thead><tr><th>Phone</th><th>Retail</th><th>Promo</th><th>Est. Device</th></tr></thead><tbody>${rows}</tbody></table><p style="margin:8px 0 0;color:var(--slate);font-size:12px;">Uses current plan, trade value, Pixel toggle, and activation type. Verify in OPUS/CCKM.</p>`;
+    box.innerHTML = `<table class="compare-table"><thead><tr><th>Phone</th><th>Retail</th><th>Promo</th><th>Est. Device</th></tr></thead><tbody>${rows}</tbody></table><p style="margin:8px 0 0;color:var(--slate);font-size:12px;">Uses current plan, trade value, Pixel/any-condition Galaxy selection, and activation type. Verify in OPUS/CCKM.</p>`;
   }
   el('compareA').addEventListener('change', renderCompare);
   el('compareB').addEventListener('change', renderCompare);
@@ -1846,15 +1910,15 @@
   function currentHistoryEntry(r){
     if(!state.plan || !state.phone) return null;
     const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
-    return { t:Date.now(), plan:state.plan, phoneId:state.phone.id, value:state.value, pixel:state.pixel, nextUp:state.nextUp, nextUpType:state.nextUpType, nextPaid:state.nextPaid, tierAction:state.tierAction, label:`${phoneLabel} · ${PLAN_LABEL[state.plan]}`, detail: buildSummary(), result:r.state==='promo'?moneyWhole(r.credit):(r.state==='tiered_final'?'$'+Number(r.monthly).toFixed(2)+'/mo':r.state) };
+    return { t:Date.now(), plan:state.plan, phoneId:state.phone.id, value:state.value, pixel:state.pixel, galaxyAny:state.galaxyAny, nextUp:state.nextUp, nextUpType:state.nextUpType, nextPaid:state.nextPaid, tierAction:state.tierAction, label:`${phoneLabel} · ${PLAN_LABEL[state.plan]}`, detail: buildSummary(), result:r.state==='promo'?moneyWhole(r.credit):(r.state==='tiered_final'?'$'+Number(r.monthly).toFixed(2)+'/mo':r.state) };
   }
   let lastHistoryKey = '';
   function maybeSaveHistory(r){
     if(!['promo','tiered_final','full_retail','full_retail_rerate','zero','tiered_not_offered'].includes(r.state)) return;
     const entry = currentHistoryEntry(r); if(!entry) return;
-    const key = JSON.stringify([entry.plan,entry.phoneId,entry.value,entry.pixel,entry.nextUp,entry.nextUpType,entry.nextPaid,entry.tierAction,entry.result]);
+    const key = JSON.stringify([entry.plan,entry.phoneId,entry.value,entry.pixel,entry.galaxyAny,entry.nextUp,entry.nextUpType,entry.nextPaid,entry.tierAction,entry.result]);
     if(key === lastHistoryKey) return; lastHistoryKey = key;
-    const items = getHistory().filter(x => JSON.stringify([x.plan,x.phoneId,x.value,x.pixel,x.nextUp,x.nextUpType,x.nextPaid,x.tierAction,x.result]) !== key);
+    const items = getHistory().filter(x => JSON.stringify([x.plan,x.phoneId,x.value,x.pixel,x.galaxyAny,x.nextUp,x.nextUpType,x.nextPaid,x.tierAction,x.result]) !== key);
     saveHistory([entry, ...items]); renderHistory();
   }
   function renderHistory(){
@@ -1864,12 +1928,12 @@
     box.querySelectorAll('.history-item').forEach(btn=>btn.addEventListener('click',()=>restoreHistory(items[btn.dataset.i])));
   }
   function restoreHistory(x){
-    state.plan=x.plan; state.phone=PHONES.find(p=>p.id===x.phoneId)||null; state.value=x.value; state.pixel=!!x.pixel; state.nextUp=!!x.nextUp; state.nextUpType=x.nextUpType||'anytime'; state.nextPaid=x.nextPaid; state.tierAction=x.tierAction||null;
+    state.plan=x.plan; state.phone=PHONES.find(p=>p.id===x.phoneId)||null; state.value=x.value; state.pixel=!!x.pixel; state.galaxyAny=x.galaxyAny||'none'; state.nextUp=!!x.nextUp; state.nextUpType=x.nextUpType||'anytime'; state.nextPaid=x.nextPaid; state.tierAction=x.tierAction||null;
     document.querySelectorAll('#plans .chip').forEach(b=>b.setAttribute('aria-pressed', b.dataset.plan===state.plan?'true':'false'));
     document.querySelectorAll('#phonesQuick .chip').forEach(b=>b.setAttribute('aria-pressed', state.phone&&b.dataset.phone===state.phone.id?'true':'false'));
     phoneSearch.value = state.phone ? state.phone.name + (state.phone.storage?' '+state.phone.storage:'') : '';
     tradeEl.value = state.value==null ? '' : new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(state.value);
-    pixelChk.checked = state.pixel; nextUpChk.checked = state.nextUp; el('nextTypeRow').style.display = state.nextUp ? 'block' : 'none'; el('nextPaidRow').style.display = state.nextUp ? 'block' : 'none';
+    pixelChk.checked = state.pixel; galaxyAnySelect.value = state.galaxyAny; nextUpChk.checked = state.nextUp; el('nextTypeRow').style.display = state.nextUp ? 'block' : 'none'; el('nextPaidRow').style.display = state.nextUp ? 'block' : 'none';
     document.querySelectorAll('#nextTypeChips [data-next-type]').forEach(btn=>btn.setAttribute('aria-pressed', btn.dataset.nextType === state.nextUpType ? 'true' : 'false'));
     updateNextUpCopy();
     document.querySelectorAll('#nextPaidChips [data-paid]').forEach(b=>b.setAttribute('aria-pressed', (state.nextPaid===true&&b.dataset.paid==='yes')||(state.nextPaid===false&&b.dataset.paid==='no')?'true':'false'));
@@ -2028,7 +2092,7 @@
     const phones = PHONES.map(p=>`<tr><td><b>${p.name}${p.storage?' '+p.storage:''}</b><br><small>${p.id}</small></td><td>${money(p.retail||0)}</td><td>${p.tieredOffer?'Tiered':(PROMO_CATEGORY_LABEL[inferPhoneCategoryForAdmin(p)]||inferPhoneCategoryForAdmin(p))}</td></tr>`).join('');
     const tips = TIPS.map((t,i)=>`<li><b>${i+1}.</b> ${t}</li>`).join('');
     box.innerHTML = `
-      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'July 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'7/16/2026'}</div>
+      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'July 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'7/17/2026'}</div>
       <details class="tool-subcard" open><summary><b>Promo Ladder Check</b></summary>${promoHtml}</details>
       <details class="tool-subcard"><summary><b>Tiered Offer Check (${PHONES.filter(p=>p.tieredOffer).length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>New Line</th><th>Upgrade</th></tr></thead><tbody>${tiered}</tbody></table></details>
       <details class="tool-subcard"><summary><b>Phone Check (${PHONES.length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>MSRP</th><th>Promo Type</th></tr></thead><tbody>${phones}</tbody></table></details>
@@ -2039,7 +2103,7 @@
   function adminFill(){
     el('adminVersionInput').value = releaseInfo.version || VERSION;
     el('adminMonthInput').value = releaseInfo.month || 'July 2026';
-    el('adminUpdatedInput').value = releaseInfo.updated || '7/16/2026';
+    el('adminUpdatedInput').value = releaseInfo.updated || '7/17/2026';
     el('adminPhones').value = JSON.stringify(PHONES, null, 2);
     buildAdminPhoneSelect();
     el('adminPromos').value = JSON.stringify(LADDERS, null, 2);
@@ -2157,7 +2221,7 @@
     try{ const val = JSON.parse(el(id).value); persistAdminData({[key]:val}); apply(val); adminFill(); alert('Saved.'); }
     catch(e){ alert('Invalid JSON: '+e.message); }
   }
-  el('saveRelease').addEventListener('click',()=>{ releaseInfo={version:el('adminVersionInput').value||VERSION, month:el('adminMonthInput').value||'July 2026', updated:el('adminUpdatedInput').value||'7/16/2026'}; persistAdminData({release:releaseInfo}); applyAdminData(); adminFill(); });
+  el('saveRelease').addEventListener('click',()=>{ releaseInfo={version:el('adminVersionInput').value||VERSION, month:el('adminMonthInput').value||'July 2026', updated:el('adminUpdatedInput').value||'7/17/2026'}; persistAdminData({release:releaseInfo}); applyAdminData(); adminFill(); });
   el('savePhones').addEventListener('click',()=>saveJsonTextarea('adminPhones','phones',val=>{PHONES.splice(0,PHONES.length,...val); buildQuickChips(); buildCompareOptions(); renderCompare(); render(); buildAdminPhoneSelect();}));
   el('savePromos').addEventListener('click',()=>saveJsonTextarea('adminPromos','ladders',val=>{Object.keys(LADDERS).forEach(k=>delete LADDERS[k]); Object.assign(LADDERS,val); render(); renderCompare(); buildAdminPromoEditor();}));
   el('saveTips').addEventListener('click',()=>{ TIPS = el('adminTips').value.split(/\n+/).map(x=>x.trim()).filter(Boolean); persistAdminData({tips:TIPS}); tipIdx=0; tipText.textContent=TIPS[0]||''; adminFill(); });
@@ -2229,7 +2293,7 @@
         amountEl.innerHTML = moneyWhole(r.credit) + '<span class="off">off</span>';
       }
       lastShownCredit = r.credit;
-      detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>You pay: <b style="color:#fff;">$${netMo}/mo</b> after credit</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.plan, r.credit)}`;
+      detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>You pay: <b style="color:#fff;">$${netMo}/mo</b> after credit</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.phone, state.galaxyAny, state.plan, r.credit)}`;
     } else if(r.state === 'nextup_promo'){
       const deviceMo = monthly(state.phone.retail);
       const netMo = Math.max(0, parseFloat(deviceMo) - parseFloat(r.monthly)).toFixed(2);
@@ -2244,7 +2308,7 @@
     } else if(r.state === 'tiered_final'){
       amountEl.innerHTML = `<span class="monthly-primary">$${r.monthly}/mo</span><span class="off">${money(r.total)} final</span>`;
       detailEl.innerHTML = `<div class="d-monthly">Total: ${money(r.total)} spread over 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]} &middot; Tiered Offer<br>Device retail: ${money(state.phone.retail)}</div>`;
-      renderTierActionRow();
+      if(r.showAction) renderTierActionRow();
       if(state.value){
         tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
         tradeAppliedNote.style.display='block';
@@ -2287,7 +2351,7 @@
     } else if(r.state === 'full_retail_rerate'){
       const cat = phoneCategory(state.phone);
       amountEl.innerHTML = '$0';
-      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">Value Plus / Mobile Share selected — all devices are full retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo). Research rerate opportunities before proceeding.</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.plan, 0)}`;
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">Value Plus / Mobile Share selected — all devices are full retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo). Research rerate opportunities before proceeding.</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.phone, state.galaxyAny, state.plan, 0)}`;
       if(state.value){
         tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
         tradeAppliedNote.style.display='block';
@@ -2296,7 +2360,7 @@
     } else if(r.state === 'full_retail'){
       const cat = phoneCategory(state.phone);
       amountEl.innerHTML = '$0';
-      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">No trade-in eligible — this device is full retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo on 36-mo installments).</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.plan, 0)}`;
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">No trade-in eligible — this device is full retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo on 36-mo installments).</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.phone, state.galaxyAny, state.plan, 0)}`;
       if(state.value){
         tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
         tradeAppliedNote.style.display='block';
@@ -2305,7 +2369,7 @@
     } else if(r.state === 'zero'){
       const cat = phoneCategory(state.phone);
       amountEl.innerHTML = '$0';
-      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo)<br>Trade-in is under threshold — no promo credit.</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.plan, 0)}`;
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo)<br>Trade-in is under threshold — no promo credit.</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.phone, state.galaxyAny, state.plan, 0)}`;
     } else if(r.state === 'needValue'){
       amountEl.innerHTML = '$&mdash;';
       detailEl.innerHTML = `<div class="d-prompt">Enter the trade-in value.</div>`;
