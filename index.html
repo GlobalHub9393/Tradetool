@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Monthly Credit Tool — v1.02</title>
+<title>Monthly Credit Tool — v1.05</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -33,8 +33,14 @@
   .card{background:var(--card); border-radius:16px; box-shadow:var(--shadow); padding:16px 16px 18px;
     position:relative; transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease, opacity .28s ease;}
   .card.needs-choice{box-shadow:0 8px 30px rgba(5,104,174,.09); border:1.5px solid rgba(5,104,174,.18);}
-  .card.step-complete{border-left:3px solid rgba(34,197,94,.58);}
-  .card.step-complete .step{background:#16a34a; box-shadow:0 0 0 3px rgba(34,197,94,.11);}
+  .card.step-complete{
+    border:1.5px solid rgba(5,104,174,.58);
+    box-shadow:0 0 0 3px rgba(59,192,240,.10), var(--shadow);
+  }
+  .card.step-complete .step{
+    background:var(--blue);
+    box-shadow:0 0 0 3px rgba(59,192,240,.18),0 0 14px rgba(5,104,174,.18);
+  }
   .card.step-awake{animation:sectionWake .62s cubic-bezier(.18,.84,.32,1);}
   @keyframes sectionWake{
     0%{transform:translateY(7px);box-shadow:var(--shadow);}
@@ -117,7 +123,7 @@
     padding:22px 22px 20px; box-shadow:0 10px 30px rgba(7,28,52,.30); position:sticky; bottom:12px;
     max-height:74vh; overflow:auto; border-left:5px solid transparent; transition:border-color .25s ease;}
 
-  /* result color states — tier color stays on the amount/accent; outside halo is AT&T blue */
+  /* result color states — each promo keeps its matching colored glow */
   .display.result-green { border-left-color:#22c55e; animation: pulse-green 1.15s ease-in-out infinite; }
   .display.result-green .d-amount, .display.result-green .monthly-primary { color:#4ade80; }
   .display.result-yellow { border-left-color:#eab308; animation: pulse-yellow 2.05s ease-in-out infinite; }
@@ -129,16 +135,16 @@
   .display.result-tiered { border-left-color:#3bc0f0; animation: pulse-blue 2.4s ease-in-out infinite; }
   .display.result-tiered .monthly-primary { color: var(--cyan); }
 
-  /* maximum promo: bright AT&T-blue outside halo; best-case amount stays green */
-  .display.result-max{border-left-color:#65d7ff;animation:maxPromoPulse .92s ease-in-out infinite;}
+  /* maximum promo: brightest green halo and price glow */
+  .display.result-max{border-left-color:#65ff9f;animation:maxPromoPulse .92s ease-in-out infinite;}
   .display.result-max::before{content:"";position:absolute;inset:-22% -12% auto auto;width:230px;height:230px;border-radius:50%;
-    background:radial-gradient(circle,rgba(79,211,255,.28) 0%,rgba(5,104,174,.12) 40%,rgba(5,104,174,0) 72%);
+    background:radial-gradient(circle,rgba(84,255,148,.22) 0%,rgba(34,197,94,.08) 38%,rgba(34,197,94,0) 70%);
     pointer-events:none;z-index:0;animation:maxHalo 1.2s ease-in-out infinite;}
   .display.result-max > *{position:relative;z-index:1;}
   .display.result-max .d-amount,.display.result-max .monthly-primary{color:#7dffad;text-shadow:0 0 8px rgba(101,255,159,.68),0 0 20px rgba(34,197,94,.55),0 0 38px rgba(34,197,94,.30);}
   @keyframes maxPromoPulse{
-    0%,100%{box-shadow:0 10px 30px rgba(7,28,52,.30),0 0 12px rgba(59,192,240,.30),0 0 0 1px rgba(59,192,240,.18);border-left-color:#2fb7eb;}
-    50%{box-shadow:0 12px 34px rgba(7,28,52,.34),0 0 38px rgba(59,192,240,.98),0 0 68px rgba(5,104,174,.56),0 0 0 2px rgba(125,216,247,.48);border-left-color:#8be3ff;}
+    0%,100%{box-shadow:0 10px 30px rgba(7,28,52,.30),0 0 14px rgba(34,197,94,.34),0 0 0 1px rgba(74,222,128,.14);border-left-color:#32d875;}
+    50%{box-shadow:0 12px 34px rgba(7,28,52,.34),0 0 42px rgba(72,255,137,.96),0 0 72px rgba(34,197,94,.52),0 0 0 2px rgba(134,239,172,.46);border-left-color:#8bffb7;}
   }
   @keyframes maxHalo{0%,100%{opacity:.45;transform:scale(.94);}50%{opacity:1;transform:scale(1.08);}}
 
@@ -148,11 +154,11 @@
   .display.promo-shimmer::after{animation:resultShimmer .82s cubic-bezier(.18,.75,.24,1);}
   @keyframes resultShimmer{0%{left:-42%;opacity:0;}16%{opacity:.8;}100%{left:118%;opacity:0;}}
 
-  @keyframes pulse-green  { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30), 0 0 0 rgba(59,192,240,0); border-left-color:#16a34a; } 50%{ box-shadow:0 11px 32px rgba(7,28,52,.32), 0 0 25px rgba(59,192,240,.66), 0 0 44px rgba(5,104,174,.24); border-left-color:#4ade80; } }
-  @keyframes pulse-yellow { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30), 0 0 0 rgba(59,192,240,0); border-left-color:#ca8a04; } 50%{ box-shadow:0 11px 32px rgba(7,28,52,.32), 0 0 21px rgba(59,192,240,.56), 0 0 36px rgba(5,104,174,.20); border-left-color:#fde047; } }
-  @keyframes pulse-orange { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30), 0 0 0 rgba(59,192,240,0); border-left-color:#ea580c; } 50%{ box-shadow:0 11px 32px rgba(7,28,52,.32), 0 0 18px rgba(59,192,240,.48), 0 0 30px rgba(5,104,174,.17); border-left-color:#fb923c; } }
-  @keyframes pulse-red    { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30), 0 0 0 rgba(59,192,240,0); border-left-color:#dc2626; } 50%{ box-shadow:0 11px 32px rgba(7,28,52,.32), 0 0 15px rgba(59,192,240,.40), 0 0 24px rgba(5,104,174,.14); border-left-color:#f87171; } }
-  @keyframes pulse-blue   { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30), 0 0 0 rgba(59,192,240,0); border-left-color:#1a9fd4; } 50%{ box-shadow:0 11px 32px rgba(7,28,52,.32), 0 0 24px rgba(59,192,240,.68), 0 0 40px rgba(5,104,174,.24); border-left-color:#7dd8f7; } }
+  @keyframes pulse-green  { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30),0 0 8px rgba(34,197,94,.12); border-left-color:#16a34a; } 50%{ box-shadow:0 11px 32px rgba(7,28,52,.32),0 0 28px rgba(74,222,128,.78),0 0 48px rgba(34,197,94,.30); border-left-color:#4ade80; } }
+  @keyframes pulse-yellow { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30),0 0 7px rgba(234,179,8,.10); border-left-color:#ca8a04; } 50%{ box-shadow:0 11px 32px rgba(7,28,52,.32),0 0 23px rgba(250,204,21,.62),0 0 38px rgba(234,179,8,.22); border-left-color:#fde047; } }
+  @keyframes pulse-orange { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30),0 0 6px rgba(249,115,22,.09); border-left-color:#ea580c; } 50%{ box-shadow:0 11px 32px rgba(7,28,52,.32),0 0 20px rgba(251,146,60,.56),0 0 32px rgba(249,115,22,.20); border-left-color:#fb923c; } }
+  @keyframes pulse-red    { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30),0 0 5px rgba(239,68,68,.08); border-left-color:#dc2626; } 50%{ box-shadow:0 11px 32px rgba(7,28,52,.32),0 0 17px rgba(248,113,113,.48),0 0 27px rgba(239,68,68,.17); border-left-color:#f87171; } }
+  @keyframes pulse-blue   { 0%,100%{ box-shadow:0 10px 30px rgba(7,28,52,.30),0 0 7px rgba(59,192,240,.12); border-left-color:#1a9fd4; } 50%{ box-shadow:0 11px 32px rgba(7,28,52,.32),0 0 24px rgba(59,192,240,.68),0 0 40px rgba(5,104,174,.24); border-left-color:#7dd8f7; } }
 
   /* pop when the amount changes */
   @keyframes amount-pop { 0%{ transform:scale(1); } 35%{ transform:scale(1.06); } 100%{ transform:scale(1); } }
@@ -412,7 +418,7 @@
       </div>
       <div style="margin-left:auto; text-align:right;">
         <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/17/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.02</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.05</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -480,7 +486,7 @@
             <option value="base">Galaxy S10 / Note10 / Z Flip3 or newer</option>
             <option value="high">Galaxy S22 / Z Flip4 / Z Fold3 or newer</option>
           </select>
-          <small>For Galaxy S26+ / S26 Ultra offers effective 7/17. Device can be in any condition; verify the exact model in CCKM.</small>
+          <small><b>7/17/26:</b> Samsung Any Year / Any Condition offer active. Exact qualifying models are listed under <b>More</b>.</small>
         </div>
       </section>
 
@@ -614,6 +620,10 @@
             <p id="summaryText">Pick a plan, phone, and trade-in value.</p>
             <div id="summaryReadable" class="rc-text"></div>
           </div>
+          <div id="promoUpdateCard" class="readable-card" style="display:none;">
+            <div class="rc-title">Promo update</div>
+            <div id="promoUpdateDetails" class="rc-text"></div>
+          </div>
         </div>
       </details>
 
@@ -733,12 +743,12 @@
       <div class="admin-subhead">Accounts</div>
       <div class="tool-subcard"><b>GitHub repo:</b> GlobalHub9393 / Tradetool<br><b>Cloudflare email:</b> Ts8686@cmcnj.com<br><b>Cloudflare password:</b> Stored separately</div>
       <div class="admin-subhead">Quick Guide — GitHub First</div>
-      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.02</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
+      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.05</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
       <details class="tool-subcard"><summary><b>2. Download the updated index.html</b></summary><p>Download the updated file from ChatGPT. The main site file must be named exactly <b>index.html</b>. If the file name becomes <b>index.html.txt</b>, <b>GlobalTradeTool_v1_DEV</b>, or anything else, rename it or ask for a corrected file before uploading to GitHub.</p></details>
       <details class="tool-subcard"><summary><b>3. Upload index.html to GitHub</b></summary><p>Open GitHub, go to <b>GlobalHub9393 / Tradetool</b>, tap <b>Add file</b>, then upload the updated <b>index.html</b>. If GitHub asks whether to replace the existing file, replace it. Commit directly to the <b>main</b> branch.</p></details>
       <details class="tool-subcard"><summary><b>4. Commit the change</b></summary><p>Use a simple commit message like <b>Update Global Trade Tool 7/9/2026</b>. Tap <b>Commit changes</b>. GitHub should now show the latest <b>index.html</b> in the file list.</p></details>
       <details class="tool-subcard"><summary><b>5. Cloudflare deployment after GitHub is connected</b></summary><p>Once Cloudflare Pages is linked to this GitHub repo, Cloudflare should automatically create a new deployment from the <b>main</b> branch after every GitHub commit. Go to Cloudflare → <b>Workers &amp; Pages</b> → the Global Trade Tool project → <b>Deployments</b> to confirm the newest deployment completed successfully.</p></details>
-      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.02</b>, the date is correct, the calculator works, More opens, Tools opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
+      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.05</b>, the date is correct, the calculator works, More opens, Tools opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
       <details class="tool-subcard"><summary><b>7. If Cloudflare is not connected yet</b></summary><p>Use the old ZIP/folder upload only as a fallback. Download the Cloudflare folder ZIP from ChatGPT, unzip it in Files, confirm the folder contains <b>index.html</b>, then upload the unzipped folder through Cloudflare Pages → <b>Create deployment</b>.</p></details>
       <details class="tool-subcard"><summary><b>8. If something goes wrong</b></summary><p>Stop and take a screenshot. Check GitHub to confirm <b>index.html</b> was replaced correctly. Then check Cloudflare Deployments for errors or use the previous successful deployment if needed. Send ChatGPT the screenshot, current file, and what went wrong.</p></details>
     </section>
@@ -826,11 +836,11 @@
 
 <script>
 (function(){
-  const VERSION = 'Live Version 1.02';
+  const VERSION = 'Live Version 1.05';
   const ADMIN_PASSWORD = 'wire9393';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0717';
   const HISTORY_KEY = 'globalTradeToolHistory_v1';
-  let releaseInfo = { version:'Live Version 1.02', month:'July 2026', updated:'7/17/2026' };
+  let releaseInfo = { version:'Live Version 1.05', month:'July 2026', updated:'7/17/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
@@ -1393,6 +1403,8 @@
   function applyAdminData(){
     const data = savedAdminData();
     if(data.release){ releaseInfo = Object.assign(releaseInfo, data.release); }
+    // The uploaded file controls the live version so an older saved Admin value cannot mask a new release.
+    releaseInfo.version = VERSION;
     if(Array.isArray(data.phones)){ PHONES.splice(0, PHONES.length, ...data.phones); }
     if(data.ladders && typeof data.ladders === 'object'){ Object.keys(LADDERS).forEach(k=>delete LADDERS[k]); Object.assign(LADDERS, data.ladders); }
     if(Array.isArray(data.tips)){ TIPS.splice(0, TIPS.length, ...data.tips); }
@@ -1558,13 +1570,30 @@
     const now = new Date();
     const samsungStart = new Date(2026, 6, 17); // July 17, 2026
     if(id.startsWith('ipair')){
-      return `<div class="d-rule"><b>iPhone Air update effective 7/17:</b> Premium trade-in and prior Next Up offers ended 7/16. Air is now tiered at $9.99/mo (256GB), $14.99/mo (512GB), or $19.99/mo (1TB). Verify in CCKM before quoting.</div>`;
+      return `<div class="d-rule"><b>iPhone Air trade-in update:</b> The last day for Air trade-in offers was 7/16/26.</div>`;
     }
     if(id.startsWith('s26u') || id.startsWith('s26p')){
       if(now >= samsungStart){
-        return `<div class="d-rule"><b>Samsung Any Condition active 7/17:</b> For S26+ / S26 Ultra, verify qualifying any-condition Galaxy turn-in rules in CCKM. Current guide: $1,100 with eligible premium/legacy plan + S22+/Z Flip4/Z Fold3+ or $95+ value; $900 with Starter/SL or Extra 2.0+ + S10/Note10/Z Flip3+ or $35-$94 value; $500 with Value 2.0 + S10/Note10/Z Flip3+ or $35+ value.</div>`;
+        return `<div class="d-rule"><b>7/17/26:</b> Samsung Any Year / Any Condition offer active. See <b>More</b> for qualifying-device details.</div>`;
       }
-      return `<div class="d-rule"><b>Samsung Any Condition starts 7/17:</b> S26+ / S26 Ultra any-condition turn-in rules are scheduled to start 7/17. Until then, verify the active offer in CCKM before quoting.</div>`;
+      return `<div class="d-rule"><b>Starts 7/17/26:</b> Samsung Any Year / Any Condition offer. Verify the active offer in CCKM until the effective date.</div>`;
+    }
+    return '';
+  }
+
+  function datedPromoDetailHtml(){
+    if(!state.phone) return '';
+    const id = state.phone.id || '';
+    const now = new Date();
+    const samsungStart = new Date(2026, 6, 17); // July 17, 2026
+    if(id.startsWith('ipair')){
+      return `<b>iPhone Air:</b> The last day for Air trade-in offers was <b>7/16/26</b>. Beginning 7/17/26, Air is handled as a tiered device: $9.99/mo for 256GB, $14.99/mo for 512GB, and $19.99/mo for 1TB. Verify the current offer in CCKM before quoting.`;
+    }
+    if(id.startsWith('s26u') || id.startsWith('s26p')){
+      if(now >= samsungStart){
+        return `<b>Samsung offer effective 7/17/26:</b> The Any Year / Any Condition offer is active for Galaxy S26+ and S26 Ultra. Current qualifying-device guide: $1,100 on eligible Premium/legacy plans with Galaxy S22+, Z Flip4, Z Fold3+ or a $95+ trade value; $900 on Starter/Starter SL or Extra 2.0+ with Galaxy S10, Note10, Z Flip3+ or a $35–$94 trade value; $500 on Value 2.0 with Galaxy S10, Note10, Z Flip3+ or a $35+ trade value. Always verify the exact model and eligibility in CCKM.`;
+      }
+      return `<b>Samsung offer starts 7/17/26:</b> The Any Year / Any Condition offer is scheduled for Galaxy S26+ and S26 Ultra. Verify the active offer in CCKM until the effective date.`;
     }
     return '';
   }
@@ -1930,12 +1959,24 @@
   function updateCopyArea(){
     const ready = !!(state.plan && state.phone);
     const fullCard = el('fullSummaryCard');
+    const promoUpdateCard = el('promoUpdateCard');
+    const promoUpdateDetails = el('promoUpdateDetails');
     if(ready){
       el('summaryReadable').textContent = buildSummary();
       fullCard.style.display = 'block';
+      const promoDetails = datedPromoDetailHtml();
+      if(promoDetails){
+        promoUpdateDetails.innerHTML = promoDetails;
+        promoUpdateCard.style.display = 'block';
+      } else {
+        promoUpdateDetails.innerHTML = '';
+        promoUpdateCard.style.display = 'none';
+      }
     } else {
       el('summaryReadable').textContent = '';
       fullCard.style.display = 'none';
+      promoUpdateDetails.innerHTML = '';
+      promoUpdateCard.style.display = 'none';
     }
     copyBtn.style.display = 'none';
     scriptBtn.style.display = 'none';
