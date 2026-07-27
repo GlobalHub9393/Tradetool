@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — v1.09</title>
+<title>Global Trade Tool — v1.10</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -433,8 +433,8 @@
         <h1>Global Trade Tool</h1>
       </div>
       <div style="margin-left:auto; text-align:right;">
-        <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/20/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.09</div>
+        <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/27/2026</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.12</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -765,12 +765,12 @@
       <div class="admin-subhead">Accounts</div>
       <div class="tool-subcard"><b>GitHub repo:</b> GlobalHub9393 / Tradetool<br><b>Cloudflare email:</b> Ts8686@cmcnj.com<br><b>Cloudflare password:</b> Stored separately</div>
       <div class="admin-subhead">Quick Guide — GitHub First</div>
-      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.09</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
+      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.12</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
       <details class="tool-subcard"><summary><b>2. Download the updated index.html</b></summary><p>Download the updated file from ChatGPT. The main site file must be named exactly <b>index.html</b>. If the file name becomes <b>index.html.txt</b>, <b>GlobalTradeTool_v1_DEV</b>, or anything else, rename it or ask for a corrected file before uploading to GitHub.</p></details>
       <details class="tool-subcard"><summary><b>3. Upload index.html to GitHub</b></summary><p>Open GitHub, go to <b>GlobalHub9393 / Tradetool</b>, tap <b>Add file</b>, then upload the updated <b>index.html</b>. If GitHub asks whether to replace the existing file, replace it. Commit directly to the <b>main</b> branch.</p></details>
       <details class="tool-subcard"><summary><b>4. Commit the change</b></summary><p>Use a simple commit message like <b>Update Global Trade Tool 7/9/2026</b>. Tap <b>Commit changes</b>. GitHub should now show the latest <b>index.html</b> in the file list.</p></details>
       <details class="tool-subcard"><summary><b>5. Cloudflare deployment after GitHub is connected</b></summary><p>Once Cloudflare Pages is linked to this GitHub repo, Cloudflare should automatically create a new deployment from the <b>main</b> branch after every GitHub commit. Go to Cloudflare → <b>Workers &amp; Pages</b> → the Global Trade Tool project → <b>Deployments</b> to confirm the newest deployment completed successfully.</p></details>
-      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.09</b>, the date is correct, the calculator works, More opens, Tools opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
+      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.12</b>, the date is correct, the calculator works, More opens, Tools opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
       <details class="tool-subcard"><summary><b>7. If Cloudflare is not connected yet</b></summary><p>Use the old ZIP/folder upload only as a fallback. Download the Cloudflare folder ZIP from ChatGPT, unzip it in Files, confirm the folder contains <b>index.html</b>, then upload the unzipped folder through Cloudflare Pages → <b>Create deployment</b>.</p></details>
       <details class="tool-subcard"><summary><b>8. If something goes wrong</b></summary><p>Stop and take a screenshot. Check GitHub to confirm <b>index.html</b> was replaced correctly. Then check Cloudflare Deployments for errors or use the previous successful deployment if needed. Send ChatGPT the screenshot, current file, and what went wrong.</p></details>
     </section>
@@ -858,11 +858,11 @@
 
 <script>
 (function(){
-  const VERSION = 'Live Version 1.09';
+  const VERSION = 'Live Version 1.12';
   const ADMIN_PASSWORD = 'wire9393';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0717';
   const HISTORY_KEY = 'globalTradeToolHistory_v1';
-  let releaseInfo = { version:'Live Version 1.09', month:'July 2026', updated:'7/20/2026' };
+  let releaseInfo = { version:'Live Version 1.12', month:'July 2026', updated:'7/27/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
@@ -914,7 +914,7 @@
     return html;
   }
 
-  // Phone catalog (visible set + searchable extras). tieredMonthlyNew / Upgrade where known.
+  // Phone catalog: active trade-in or tiered-promo devices only. tieredMonthlyNew / Upgrade where known.
   // retail = full MSRP for that exact storage SKU. Verified against Apple/Samsung/Google + AT&T retail pages, June 2026.
   const PHONES = [
     // iPhone 17 Pro Max (256/512/1TB/2TB) — category iphonePro
@@ -946,10 +946,18 @@
     { id:'s26p', name:'Galaxy S26+', storage:'256GB', retail:1099.99, tieredOffer:false },
     { id:'s26p-512', name:'Galaxy S26+', storage:'512GB', retail:1299.99, tieredOffer:false },
 
-    // Galaxy Z Fold7 (256/512/1TB) — NOTE: currently categorized same as iPhone base ladder (see flag below)
-    { id:'zfold7', name:'Galaxy Z Fold7', storage:'256GB', retail:1999.99, tieredOffer:false },
-    { id:'zfold7-512', name:'Galaxy Z Fold7', storage:'512GB', retail:2199.99, tieredOffer:false },
-    { id:'zfold7-1tb', name:'Galaxy Z Fold7', storage:'1TB', retail:2499.99, tieredOffer:false },
+    // Galaxy Z Fold8 Ultra — active trade-in ladder confirmed 7/22/2026.
+    { id:'zfold8u', name:'Galaxy Z Fold8 Ultra', storage:'256GB', retail:2099.99, tieredOffer:false, promoCategory:'fold8' },
+    { id:'zfold8u-512', name:'Galaxy Z Fold8 Ultra', storage:'512GB', retail:2299.99, tieredOffer:false, promoCategory:'fold8' },
+    { id:'zfold8u-1tb', name:'Galaxy Z Fold8 Ultra', storage:'1TB', retail:2699.99, tieredOffer:false, promoCategory:'fold8' },
+
+    // Galaxy Z Fold8 — active trade-in ladder confirmed 7/22/2026.
+    { id:'zfold8', name:'Galaxy Z Fold8', storage:'256GB', retail:1899.99, tieredOffer:false, promoCategory:'fold8' },
+    { id:'zfold8-512', name:'Galaxy Z Fold8', storage:'512GB', retail:2099.99, tieredOffer:false, promoCategory:'fold8' },
+
+    // Galaxy Z Flip8 — active $1,000 / $500 trade-in ladder confirmed 7/22/2026.
+    { id:'zflip8', name:'Galaxy Z Flip8', storage:'256GB', retail:1199.99, tieredOffer:false, promoCategory:'flip8' },
+    { id:'zflip8-512', name:'Galaxy Z Flip8', storage:'512GB', retail:1399.99, tieredOffer:false, promoCategory:'flip8' },
 
     // Pixel 10 Pro XL (AT&T carries 256/512 only) — category pixelXL
     { id:'pxl', name:'Pixel 10 Pro XL', storage:'256GB', retail:1249.99, tieredOffer:false },
@@ -962,7 +970,7 @@
     // Razr Ultra — see flag in chat: AT&T's prior listing doesn't match the 2026 model's actual retail/availability
     { id:'razr', name:'Razr Ultra', storage:'', retail:1319.99, tieredOffer:false },
 
-    // extras searchable — tiered offers, rebuilt against TJ's pulled "Eligible Devices" list (effective until 7/1 changeover)
+    // Searchable tiered-offer devices confirmed against the 7/27/2026 eligible-device list.
     // iPhone 17e — Updated 7/2/2026: both new and upgrade now flat per storage tier
     // 256GB $5.99 (was $0.99 new / $5.99 upgrade), 512GB $11.99 (was $6.99 new / $11.99 upgrade)
     { id:'i17e-256', name:'iPhone 17e', storage:'256GB', retail:599.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:5.99 },
@@ -978,7 +986,8 @@
     { id:'pxl10a', name:'Pixel 10a', storage:'128GB', retail:519.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:5.99 },
 
     { id:'razrplus', name:'moto razr+ (2026)', storage:'256GB', retail:1044.99, tieredOffer:true, tieredMonthlyNew:9.99, tieredMonthlyUpgrade:12.99 },
-    { id:'moto-g-stylus', name:'moto g stylus (2025)', storage:'', retail:294.99, tieredOffer:true, tieredMonthlyNew:2.99, tieredMonthlyUpgrade:2.99 },
+    { id:'moto-g-2026', name:'moto g (2026)', storage:'128GB', retail:239.99, tieredOffer:true, tieredMonthlyNew:0.00, tieredMonthlyUpgrade:4.99 },
+    { id:'moto-edge-2026', name:'moto edge (2026)', storage:'128GB', retail:504.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:8.99 },
 
     // iPhone 16 — Updated 7/2/2026: all tiers now flat new/upgrade
     // 128GB $7.99 (was $2.99 new/$7.99 upgrade), 256GB $12.99 (was $7.99/$12.99), 512GB $17.99 (was $12.99/$17.99)
@@ -995,8 +1004,8 @@
     { id:'s25edge-256', name:'Galaxy S25 Edge', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:15.99 },
     { id:'s25edge-512', name:'Galaxy S25 Edge', storage:'512GB', retail:1219.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:20.99 },
 
-    // amiGO Jr. Phone — no current promo; remains searchable as full retail only.
-    { id:'amigojr', name:'amiGO Jr. Phone', storage:'128GB', retail:209.99, tieredOffer:false }
+    // amiGO Jr. Phone — $2.99/mo on a new line.
+    { id:'amigojr', name:'amiGO Jr. Phone', storage:'128GB', retail:259.99, tieredOffer:true, tieredMonthlyNew:2.99, tieredMonthlyUpgrade:null }
   ];
 
   const money = n => "$" + Number(n).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
@@ -1020,7 +1029,7 @@
   const amountEl = el('amount'), detailEl = el('detail'), summaryEl = el('summaryText');
   const pixelChk = el('pixelChk'), planHelp = el('planHelp'), pixelToggleEl = el('pixelToggle'), galaxyAnyToggleEl = el('galaxyAnyToggle'), galaxyAnySelect = el('galaxyAnySelect');
 
-  const VISIBLE_PHONE_IDS = ['ip17pm','ip17p','ip17','ipair','s26u','s26p','zfold7','pxl','ppro','razr'];
+  const VISIBLE_PHONE_IDS = ['ip17pm','ip17p','ip17','ipair','s26u','s26p','zfold8u','zfold8','zflip8','pxl','ppro','razr'];
 
   const phonesRecent = el('phonesRecent');
   const recentPicksWrap = el('recentPicksWrap');
@@ -1439,10 +1448,10 @@
   const LADDERS = {
     // iPhone 17 / 17 Pro / 17 Pro Max: the $130+ Premium/Starter tier increased from $700 to $830.
     // iPhone Air left the trade-in ladders after 7/16 and is handled as a tiered device.
-    // Samsung value ladders remain in place; qualifying any-condition Galaxy devices are applied as floors below.
-    premium:{ iphonePro:[{min:290,credit:1100},{min:130,credit:830},{min:35,credit:350}], iphoneBase:[{min:130,credit:830},{min:35,credit:350}], samsung:[{min:95,credit:1100},{min:35,credit:900}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
-    starter:{ iphonePro:[{min:130,credit:830},{min:35,credit:350}], iphoneBase:[{min:130,credit:830},{min:35,credit:350}], samsung:[{min:35,credit:900}], pixelXL:[{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:35,credit:1000}] },
-    value:{ iphonePro:[{min:130,credit:500},{min:35,credit:350}], iphoneBase:[{min:130,credit:500},{min:35,credit:350}], samsung:[{min:35,credit:500}], pixelXL:[{min:35,credit:500}], pixelPro:[{min:35,credit:500}], razr:[{min:35,credit:500}] }
+    // Samsung ladders confirmed against the 7/22–7/23 CCKM updates, including plan-specific Fold8 / Fold8 Ultra and Flip8 tiers.
+    premium:{ iphonePro:[{min:290,credit:1100},{min:130,credit:830},{min:35,credit:350}], iphoneBase:[{min:130,credit:830},{min:35,credit:350}], samsung:[{min:95,credit:1100},{min:35,credit:900}], fold8:[{min:290,credit:1900},{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
+    starter:{ iphonePro:[{min:130,credit:830},{min:35,credit:350}], iphoneBase:[{min:130,credit:830},{min:35,credit:350}], samsung:[{min:35,credit:900}], fold8:[{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixelXL:[{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:35,credit:1000}] },
+    value:{ iphonePro:[{min:130,credit:500},{min:35,credit:350}], iphoneBase:[{min:130,credit:500},{min:35,credit:350}], samsung:[{min:35,credit:500}], fold8:[{min:35,credit:500}], flip8:[{min:35,credit:500}], pixelXL:[{min:35,credit:500}], pixelPro:[{min:35,credit:500}], razr:[{min:35,credit:500}] }
   };
   function savedAdminData(){
     try { return JSON.parse(localStorage.getItem(ADMIN_STORE_KEY) || '{}'); }
@@ -1458,13 +1467,16 @@
     if(data.release){ releaseInfo = Object.assign(releaseInfo, data.release); }
     // The uploaded file controls the live version so an older saved Admin value cannot mask a new release.
     releaseInfo.version = VERSION;
-    releaseInfo.updated = '7/20/2026';
-    if(Array.isArray(data.phones)){ PHONES.splice(0, PHONES.length, ...data.phones); }
-    if(data.ladders && typeof data.ladders === 'object'){ Object.keys(LADDERS).forEach(k=>delete LADDERS[k]); Object.assign(LADDERS, data.ladders); }
-    if(Array.isArray(data.tips)){ TIPS.splice(0, TIPS.length, ...data.tips); }
+    releaseInfo.updated = '7/27/2026';
+    // Only apply local phone/promo/tip edits made against this exact release.
+    // This prevents stale browser data from restoring phones or promo ladders removed in a newer upload.
+    const savedMatchesRelease = data.backupVersion === VERSION;
+    if(savedMatchesRelease && Array.isArray(data.phones)){ PHONES.splice(0, PHONES.length, ...data.phones); }
+    if(savedMatchesRelease && data.ladders && typeof data.ladders === 'object'){ Object.keys(LADDERS).forEach(k=>delete LADDERS[k]); Object.assign(LADDERS, data.ladders); }
+    if(savedMatchesRelease && Array.isArray(data.tips)){ TIPS.splice(0, TIPS.length, ...data.tips); }
     const vb = el('versionBadge'), rm = el('releaseMeta');
     if(vb) vb.textContent = releaseInfo.version || VERSION;
-    if(rm) rm.textContent = `${releaseInfo.month || 'July 2026'} · Last Updated ${releaseInfo.updated || '7/20/2026'}`;
+    if(rm) rm.textContent = `${releaseInfo.month || 'July 2026'} · Last Updated ${releaseInfo.updated || '7/27/2026'}`;
   }
 
   const PIXEL_FLOOR = { premium:1050, starter:1050, value:500 };
@@ -1515,10 +1527,18 @@
   function isSamsungAnyConditionPhone(phone){
     if(!phone) return false;
     const id = phone.id || '';
-    return id.startsWith('s26u') || id.startsWith('s26p');
+    return id.startsWith('s26u') || id.startsWith('s26p') || id.startsWith('zfold8') || id.startsWith('zflip8');
   }
   function samsungAnyConditionFloor(plan, phone, galaxyAny){
     if(!isSamsungAnyConditionPhone(phone) || !galaxyAny || galaxyAny === 'none') return 0;
+    const id = phone.id || '';
+    // Fold8 / Fold8 Ultra / Flip8 confirmed rules: qualifying newer Galaxy = $1,000,
+    // qualifying older Galaxy = $500. Fold8 / Fold8 Ultra reach $1,900 only on Premium/Elite with $290+ TIV.
+    if(id.startsWith('zfold8') || id.startsWith('zflip8')){
+      if(plan === 'premium' || plan === 'starter') return galaxyAny === 'high' ? 1000 : 500;
+      if(plan === 'value') return 500;
+      return 0;
+    }
     if(plan === 'premium') return galaxyAny === 'high' ? 1100 : 900;
     if(plan === 'starter') return 900;
     if(plan === 'value') return 500;
@@ -1575,7 +1595,7 @@
     }
     if(name.indexOf('razr') !== -1) return 'razr';
     // Any Samsung Galaxy device (S-series, Z Fold, A-series) uses the Samsung ladder.
-    // Note: "galaxy s" alone missed "Galaxy Z Fold7" — check 'galaxy' and 'fold' too.
+    // Foldables also use Galaxy naming, so check galaxy / fold / flip rather than only Galaxy S.
     if(name.indexOf('galaxy') !== -1 || name.indexOf('fold') !== -1 || name.indexOf('flip') !== -1) return 'samsung';
     if(name.indexOf('pro max') !== -1 || name.indexOf('pro') !== -1) return 'iphonePro';
     return 'iphoneBase';
@@ -1613,7 +1633,7 @@
     if(id.startsWith('pxl') || id.startsWith('ppro')) return 500; // Pixel 10 Pro / Pro XL
     if(id.startsWith('ip17pm') || id.startsWith('ip17p')) return 500; // iPhone 17 Pro / Pro Max
     if(id.startsWith('ip17')) return 350; // iPhone 17 (iPhone Air legacy Next Up offer ended 7/16)
-    if(id.startsWith('s26u') || id.startsWith('s26p') || id.startsWith('zfold7')) return 350;
+    if(id.startsWith('s26u') || id.startsWith('s26p')) return 350;
     if(id === 'razr') return 350;
     return 0;
   }
@@ -1621,21 +1641,15 @@
   function datedPromoNoteHtml(){
     if(!state.phone) return '';
     const id = state.phone.id || '';
-    const now = new Date();
-    const samsungStart = new Date(2026, 6, 17); // July 17, 2026
     const notes = [];
     if(id.startsWith('ipair')){
       notes.push(`<div class="d-rule"><b>iPhone Air trade-in update:</b> The last day for Air trade-in offers was 7/16/26.</div>`);
     }
     if(id.startsWith('s26u') || id.startsWith('s26p')){
-      if(now >= samsungStart){
-        notes.push(`<div class="d-rule"><b>7/17/26:</b> Samsung Any Year / Any Condition offer active. See <b>More</b> for qualifying-device details.</div>`);
-      } else {
-        notes.push(`<div class="d-rule"><b>Starts 7/17/26:</b> Samsung Any Year / Any Condition offer. Verify the active offer in CCKM until the effective date.</div>`);
-      }
+      notes.push(`<div class="d-rule"><b>7/17/26:</b> Samsung Any Condition offer active. See <b>More</b> for the qualifying-device tiers.</div>`);
     }
-    if(phoneCategory(state.phone) === 'samsung'){
-      notes.push(`<div class="d-rule"><b>Samsung Unpacked — 7/22/26:</b> Samsung may have new releases at the event, including 3 foldable devices.</div>`);
+    if(id.startsWith('zfold8') || id.startsWith('zflip8')){
+      notes.push(`<div class="d-rule"><b>7/22/26:</b> Current Samsung foldable trade-in offers are loaded. See <b>More</b> for plan and trade tiers.</div>`);
     }
     return notes.join('');
   }
@@ -1643,16 +1657,17 @@
   function datedPromoDetailHtml(){
     if(!state.phone) return '';
     const id = state.phone.id || '';
-    const now = new Date();
-    const samsungStart = new Date(2026, 6, 17); // July 17, 2026
     if(id.startsWith('ipair')){
-      return `<b>iPhone Air:</b> The last day for Air trade-in offers was <b>7/16/26</b>. Beginning 7/17/26, Air is handled as a tiered device: $9.99/mo for 256GB, $14.99/mo for 512GB, and $19.99/mo for 1TB. Verify the current offer in CCKM before quoting.`;
+      return `<b>iPhone Air:</b> The last day for Air trade-in offers was <b>7/16/26</b>. Air is now handled as a tiered device: $9.99/mo for 256GB, $14.99/mo for 512GB, and $19.99/mo for 1TB. Verify the current offer in CCKM before quoting.`;
     }
     if(id.startsWith('s26u') || id.startsWith('s26p')){
-      if(now >= samsungStart){
-        return `<b>Samsung offer effective 7/17/26:</b> The Any Year / Any Condition offer is active for Galaxy S26+ and S26 Ultra. Current qualifying-device guide: $1,100 on eligible Premium/legacy plans with Galaxy S22+, Z Flip4, Z Fold3+ or a $95+ trade value; $900 on Starter/Starter SL or Extra 2.0+ with Galaxy S10, Note10, Z Flip3+ or a $35–$94 trade value; $500 on Value 2.0 with Galaxy S10, Note10, Z Flip3+ or a $35+ trade value. Always verify the exact model and eligibility in CCKM.`;
-      }
-      return `<b>Samsung offer starts 7/17/26:</b> The Any Year / Any Condition offer is scheduled for Galaxy S26+ and S26 Ultra. Verify the active offer in CCKM until the effective date.`;
+      return `<b>Galaxy S26+ / S26 Ultra — effective 7/17/26:</b> Premium/Elite/Extra plans receive up to $1,100 with a $95+ trade or qualifying any-condition Galaxy S22+, Z Flip4, or Z Fold3+. Starter/Starter SL receive up to $900. A $35–$94 trade or qualifying any-condition Galaxy S10, Note10, or Z Flip3+ receives up to $900 on Premium/Extra/Elite/Starter and up to $500 on Value 2.0. Value 2.0 receives up to $500. Verify the exact plan and trade result in CCKM.`;
+    }
+    if(id.startsWith('zfold8')){
+      return `<b>Galaxy Z Fold8 / Z Fold8 Ultra — effective 7/22/26:</b> With a $290+ trade, Premium/Elite receive up to $1,900, Extra/Starter receive up to $1,000, and Value 2.0 receives up to $500. A $95–$289 trade or qualifying any-condition Galaxy S22+, Z Flip4, or Z Fold3+ receives up to $1,000 on Premium/Extra/Elite/Starter and up to $500 on Value 2.0. A $35–$94 trade or qualifying any-condition Galaxy S10, Note10, or Z Flip3+ receives up to $500 on any eligible unlimited plan. Verify in CCKM before quoting.`;
+    }
+    if(id.startsWith('zflip8')){
+      return `<b>Galaxy Z Flip8 — effective 7/22/26:</b> A $95+ trade or qualifying any-condition Galaxy S22+, Z Flip4, or Z Fold3+ receives up to $1,000 on Premium/Extra/Elite/Starter and up to $500 on Value 2.0. A $35–$94 trade or qualifying any-condition Galaxy S10, Note10, or Z Flip3+ receives up to $500 on any eligible unlimited plan. Verify in CCKM before quoting.`;
     }
     return '';
   }
@@ -1704,6 +1719,10 @@
     if(!state.plan || !state.phone) return { state:'incomplete' };
 
     if(state.plan === 'valueplus_mobile') return { state:'full_retail_rerate' };
+
+    // Newly released phones stay searchable with verified MSRP, but no promo is guessed
+    // until the exact AT&T / CCKM offer is loaded.
+    if(state.phone.promoCategory === 'pending' && !state.nextUp) return { state:'promo_pending' };
 
     if(state.nextUp){
       if(state.nextPaid === null) return { state:'needNextPaid' };
@@ -1772,6 +1791,10 @@
       return `${phoneLabel} does not have a Next Up promo loaded in this tool. Verify in CCKM before quoting.`;
     }
     if(r.state === 'incomplete') return 'Incomplete: select a plan and a phone to generate the summary.';
+    if(r.state === 'promo_pending'){
+      const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
+      return `${phoneLabel} is newly released at ${money(state.phone.retail)} retail ($${monthly(state.phone.retail)}/mo). AT&T trade-in and turn-in promotions are not loaded yet — verify the current offer in CCKM before quoting.`;
+    }
     if(r.state === 'full_retail_rerate'){
       const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
       return `Customer is getting a ${phoneLabel} on ${PLAN_LABEL[state.plan]} — full retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo). Value Plus / Mobile Share selected — research rerate opportunities before proceeding.`;
@@ -1828,6 +1851,7 @@
   function getCreditColorClass(r){
     if(r.state === 'nextup_promo') return 'result-green';
     if(r.state === 'tiered_final') return 'result-tiered';
+    if(r.state === 'promo_pending') return 'result-tiered';
     if(r.state === 'tiered_action_needed' || r.state === 'tiered_confirm_cckm' || r.state === 'tier_action_needed') return 'result-tiered';
     if(r.state === 'zero' || r.state === 'full_retail' || r.state === 'full_retail_rerate' || r.state === 'nextup_no_payoff' || r.state === 'nextup_not_eligible') return 'result-red';
     if(r.state !== 'promo') return '';
@@ -1880,7 +1904,7 @@
     return [r.state,r.credit ?? '',r.monthly ?? '',r.total ?? '',state.plan,state.phone && state.phone.id,state.value,state.pixel,state.galaxyAny,state.nextUp,state.nextUpType,state.nextPaid,state.tierAction].join('|');
   }
   function isReadyResult(r){
-    return ['promo','nextup_promo','tiered_final','zero','full_retail','full_retail_rerate','nextup_no_payoff'].includes(r.state);
+    return ['promo','nextup_promo','tiered_final','promo_pending','zero','full_retail','full_retail_rerate','nextup_no_payoff'].includes(r.state);
   }
   function playResultAnimations(r, colorClass){
     const displayEl = el('display');
@@ -1977,6 +2001,7 @@
     if(r.state === 'needNextPaid') return `Next Up: confirm ${nextUpThresholdPct()}% payoff.`;
     if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? 'Legacy Next Up under 50%: pay to 50% first.' : 'Next Up Anytime under 33%: AT&T payoff path, no new promo.';
     if(r.state === 'nextup_not_eligible') return 'No Next Up promo loaded for this phone.';
+    if(r.state === 'promo_pending') return `${phoneLabel}: MSRP loaded; AT&T promo pending.`;
     if(r.state === 'full_retail_rerate') return `${phoneLabel}: full retail on ${PLAN_LABEL[state.plan]}; check rerate.`;
     if(r.state === 'tiered_not_offered' || r.state === 'full_retail' || r.state === 'zero') return `${phoneLabel}: no recurring promo showing.`;
     if(r.state === 'tiered_confirm_cckm') return `${phoneLabel}: confirm tiered price in CCKM.`;
@@ -1995,6 +2020,7 @@
       return `Based on the ${PLAN_LABEL[state.plan]} plan and this trade-in, the ${phoneLabel} is estimated to receive ${moneyWhole(r.credit)} in bill credits over 36 months. That brings the device payment to about $${netMo}/mo before taxes. ${baseVerify}`;
     }
     if(r.state === 'tiered_final') return `This ${phoneLabel} has an estimated tiered promo price of $${r.monthly}/mo for 36 months before taxes. ${baseVerify}`;
+    if(r.state === 'promo_pending') return `The ${phoneLabel} is newly released and its retail price is loaded, but the AT&T promotional offer has not been added to this tool yet. ${baseVerify}`;
     if(r.state === 'full_retail_rerate') return `This plan does not show a promo credit in the tool, so I would review plan options before quoting the final device cost. ${baseVerify}`;
     if(r.state === 'zero' || r.state === 'full_retail') return `With the current information, this device is estimated at full retail in the tool. ${baseVerify}`;
     if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? `Because the legacy Next Up device is not at least 50% paid off, the customer generally needs to pay up to 50% first, then they can upgrade. ${baseVerify}` : `Because the Next Up Anytime device is not at least 33% paid off, AT&T can still pay off the remaining installments for the upgrade path, but no new phone promo applies. ${baseVerify}`;
@@ -2328,7 +2354,7 @@
     const phones = PHONES.map(p=>`<tr><td><b>${p.name}${p.storage?' '+p.storage:''}</b><br><small>${p.id}</small></td><td>${money(p.retail||0)}</td><td>${p.tieredOffer?'Tiered':(PROMO_CATEGORY_LABEL[inferPhoneCategoryForAdmin(p)]||inferPhoneCategoryForAdmin(p))}</td></tr>`).join('');
     const tips = TIPS.map((t,i)=>`<li><b>${i+1}.</b> ${t}</li>`).join('');
     box.innerHTML = `
-      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'July 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'7/17/2026'}</div>
+      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'July 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'7/27/2026'}</div>
       <details class="tool-subcard" open><summary><b>Promo Ladder Check</b></summary>${promoHtml}</details>
       <details class="tool-subcard"><summary><b>Tiered Offer Check (${PHONES.filter(p=>p.tieredOffer).length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>New Line</th><th>Upgrade</th></tr></thead><tbody>${tiered}</tbody></table></details>
       <details class="tool-subcard"><summary><b>Phone Check (${PHONES.length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>MSRP</th><th>Promo Type</th></tr></thead><tbody>${phones}</tbody></table></details>
@@ -2339,7 +2365,7 @@
   function adminFill(){
     el('adminVersionInput').value = releaseInfo.version || VERSION;
     el('adminMonthInput').value = releaseInfo.month || 'July 2026';
-    el('adminUpdatedInput').value = releaseInfo.updated || '7/20/2026';
+    el('adminUpdatedInput').value = releaseInfo.updated || '7/27/2026';
     el('adminPhones').value = JSON.stringify(PHONES, null, 2);
     buildAdminPhoneSelect();
     el('adminPromos').value = JSON.stringify(LADDERS, null, 2);
@@ -2457,7 +2483,7 @@
     try{ const val = JSON.parse(el(id).value); persistAdminData({[key]:val}); apply(val); adminFill(); alert('Saved.'); }
     catch(e){ alert('Invalid JSON: '+e.message); }
   }
-  el('saveRelease').addEventListener('click',()=>{ releaseInfo={version:el('adminVersionInput').value||VERSION, month:el('adminMonthInput').value||'July 2026', updated:el('adminUpdatedInput').value||'7/20/2026'}; persistAdminData({release:releaseInfo}); applyAdminData(); adminFill(); });
+  el('saveRelease').addEventListener('click',()=>{ releaseInfo={version:el('adminVersionInput').value||VERSION, month:el('adminMonthInput').value||'July 2026', updated:el('adminUpdatedInput').value||'7/27/2026'}; persistAdminData({release:releaseInfo}); applyAdminData(); adminFill(); });
   el('savePhones').addEventListener('click',()=>saveJsonTextarea('adminPhones','phones',val=>{PHONES.splice(0,PHONES.length,...val); buildQuickChips(); buildCompareOptions(); renderCompare(); render(); buildAdminPhoneSelect();}));
   el('savePromos').addEventListener('click',()=>saveJsonTextarea('adminPromos','ladders',val=>{Object.keys(LADDERS).forEach(k=>delete LADDERS[k]); Object.assign(LADDERS,val); render(); renderCompare(); buildAdminPromoEditor();}));
   el('saveTips').addEventListener('click',()=>{ TIPS = el('adminTips').value.split(/\n+/).map(x=>x.trim()).filter(Boolean); persistAdminData({tips:TIPS}); tipIdx=0; tipText.textContent=TIPS[0]||''; adminFill(); });
@@ -2585,6 +2611,9 @@
     } else if(r.state === 'nextup_not_eligible'){
       amountEl.innerHTML = '$0';
       detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> does not have a Next Up / legacy Next Up promo loaded in this tool. Verify the device and offer in CCKM before quoting.</div>`;
+    } else if(r.state === 'promo_pending'){
+      amountEl.innerHTML = '$&mdash;';
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b><br>AT&T retail: <b>${money(state.phone.retail)}</b> ($${monthly(state.phone.retail)}/mo on 36-month installments)<br><b>Promo details pending:</b> Trade-in and turn-in offers are not loaded yet. Verify the active offer in <a href="${CCKM}" target="_blank" rel="noopener noreferrer" style="color:#eaf3fb;">CCKM</a> before quoting.</div>`;
     } else if(r.state === 'full_retail_rerate'){
       const cat = phoneCategory(state.phone);
       amountEl.innerHTML = '$0';
