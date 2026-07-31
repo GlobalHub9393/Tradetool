@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — v1.10</title>
+<title>Global Trade Tool — v1.13</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -395,6 +395,24 @@
   .tools-page.open{display:block;}
   .tools-back{margin-bottom:12px;}
   .tools-page .tool-subcard{box-shadow:var(--shadow);}
+  .changes-intro{margin:0 0 12px;color:var(--slate);font-size:13px;line-height:1.5;}
+  .change-entry{background:#fff;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;margin-top:10px;box-shadow:var(--shadow);}
+  .change-entry summary{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;cursor:pointer;padding:14px;list-style:none;}
+  .change-entry summary::-webkit-details-marker{display:none;}
+  .change-entry[open] summary{border-bottom:1px solid var(--line);background:#f7fbff;}
+  .change-date{display:inline-flex;align-items:center;justify-content:center;min-width:54px;padding:7px 9px;border-radius:10px;background:var(--blue);color:#fff;font-size:13px;font-weight:900;letter-spacing:.02em;}
+  .change-title{font-size:14px;font-weight:800;color:var(--ink);line-height:1.3;}
+  .change-more{font-size:12px;font-weight:800;color:var(--blue);white-space:nowrap;}
+  .change-entry[open] .change-more::before{content:"Hide ";}
+  .change-entry:not([open]) .change-more::before{content:"More ";}
+  .change-entry .change-more{font-size:0;}
+  .change-entry .change-more::before{font-size:12px;}
+  .change-body{padding:14px;color:var(--ink);font-size:13px;line-height:1.55;}
+  .change-body h3{font-size:14px;margin:0 0 6px;color:var(--blue);}
+  .change-body h3:not(:first-child){margin-top:16px;}
+  .change-body ul{margin:6px 0 0;padding-left:20px;}
+  .change-body li{margin:5px 0;}
+  .change-foot{margin-top:14px;padding:10px 11px;border-radius:10px;background:#eef7ff;border:1px solid #b9dcf5;color:#163b55;font-weight:700;}
   @media (max-width:700px){
     body{padding:10px;}
     .header-row{align-items:flex-start;gap:8px;}
@@ -433,8 +451,8 @@
         <h1>Global Trade Tool</h1>
       </div>
       <div style="margin-left:auto; text-align:right;">
-        <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/27/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.12</div>
+        <div class="sub" id="releaseMeta">July 2026 &middot; Last Updated 7/31/2026</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.13</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -679,16 +697,52 @@
     </div>
     <div id="toolsMenu" class="tools-page open">
       <div class="tools-menu-grid">
+        <button type="button" class="tools-tile" data-tools-page="changes"><b>🆕 Recent Changes</b><span>See date-by-date promotion updates. Tap a date, then More, for the full change details.</span></button>
         <button type="button" class="tools-tile" data-tools-page="compare"><b>📊 Phone Comparison</b><span>Compare two phones side-by-side using the current plan, trade value, Pixel toggle, and activation type.</span></button>
         <button type="button" class="tools-tile" data-tools-page="history"><b>🕒 Recent History</b><span>Reload recent calculations without adding anything to the main calculator page.</span></button>
         <button type="button" class="tools-tile" data-tools-page="faq"><b>❓ FAQ / Trade Help</b><span>Quick answers for trade-ins, credits, plans, values, and Next Up Anytime.</span></button>
         <button type="button" class="tools-tile" data-tools-page="admin"><b>⚙️ Admin</b><span>Password-protected guide and reference area.</span></button>
       </div>
     </div>
+    <div id="toolsChangesPage" class="tools-page">
+      <button type="button" class="admin-btn secondary tools-back" data-tools-back>← Back to Tools</button>
+      <section class="tool-subcard">
+        <p class="label"><span class="step">5</span>Recent changes</p>
+        <p class="changes-intro">Newest updates appear first. Tap the date to open the full details.</p>
+
+        <details class="change-entry">
+          <summary>
+            <span class="change-date">7/31</span>
+            <span class="change-title">Galaxy S26 and iPhone 17 offer updates</span>
+            <span class="change-more" aria-hidden="true"></span>
+          </summary>
+          <div class="change-body">
+            <h3>Samsung Galaxy S26</h3>
+            <ul>
+              <li><b>Up to $900 off</b> on Starter / Starter SL or Extra 2.0 and above with a qualifying any-condition Galaxy S10, Note10, or Z Flip3 or newer, or a qualifying trade valued at $35+.</li>
+              <li><b>Up to $500 off</b> on Value 2.0 with a qualifying any-condition Galaxy S10, Note10, or Z Flip3 or newer, or a qualifying trade valued at $35+.</li>
+              <li><b>Legacy Next Up:</b> Galaxy S26 now receives up to <b>$350 off</b> with an eligible early upgrade.</li>
+              <li>Galaxy S26 was removed from the Next Up Anytime tiered offer, Consumer tiered offer, and CRU tiered offer. The last eligible day for those tiered offers was <b>7/30</b>.</li>
+            </ul>
+
+            <h3>iPhone 17 series</h3>
+            <ul>
+              <li>On Extra 2.0 and above, iPhone 17, iPhone 17 Pro, and iPhone 17 Pro Max now receive <b>$700 off</b> with a trade or turn-in valued at $130+.</li>
+              <li>The previous <b>$830</b> offer at the $130+ tier ended on <b>7/30</b>.</li>
+              <li>On Starter / Starter SL, <b>$830 off</b> requires a trade or turn-in valued at $290+.</li>
+              <li>The existing iPhone 17 Pro / Pro Max <b>$1,100</b> top tier at $290+ remains loaded.</li>
+              <li>These normal-promo changes also apply to eligible Next Up Anytime upgrades at 33%+ paid.</li>
+            </ul>
+
+            <div class="change-foot">Effective 7/31/26. Verify the exact device, plan, trade result, and offer eligibility in OPUS/CCKM before quoting.</div>
+          </div>
+        </details>
+      </section>
+    </div>
     <div id="toolsComparePage" class="tools-page">
       <button type="button" class="admin-btn secondary tools-back" data-tools-back>← Back to Tools</button>
           <section id="compareCard" class="tool-subcard">
-            <p class="label"><span class="step">5</span>Phone comparison</p>
+            <p class="label"><span class="step">6</span>Phone comparison</p>
             <div class="mini-grid">
               <select id="compareA" class="tool-select"></select>
               <select id="compareB" class="tool-select"></select>
@@ -701,7 +755,7 @@
     <div id="toolsHistoryPage" class="tools-page">
       <button type="button" class="admin-btn secondary tools-back" data-tools-back>← Back to Tools</button>
           <section id="historyCard" class="tool-subcard">
-            <p class="label"><span class="step">6</span>Recent calculations</p>
+            <p class="label"><span class="step">7</span>Recent calculations</p>
             <div id="historyList" class="history-list"><p style="margin:0;color:var(--slate);font-size:13px;">Completed calculations will appear here.</p></div>
           </section>
 
@@ -709,7 +763,7 @@
     <div id="toolsFaqPage" class="tools-page">
       <button type="button" class="admin-btn secondary tools-back" data-tools-back>← Back to Tools</button>
       <section class="tool-subcard">
-        <p class="label"><span class="step">7</span>FAQ / Trade Help</p>
+        <p class="label"><span class="step">8</span>FAQ / Trade Help</p>
         <p style="margin:0 0 12px;color:var(--slate);font-size:13px;line-height:1.5;">Quick reference only. While in store, confirm trade values with designated AT&amp;T trade tools and verify promotion eligibility in OPUS/CCKM before quoting.</p>
 
         <details class="tool-subcard"><summary><b>1. How long until promo credits hit the account?</b></summary><p>Promo credits usually appear within <b>1–3 billing cycles</b>. If credits do not show right away, the customer should keep paying the bill normally. Credits may catch up later if the promotion and trade were completed correctly.</p></details>
@@ -765,12 +819,12 @@
       <div class="admin-subhead">Accounts</div>
       <div class="tool-subcard"><b>GitHub repo:</b> GlobalHub9393 / Tradetool<br><b>Cloudflare email:</b> Ts8686@cmcnj.com<br><b>Cloudflare password:</b> Stored separately</div>
       <div class="admin-subhead">Quick Guide — GitHub First</div>
-      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.12</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
+      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.13</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
       <details class="tool-subcard"><summary><b>2. Download the updated index.html</b></summary><p>Download the updated file from ChatGPT. The main site file must be named exactly <b>index.html</b>. If the file name becomes <b>index.html.txt</b>, <b>GlobalTradeTool_v1_DEV</b>, or anything else, rename it or ask for a corrected file before uploading to GitHub.</p></details>
       <details class="tool-subcard"><summary><b>3. Upload index.html to GitHub</b></summary><p>Open GitHub, go to <b>GlobalHub9393 / Tradetool</b>, tap <b>Add file</b>, then upload the updated <b>index.html</b>. If GitHub asks whether to replace the existing file, replace it. Commit directly to the <b>main</b> branch.</p></details>
-      <details class="tool-subcard"><summary><b>4. Commit the change</b></summary><p>Use a simple commit message like <b>Update Global Trade Tool 7/9/2026</b>. Tap <b>Commit changes</b>. GitHub should now show the latest <b>index.html</b> in the file list.</p></details>
+      <details class="tool-subcard"><summary><b>4. Commit the change</b></summary><p>Use a simple commit message like <b>Update Global Trade Tool 7/31/2026</b>. Tap <b>Commit changes</b>. GitHub should now show the latest <b>index.html</b> in the file list.</p></details>
       <details class="tool-subcard"><summary><b>5. Cloudflare deployment after GitHub is connected</b></summary><p>Once Cloudflare Pages is linked to this GitHub repo, Cloudflare should automatically create a new deployment from the <b>main</b> branch after every GitHub commit. Go to Cloudflare → <b>Workers &amp; Pages</b> → the Global Trade Tool project → <b>Deployments</b> to confirm the newest deployment completed successfully.</p></details>
-      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.12</b>, the date is correct, the calculator works, More opens, Tools opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
+      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.13</b>, the date is correct, the calculator works, More opens, Tools opens, Recent Changes opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
       <details class="tool-subcard"><summary><b>7. If Cloudflare is not connected yet</b></summary><p>Use the old ZIP/folder upload only as a fallback. Download the Cloudflare folder ZIP from ChatGPT, unzip it in Files, confirm the folder contains <b>index.html</b>, then upload the unzipped folder through Cloudflare Pages → <b>Create deployment</b>.</p></details>
       <details class="tool-subcard"><summary><b>8. If something goes wrong</b></summary><p>Stop and take a screenshot. Check GitHub to confirm <b>index.html</b> was replaced correctly. Then check Cloudflare Deployments for errors or use the previous successful deployment if needed. Send ChatGPT the screenshot, current file, and what went wrong.</p></details>
     </section>
@@ -795,7 +849,8 @@
           <option value="auto">Auto-detect from name</option>
           <option value="iphonePro">iPhone Pro ladder</option>
           <option value="iphoneBase">iPhone/Base ladder</option>
-          <option value="samsung">Samsung/Galaxy ladder</option>
+          <option value="samsung">Samsung S26+ / Ultra ladder</option>
+          <option value="s26base">Galaxy S26 ladder</option>
           <option value="pixelXL">Pixel Pro XL ladder</option>
           <option value="pixelPro">Pixel Pro ladder</option>
           <option value="razr">Razr ladder</option>
@@ -858,11 +913,11 @@
 
 <script>
 (function(){
-  const VERSION = 'Live Version 1.12';
+  const VERSION = 'Live Version 1.13';
   const ADMIN_PASSWORD = 'wire9393';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0717';
   const HISTORY_KEY = 'globalTradeToolHistory_v1';
-  let releaseInfo = { version:'Live Version 1.12', month:'July 2026', updated:'7/27/2026' };
+  let releaseInfo = { version:'Live Version 1.13', month:'July 2026', updated:'7/31/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
@@ -870,13 +925,14 @@
   const PROMO_CATEGORY_LABEL = {
     iphonePro:'iPhone Pro ladder',
     iphoneBase:'iPhone/Base ladder',
-    samsung:'Samsung/Galaxy ladder',
+    samsung:'Samsung S26+ / Ultra ladder',
+    s26base:'Galaxy S26 ladder',
     pixelXL:'Pixel Pro XL ladder',
     pixelPro:'Pixel Pro ladder',
     razr:'Razr ladder',
     none:'No ladder promo'
   };
-  const PROMO_CATEGORY_KEYS = ['iphonePro','iphoneBase','samsung','pixelXL','pixelPro','razr'];
+  const PROMO_CATEGORY_KEYS = ['iphonePro','iphoneBase','samsung','s26base','pixelXL','pixelPro','razr'];
   const PLAN_MEMBERS = {
     premium:{
       regular:['Elite 2.0','Premium 2.0','Extra 2.0','Elite w/ HBO Max','Premium PL','Extra EL'],
@@ -995,10 +1051,9 @@
     { id:'ip16-256', name:'iPhone 16', storage:'256GB', retail:829.99, tieredOffer:true, tieredMonthlyNew:12.99, tieredMonthlyUpgrade:12.99 },
     { id:'ip16-512', name:'iPhone 16', storage:'512GB', retail:1029.99, tieredOffer:true, tieredMonthlyNew:17.99, tieredMonthlyUpgrade:17.99 },
 
-    // Galaxy S26 (base model, distinct from S26+/Ultra which stay on the ladder) — flat price, same for New or Upgrade
-    // Updated 7/2/2026: 256GB $12.99, 512GB $19.99 (was $10.99/$15.99)
-    { id:'s26-256', name:'Galaxy S26', storage:'256GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:12.99, tieredMonthlyUpgrade:12.99 },
-    { id:'s26-512', name:'Galaxy S26', storage:'512GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:19.99, tieredMonthlyUpgrade:19.99 },
+    // Galaxy S26 base model — tiered offers ended 7/30/2026. Trade-in and legacy Next Up offers remain active.
+    { id:'s26-256', name:'Galaxy S26', storage:'256GB', retail:899.99, tieredOffer:false, promoCategory:'s26base' },
+    { id:'s26-512', name:'Galaxy S26', storage:'512GB', retail:1099.99, tieredOffer:false, promoCategory:'s26base' },
 
     // Galaxy S25 Edge — flat price, same for New or Upgrade
     { id:'s25edge-256', name:'Galaxy S25 Edge', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:15.99 },
@@ -1444,14 +1499,13 @@
     tradeEl.value=''; state.value=null; state.tradePreset=null; tradeError.style.display='none'; updateTradePresetNote(); tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true'); updateTradeHelp(); render();
   });
 
-  // Promo ladders effective 7/17/2026.
+  // Promo ladders effective 7/31/2026.
   const LADDERS = {
-    // iPhone 17 / 17 Pro / 17 Pro Max: the $130+ Premium/Starter tier increased from $700 to $830.
-    // iPhone Air left the trade-in ladders after 7/16 and is handled as a tiered device.
-    // Samsung ladders confirmed against the 7/22–7/23 CCKM updates, including plan-specific Fold8 / Fold8 Ultra and Flip8 tiers.
-    premium:{ iphonePro:[{min:290,credit:1100},{min:130,credit:830},{min:35,credit:350}], iphoneBase:[{min:130,credit:830},{min:35,credit:350}], samsung:[{min:95,credit:1100},{min:35,credit:900}], fold8:[{min:290,credit:1900},{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
-    starter:{ iphonePro:[{min:130,credit:830},{min:35,credit:350}], iphoneBase:[{min:130,credit:830},{min:35,credit:350}], samsung:[{min:35,credit:900}], fold8:[{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixelXL:[{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:35,credit:1000}] },
-    value:{ iphonePro:[{min:130,credit:500},{min:35,credit:350}], iphoneBase:[{min:130,credit:500},{min:35,credit:350}], samsung:[{min:35,credit:500}], fold8:[{min:35,credit:500}], flip8:[{min:35,credit:500}], pixelXL:[{min:35,credit:500}], pixelPro:[{min:35,credit:500}], razr:[{min:35,credit:500}] }
+    // iPhone 17 series: Extra 2.0 and above returned to $700 at $130+; Starter keeps $830 at $290+.
+    // Galaxy S26 base model left tiered offers after 7/30 and now uses its own $900 / $500 trade ladder.
+    premium:{ iphonePro:[{min:290,credit:1100},{min:130,credit:700},{min:35,credit:350}], iphoneBase:[{min:130,credit:700},{min:35,credit:350}], samsung:[{min:95,credit:1100},{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:290,credit:1900},{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
+    starter:{ iphonePro:[{min:290,credit:830},{min:130,credit:700},{min:35,credit:350}], iphoneBase:[{min:290,credit:830},{min:130,credit:700},{min:35,credit:350}], samsung:[{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixelXL:[{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:35,credit:1000}] },
+    value:{ iphonePro:[{min:130,credit:500},{min:35,credit:350}], iphoneBase:[{min:130,credit:500},{min:35,credit:350}], samsung:[{min:35,credit:500}], s26base:[{min:35,credit:500}], fold8:[{min:35,credit:500}], flip8:[{min:35,credit:500}], pixelXL:[{min:35,credit:500}], pixelPro:[{min:35,credit:500}], razr:[{min:35,credit:500}] }
   };
   function savedAdminData(){
     try { return JSON.parse(localStorage.getItem(ADMIN_STORE_KEY) || '{}'); }
@@ -1467,7 +1521,7 @@
     if(data.release){ releaseInfo = Object.assign(releaseInfo, data.release); }
     // The uploaded file controls the live version so an older saved Admin value cannot mask a new release.
     releaseInfo.version = VERSION;
-    releaseInfo.updated = '7/27/2026';
+    releaseInfo.updated = '7/31/2026';
     // Only apply local phone/promo/tip edits made against this exact release.
     // This prevents stale browser data from restoring phones or promo ladders removed in a newer upload.
     const savedMatchesRelease = data.backupVersion === VERSION;
@@ -1476,7 +1530,7 @@
     if(savedMatchesRelease && Array.isArray(data.tips)){ TIPS.splice(0, TIPS.length, ...data.tips); }
     const vb = el('versionBadge'), rm = el('releaseMeta');
     if(vb) vb.textContent = releaseInfo.version || VERSION;
-    if(rm) rm.textContent = `${releaseInfo.month || 'July 2026'} · Last Updated ${releaseInfo.updated || '7/27/2026'}`;
+    if(rm) rm.textContent = `${releaseInfo.month || 'July 2026'} · Last Updated ${releaseInfo.updated || '7/31/2026'}`;
   }
 
   const PIXEL_FLOOR = { premium:1050, starter:1050, value:500 };
@@ -1527,7 +1581,7 @@
   function isSamsungAnyConditionPhone(phone){
     if(!phone) return false;
     const id = phone.id || '';
-    return id.startsWith('s26u') || id.startsWith('s26p') || id.startsWith('zfold8') || id.startsWith('zflip8');
+    return id.startsWith('s26u') || id.startsWith('s26p') || id.startsWith('s26-') || id.startsWith('zfold8') || id.startsWith('zflip8');
   }
   function samsungAnyConditionFloor(plan, phone, galaxyAny){
     if(!isSamsungAnyConditionPhone(phone) || !galaxyAny || galaxyAny === 'none') return 0;
@@ -1536,6 +1590,11 @@
     // qualifying older Galaxy = $500. Fold8 / Fold8 Ultra reach $1,900 only on Premium/Elite with $290+ TIV.
     if(id.startsWith('zfold8') || id.startsWith('zflip8')){
       if(plan === 'premium' || plan === 'starter') return galaxyAny === 'high' ? 1000 : 500;
+      if(plan === 'value') return 500;
+      return 0;
+    }
+    if(id.startsWith('s26-')){
+      if(plan === 'premium' || plan === 'starter') return 900;
       if(plan === 'value') return 500;
       return 0;
     }
@@ -1633,7 +1692,7 @@
     if(id.startsWith('pxl') || id.startsWith('ppro')) return 500; // Pixel 10 Pro / Pro XL
     if(id.startsWith('ip17pm') || id.startsWith('ip17p')) return 500; // iPhone 17 Pro / Pro Max
     if(id.startsWith('ip17')) return 350; // iPhone 17 (iPhone Air legacy Next Up offer ended 7/16)
-    if(id.startsWith('s26u') || id.startsWith('s26p')) return 350;
+    if(id.startsWith('s26u') || id.startsWith('s26p') || id.startsWith('s26-')) return 350;
     if(id === 'razr') return 350;
     return 0;
   }
@@ -1645,7 +1704,9 @@
     if(id.startsWith('ipair')){
       notes.push(`<div class="d-rule"><b>iPhone Air trade-in update:</b> The last day for Air trade-in offers was 7/16/26.</div>`);
     }
-    if(id.startsWith('s26u') || id.startsWith('s26p')){
+    if(id.startsWith('s26-')){
+      notes.push(`<div class="d-rule"><b>7/31/26:</b> Galaxy S26 moved from tiered pricing to trade-in offers. See <b>Recent Changes</b> or <b>More</b>.</div>`);
+    } else if(id.startsWith('s26u') || id.startsWith('s26p')){
       notes.push(`<div class="d-rule"><b>7/17/26:</b> Samsung Any Condition offer active. See <b>More</b> for the qualifying-device tiers.</div>`);
     }
     if(id.startsWith('zfold8') || id.startsWith('zflip8')){
@@ -1659,6 +1720,12 @@
     const id = state.phone.id || '';
     if(id.startsWith('ipair')){
       return `<b>iPhone Air:</b> The last day for Air trade-in offers was <b>7/16/26</b>. Air is now handled as a tiered device: $9.99/mo for 256GB, $14.99/mo for 512GB, and $19.99/mo for 1TB. Verify the current offer in CCKM before quoting.`;
+    }
+    if(id.startsWith('ip17')){
+      return `<b>iPhone 17 series — effective 7/31/26:</b> Extra 2.0 and above receive $700 with a $130+ trade or eligible turn-in. Starter / Starter SL receive $830 at $290+; the lower $130+ tier remains $700. iPhone 17 Pro and Pro Max retain the $1,100 top tier at $290+. Verify in CCKM before quoting.`;
+    }
+    if(id.startsWith('s26-')){
+      return `<b>Galaxy S26 — effective 7/31/26:</b> Up to $900 on Starter / Starter SL or Extra 2.0 and above with a $35+ qualifying trade or a qualifying any-condition Galaxy S10, Note10, or Z Flip3 or newer. Value 2.0 receives up to $500. Galaxy S26 also receives up to $350 through an eligible legacy Next Up early upgrade. Its tiered offers ended 7/30. Verify in CCKM before quoting.`;
     }
     if(id.startsWith('s26u') || id.startsWith('s26p')){
       return `<b>Galaxy S26+ / S26 Ultra — effective 7/17/26:</b> Premium/Elite/Extra plans receive up to $1,100 with a $95+ trade or qualifying any-condition Galaxy S22+, Z Flip4, or Z Fold3+. Starter/Starter SL receive up to $900. A $35–$94 trade or qualifying any-condition Galaxy S10, Note10, or Z Flip3+ receives up to $900 on Premium/Extra/Elite/Starter and up to $500 on Value 2.0. Value 2.0 receives up to $500. Verify the exact plan and trade result in CCKM.`;
@@ -2343,7 +2410,7 @@
   function buildAdminCheckContent(){
     const box = el('adminCheckContent');
     if(!box) return;
-    const cats = ['iphonePro','iphoneBase','samsung','pixelXL','pixelPro','razr'];
+    const cats = ['iphonePro','iphoneBase','samsung','s26base','pixelXL','pixelPro','razr'];
     const planKeys = ['premium','starter','value'];
     const promoHtml = planKeys.map(plan=>`<details class="tool-subcard"><summary><b>${PLAN_LABEL[plan]} Promo Ladders</b></summary>` + cats.map(cat=>{
       const tiers = (LADDERS[plan] && LADDERS[plan][cat]) ? LADDERS[plan][cat] : [];
@@ -2354,18 +2421,18 @@
     const phones = PHONES.map(p=>`<tr><td><b>${p.name}${p.storage?' '+p.storage:''}</b><br><small>${p.id}</small></td><td>${money(p.retail||0)}</td><td>${p.tieredOffer?'Tiered':(PROMO_CATEGORY_LABEL[inferPhoneCategoryForAdmin(p)]||inferPhoneCategoryForAdmin(p))}</td></tr>`).join('');
     const tips = TIPS.map((t,i)=>`<li><b>${i+1}.</b> ${t}</li>`).join('');
     box.innerHTML = `
-      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'July 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'7/27/2026'}</div>
+      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'July 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'7/31/2026'}</div>
       <details class="tool-subcard" open><summary><b>Promo Ladder Check</b></summary>${promoHtml}</details>
       <details class="tool-subcard"><summary><b>Tiered Offer Check (${PHONES.filter(p=>p.tieredOffer).length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>New Line</th><th>Upgrade</th></tr></thead><tbody>${tiered}</tbody></table></details>
       <details class="tool-subcard"><summary><b>Phone Check (${PHONES.length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>MSRP</th><th>Promo Type</th></tr></thead><tbody>${phones}</tbody></table></details>
       <details class="tool-subcard"><summary><b>Rotating Tips (${TIPS.length})</b></summary><ol style="margin:10px 0 0;padding-left:22px;color:var(--ink);font-size:13px;line-height:1.5;">${tips}</ol></details>
-      <details class="tool-subcard"><summary><b>Quick Test Checklist</b></summary><ul style="margin:10px 0 0;padding-left:22px;color:var(--ink);font-size:13px;line-height:1.6;"><li>Calculator opens normally.</li><li>Plan buttons work.</li><li>Phone search works.</li><li>Trade value field works.</li><li>More section opens.</li><li>Tools menu opens comparison and history.</li><li>Admin opens after password.</li><li>Promo amounts and tiered offers look correct.</li></ul></details>`;
+      <details class="tool-subcard"><summary><b>Quick Test Checklist</b></summary><ul style="margin:10px 0 0;padding-left:22px;color:var(--ink);font-size:13px;line-height:1.6;"><li>Calculator opens normally.</li><li>Plan buttons work.</li><li>Phone search works.</li><li>Trade value field works.</li><li>More section opens.</li><li>Tools menu opens recent changes, comparison, and history.</li><li>Admin opens after password.</li><li>Promo amounts and tiered offers look correct.</li></ul></details>`;
   }
 
   function adminFill(){
     el('adminVersionInput').value = releaseInfo.version || VERSION;
     el('adminMonthInput').value = releaseInfo.month || 'July 2026';
-    el('adminUpdatedInput').value = releaseInfo.updated || '7/27/2026';
+    el('adminUpdatedInput').value = releaseInfo.updated || '7/31/2026';
     el('adminPhones').value = JSON.stringify(PHONES, null, 2);
     buildAdminPhoneSelect();
     el('adminPromos').value = JSON.stringify(LADDERS, null, 2);
@@ -2430,8 +2497,9 @@
   }
   function closeTools(){ el('toolsModal').classList.remove('open'); el('toolsModal').setAttribute('aria-hidden','true'); }
   function showToolsPage(page){
-    ['toolsMenu','toolsComparePage','toolsHistoryPage','toolsFaqPage'].forEach(id=>el(id).classList.remove('open'));
-    if(page==='compare') el('toolsComparePage').classList.add('open');
+    ['toolsMenu','toolsChangesPage','toolsComparePage','toolsHistoryPage','toolsFaqPage'].forEach(id=>el(id).classList.remove('open'));
+    if(page==='changes') el('toolsChangesPage').classList.add('open');
+    else if(page==='compare') el('toolsComparePage').classList.add('open');
     else if(page==='history') el('toolsHistoryPage').classList.add('open');
     else if(page==='faq') el('toolsFaqPage').classList.add('open');
     else if(page==='admin'){ closeTools(); openAdminLogin(); }
@@ -2483,7 +2551,7 @@
     try{ const val = JSON.parse(el(id).value); persistAdminData({[key]:val}); apply(val); adminFill(); alert('Saved.'); }
     catch(e){ alert('Invalid JSON: '+e.message); }
   }
-  el('saveRelease').addEventListener('click',()=>{ releaseInfo={version:el('adminVersionInput').value||VERSION, month:el('adminMonthInput').value||'July 2026', updated:el('adminUpdatedInput').value||'7/27/2026'}; persistAdminData({release:releaseInfo}); applyAdminData(); adminFill(); });
+  el('saveRelease').addEventListener('click',()=>{ releaseInfo={version:el('adminVersionInput').value||VERSION, month:el('adminMonthInput').value||'July 2026', updated:el('adminUpdatedInput').value||'7/31/2026'}; persistAdminData({release:releaseInfo}); applyAdminData(); adminFill(); });
   el('savePhones').addEventListener('click',()=>saveJsonTextarea('adminPhones','phones',val=>{PHONES.splice(0,PHONES.length,...val); buildQuickChips(); buildCompareOptions(); renderCompare(); render(); buildAdminPhoneSelect();}));
   el('savePromos').addEventListener('click',()=>saveJsonTextarea('adminPromos','ladders',val=>{Object.keys(LADDERS).forEach(k=>delete LADDERS[k]); Object.assign(LADDERS,val); render(); renderCompare(); buildAdminPromoEditor();}));
   el('saveTips').addEventListener('click',()=>{ TIPS = el('adminTips').value.split(/\n+/).map(x=>x.trim()).filter(Boolean); persistAdminData({tips:TIPS}); tipIdx=0; tipText.textContent=TIPS[0]||''; adminFill(); });
