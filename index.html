@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — v1.15</title>
+<title>Global Trade Tool — v1.16</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -466,7 +466,7 @@
       </div>
       <div style="margin-left:auto; text-align:right;">
         <div class="sub" id="releaseMeta">August 2026 &middot; Last Updated 8/6/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.15</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.16</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -706,7 +706,7 @@
   <div class="whats-new-panel" role="dialog" aria-modal="true" aria-labelledby="whatsNewTitle">
     <div class="whats-new-kicker">Changes since last update</div>
     <h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2>
-    <div class="whats-new-version">Version 1.15</div>
+    <div class="whats-new-version">Version 1.16</div>
     <p class="whats-new-sub">This message appears once for each new published version.</p>
 
     <section class="whats-new-section">
@@ -717,6 +717,14 @@
         <li><b>$500 off</b> on Value 2.0 with a $35+ eligible trade or turn-in.</li>
         <li><b>Legacy Next Up:</b> up to $350 with an eligible Next Up turn-in.</li>
         <li>iPhone Air leaves tiered offers after <b>8/6</b>.</li>
+      </ul>
+    </section>
+
+    <section class="whats-new-section">
+      <h3>Effective 8/7 — Galaxy A57 5G</h3>
+      <ul>
+        <li><b>$5.99/mo</b> on eligible new lines.</li>
+        <li><b>$10.99/mo</b> on eligible upgrades and Next Up Anytime tiered upgrades.</li>
       </ul>
     </section>
 
@@ -756,7 +764,7 @@
         <details class="change-entry">
           <summary>
             <span class="change-date">8/7</span>
-            <span class="change-title">iPhone Air offer update + Pixel announcement</span>
+            <span class="change-title">iPhone Air + Galaxy A57 5G + Pixel announcement</span>
             <span class="change-more" aria-hidden="true"></span>
           </summary>
           <div class="change-body">
@@ -770,10 +778,16 @@
               <li>The last day for iPhone Air tiered offers is <b>8/6</b>.</li>
             </ul>
 
+            <h3>Galaxy A57 5G — effective 8/7</h3>
+            <ul>
+              <li><b>$5.99/mo</b> tiered offer on eligible new lines.</li>
+              <li><b>$10.99/mo</b> tiered offer on eligible upgrades and Next Up Anytime tiered upgrades.</li>
+            </ul>
+
             <h3>Pixel announcement — 8/12</h3>
             <ul><li>A Pixel announcement is expected on 8/12. No new Pixel promo details are loaded yet.</li></ul>
 
-            <div class="change-foot">The iPhone Air rules activate automatically on 8/7/26. Verify the exact device, plan, trade result, and offer eligibility in OPUS/CCKM before quoting.</div>
+            <div class="change-foot">The iPhone Air rules and Galaxy A57 5G tiered offers are effective 8/7/26. Verify the exact device, plan, trade result, and offer eligibility in OPUS/CCKM before quoting.</div>
           </div>
         </details>
 
@@ -886,12 +900,12 @@
       <div class="admin-subhead">Accounts</div>
       <div class="tool-subcard"><b>GitHub repo:</b> GlobalHub9393 / Tradetool<br><b>Cloudflare email:</b> Ts8686@cmcnj.com<br><b>Cloudflare password:</b> Stored separately</div>
       <div class="admin-subhead">Quick Guide — GitHub First</div>
-      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.15</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
+      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.16</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
       <details class="tool-subcard"><summary><b>2. Download the updated index.html</b></summary><p>Download the updated file from ChatGPT. The main site file must be named exactly <b>index.html</b>. If the file name becomes <b>index.html.txt</b>, <b>GlobalTradeTool_v1_DEV</b>, or anything else, rename it or ask for a corrected file before uploading to GitHub.</p></details>
       <details class="tool-subcard"><summary><b>3. Upload index.html to GitHub</b></summary><p>Open GitHub, go to <b>GlobalHub9393 / Tradetool</b>, tap <b>Add file</b>, then upload the updated <b>index.html</b>. If GitHub asks whether to replace the existing file, replace it. Commit directly to the <b>main</b> branch.</p></details>
       <details class="tool-subcard"><summary><b>4. Commit the change</b></summary><p>Use a simple commit message like <b>Update Global Trade Tool 7/31/2026</b>. Tap <b>Commit changes</b>. GitHub should now show the latest <b>index.html</b> in the file list.</p></details>
       <details class="tool-subcard"><summary><b>5. Cloudflare deployment after GitHub is connected</b></summary><p>Once Cloudflare Pages is linked to this GitHub repo, Cloudflare should automatically create a new deployment from the <b>main</b> branch after every GitHub commit. Go to Cloudflare → <b>Workers &amp; Pages</b> → the Global Trade Tool project → <b>Deployments</b> to confirm the newest deployment completed successfully.</p></details>
-      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.15</b>, the date is correct, the calculator works, More opens, Tools opens, Recent Changes opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
+      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.16</b>, the date is correct, the calculator works, More opens, Tools opens, Recent Changes opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
       <details class="tool-subcard"><summary><b>7. If Cloudflare is not connected yet</b></summary><p>Use the old ZIP/folder upload only as a fallback. Download the Cloudflare folder ZIP from ChatGPT, unzip it in Files, confirm the folder contains <b>index.html</b>, then upload the unzipped folder through Cloudflare Pages → <b>Create deployment</b>.</p></details>
       <details class="tool-subcard"><summary><b>8. If something goes wrong</b></summary><p>Stop and take a screenshot. Check GitHub to confirm <b>index.html</b> was replaced correctly. Then check Cloudflare Deployments for errors or use the previous successful deployment if needed. Send ChatGPT the screenshot, current file, and what went wrong.</p></details>
     </section>
@@ -981,11 +995,11 @@
 
 <script>
 (function(){
-  const VERSION = 'Live Version 1.15';
+  const VERSION = 'Live Version 1.16';
   const ADMIN_PASSWORD = 'wire9393';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0717';
   const HISTORY_KEY = 'globalTradeToolHistory_v1';
-  let releaseInfo = { version:'Live Version 1.15', month:'August 2026', updated:'8/6/2026' };
+  let releaseInfo = { version:'Live Version 1.16', month:'August 2026', updated:'8/8/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -1110,6 +1124,8 @@
     // Galaxy A17 5G — upgrade tiered offer ended 7/1. New line $0/mo only going forward.
     { id:'a17', name:'Galaxy A17 5G', storage:'', retail:249.99, tieredOffer:true, tieredMonthlyNew:0.00, tieredMonthlyUpgrade:null },
     { id:'a37', name:'Galaxy A37', storage:'', retail:449.99, tieredOffer:true, tieredMonthlyNew:2.99, tieredMonthlyUpgrade:7.99 },
+    // Galaxy A57 5G — effective 8/7/2026: $5.99 new line / $10.99 upgrade + Next Up Anytime tiered upgrade.
+    { id:'a57', name:'Galaxy A57 5G', storage:'128GB', retail:449.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:10.99 },
 
     { id:'pxl10-128', name:'Pixel 10', storage:'128GB', retail:849.99, tieredOffer:true, tieredMonthlyNew:10.99, tieredMonthlyUpgrade:10.99 },
     { id:'pxl10a', name:'Pixel 10a', storage:'128GB', retail:519.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:5.99 },
