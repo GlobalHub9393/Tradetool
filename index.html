@@ -134,6 +134,113 @@
   .galaxy-any-toggle select{width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px; background:#fff; color:var(--ink); font-size:12px; font-weight:700;}
   .galaxy-any-toggle small{display:block; margin-top:6px; color:var(--slate); font-size:11px; line-height:1.35;}
 
+
+
+  /* 2.07 Version 2.0 welcome */
+  .v2-welcome-backdrop{
+    position:fixed; inset:0; z-index:9998;
+    background:rgba(6,24,39,.58);
+    backdrop-filter:blur(7px);
+    display:none; align-items:center; justify-content:center;
+    padding:18px;
+  }
+  .v2-welcome-backdrop.show{display:flex;}
+  .v2-welcome{
+    width:min(620px,96vw);
+    border-radius:22px;
+    background:linear-gradient(180deg,#ffffff 0%,#f7fbfe 100%);
+    box-shadow:0 28px 70px rgba(5,43,73,.28);
+    border:1px solid rgba(0,108,174,.18);
+    overflow:hidden;
+  }
+  .v2-welcome-head{
+    padding:24px 24px 18px;
+    background:linear-gradient(135deg,#0057b8 0%,#00a8e0 100%);
+    color:#fff;
+  }
+  .v2-welcome-kicker{
+    font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;opacity:.86;
+  }
+  .v2-welcome-title{font-size:30px;font-weight:900;line-height:1.05;margin-top:7px;}
+  .v2-welcome-sub{margin-top:8px;font-size:14px;line-height:1.45;opacity:.94;}
+  .v2-welcome-body{padding:20px 24px 22px;}
+  .v2-feature{
+    display:flex;gap:12px;align-items:flex-start;
+    padding:12px 0;border-bottom:1px solid #e6eef4;
+  }
+  .v2-feature:last-of-type{border-bottom:none;}
+  .v2-feature-icon{
+    width:34px;height:34px;flex:0 0 34px;border-radius:10px;
+    background:#eaf6fd;color:#006cb0;display:grid;place-items:center;
+    font-weight:900;font-size:15px;
+  }
+  .v2-feature b{display:block;color:#17324a;font-size:14px;margin-bottom:2px;}
+  .v2-feature span{color:#607387;font-size:13px;line-height:1.4;}
+  .v2-welcome-note{
+    margin-top:14px;padding:11px 12px;border-radius:12px;
+    background:#fff6d8;border:1px solid #efd98b;color:#6f5612;
+    font-size:12px;line-height:1.4;font-weight:650;
+  }
+  .v2-welcome-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:17px;flex-wrap:wrap;}
+  .v2-welcome-btn{
+    border:0;border-radius:11px;padding:11px 15px;font-weight:850;cursor:pointer;
+  }
+  .v2-welcome-btn.secondary{background:#eef4f8;color:#28445b;}
+  .v2-welcome-btn.primary{background:#0078bd;color:#fff;box-shadow:0 8px 18px rgba(0,120,189,.22);}
+
+  /* 2.06 progressive step flow */
+  .card.step-locked{
+    opacity:.42;
+    filter:grayscale(.85);
+    pointer-events:none;
+    user-select:none;
+    position:relative;
+  }
+  .card.step-locked::after{
+    content:"Complete the previous step";
+    position:absolute;
+    right:14px;
+    top:14px;
+    padding:5px 9px;
+    border-radius:999px;
+    background:#e8edf2;
+    border:1px solid #cbd5df;
+    color:#6b7785;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.02em;
+  }
+  #nextUpCard.step-locked.no-trade-lock::after{
+    content:"Not available without a trade-in phone";
+  }
+  .no-trade-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:10px 0 2px;
+  }
+  .no-trade-btn{
+    border:1.5px solid #b8c7d4;
+    background:#fff;
+    color:var(--ink);
+    border-radius:10px;
+    padding:9px 13px;
+    min-height:40px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .no-trade-btn[aria-pressed="true"]{
+    background:#eaf6fd;
+    border-color:var(--blue);
+    color:var(--blue);
+    box-shadow:0 0 0 3px rgba(5,104,174,.10);
+  }
+  .no-trade-copy{
+    color:var(--slate);
+    font-size:12px;
+    font-weight:600;
+  }
+
   /* display panel */
   .display{background:linear-gradient(160deg,var(--navy1),var(--navy2)); color:#eaf3fb; border-radius:18px;
     padding:22px 22px 20px; box-shadow:0 10px 30px rgba(7,28,52,.30); position:sticky; bottom:12px;
@@ -454,6 +561,27 @@
     .display,.display.result-max,.display.result-green,.display.result-yellow,.display.result-orange,.display.result-red,.display.result-tiered,
     .display.result-max::before,.display.promo-shimmer::after,.card.step-awake,.inputs.resetting .card{animation:none !important;}
   }
+
+  /* ===== Global Trade Tool 2.0 additions ===== */
+  .lookup-search{margin-bottom:10px;display:flex;gap:8px;align-items:center;position:relative}
+  .lookup-search input{flex:1;padding:10px 11px;border-radius:10px;border:1.5px solid var(--line);font-size:14px;background:#fff}
+  .lookup-search button{padding:9px 12px;border-radius:10px;border:none;background:#cdeefb;color:var(--blue);font-weight:800;cursor:pointer}
+  .lookup-list{position:absolute;left:0;right:0;top:46px;z-index:45;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px rgba(11,42,74,.13);max-height:270px;overflow:auto;display:none}
+  .lookup-list.open{display:block}.lookup-list ul{list-style:none;margin:0;padding:7px 0}
+  .lookup-list li{padding:9px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #eef3f7}
+  .lookup-list li:last-child{border-bottom:none}.lookup-list li:hover{background:#eef8ff}
+  .lookup-brand{font-size:11px;font-weight:900;color:#60758a;text-transform:uppercase;letter-spacing:.04em}.lookup-model{font-weight:800;color:var(--ink)}
+  .lookup-value{font-weight:900;color:#168048;white-space:nowrap}.lookup-value.unknown{color:#9b6b00}
+  .trade-storage-row{display:none;margin:10px 0}.trade-storage-row.show{display:block}.trade-storage-row select{width:100%;padding:10px 11px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-weight:700;color:var(--ink)}
+  .condition-panel{display:none;margin-top:12px;padding:12px;border-radius:12px;border:1px solid #d8e6f1;background:#f8fbfd}.condition-panel.show{display:block}
+  .condition-title{font-weight:900;color:var(--ink);margin-bottom:9px}.condition-q{padding:9px 0;border-top:1px solid #e5edf3}.condition-q:first-of-type{border-top:0}
+  .condition-q-title{font-size:13px;font-weight:800;margin-bottom:7px}.condition-buttons{display:flex;gap:8px}.condition-buttons .chip{padding:7px 12px;font-size:12px}
+  .trade-db-status{font-size:12px;font-weight:700;color:#5d7184;margin-top:6px}.trade-db-status.auto{color:#13764a}.trade-db-status.manual{color:#9b6b00}.trade-db-status.missing{color:#a32b2b}
+  .verify-banner{margin-top:12px;padding:10px 12px;border-radius:10px;background:#fff5da;border:1px solid #ecd48e;color:#574714;font-size:12px;font-weight:800;line-height:1.42}
+  .quick-value-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:900;color:#667b8d;margin:12px 0 5px}
+  .condition-poor{border-color:#e3a6a6;background:#fff5f5}.condition-good{border-color:#9ed5b6;background:#f3fbf6}
+  .manual-override-pill{display:none;margin-left:6px;padding:2px 7px;border-radius:999px;background:#fff2cc;color:#7c5b00;font-size:10px;font-weight:900;vertical-align:middle}.manual-override-pill.show{display:inline-block}
+
 </style>
 </head>
 <body>
@@ -462,11 +590,11 @@
     <div class="header-row">
       <div style="display:flex; flex-direction:column;">
         <div class="eyebrow">AT&amp;T Authorized Retailer</div>
-        <h1>Global Trade Tool</h1>
+        <h1>Global Trade Tool <span style="font-size:.54em;opacity:.72;vertical-align:middle;">2.0</span></h1>
       </div>
       <div style="margin-left:auto; text-align:right;">
-        <div class="sub" id="releaseMeta">August 2026 &middot; Last Updated 8/6/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Live Version 1.18</div>
+        <div class="sub" id="releaseMeta">August 2026 &middot; Last Updated 8/12/2026</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Version 2.0</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -538,27 +666,52 @@
         </div>
       </section>
 
-      <!-- TRADE-IN -->
+      <!-- TRADE-IN LOOKUP — 2.0 -->
       <section id="tradeCard" class="card">
-        <p class="label"><span class="step">3</span>What&rsquo;s the trade-in worth?</p>
-        <div class="tradewrap">
-          <span class="dollar"><span class="sign">$</span><input type="text" id="trade" inputmode="decimal" placeholder="0" autocomplete="off"></span>
-          <button class="clearbtn" id="clearTrade">Clear</button>
+        <p class="label"><span class="step">3</span>What are they trading in?</p>
+        <div class="lookup-search">
+          <input id="tradeDeviceSearch" placeholder="Search trade-in phone — or tap for alphabetical list" autocomplete="off" aria-expanded="false" />
+          <button id="tradeDeviceClear" type="button">Clear</button>
+          <div class="lookup-list" id="tradeDeviceSuggestions"><ul id="tradeDeviceSuggestionsList"></ul></div>
+        </div>
+        <div class="no-trade-row">
+          <button id="noTradeBtn" class="no-trade-btn" type="button" aria-pressed="false">No Trade</button>
+          <span class="no-trade-copy">Choose this if the customer is not trading in a device.</span>
+        </div>
+        <div class="trade-storage-row" id="tradeStorageRow">
+          <select id="tradeStorageSelect" aria-label="Trade-in storage"></select>
         </div>
 
-        <div id="tradeHelp" class="trade-help" aria-hidden="true">
-          <div class="trade-help-warning"><strong>In-store requirement:</strong> Confirm trade-in values using designated AT&amp;T trade tools before quoting or submitting a trade. Do not use this calculator or tradein.att.com as the default in-store valuation source.</div>
-          <a class="trade-reference-link" href="https://tradein.att.com/" target="_blank" rel="noopener noreferrer">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            Open tradein.att.com as a reference
-          </a>
+        <div class="tradewrap" style="margin-top:10px;">
+          <span class="dollar"><span class="sign">$</span><input type="text" id="trade" inputmode="decimal" placeholder="Enter or auto-fill value" autocomplete="off"></span>
+          <button class="clearbtn" id="clearTrade">Clear Value</button>
+        </div>
+        <div id="tradeDbStatus" class="trade-db-status">Choose a trade-in phone or enter a value manually.</div>
+        <span id="manualOverridePill" class="manual-override-pill">Manual value</span>
+
+        <div class="condition-panel" id="tradeConditionPanel">
+          <div class="condition-title">Device condition</div>
+          <div class="condition-q">
+            <div class="condition-q-title">Does the phone power on and off?</div>
+            <div class="condition-buttons"><button class="chip" data-cond="power" data-answer="yes">Yes</button><button class="chip" data-cond="power" data-answer="no">No</button></div>
+          </div>
+          <div class="condition-q">
+            <div class="condition-q-title">Is Activation Lock / Find My off?</div>
+            <div class="condition-buttons"><button class="chip" data-cond="lock" data-answer="yes">Yes</button><button class="chip" data-cond="lock" data-answer="no">No</button></div>
+          </div>
+          <div class="condition-q">
+            <div class="condition-q-title">Is the device free of chips and cracks?</div>
+            <div class="condition-buttons"><button class="chip" data-cond="cracks" data-answer="yes">Yes</button><button class="chip" data-cond="cracks" data-answer="no">No</button></div>
+          </div>
         </div>
 
-        <div id="tradePresetNote" class="trade-preset-note" aria-hidden="true"></div>
+        <div id="tradeHelp" class="trade-help" aria-hidden="true" style="display:none;"></div>
+        <div id="tradePresetNote" class="trade-preset-note" aria-hidden="true" style="display:none;"></div>
         <div id="tradeAppliedNote" class="trade-applied-note" aria-hidden="true"></div>
+        <div id="tradeError" style="color:#a32b2b;font-weight:600;margin-top:8px;display:none;">Enter a valid trade-in amount.</div>
 
-        <div id="tradeError" style="color:#a32b2b; font-weight:600; margin-top:8px; display:none;">Enter a valid trade-in amount.</div>
-        <div class="chips" style="margin-top:11px;" id="quick">
+        <div class="quick-value-label">Quick Value</div>
+        <div class="chips" id="quick">
           <button class="chip qchip" data-v="35">$35</button>
           <button class="chip qchip" data-v="95">$95</button>
           <button class="chip qchip" data-v="130">$130</button>
@@ -566,12 +719,7 @@
           <button class="chip qchip" data-v="290">$290</button>
           <button class="chip qchip" data-v="400">$400+</button>
         </div>
-        <div class="trade-special-row" id="tradeSpecialRow">
-          <button type="button" id="tradePresetIphone16e" class="chip qchip trade-preset-chip">Trading in iPhone 16e</button>
-          <span class="trade-preset-copy">Use this special option instead of selecting a trade value.</span>
-        </div>
-
-        <p class="trade-verify-note">While in store, confirm the trade value using designated AT&amp;T trade tools. Do not use this calculator or the reference link as the final source of value.</p>
+        <div class="verify-banner"><b>Always verify the trade value.</b> Global Trade Tool uses a maintained reference database and can contain human error or outdated values. In store, confirm the value using designated AT&amp;T trade tools before quoting or submitting the trade.<br><a href="https://tradein.att.com/" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:7px;font-weight:800;">Open trade value lookup</a></div>
       </section>
 
       <!-- NEXT UP -->
@@ -600,8 +748,9 @@
             <button class="chip" data-paid="no" id="nextPaidNo" aria-pressed="false">No — less than 33% paid</button>
           </div>
         </div>
-        <p id="nextUpHelp" style="margin-top:12px; color:var(--slate); font-size:13px;">Choose the feature shown on the customer's bill so the promo path is calculated correctly. Next Up Anytime uses the 33% path. Legacy Next Up uses the 50% path. Verify in OPUS/CCKM.</p>
+        <p id="nextUpHelp" style="margin-top:12px; color:var(--slate); font-size:13px;">Choose the feature shown on the customer's bill so the promo path is calculated correctly. Next Up Anytime uses the 33% path. Legacy Next Up uses the 50% path. <b>Select the customer’s current phone and confirm its condition.</b> The old phone is used for the payoff/turn-in path and does <b>not</b> receive a separate trade-value bill credit. Verify in OPUS/CCKM.</p>
         <p id="nextUpDisabledNote" style="margin-top:10px; color:#a32b2b; font-weight:600; font-size:13px; display:none;">Not available — Next Up requires turning in a device on an existing line, not a new line activation.</p>
+        <p id="nextUpConditionWarning" style="margin-top:10px;padding:10px 12px;border-radius:10px;background:#fff1f1;border:1px solid #f2b8b8;color:#991b1b;font-weight:800;font-size:13px;display:none;">Poor condition selected — Next Up / Next Up Anytime cannot be used.</p>
       </section>
 
       <details class="card" style="padding:14px 16px;">
@@ -706,7 +855,7 @@
   <div class="whats-new-panel" role="dialog" aria-modal="true" aria-labelledby="whatsNewTitle">
     <div class="whats-new-kicker">Changes since last update</div>
     <h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2>
-    <div class="whats-new-version">Version 1.18</div>
+    <div class="whats-new-version">Version 2.0</div>
     <p class="whats-new-sub">This message appears once for each new published version.</p>
 
     <section class="whats-new-section">
@@ -933,17 +1082,17 @@
       <div class="admin-subhead">Accounts</div>
       <div class="tool-subcard"><b>GitHub repo:</b> GlobalHub9393 / Tradetool<br><b>Cloudflare email:</b> Ts8686@cmcnj.com<br><b>Cloudflare password:</b> Stored separately</div>
       <div class="admin-subhead">Quick Guide — GitHub First</div>
-      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Live Version 1.18</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
+      <details class="tool-subcard"><summary><b>1. Send ChatGPT the current code and changes</b></summary><p>Upload or reference the current <b>index.html</b> from the GitHub repo. Tell ChatGPT the exact date, that it is still <b>Version 2.0</b>, and list the promo, phone, FAQ, layout, or wording changes needed. Ask for an updated <b>index.html</b> file.</p></details>
       <details class="tool-subcard"><summary><b>2. Download the updated index.html</b></summary><p>Download the updated file from ChatGPT. The main site file must be named exactly <b>index.html</b>. If the file name becomes <b>index.html.txt</b>, <b>GlobalTradeTool_v1_DEV</b>, or anything else, rename it or ask for a corrected file before uploading to GitHub.</p></details>
       <details class="tool-subcard"><summary><b>3. Upload index.html to GitHub</b></summary><p>Open GitHub, go to <b>GlobalHub9393 / Tradetool</b>, tap <b>Add file</b>, then upload the updated <b>index.html</b>. If GitHub asks whether to replace the existing file, replace it. Commit directly to the <b>main</b> branch.</p></details>
       <details class="tool-subcard"><summary><b>4. Commit the change</b></summary><p>Use a simple commit message like <b>Update Global Trade Tool 7/31/2026</b>. Tap <b>Commit changes</b>. GitHub should now show the latest <b>index.html</b> in the file list.</p></details>
       <details class="tool-subcard"><summary><b>5. Cloudflare deployment after GitHub is connected</b></summary><p>Once Cloudflare Pages is linked to this GitHub repo, Cloudflare should automatically create a new deployment from the <b>main</b> branch after every GitHub commit. Go to Cloudflare → <b>Workers &amp; Pages</b> → the Global Trade Tool project → <b>Deployments</b> to confirm the newest deployment completed successfully.</p></details>
-      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Live Version 1.18</b>, the date is correct, the calculator works, More opens, Tools opens, Recent Changes opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
+      <details class="tool-subcard"><summary><b>6. Test the live site</b></summary><p>Open <b>globaltradetool.com</b>. Confirm the site opens normally, the header still says <b>Version 2.0</b>, the date is correct, the calculator works, More opens, Tools opens, Recent Changes opens, FAQ / Trade Help opens, Admin opens, promos calculate correctly, and tiered offers show correctly.</p></details>
       <details class="tool-subcard"><summary><b>7. If Cloudflare is not connected yet</b></summary><p>Use the old ZIP/folder upload only as a fallback. Download the Cloudflare folder ZIP from ChatGPT, unzip it in Files, confirm the folder contains <b>index.html</b>, then upload the unzipped folder through Cloudflare Pages → <b>Create deployment</b>.</p></details>
       <details class="tool-subcard"><summary><b>8. If something goes wrong</b></summary><p>Stop and take a screenshot. Check GitHub to confirm <b>index.html</b> was replaced correctly. Then check Cloudflare Deployments for errors or use the previous successful deployment if needed. Send ChatGPT the screenshot, current file, and what went wrong.</p></details>
     </section>
     <section class="admin-section" data-section="release">
-      <p class="admin-note"><b>Local testing only:</b> changes here affect this browser/device. They do not publish to Cloudflare.</p>
+      <p class="admin-note"><b>Local admin settings:</b> changes here affect this browser/device. They do not publish to the live site.</p>
       <label>Version badge<input id="adminVersionInput" /></label><br><br>
       <label>Month / effective text<input id="adminMonthInput" /></label><br><br>
       <label>Last updated<input id="adminUpdatedInput" /></label>
@@ -1028,11 +1177,11 @@
 
 <script>
 (function(){
-  const VERSION = 'Live Version 1.18';
+  const VERSION = 'Version 2.0';
   const ADMIN_PASSWORD = 'wire9393';
-  const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v1_0717';
-  const HISTORY_KEY = 'globalTradeToolHistory_v1';
-  let releaseInfo = { version:'Live Version 1.18', month:'August 2026', updated:'8/12/2026' };
+  const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
+  const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
+  let releaseInfo = { version:'Version 2.0', month:'August 2026', updated:'8/12/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -1213,7 +1362,12 @@
   };
   const monthly = n => (Math.ceil(n/36*100)/100).toFixed(2);
 
-  const state = { plan:null, phone:null, value:null, tradePreset:null, pixel:false, galaxyAny:'none', nextUp:false, nextUpType:'anytime', nextPaid:null, tierAction:null };
+  const TRADE_DB = [{"brand":"Apple","model":"iPhone 11","storage":"128GB","value":55.0},{"brand":"Apple","model":"iPhone 11","storage":"256GB","value":55.0},{"brand":"Apple","model":"iPhone 11","storage":"64GB","value":55.0},{"brand":"Apple","model":"iPhone 11 Pro","storage":"256GB","value":95.0},{"brand":"Apple","model":"iPhone 11 Pro","storage":"512GB","value":95.0},{"brand":"Apple","model":"iPhone 11 Pro","storage":"64GB","value":95.0},{"brand":"Apple","model":"iPhone 11 Pro Max","storage":"256GB","value":95.0},{"brand":"Apple","model":"iPhone 11 Pro Max","storage":"512GB","value":95.0},{"brand":"Apple","model":"iPhone 11 Pro Max","storage":"64GB","value":95.0},{"brand":"Apple","model":"iPhone 12","storage":"128GB","value":95.0},{"brand":"Apple","model":"iPhone 12","storage":"256GB","value":95.0},{"brand":"Apple","model":"iPhone 12","storage":"64GB","value":95.0},{"brand":"Apple","model":"iPhone 12 mini","storage":"128GB","value":95.0},{"brand":"Apple","model":"iPhone 12 mini","storage":"256GB","value":95.0},{"brand":"Apple","model":"iPhone 12 mini","storage":"64GB","value":95.0},{"brand":"Apple","model":"iPhone 12 Pro","storage":"128GB","value":95.0},{"brand":"Apple","model":"iPhone 12 Pro","storage":"256GB","value":95.0},{"brand":"Apple","model":"iPhone 12 Pro","storage":"512GB","value":95.0},{"brand":"Apple","model":"iPhone 12 Pro Max","storage":"128GB","value":115.0},{"brand":"Apple","model":"iPhone 12 Pro Max","storage":"256GB","value":115.0},{"brand":"Apple","model":"iPhone 12 Pro Max","storage":"512GB","value":115.0},{"brand":"Apple","model":"iPhone 13","storage":"128GB","value":115.0},{"brand":"Apple","model":"iPhone 13","storage":"256GB","value":115.0},{"brand":"Apple","model":"iPhone 13","storage":"512GB","value":115.0},{"brand":"Apple","model":"iPhone 13 mini","storage":"128GB","value":95.0},{"brand":"Apple","model":"iPhone 13 mini","storage":"256GB","value":95.0},{"brand":"Apple","model":"iPhone 13 mini","storage":"512GB","value":95.0},{"brand":"Apple","model":"iPhone 13 Pro","storage":"128GB","value":125.0},{"brand":"Apple","model":"iPhone 13 Pro","storage":"1TB","value":125.0},{"brand":"Apple","model":"iPhone 13 Pro","storage":"256GB","value":125.0},{"brand":"Apple","model":"iPhone 13 Pro","storage":"512GB","value":125.0},{"brand":"Apple","model":"iPhone 13 Pro Max","storage":"128GB","value":195.0},{"brand":"Apple","model":"iPhone 13 Pro Max","storage":"1TB","value":195.0},{"brand":"Apple","model":"iPhone 13 Pro Max","storage":"256GB","value":195.0},{"brand":"Apple","model":"iPhone 13 Pro Max","storage":"512GB","value":195.0},{"brand":"Apple","model":"iPhone 14","storage":"128GB","value":130.0},{"brand":"Apple","model":"iPhone 14","storage":"256GB","value":130.0},{"brand":"Apple","model":"iPhone 14","storage":"512GB","value":130.0},{"brand":"Apple","model":"iPhone 14 Plus","storage":"128GB","value":135.0},{"brand":"Apple","model":"iPhone 14 Plus","storage":"256GB","value":135.0},{"brand":"Apple","model":"iPhone 14 Plus","storage":"512GB","value":135.0},{"brand":"Apple","model":"iPhone 14 Pro","storage":"128GB","value":195.0},{"brand":"Apple","model":"iPhone 14 Pro","storage":"1TB","value":215.0},{"brand":"Apple","model":"iPhone 14 Pro","storage":"256GB","value":195.0},{"brand":"Apple","model":"iPhone 14 Pro","storage":"512GB","value":195.0},{"brand":"Apple","model":"iPhone 14 Pro Max","storage":"128GB","value":230.0},{"brand":"Apple","model":"iPhone 14 Pro Max","storage":"1TB","value":230.0},{"brand":"Apple","model":"iPhone 14 Pro Max","storage":"256GB","value":230.0},{"brand":"Apple","model":"iPhone 14 Pro Max","storage":"512GB","value":230.0},{"brand":"Apple","model":"iPhone 15","storage":"128GB","value":230.0},{"brand":"Apple","model":"iPhone 15","storage":"256GB","value":230.0},{"brand":"Apple","model":"iPhone 15","storage":"512GB","value":230.0},{"brand":"Apple","model":"iPhone 15 Plus","storage":"128GB","value":290.0},{"brand":"Apple","model":"iPhone 15 Plus","storage":"256GB","value":290.0},{"brand":"Apple","model":"iPhone 15 Plus","storage":"512GB","value":290.0},{"brand":"Apple","model":"iPhone 15 Pro","storage":"128GB","value":290.0},{"brand":"Apple","model":"iPhone 15 Pro","storage":"1TB","value":290.0},{"brand":"Apple","model":"iPhone 15 Pro","storage":"256GB","value":290.0},{"brand":"Apple","model":"iPhone 15 Pro","storage":"512GB","value":290.0},{"brand":"Apple","model":"iPhone 15 Pro Max","storage":"1TB","value":370.0},{"brand":"Apple","model":"iPhone 15 Pro Max","storage":"256GB","value":330.0},{"brand":"Apple","model":"iPhone 15 Pro Max","storage":"512GB","value":330.0},{"brand":"Apple","model":"iPhone 16","storage":"128GB","value":320.0},{"brand":"Apple","model":"iPhone 16","storage":"256GB","value":320.0},{"brand":"Apple","model":"iPhone 16","storage":"512GB","value":320.0},{"brand":"Apple","model":"iPhone 16 Plus","storage":"128GB","value":330.0},{"brand":"Apple","model":"iPhone 16 Plus","storage":"256GB","value":330.0},{"brand":"Apple","model":"iPhone 16 Plus","storage":"512GB","value":330.0},{"brand":"Apple","model":"iPhone 16 Pro","storage":"128GB","value":385.0},{"brand":"Apple","model":"iPhone 16 Pro","storage":"1TB","value":450.0},{"brand":"Apple","model":"iPhone 16 Pro","storage":"256GB","value":380.0},{"brand":"Apple","model":"iPhone 16 Pro","storage":"512GB","value":420.0},{"brand":"Apple","model":"iPhone 16 Pro Max","storage":"1TB","value":550.0},{"brand":"Apple","model":"iPhone 16 Pro Max","storage":"256GB","value":480.0},{"brand":"Apple","model":"iPhone 16 Pro Max","storage":"512GB","value":510.0},{"brand":"Apple","model":"iPhone 16e","storage":"128GB","value":200.0},{"brand":"Apple","model":"iPhone 16e","storage":"256GB","value":200.0},{"brand":"Apple","model":"iPhone 16e","storage":"512GB","value":200.0},{"brand":"Apple","model":"iPhone 17","storage":"256GB","value":400.0},{"brand":"Apple","model":"iPhone 17","storage":"512GB","value":460.0},{"brand":"Apple","model":"iPhone 17 Pro","storage":"1TB","value":630.0},{"brand":"Apple","model":"iPhone 17 Pro","storage":"256GB","value":535.0},{"brand":"Apple","model":"iPhone 17 Pro","storage":"512GB","value":590.0},{"brand":"Apple","model":"iPhone 17 Pro Max","storage":"1TB","value":740.0},{"brand":"Apple","model":"iPhone 17 Pro Max","storage":"256GB","value":585.0},{"brand":"Apple","model":"iPhone 17 Pro Max","storage":"2TB","value":780.0},{"brand":"Apple","model":"iPhone 17 Pro Max","storage":"512GB","value":685.0},{"brand":"Apple","model":"iPhone 17e","storage":"256GB","value":285.0},{"brand":"Apple","model":"iPhone 17e","storage":"512GB","value":285.0},{"brand":"Apple","model":"iPhone Air","storage":"1TB","value":485.0},{"brand":"Apple","model":"iPhone Air","storage":"256GB","value":485.0},{"brand":"Apple","model":"iPhone Air","storage":"512GB","value":485.0},{"brand":"Apple","model":"iPhone SE (2nd gen)","storage":"128GB","value":20.0},{"brand":"Apple","model":"iPhone SE (2nd gen)","storage":"256GB","value":20.0},{"brand":"Apple","model":"iPhone SE (2nd gen)","storage":"64GB","value":20.0},{"brand":"Apple","model":"iPhone SE (3rd gen)","storage":"128GB","value":40.0},{"brand":"Apple","model":"iPhone SE (3rd gen)","storage":"256GB","value":40.0},{"brand":"Apple","model":"iPhone SE (3rd gen)","storage":"64GB","value":40.0},{"brand":"Apple","model":"iPhone XR","storage":"128GB","value":35.0},{"brand":"Apple","model":"iPhone XR","storage":"256GB","value":35.0},{"brand":"Apple","model":"iPhone XR","storage":"64GB","value":35.0},{"brand":"Apple","model":"iPhone XS","storage":"256GB","value":35.0},{"brand":"Apple","model":"iPhone XS","storage":"512GB","value":35.0},{"brand":"Apple","model":"iPhone XS","storage":"64GB","value":35.0},{"brand":"Apple","model":"iPhone XS Max","storage":"256GB","value":35.0},{"brand":"Apple","model":"iPhone XS Max","storage":"512GB","value":35.0},{"brand":"Apple","model":"iPhone XS Max","storage":"64GB","value":35.0},{"brand":"Google","model":"Pixel","storage":"128GB","value":1.0},{"brand":"Google","model":"Pixel","storage":"32GB","value":1.0},{"brand":"Google","model":"Pixel 10","storage":"128GB","value":290.0},{"brand":"Google","model":"Pixel 10","storage":"256GB","value":290.0},{"brand":"Google","model":"Pixel 10 Pro","storage":"128GB","value":350.0},{"brand":"Google","model":"Pixel 10 Pro","storage":"1TB","value":290.0},{"brand":"Google","model":"Pixel 10 Pro","storage":"256GB","value":350.0},{"brand":"Google","model":"Pixel 10 Pro","storage":"512GB","value":350.0},{"brand":"Google","model":"Pixel 10 Pro Fold","storage":"1TB","value":550.0},{"brand":"Google","model":"Pixel 10 Pro Fold","storage":"256GB","value":550.0},{"brand":"Google","model":"Pixel 10 Pro Fold","storage":"512GB","value":550.0},{"brand":"Google","model":"Pixel 10 Pro XL","storage":"1TB","value":420.0},{"brand":"Google","model":"Pixel 10 Pro XL","storage":"256GB","value":420.0},{"brand":"Google","model":"Pixel 10 Pro XL","storage":"512GB","value":420.0},{"brand":"Google","model":"Pixel 10a","storage":"128GB","value":210.0},{"brand":"Google","model":"Pixel 10a","storage":"256GB","value":210.0},{"brand":"Google","model":"Pixel 11","storage":"256GB","value":null},{"brand":"Google","model":"Pixel 11 Pro","storage":"256GB","value":null},{"brand":"Google","model":"Pixel 11 Pro","storage":"512GB","value":null},{"brand":"Google","model":"Pixel 11 Pro XL","storage":"256GB","value":null},{"brand":"Google","model":"Pixel 11 Pro XL","storage":"512GB","value":null},{"brand":"Google","model":"Pixel 2","storage":"128GB","value":1.0},{"brand":"Google","model":"Pixel 2","storage":"64GB","value":1.0},{"brand":"Google","model":"Pixel 2 XL","storage":"128GB","value":1.0},{"brand":"Google","model":"Pixel 2 XL","storage":"64GB","value":1.0},{"brand":"Google","model":"Pixel 3","storage":"128GB","value":1.0},{"brand":"Google","model":"Pixel 3","storage":"64GB","value":1.0},{"brand":"Google","model":"Pixel 3 XL","storage":"128GB","value":15.0},{"brand":"Google","model":"Pixel 3 XL","storage":"64GB","value":15.0},{"brand":"Google","model":"Pixel 3a","storage":"64GB","value":15.0},{"brand":"Google","model":"Pixel 3a XL","storage":"64GB","value":15.0},{"brand":"Google","model":"Pixel 4","storage":"128GB","value":20.0},{"brand":"Google","model":"Pixel 4","storage":"64GB","value":20.0},{"brand":"Google","model":"Pixel 4 XL","storage":"128GB","value":35.0},{"brand":"Google","model":"Pixel 4 XL","storage":"64GB","value":35.0},{"brand":"Google","model":"Pixel 4a","storage":"128GB","value":20.0},{"brand":"Google","model":"Pixel 4a 5G","storage":"128GB","value":20.0},{"brand":"Google","model":"Pixel 5","storage":"128GB","value":25.0},{"brand":"Google","model":"Pixel 5a","storage":"128GB","value":35.0},{"brand":"Google","model":"Pixel 6","storage":"128GB","value":35.0},{"brand":"Google","model":"Pixel 6","storage":"256GB","value":35.0},{"brand":"Google","model":"Pixel 6 Pro","storage":"128GB","value":35.0},{"brand":"Google","model":"Pixel 6 Pro","storage":"256GB","value":35.0},{"brand":"Google","model":"Pixel 6 Pro","storage":"512GB","value":35.0},{"brand":"Google","model":"Pixel 6a","storage":"128GB","value":35.0},{"brand":"Google","model":"Pixel 7","storage":"128GB","value":45.0},{"brand":"Google","model":"Pixel 7","storage":"256GB","value":45.0},{"brand":"Google","model":"Pixel 7 Pro","storage":"128GB","value":95.0},{"brand":"Google","model":"Pixel 7 Pro","storage":"256GB","value":95.0},{"brand":"Google","model":"Pixel 7 Pro","storage":"512GB","value":95.0},{"brand":"Google","model":"Pixel 7a","storage":"128GB","value":40.0},{"brand":"Google","model":"Pixel 8","storage":"128GB","value":110.0},{"brand":"Google","model":"Pixel 8","storage":"256GB","value":110.0},{"brand":"Google","model":"Pixel 8 Pro","storage":"128GB","value":150.0},{"brand":"Google","model":"Pixel 8 Pro","storage":"1TB","value":150.0},{"brand":"Google","model":"Pixel 8 Pro","storage":"256GB","value":150.0},{"brand":"Google","model":"Pixel 8 Pro","storage":"512GB","value":150.0},{"brand":"Google","model":"Pixel 8a","storage":"128GB","value":95.0},{"brand":"Google","model":"Pixel 8a","storage":"256GB","value":95.0},{"brand":"Google","model":"Pixel 9","storage":"128GB","value":230.0},{"brand":"Google","model":"Pixel 9","storage":"256GB","value":230.0},{"brand":"Google","model":"Pixel 9 Pro","storage":"128GB","value":230.0},{"brand":"Google","model":"Pixel 9 Pro","storage":"1TB","value":250.0},{"brand":"Google","model":"Pixel 9 Pro","storage":"256GB","value":240.0},{"brand":"Google","model":"Pixel 9 Pro","storage":"512GB","value":240.0},{"brand":"Google","model":"Pixel 9 Pro Fold","storage":"256GB","value":350.0},{"brand":"Google","model":"Pixel 9 Pro Fold","storage":"512GB","value":350.0},{"brand":"Google","model":"Pixel 9 Pro XL","storage":"128GB","value":265.0},{"brand":"Google","model":"Pixel 9 Pro XL","storage":"1TB","value":265.0},{"brand":"Google","model":"Pixel 9 Pro XL","storage":"256GB","value":265.0},{"brand":"Google","model":"Pixel 9 Pro XL","storage":"512GB","value":265.0},{"brand":"Google","model":"Pixel 9a","storage":"128GB","value":150.0},{"brand":"Google","model":"Pixel 9a","storage":"256GB","value":150.0},{"brand":"Google","model":"Pixel Fold","storage":"256GB","value":95.0},{"brand":"Google","model":"Pixel Fold","storage":"512GB","value":95.0},{"brand":"Google","model":"Pixel XL","storage":"128GB","value":5.0},{"brand":"Google","model":"Pixel XL","storage":"32GB","value":5.0},{"brand":"Motorola","model":"moto g 5G (2024)","storage":"128GB","value":35.0},{"brand":"Motorola","model":"moto g play","storage":"32GB","value":1.0},{"brand":"Motorola","model":"moto g play (2024)","storage":"64GB","value":1.0},{"brand":"Motorola","model":"moto g power","storage":"64GB","value":1.0},{"brand":"Motorola","model":"moto g power 5G","storage":"128GB","value":5.0},{"brand":"Motorola","model":"moto g power 5G (2024)","storage":"128GB","value":5.0},{"brand":"Motorola","model":"moto g pure","storage":"32GB","value":5.0},{"brand":"Motorola","model":"moto g stylus","storage":"128GB","value":1.0},{"brand":"Motorola","model":"moto g stylus 5G","storage":"128GB","value":5.0},{"brand":"Motorola","model":"moto g stylus 5G","storage":"256GB","value":5.0},{"brand":"Motorola","model":"moto g stylus 5G (2024)","storage":"128GB","value":5.0},{"brand":"Motorola","model":"moto g stylus 5G (2024)","storage":"256GB","value":5.0},{"brand":"Motorola","model":"motorola edge (2024)","storage":"256GB","value":35.0},{"brand":"Motorola","model":"Motorola Edge (older listing)","storage":"128GB","value":10.0},{"brand":"Motorola","model":"Motorola Edge (older listing)","storage":"256GB","value":10.0},{"brand":"Motorola","model":"Motorola Edge+","storage":"256GB","value":10.0},{"brand":"Motorola","model":"motorola edge+ 5G UW","storage":"128GB","value":35.0},{"brand":"Motorola","model":"motorola edge+ 5G UW","storage":"256GB","value":35.0},{"brand":"Motorola","model":"razr (2023)","storage":"128GB","value":30.0},{"brand":"Motorola","model":"razr (2024)","storage":"256GB","value":35.0},{"brand":"Motorola","model":"razr+ (2023) / razr Plus 5G","storage":"256GB","value":35.0},{"brand":"Motorola","model":"razr+ (2024)","storage":"256GB","value":45.0},{"brand":"Samsung","model":"Galaxy A17","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy A56","storage":"128GB","value":95.0},{"brand":"Samsung","model":"Galaxy A56","storage":"256GB","value":95.0},{"brand":"Samsung","model":"Galaxy Note10","storage":"256GB","value":35.0},{"brand":"Samsung","model":"Galaxy Note10+","storage":"256GB","value":35.0},{"brand":"Samsung","model":"Galaxy Note10+","storage":"512GB","value":35.0},{"brand":"Samsung","model":"Galaxy Note20","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy Note20 Ultra","storage":"128GB","value":70.0},{"brand":"Samsung","model":"Galaxy Note20 Ultra","storage":"512GB","value":70.0},{"brand":"Samsung","model":"Galaxy S10","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy S10","storage":"512GB","value":35.0},{"brand":"Samsung","model":"Galaxy S10+","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy S10+","storage":"512GB","value":35.0},{"brand":"Samsung","model":"Galaxy S10e","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy S10e","storage":"256GB","value":35.0},{"brand":"Samsung","model":"Galaxy S20","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy S20 FE","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy S20 FE","storage":"256GB","value":35.0},{"brand":"Samsung","model":"Galaxy S20 Ultra","storage":"128GB","value":50.0},{"brand":"Samsung","model":"Galaxy S20 Ultra","storage":"512GB","value":50.0},{"brand":"Samsung","model":"Galaxy S20+","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy S20+","storage":"512GB","value":35.0},{"brand":"Samsung","model":"Galaxy S21","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy S21","storage":"256GB","value":35.0},{"brand":"Samsung","model":"Galaxy S21 FE","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy S21 FE","storage":"256GB","value":35.0},{"brand":"Samsung","model":"Galaxy S21 Ultra","storage":"128GB","value":85.0},{"brand":"Samsung","model":"Galaxy S21 Ultra","storage":"256GB","value":85.0},{"brand":"Samsung","model":"Galaxy S21 Ultra","storage":"512GB","value":85.0},{"brand":"Samsung","model":"Galaxy S21+","storage":"128GB","value":55.0},{"brand":"Samsung","model":"Galaxy S21+","storage":"256GB","value":55.0},{"brand":"Samsung","model":"Galaxy S22","storage":"128GB","value":60.0},{"brand":"Samsung","model":"Galaxy S22","storage":"256GB","value":69.0},{"brand":"Samsung","model":"Galaxy S22 Ultra","storage":"128GB","value":130.0},{"brand":"Samsung","model":"Galaxy S22 Ultra","storage":"1TB","value":130.0},{"brand":"Samsung","model":"Galaxy S22 Ultra","storage":"256GB","value":130.0},{"brand":"Samsung","model":"Galaxy S22 Ultra","storage":"512GB","value":130.0},{"brand":"Samsung","model":"Galaxy S22+","storage":"128GB","value":95.0},{"brand":"Samsung","model":"Galaxy S22+","storage":"256GB","value":95.0},{"brand":"Samsung","model":"Galaxy S23","storage":"128GB","value":130.0},{"brand":"Samsung","model":"Galaxy S23","storage":"256GB","value":130.0},{"brand":"Samsung","model":"Galaxy S23 FE","storage":"128GB","value":95.0},{"brand":"Samsung","model":"Galaxy S23 FE","storage":"256GB","value":95.0},{"brand":"Samsung","model":"Galaxy S23 Ultra","storage":"1TB","value":200.0},{"brand":"Samsung","model":"Galaxy S23 Ultra","storage":"256GB","value":200.0},{"brand":"Samsung","model":"Galaxy S23 Ultra","storage":"512GB","value":200.0},{"brand":"Samsung","model":"Galaxy S23+","storage":"256GB","value":150.0},{"brand":"Samsung","model":"Galaxy S23+","storage":"512GB","value":150.0},{"brand":"Samsung","model":"Galaxy S24","storage":"128GB","value":160.0},{"brand":"Samsung","model":"Galaxy S24","storage":"256GB","value":160.0},{"brand":"Samsung","model":"Galaxy S24 FE","storage":"128GB","value":130.0},{"brand":"Samsung","model":"Galaxy S24 FE","storage":"256GB","value":130.0},{"brand":"Samsung","model":"Galaxy S24 Ultra","storage":"1TB","value":300.0},{"brand":"Samsung","model":"Galaxy S24 Ultra","storage":"256GB","value":300.0},{"brand":"Samsung","model":"Galaxy S24 Ultra","storage":"512GB","value":300.0},{"brand":"Samsung","model":"Galaxy S24+","storage":"256GB","value":230.0},{"brand":"Samsung","model":"Galaxy S24+","storage":"512GB","value":230.0},{"brand":"Samsung","model":"Galaxy S25","storage":"128GB","value":290.0},{"brand":"Samsung","model":"Galaxy S25","storage":"256GB","value":290.0},{"brand":"Samsung","model":"Galaxy S25 Edge","storage":"256GB","value":300.0},{"brand":"Samsung","model":"Galaxy S25 Edge","storage":"512GB","value":300.0},{"brand":"Samsung","model":"Galaxy S25 FE","storage":"128GB","value":230.0},{"brand":"Samsung","model":"Galaxy S25 FE","storage":"256GB","value":230.0},{"brand":"Samsung","model":"Galaxy S25 Ultra","storage":"1TB","value":455.0},{"brand":"Samsung","model":"Galaxy S25 Ultra","storage":"256GB","value":455.0},{"brand":"Samsung","model":"Galaxy S25 Ultra","storage":"512GB","value":455.0},{"brand":"Samsung","model":"Galaxy S25+","storage":"256GB","value":330.0},{"brand":"Samsung","model":"Galaxy S25+","storage":"512GB","value":330.0},{"brand":"Samsung","model":"Galaxy S26","storage":"256GB","value":350.0},{"brand":"Samsung","model":"Galaxy S26","storage":"512GB","value":350.0},{"brand":"Samsung","model":"Galaxy S26 Ultra","storage":"1TB","value":520.0},{"brand":"Samsung","model":"Galaxy S26 Ultra","storage":"256GB","value":500.0},{"brand":"Samsung","model":"Galaxy S26 Ultra","storage":"512GB","value":520.0},{"brand":"Samsung","model":"Galaxy S26+","storage":"256GB","value":450.0},{"brand":"Samsung","model":"Galaxy S26+","storage":"512GB","value":470.0},{"brand":"Samsung","model":"Galaxy Z Flip3","storage":"128GB","value":35.0},{"brand":"Samsung","model":"Galaxy Z Flip3","storage":"256GB","value":35.0},{"brand":"Samsung","model":"Galaxy Z Flip4","storage":"128GB","value":95.0},{"brand":"Samsung","model":"Galaxy Z Flip4","storage":"256GB","value":95.0},{"brand":"Samsung","model":"Galaxy Z Flip4","storage":"512GB","value":95.0},{"brand":"Samsung","model":"Galaxy Z Flip5","storage":"256GB","value":95.0},{"brand":"Samsung","model":"Galaxy Z Flip5","storage":"512GB","value":95.0},{"brand":"Samsung","model":"Galaxy Z Flip6","storage":"256GB","value":190.0},{"brand":"Samsung","model":"Galaxy Z Flip6","storage":"512GB","value":190.0},{"brand":"Samsung","model":"Galaxy Z Flip7","storage":"256GB","value":250.0},{"brand":"Samsung","model":"Galaxy Z Flip7","storage":"512GB","value":250.0},{"brand":"Samsung","model":"Galaxy Z Flip8","storage":"256GB","value":null},{"brand":"Samsung","model":"Galaxy Z Flip8","storage":"512GB","value":null},{"brand":"Samsung","model":"Galaxy Z Fold3","storage":"256GB","value":95.0},{"brand":"Samsung","model":"Galaxy Z Fold3","storage":"512GB","value":95.0},{"brand":"Samsung","model":"Galaxy Z Fold4","storage":"1TB","value":120.0},{"brand":"Samsung","model":"Galaxy Z Fold4","storage":"256GB","value":120.0},{"brand":"Samsung","model":"Galaxy Z Fold4","storage":"512GB","value":120.0},{"brand":"Samsung","model":"Galaxy Z Fold5","storage":"1TB","value":210.0},{"brand":"Samsung","model":"Galaxy Z Fold5","storage":"256GB","value":210.0},{"brand":"Samsung","model":"Galaxy Z Fold5","storage":"512GB","value":210.0},{"brand":"Samsung","model":"Galaxy Z Fold6","storage":"1TB","value":300.0},{"brand":"Samsung","model":"Galaxy Z Fold6","storage":"256GB","value":300.0},{"brand":"Samsung","model":"Galaxy Z Fold6","storage":"512GB","value":300.0},{"brand":"Samsung","model":"Galaxy Z Fold7","storage":"1TB","value":510.0},{"brand":"Samsung","model":"Galaxy Z Fold7","storage":"256GB","value":480.0},{"brand":"Samsung","model":"Galaxy Z Fold7","storage":"512GB","value":480.0},{"brand":"Samsung","model":"Galaxy Z Fold8","storage":"1TB","value":null},{"brand":"Samsung","model":"Galaxy Z Fold8","storage":"256GB","value":null},{"brand":"Samsung","model":"Galaxy Z Fold8","storage":"512GB","value":null},{"brand":"Samsung","model":"Galaxy Z Fold8 Ultra","storage":"1TB","value":null},{"brand":"Samsung","model":"Galaxy Z Fold8 Ultra","storage":"256GB","value":null},{"brand":"Samsung","model":"Galaxy Z Fold8 Ultra","storage":"512GB","value":null}];
+  const TRADE_DB_UPDATED = '8/12/2026';
+  const state = { plan:null, phone:null, value:null, tradePreset:null, pixel:false, galaxyAny:'none', nextUp:false, nextUpType:'anytime', nextPaid:null, tierAction:null,
+    noTrade:false, tradeDevice:null, tradeStorage:null, tradeBaseValue:null, tradeValueMode:null,
+    tradeCondition:{power:null,lock:null,cracks:null}
+  };
 
   const el = id => document.getElementById(id);
   const planSearch = el('planSearch'), planSuggestions = el('planSuggestions'), planSuggestionsList = el('planSuggestionsList');
@@ -1223,7 +1377,43 @@
   const amountEl = el('amount'), detailEl = el('detail'), summaryEl = el('summaryText');
   const pixelChk = el('pixelChk'), planHelp = el('planHelp'), pixelToggleEl = el('pixelToggle'), galaxyAnyToggleEl = el('galaxyAnyToggle'), galaxyAnySelect = el('galaxyAnySelect');
 
-  const VISIBLE_PHONE_IDS = ['ip17pm','ip17p','ip17','ipair','s26u','s26p','s26-256','zfold8u','zfold8','zflip8','p11xl-256','p11pro-256','pxl','ppro','razr'];
+  const VISIBLE_PHONE_IDS = ['ip17','ipair','ip17p','ip17pm','i17e-256','s26-256','s26p','s26u','zflip8','zfold8','zfold8u','a17','a37','p11-256','p11pro-256','p11xl-256'];
+
+  const noTradeBtn = el('noTradeBtn');
+
+  function tradeStepComplete(){
+    return state.noTrade || !!state.tradeDevice || (state.tradeValueMode === 'manual' && state.value !== null && !isNaN(state.value));
+  }
+  function setStepLocked(cardId, locked, extraClass){
+    const card = el(cardId);
+    if(!card) return;
+    card.classList.toggle('step-locked', !!locked);
+    if(extraClass) card.classList.toggle(extraClass, !!locked);
+    card.setAttribute('aria-disabled', locked ? 'true' : 'false');
+    try { card.inert = !!locked; } catch(e) {}
+  }
+  function updateStepLocks(){
+    setStepLocked('phonesCard', !state.plan);
+    setStepLocked('tradeCard', !state.phone);
+    // Next Up requires an actual current/trade-in phone because condition must be verified.
+    const nextLocked = !state.tradeDevice;
+    setStepLocked('nextUpCard', nextLocked, state.noTrade ? 'no-trade-lock' : '');
+    const nextCard = el('nextUpCard');
+    if(nextCard && !state.noTrade) nextCard.classList.remove('no-trade-lock');
+  }
+  function clearNextUpSelection(){
+    state.nextUp=false;
+    state.nextUpType='anytime';
+    state.nextPaid=null;
+    if(typeof nextUpChk !== 'undefined' && nextUpChk){
+      nextUpChk.checked=false;
+    }
+    const typeRow=el('nextTypeRow'), paidRow=el('nextPaidRow');
+    if(typeRow) typeRow.style.display='none';
+    if(paidRow) paidRow.style.display='none';
+    document.querySelectorAll('#nextPaidChips .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
+    document.querySelectorAll('#nextTypeChips .chip').forEach(x=>x.setAttribute('aria-pressed', x.dataset.nextType === 'anytime' ? 'true' : 'false'));
+  }
 
   const phonesRecent = el('phonesRecent');
   const recentPicksWrap = el('recentPicksWrap');
@@ -1277,27 +1467,26 @@
     });
   }
 
-  // Phone suggestions
-  function updatePhoneSuggestions(q){
+  // Phone suggestions — type to filter, or focus an empty field for alphabetical browsing
+  function updatePhoneSuggestions(q, showAll){
     const ul = phoneSuggestionsList;
     ul.innerHTML = '';
-    if(!q || !q.trim()){ phoneSuggestions.classList.remove('open'); phoneSearch.setAttribute('aria-expanded','false'); return; }
-    const ql = q.trim().toLowerCase();
-    const matches = PHONES.filter(p => isPhoneCurrentlyListed(p) && (p.name + ' ' + (p.storage||'') + ' ' + (p.id||'')).toLowerCase().indexOf(ql) !== -1).slice(0,12);
-    matches.forEach(p=>{
+    const ql = (q||'').trim().toLowerCase();
+    let matches = PHONES.filter(p => isPhoneCurrentlyListed(p));
+    if(ql) matches = matches.filter(p => (p.name + ' ' + (p.storage||'') + ' ' + (p.id||'')).toLowerCase().includes(ql));
+    matches.sort((a,b)=>(a.name+' '+(a.storage||'')).localeCompare(b.name+' '+(b.storage||'')));
+    if(!ql && !showAll){ phoneSuggestions.classList.remove('open'); phoneSearch.setAttribute('aria-expanded','false'); return; }
+    matches.slice(0,60).forEach(p=>{
       const li = document.createElement('li');
-      li.className = 'phone-suggestion';
-      li.dataset.phone = p.id;
+      li.className = 'phone-suggestion'; li.dataset.phone = p.id;
       const left = document.createElement('span'); left.className='left'; left.textContent = p.name + (p.storage ? ' ' + p.storage : '');
       const right = document.createElement('span'); right.className='right';
       const hasKnownTier = (p.tieredMonthlyNew !== undefined && p.tieredMonthlyNew !== null) || (p.tieredMonthlyUpgrade !== undefined && p.tieredMonthlyUpgrade !== null);
-      const priceText = hasActiveTieredOffer(p) ? (hasKnownTier ? 'tiered promo available' : 'tiered — confirm in CCKM') : (p.retail ? money(p.retail) + ' · $' + monthly(p.retail) + '/mo' : '');
-      right.textContent = priceText;
-      li.appendChild(left); li.appendChild(right);
-      li.addEventListener('click', ()=> choosePhone(p.id));
-      ul.appendChild(li);
+      right.textContent = hasActiveTieredOffer(p) ? (hasKnownTier ? 'tiered promo available' : 'tiered — confirm in CCKM') : (p.retail ? money(p.retail) : '');
+      li.appendChild(left); li.appendChild(right); li.addEventListener('click', ()=> choosePhone(p.id)); ul.appendChild(li);
     });
-    if(matches.length){ phoneSuggestions.classList.add('open'); phoneSearch.setAttribute('aria-expanded','true'); } else { phoneSuggestions.classList.remove('open'); phoneSearch.setAttribute('aria-expanded','false'); }
+    if(matches.length){ phoneSuggestions.classList.add('open'); phoneSearch.setAttribute('aria-expanded','true'); }
+    else { phoneSuggestions.classList.remove('open'); phoneSearch.setAttribute('aria-expanded','false'); }
   }
 
   // Choose phone
@@ -1418,72 +1607,29 @@
     { name:'Business Nation',             group:'valueplus_mobile' },
     { name:'BusinessTalk',                group:'valueplus_mobile' },
   ];
-  // Plan search — shows individual plan names + which group they fall under
-  planSearch.addEventListener('input', ()=>{
+  // Plan search — type to filter, or focus an empty field for alphabetical browsing
+  function updatePlanSuggestions(showAll){
     const q = planSearch.value.trim().toLowerCase();
     document.querySelectorAll('#plans .chip').forEach(btn => btn.classList.remove('search-hit'));
     planSuggestionsList.innerHTML = '';
-
-    if(!q){
-      planSuggestions.classList.remove('open');
-      planSearch.setAttribute('aria-expanded','false');
-      return;
-    }
-
-    // Match individual plans first, then group labels as fallback
-    const planMatches = PLAN_INDEX.filter(p =>
-      p.name.toLowerCase().indexOf(q) !== -1 ||
-      (p.alt && p.alt.toLowerCase().indexOf(q) !== -1)
-    );
-    // Also match the group label itself (e.g. typing "starter" shows the group even if no individual plan matched)
-    const groupMatches = Object.keys(PLAN_LABEL).filter(k =>
-      PLAN_LABEL[k].toLowerCase().indexOf(q) !== -1 &&
-      !planMatches.some(p => p.group === k)
-    ).map(k => ({ name: PLAN_LABEL[k], group: k, isGroupLabel: true }));
-
-    const results = [...planMatches, ...groupMatches].slice(0, 12);
-
-    results.forEach(item => {
-      const li = document.createElement('li');
-      li.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:8px;';
-      const left = document.createElement('span');
-      left.style.fontWeight = '700';
-      left.textContent = item.name;
-      if(item.cru){
-        const cruTag = document.createElement('span');
-        cruTag.textContent = ' (CRU)';
-        cruTag.style.cssText = 'color:#0568AE; font-weight:800; font-size:12px;';
-        left.appendChild(cruTag);
-      }
-      const right = document.createElement('span');
-      right.style.cssText = 'font-size:12px; color:#425b6f; font-weight:600; white-space:nowrap;';
-      right.textContent = item.isGroupLabel ? '' : '→ ' + PLAN_LABEL[item.group];
-      li.appendChild(left);
-      li.appendChild(right);
-      li.addEventListener('click', ()=> {
-        const btn = document.querySelector('#plans .chip[data-plan="'+item.group+'"]');
-        if(btn) btn.click();
-        planSearch.value = item.name;
-        planSuggestions.classList.remove('open');
-        planSearch.setAttribute('aria-expanded','false');
-      });
+    let planMatches = PLAN_INDEX.filter(p => !q || p.name.toLowerCase().includes(q) || (p.alt && p.alt.toLowerCase().includes(q)));
+    planMatches.sort((a,b)=>a.name.localeCompare(b.name));
+    const groupMatches = q ? Object.keys(PLAN_LABEL).filter(k => PLAN_LABEL[k].toLowerCase().includes(q) && !planMatches.some(p=>p.group===k)).map(k=>({name:PLAN_LABEL[k],group:k,isGroupLabel:true})) : [];
+    const results = [...planMatches,...groupMatches].slice(0,70);
+    if(!q && !showAll){ planSuggestions.classList.remove('open'); planSearch.setAttribute('aria-expanded','false'); return; }
+    results.forEach(item=>{
+      const li=document.createElement('li'); li.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:8px;';
+      const left=document.createElement('span'); left.style.fontWeight='700'; left.textContent=item.name;
+      if(item.cru){ const tag=document.createElement('span'); tag.textContent=' (CRU)'; tag.style.cssText='color:#0568AE;font-weight:800;font-size:12px;'; left.appendChild(tag); }
+      const right=document.createElement('span'); right.style.cssText='font-size:12px;color:#425b6f;font-weight:600;white-space:nowrap;'; right.textContent=item.isGroupLabel?'':'→ '+PLAN_LABEL[item.group];
+      li.appendChild(left);li.appendChild(right);li.addEventListener('click',()=>{ const btn=document.querySelector('#plans .chip[data-plan="'+item.group+'"]'); if(btn) btn.click(); planSearch.value=item.name; planSuggestions.classList.remove('open'); planSearch.setAttribute('aria-expanded','false'); });
       planSuggestionsList.appendChild(li);
     });
-
-    if(results.length){
-      planSuggestions.classList.add('open');
-      planSearch.setAttribute('aria-expanded','true');
-    } else {
-      planSuggestions.classList.remove('open');
-      planSearch.setAttribute('aria-expanded','false');
-    }
-
-    // Highlight the matching group chip(s) in the button row
-    const matchingGroups = new Set(results.map(r => r.group));
-    document.querySelectorAll('#plans .chip').forEach(btn => {
-      if(matchingGroups.has(btn.dataset.plan)) btn.classList.add('search-hit');
-    });
-  });
+    if(results.length){planSuggestions.classList.add('open');planSearch.setAttribute('aria-expanded','true');}else{planSuggestions.classList.remove('open');planSearch.setAttribute('aria-expanded','false');}
+    const matchingGroups=new Set(results.map(r=>r.group)); document.querySelectorAll('#plans .chip').forEach(btn=>{if(matchingGroups.has(btn.dataset.plan))btn.classList.add('search-hit');});
+  }
+  planSearch.addEventListener('input',()=>updatePlanSuggestions(true));
+  planSearch.addEventListener('focus',()=>updatePlanSuggestions(true));
 
   el('planClearSearch').addEventListener('click', ()=>{
     planSearch.value='';
@@ -1493,68 +1639,102 @@
   });
 
   // phoneSearch wiring
-  phoneSearch.addEventListener('input', ()=> updatePhoneSuggestions(phoneSearch.value));
+  phoneSearch.addEventListener('input', ()=> updatePhoneSuggestions(phoneSearch.value, true));
+  phoneSearch.addEventListener('focus', ()=> updatePhoneSuggestions(phoneSearch.value, true));
   document.getElementById('phoneClear').addEventListener('click', ()=> { phoneSearch.value=''; phoneSuggestions.classList.remove('open'); phoneSearch.setAttribute('aria-expanded','false'); });
 
-  function updateTradePresetNote(){
-    const isIphone16e = state.tradePreset === 'iphone16e';
-    el('tradeCard').classList.toggle('preset-16e', isIphone16e);
-    if(isIphone16e){
-      tradePresetNote.innerHTML = '<strong>iPhone 16e selected:</strong> the special $350 trade-in promotion tier is applied. Tap <b>Clear</b> or reset the form to choose a different trade.';
-      tradePresetNote.style.display = 'block';
-      tradePresetNote.setAttribute('aria-hidden','false');
-    } else {
-      tradePresetNote.style.display = 'none';
-      tradePresetNote.setAttribute('aria-hidden','true');
-      tradePresetNote.textContent = '';
-    }
-  }
+  // ===== 2.0 trade-in device lookup =====
+  const tradeDeviceSearch = el('tradeDeviceSearch');
+  const tradeDeviceSuggestions = el('tradeDeviceSuggestions');
+  const tradeDeviceSuggestionsList = el('tradeDeviceSuggestionsList');
+  const tradeStorageRow = el('tradeStorageRow');
+  const tradeStorageSelect = el('tradeStorageSelect');
+  const tradeConditionPanel = el('tradeConditionPanel');
+  const tradeDbStatus = el('tradeDbStatus');
+  const manualOverridePill = el('manualOverridePill');
 
-  // quick trade chips
-  document.querySelectorAll('#quick .chip').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      const n = parseFloat(b.dataset.v);
-      state.tradePreset = null;
-      updateTradePresetNote();
-      if(!isNaN(n)){ state.value = Math.round(n); tradeEl.value = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(state.value); }
+  function tradeModels(){
+    const map=new Map();
+    TRADE_DB.forEach(r=>{ const key=r.brand+'|'+r.model; if(!map.has(key)) map.set(key,{brand:r.brand,model:r.model,rows:[]}); map.get(key).rows.push(r); });
+    return [...map.values()].sort((a,b)=>(a.brand+' '+a.model).localeCompare(b.brand+' '+b.model));
+  }
+  const TRADE_MODELS = tradeModels();
+  function isTradeValueKnown(v){ return typeof v==='number' && isFinite(v); }
+  function formatTradeValue(v){ return Number(v).toLocaleString('en-US',{style:'currency',currency:'USD',minimumFractionDigits:Number.isInteger(Number(v))?0:2,maximumFractionDigits:2}); }
+  function resetTradeCondition(){ state.tradeCondition={power:null,lock:null,cracks:null}; document.querySelectorAll('[data-cond]').forEach(b=>b.setAttribute('aria-pressed','false')); tradeConditionPanel.classList.remove('condition-good','condition-poor'); }
+  function conditionComplete(){ const c=state.tradeCondition; return c.power!==null&&c.lock!==null&&c.cracks!==null; }
+  function conditionPoor(){ const c=state.tradeCondition; return c.power===false||c.lock===false||c.cracks===false; }
+  function conditionMultiplier(){ const c=state.tradeCondition; if(c.power===false||c.lock===false) return .18; if(c.cracks===false) return .5; return 1; }
+  function selectedTradeRow(){ if(!state.tradeDevice||!state.tradeStorage) return null; return TRADE_DB.find(r=>r.brand===state.tradeDevice.brand&&r.model===state.tradeDevice.model&&r.storage===state.tradeStorage)||null; }
+  function isIphone16eTrade(){ return !!(state.tradeDevice && /iphone 16e/i.test(state.tradeDevice.model)); }
+  function promoTradeValue(){ return isIphone16eTrade() ? 35 : state.value; }
+  function syncPixelTradeFlag(){
+    if(state.tradeDevice && state.tradeDevice.brand.toLowerCase()==='google'){ state.pixel=true; pixelChk.checked=true; }
+    else if(state.tradeDevice){ state.pixel=false; pixelChk.checked=false; }
+  }
+  function applyTradeDatabaseValue(){
+    const row=selectedTradeRow();
+    state.tradeBaseValue=row&&isTradeValueKnown(row.value)?Number(row.value):null;
+    if(state.tradeBaseValue===null){ state.value=null; state.tradeValueMode='missing'; tradeEl.value=''; tradeDbStatus.className='trade-db-status missing'; tradeDbStatus.textContent='No stored value yet — verify with the designated trade tool or enter it manually.'; manualOverridePill.classList.remove('show'); render(); return; }
+    const mult=conditionMultiplier(); state.value=Math.round(state.tradeBaseValue*mult*100)/100; state.tradeValueMode='auto'; tradeEl.value=formatTradeValue(state.value);
+    tradeDbStatus.className='trade-db-status auto'; tradeDbStatus.textContent = conditionComplete()
+      ? `Database value: ${formatTradeValue(state.tradeBaseValue)} · condition-adjusted: ${formatTradeValue(state.value)} · last updated ${TRADE_DB_UPDATED}`
+      : (conditionPoor()
+          ? `Database value: ${formatTradeValue(state.tradeBaseValue)} · current condition value: ${formatTradeValue(state.value)} · finish condition check · last updated ${TRADE_DB_UPDATED}`
+          : `Assuming good condition: ${formatTradeValue(state.value)} · answer condition questions to adjust · last updated ${TRADE_DB_UPDATED}`);
+    manualOverridePill.classList.remove('show');
+    syncPixelTradeFlag(); updateControlsAfterSelection(); render();
+  }
+  function renderTradeStorage(){
+    if(!state.tradeDevice){ tradeStorageRow.classList.remove('show'); tradeConditionPanel.classList.remove('show'); return; }
+    const rows=TRADE_DB.filter(r=>r.brand===state.tradeDevice.brand&&r.model===state.tradeDevice.model).sort((a,b)=>a.storage.localeCompare(b.storage,undefined,{numeric:true}));
+    tradeStorageSelect.innerHTML='';
+    rows.forEach(r=>{const o=document.createElement('option');o.value=r.storage;o.textContent=r.storage+(isTradeValueKnown(r.value)?` — ${formatTradeValue(r.value)}`:' — value not stored');tradeStorageSelect.appendChild(o);});
+    tradeStorageRow.classList.add('show'); tradeConditionPanel.classList.add('show');
+    if(!state.tradeStorage || !rows.some(r=>r.storage===state.tradeStorage)) state.tradeStorage=rows[0]?.storage||'';
+    tradeStorageSelect.value=state.tradeStorage; applyTradeDatabaseValue();
+  }
+  function chooseTradeDevice(brand,model){
+    const found=TRADE_MODELS.find(x=>x.brand===brand&&x.model===model); if(!found)return;
+    state.noTrade=false;
+    if(noTradeBtn) noTradeBtn.setAttribute('aria-pressed','false');
+    state.tradeDevice={brand,model}; state.tradeStorage=null; state.tradeValueMode='auto'; tradeDeviceSearch.value=`${brand} ${model}`; tradeDeviceSuggestions.classList.remove('open'); resetTradeCondition(); renderTradeStorage();
+  }
+  function updateTradeDeviceSuggestions(showAll){
+    const q=(tradeDeviceSearch.value||'').trim().toLowerCase(); tradeDeviceSuggestionsList.innerHTML='';
+    let rows=TRADE_MODELS.filter(x=>!q||(x.brand+' '+x.model).toLowerCase().includes(q));
+    if(!q&&!showAll){tradeDeviceSuggestions.classList.remove('open');return;}
+    rows.slice(0,100).forEach(x=>{ const vals=x.rows.filter(r=>isTradeValueKnown(r.value)).map(r=>Number(r.value)); const li=document.createElement('li'); const l=document.createElement('span'); l.innerHTML=`<span class="lookup-brand">${escapeHtml(x.brand)}</span><br><span class="lookup-model">${escapeHtml(x.model)}</span>`; const rr=document.createElement('span'); rr.className='lookup-value '+(vals.length?'':'unknown'); rr.textContent=vals.length?(Math.min(...vals)===Math.max(...vals)?formatTradeValue(vals[0]):`${formatTradeValue(Math.min(...vals))}–${formatTradeValue(Math.max(...vals))}`):'verify value'; li.appendChild(l);li.appendChild(rr);li.addEventListener('click',()=>chooseTradeDevice(x.brand,x.model));tradeDeviceSuggestionsList.appendChild(li); });
+    tradeDeviceSuggestions.classList.toggle('open',rows.length>0); tradeDeviceSearch.setAttribute('aria-expanded',rows.length?'true':'false');
+  }
+  if(noTradeBtn){
+    noTradeBtn.addEventListener('click',()=>{
+      state.noTrade=true;
+      state.tradeDevice=null; state.tradeStorage=null; state.tradeBaseValue=null; state.tradeValueMode=null; state.value=null;
+      tradeDeviceSearch.value=''; tradeDeviceSuggestions.classList.remove('open'); tradeStorageRow.classList.remove('show'); tradeConditionPanel.classList.remove('show');
+      resetTradeCondition();
+      tradeEl.value=''; tradeError.style.display='none'; manualOverridePill.classList.remove('show');
+      tradeDbStatus.className='trade-db-status'; tradeDbStatus.textContent='No trade selected.';
+      state.pixel=false; pixelChk.checked=false; state.galaxyAny='none'; galaxyAnySelect.value='none';
+      clearNextUpSelection();
+      noTradeBtn.setAttribute('aria-pressed','true');
       render();
     });
-  });
-
-  const tradePresetIphone16e = el('tradePresetIphone16e');
-  if(tradePresetIphone16e){
-    tradePresetIphone16e.addEventListener('click', ()=>{
-      state.tradePreset = 'iphone16e';
-      state.value = 35;
-      tradeEl.value = '';
-      tradeError.style.display = 'none';
-      updateTradePresetNote();
-      updateTradeHelp();
-      render();
-    });
   }
+  tradeDeviceSearch.addEventListener('input',()=>updateTradeDeviceSuggestions(true));
+  tradeDeviceSearch.addEventListener('focus',()=>updateTradeDeviceSuggestions(true));
+  el('tradeDeviceClear').addEventListener('click',()=>{state.noTrade=false;if(noTradeBtn)noTradeBtn.setAttribute('aria-pressed','false');state.tradeDevice=null;state.tradeStorage=null;state.tradeBaseValue=null;state.tradeValueMode=null;tradeDeviceSearch.value='';tradeDeviceSuggestions.classList.remove('open');tradeStorageRow.classList.remove('show');tradeConditionPanel.classList.remove('show');resetTradeCondition();state.pixel=false;pixelChk.checked=false;clearNextUpSelection();tradeDbStatus.className='trade-db-status';tradeDbStatus.textContent='Choose a trade-in phone or enter a value manually.';render();});
+  tradeStorageSelect.addEventListener('change',()=>{state.tradeStorage=tradeStorageSelect.value;resetTradeCondition();applyTradeDatabaseValue();});
+  document.querySelectorAll('[data-cond]').forEach(b=>b.addEventListener('click',()=>{ const key=b.dataset.cond,val=b.dataset.answer==='yes'; state.tradeCondition[key]=val; document.querySelectorAll(`[data-cond="${key}"]`).forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false')); tradeConditionPanel.classList.toggle('condition-poor',conditionPoor());tradeConditionPanel.classList.toggle('condition-good',conditionComplete()&&!conditionPoor());applyTradeDatabaseValue(); }));
 
-  // trade input parsing and help
-  function parseTradeField(){
-    const n = parseFloat(tradeEl.value.replace(/[^0-9.]/g,''));
-    state.value = isNaN(n) ? null : Math.round(n);
-  }
-  tradeEl.addEventListener('input', ()=> { state.tradePreset = null; updateTradePresetNote(); parseTradeField(); tradeError.style.display='none'; updateTradeHelp(); render(); });
-  tradeEl.addEventListener('focus', ()=> { tradeEl.value = tradeEl.value.replace(/[^0-9.]/g,''); tradeEl.select(); updateTradeHelp(true); });
-  tradeEl.addEventListener('blur', ()=> {
-    const n = parseFloat(tradeEl.value.replace(/[^0-9.]/g,''));
-    if(isNaN(n) || n < 0){ state.value = null; tradeError.style.display = 'block'; tradeEl.value=''; }
-    else { state.value = Math.round(n); tradeError.style.display = 'none'; tradeEl.value = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(state.value); }
-    updateTradeHelp();
-    render();
-  });
-
-  function updateTradeHelp(forceFocus){
-    const focused = document.activeElement === tradeEl;
-    const show = state.tradePreset !== 'iphone16e' && (focused || state.value === null);
-    tradeHelp.style.display = show ? 'block' : 'none';
-    tradeHelp.setAttribute('aria-hidden', show ? 'false' : 'true');
-  }
+  // Quick trade-value chips remain available as a manual shortcut.
+  document.querySelectorAll('#quick .chip').forEach(b=>b.addEventListener('click',()=>{const n=parseFloat(b.dataset.v);if(!isNaN(n)){state.noTrade=false;if(noTradeBtn)noTradeBtn.setAttribute('aria-pressed','false');state.value=n;state.tradeValueMode='manual';tradeEl.value=formatTradeValue(n);tradeDbStatus.className='trade-db-status manual';tradeDbStatus.textContent='Manual trade value entered — verify before quoting.';manualOverridePill.classList.add('show');render();}}));
+  function parseTradeField(){ const n=parseFloat(tradeEl.value.replace(/[^0-9.]/g,'')); state.value=isNaN(n)?null:Math.round(n*100)/100; }
+  tradeEl.addEventListener('input',()=>{state.noTrade=false;if(noTradeBtn)noTradeBtn.setAttribute('aria-pressed','false');parseTradeField();state.tradeValueMode='manual';tradeError.style.display='none';tradeDbStatus.className='trade-db-status manual';tradeDbStatus.textContent='Manual trade value entered — verify before quoting.';manualOverridePill.classList.add('show');render();});
+  tradeEl.addEventListener('focus',()=>{tradeEl.value=tradeEl.value.replace(/[^0-9.]/g,'');tradeEl.select();});
+  tradeEl.addEventListener('blur',()=>{const n=parseFloat(tradeEl.value.replace(/[^0-9.]/g,''));if(isNaN(n)||n<0){state.value=null;tradeError.style.display='block';tradeEl.value='';}else{state.value=Math.round(n*100)/100;tradeError.style.display='none';tradeEl.value=formatTradeValue(state.value);}render();});
+  function updateTradeHelp(){ tradeHelp.style.display='none'; }
+  function updateTradePresetNote(){ tradePresetNote.style.display='none'; }
 
   // Next Up wiring
   const nextUpChk = el('nextUpChk');
@@ -1594,7 +1774,7 @@
 
   // clear all & clear trade
   function resetAllFields(){
-    state.plan = null; state.phone = null; state.value = null; state.tradePreset = null; state.pixel = false; state.galaxyAny = 'none'; state.nextUp = false; state.nextUpType = 'anytime'; state.nextPaid = null; state.tierAction = null;
+    state.plan=null; state.phone=null; state.value=null; state.tradePreset=null; state.pixel=false; state.noTrade=false; state.galaxyAny='none'; state.nextUp=false; state.nextUpType='anytime'; state.nextPaid=null; state.tierAction=null; state.tradeDevice=null; state.tradeStorage=null; state.tradeBaseValue=null; state.tradeValueMode=null; state.tradeCondition={power:null,lock:null,cracks:null};
     document.querySelectorAll('#plans .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
     document.querySelectorAll('#phonesQuick .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
     document.querySelectorAll('#nextPaidChips .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
@@ -1603,6 +1783,8 @@
     planSearch.value=''; planSuggestions.classList.remove('open');
     phoneSearch.value=''; phoneSuggestions.classList.remove('open');
     tradeEl.value=''; tradeEl.disabled=false; tradeError.style.display='none';
+    tradeDeviceSearch.value=''; tradeDeviceSuggestions.classList.remove('open'); tradeStorageRow.classList.remove('show'); tradeConditionPanel.classList.remove('show'); resetTradeCondition(); tradeDbStatus.className='trade-db-status'; tradeDbStatus.textContent='Choose a trade-in phone or enter a value manually.'; manualOverridePill.classList.remove('show');
+    if(noTradeBtn) noTradeBtn.setAttribute('aria-pressed','false');
     document.querySelectorAll('#quick .chip').forEach(x=>x.disabled=false);
     pixelChk.checked=false;
     galaxyAnySelect.value = 'none';
@@ -1635,7 +1817,7 @@
   });
 
   document.getElementById('clearTrade').addEventListener('click', ()=> {
-    tradeEl.value=''; state.value=null; state.tradePreset=null; tradeError.style.display='none'; updateTradePresetNote(); tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true'); updateTradeHelp(); render();
+    tradeEl.value=''; state.value=null; state.tradeValueMode=null; tradeError.style.display='none'; manualOverridePill.classList.remove('show'); tradeDbStatus.className='trade-db-status'; tradeDbStatus.textContent=state.tradeDevice?'Value cleared — choose storage/condition again or enter manually.':'Choose a trade-in phone or enter a value manually.'; tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true'); render();
   });
 
   // Promo ladders effective 7/31/2026.
@@ -1670,7 +1852,7 @@
     if(savedMatchesRelease && Array.isArray(data.tips)){ TIPS.splice(0, TIPS.length, ...data.tips); }
     const vb = el('versionBadge'), rm = el('releaseMeta');
     if(vb) vb.textContent = releaseInfo.version || VERSION;
-    if(rm) rm.textContent = `${releaseInfo.month || 'August 2026'} · Last Updated ${releaseInfo.updated || '8/6/2026'}`;
+    if(rm) rm.textContent = `${releaseInfo.month || 'August 2026'} · Last Updated ${releaseInfo.updated || '8/12/2026'}`;
   }
 
   const PIXEL_FLOORS = {
@@ -1945,6 +2127,12 @@
 
   // getResult returns outcome object describing current state
   function getResult(){
+    if(state.plan && state.phone && !tradeStepComplete()) return { state:'need_trade_choice' };
+    // Next Up / Next Up Anytime always requires identifying the CURRENT phone
+    // and confirming that its turn-in condition is eligible.
+    if(state.nextUp && !state.tradeDevice) return { state:'nextup_need_device' };
+    if(state.nextUp && state.tradeDevice && !conditionComplete()) return { state:'nextup_need_condition' };
+    if(state.nextUp && state.tradeDevice && conditionPoor()) return { state:'nextup_bad_condition' };
     if(!state.plan || !state.phone) return { state:'incomplete' };
 
     if(state.plan === 'valueplus_mobile') return { state:'full_retail_rerate' };
@@ -1958,14 +2146,27 @@
     if(state.nextUp){
       if(state.nextPaid === null) return { state:'needNextPaid' };
       if(state.nextPaid === false) return { state:'nextup_no_payoff' };
+
+      // A Next Up turn-in is an upgrade, not an extra trade-in bill credit.
+      // If the NEW phone has an active tiered UPGRADE price, use that tiered price.
+      if(hasActiveTieredOffer(state.phone)){
+        const val = state.phone.tieredMonthlyUpgrade;
+        if(val !== undefined && val !== null){
+          const total = Math.round(Number(val) * 36 * 100)/100;
+          return { state:'tiered_final', monthly:Number(val), total:total, showAction:false, viaNextUp:true };
+        }
+        if(val === null) return { state:'tiered_not_offered', viaNextUp:true };
+        return { state:'tiered_confirm_cckm', viaNextUp:true };
+      }
+
       if(state.nextUpType === 'legacy'){
         const nextCredit = nextUpPromoCredit(state.phone);
         if(nextCredit > 0) return { state:'nextup_promo', credit: nextCredit, monthly: (Math.ceil(nextCredit/36*100)/100).toFixed(2) };
         return { state:'nextup_not_eligible' };
       }
       // Next Up Anytime at 33%+ follows the normal promo path below.
-      // If it is under 33%, AT&T can still pay off the remaining installments for an upgrade path,
-      // but no new phone promo applies in this tool.
+      // The current phone is a turn-in. Its value can determine promo qualification,
+      // but it is NOT paid again as a separate one-time bill credit.
     }
 
     const tierPlans = ['premium','starter','value','55plus'];
@@ -1994,6 +2195,8 @@
       }
     }
 
+    if(state.noTrade) return { state:'full_retail' };
+
     const cat = phoneCategory(state.phone);
     const hasLadder = LADDERS[state.plan] && LADDERS[state.plan][cat];
     if(!hasLadder) return { state:'full_retail' };
@@ -2003,7 +2206,7 @@
     const samsungAny = isSamsungAnyConditionPhone(state.phone) && state.galaxyAny !== 'none';
     if(!hasValue && !pix && !samsungAny) return { state:'needValue' };
 
-    const credit = computeCredit(state.plan, cat, state.value, state.pixel, state.phone, state.galaxyAny);
+    const credit = computeCredit(state.plan, cat, promoTradeValue(), state.pixel, state.phone, state.galaxyAny);
     if(credit === 0) return { state:'zero' };
     return { state:'promo', credit: credit, monthly: (Math.ceil(credit/36*100)/100).toFixed(2) };
   }
@@ -2011,6 +2214,11 @@
   // build summary text
   function buildSummary(){
     const r = getResult();
+    if(r.state === 'need_trade_choice') return 'Choose a trade-in phone, enter a trade value, or select No Trade.';
+    if(r.state === 'nextup_need_device') return 'Next Up selected — choose the customer’s current phone so turn-in condition can be verified.';
+    if(r.state === 'nextup_need_condition') return 'Next Up selected — answer all three condition questions for the customer’s current phone. The phone must be in eligible turn-in condition.';
+    if(r.state === 'needCondition') return 'Trade-in selected — answer all three condition questions before calculating the promotion.';
+    if(r.state === 'nextup_bad_condition') return 'Next Up and Next Up Anytime are Ineligible. Look for opportunities related to a New Line or Insurance.';
     if(r.state === 'needNextPaid') return `Next Up selected — confirm whether the device is at least ${nextUpThresholdPct()}% paid off.`;
     if(r.state === 'nextup_no_payoff') return state.nextUpType === 'legacy' ? 'Legacy Next Up selected — customer is under 50% paid. Customer must pay up to 50%, then they can upgrade. Verify payoff/upgrade options in OPUS.' : 'Next Up Anytime selected — customer is under 33% paid. AT&T can still pay off the remaining installments for the upgrade path, but no new phone promo applies. Verify in OPUS/CCKM.';
     if(r.state === 'nextup_promo'){
@@ -2043,6 +2251,9 @@
     }
     if(r.state === 'tiered_final'){
       const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
+      if(r.viaNextUp || state.nextUp){
+        return `Customer is using ${nextUpFeatureLabel()} for a ${phoneLabel} on ${PLAN_LABEL[state.plan]} — eligible tiered upgrade price is ${money(r.total)} ($${r.monthly}/mo). The old phone is a turn-in for the Next Up payoff path, not a separate trade-in bill credit. Verify payoff, condition, and offer eligibility in OPUS/CCKM.`;
+      }
       if(state.value){
         return `Customer is getting a ${phoneLabel} on ${PLAN_LABEL[state.plan]} — tiered final ${money(r.total)} ($${r.monthly}/mo, normally ${money(state.phone.retail)} retail). They can also trade in a device for a one-time bill credit of ${moneyWhole(state.value)} applied to the bill or accessories.`;
       }
@@ -2062,7 +2273,13 @@
       return `Customer is getting a ${phoneLabel} on ${PLAN_LABEL[state.plan]} — retail ${money(state.phone.retail)}, part of tiered offers. Confirm exact price in CCKM.`;
     }
     if(r.state === 'needValue') return `Enter the trade-in value to compute promo credit for ${state.phone.name} on ${PLAN_LABEL[state.plan]}.`;
-    if(r.state === 'promo'){
+    if(r.state === 'needCondition'){
+      amountEl.innerHTML = '$—';
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>Confirm trade-in condition.</b><br>Answer all three device-condition questions to calculate the adjusted trade value and promotion.</div>`;
+    } else if(r.state === 'nextup_bad_condition'){
+      amountEl.innerHTML = 'INELIGIBLE'; amountEl.classList.add('ineligible');
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;background:rgba(239,68,68,.16);border:1px solid rgba(248,113,113,.55);border-radius:12px;padding:14px;color:#ffe6e6;"><div style="font-size:16px;font-weight:900;margin-bottom:5px;">⚠ NEXT UP CANNOT BE USED</div><b>This device is in poor condition.</b><br>Next Up and Next Up Anytime are <b>ineligible</b>.<br>Look for opportunities related to a <b>New Line or Insurance.</b></div>`;
+    } else if(r.state === 'promo'){
       const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
       const tradeDesc = samsungAnyConditionLabel() || ((state.value !== null && !isNaN(state.value)) ? moneyWhole(state.value) : (state.pixel ? 'an eligible Google Pixel' : 'a trade-in device'));
       const deviceMo = monthly(state.phone.retail);
@@ -2222,7 +2439,16 @@
     if(!state.plan || !state.phone) return 'Pick a plan, phone, and trade-in value.';
     const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
     if(r.state === 'nextup_promo') return `${phoneLabel}: ${moneyWhole(r.credit)} Next Up credit.`;
-    if(r.state === 'promo'){
+    if(r.state === 'need_trade_choice'){
+      amountEl.innerHTML = '$&mdash;';
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>Choose the trade-in step.</b><br>Select the customer’s old phone, enter a trade value manually, or tap <b>No Trade</b> to continue.</div>`;
+    } else if(r.state === 'nextup_need_device'){
+      amountEl.innerHTML = '$&mdash;';
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>Choose the customer’s current phone.</b><br>Next Up / Next Up Anytime requires the old phone to be selected so its turn-in condition can be verified. The old phone is used for the payoff/turn-in path — it is not an extra bill credit.</div>`;
+    } else if(r.state === 'nextup_need_condition'){
+      amountEl.innerHTML = '$&mdash;';
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>Confirm the old phone’s condition.</b><br>Answer all three condition questions. Next Up / Next Up Anytime requires an eligible-condition turn-in. The old phone is used for payoff/turn-in and does not receive a separate trade-value bill credit.</div>`;
+    } else if(r.state === 'promo'){
       const netMo = Math.max(0, parseFloat(monthly(state.phone.retail)) - parseFloat(r.monthly)).toFixed(2);
       return `${phoneLabel}: ${moneyWhole(r.credit)} off • about $${netMo}/mo after credits.`;
     }
@@ -2585,7 +2811,7 @@
     const phones = PHONES.map(p=>`<tr><td><b>${p.name}${p.storage?' '+p.storage:''}</b><br><small>${p.id}</small></td><td>${money(p.retail||0)}</td><td>${hasActiveTieredOffer(p)?'Tiered':(PROMO_CATEGORY_LABEL[inferPhoneCategoryForAdmin(p)]||inferPhoneCategoryForAdmin(p))}</td></tr>`).join('');
     const tips = TIPS.map((t,i)=>`<li><b>${i+1}.</b> ${t}</li>`).join('');
     box.innerHTML = `
-      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'August 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'8/6/2026'}</div>
+      <div class="tool-subcard"><b>Version:</b> ${releaseInfo.version||VERSION}<br><b>Month:</b> ${releaseInfo.month||'August 2026'}<br><b>Last Updated:</b> ${releaseInfo.updated||'8/12/2026'}</div>
       <details class="tool-subcard" open><summary><b>Promo Ladder Check</b></summary>${promoHtml}</details>
       <details class="tool-subcard"><summary><b>Tiered Offer Check (${PHONES.filter(p=>hasActiveTieredOffer(p)).length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>New Line</th><th>Upgrade</th></tr></thead><tbody>${tiered}</tbody></table></details>
       <details class="tool-subcard"><summary><b>Phone Check (${PHONES.length})</b></summary><table class="compare-table"><thead><tr><th>Phone</th><th>MSRP</th><th>Promo Type</th></tr></thead><tbody>${phones}</tbody></table></details>
@@ -2596,7 +2822,7 @@
   function adminFill(){
     el('adminVersionInput').value = releaseInfo.version || VERSION;
     el('adminMonthInput').value = releaseInfo.month || 'August 2026';
-    el('adminUpdatedInput').value = releaseInfo.updated || '8/6/2026';
+    el('adminUpdatedInput').value = releaseInfo.updated || '8/12/2026';
     el('adminPhones').value = JSON.stringify(PHONES, null, 2);
     buildAdminPhoneSelect();
     el('adminPromos').value = JSON.stringify(LADDERS, null, 2);
@@ -2765,10 +2991,15 @@
   // Render UI
   let lastShownCredit = null;
   function render(){
+    updateStepLocks();
     summaryEl.textContent = buildShortSummary();
     updateCopyArea();
 
     const r = getResult();
+    const nextUpConditionWarningEl = el('nextUpConditionWarning');
+    if(nextUpConditionWarningEl){
+      nextUpConditionWarningEl.style.display = (state.nextUp && state.tradeDevice && conditionPoor()) ? 'block' : 'none';
+    }
     const displayEl = el('display');
 
     // Clear all result color classes then apply the correct one
@@ -2806,7 +3037,7 @@
         amountEl.innerHTML = moneyWhole(r.credit) + '<span class="off">off</span>';
       }
       lastShownCredit = r.credit;
-      detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>You pay: <b style="color:#fff;">$${netMo}/mo</b> after credit</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.phone, state.galaxyAny, state.plan, r.credit)}`;
+      detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>You pay: <b style="color:#fff;">$${netMo}/mo</b> after credit</div>${betterPlanHintHtml(cat, promoTradeValue(), state.pixel, state.phone, state.galaxyAny, state.plan, r.credit)}`;
     } else if(r.state === 'nextup_promo'){
       const deviceMo = monthly(state.phone.retail);
       const netMo = Math.max(0, parseFloat(deviceMo) - parseFloat(r.monthly)).toFixed(2);
@@ -2820,19 +3051,23 @@
       detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>${nextUpFeatureLabel()} upgrade offer. Device must be at least <b>${nextUpThresholdPct()}% paid</b> and in eligible turn-in condition.<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>Estimated after credit: <b style="color:#fff;">$${netMo}/mo</b></div><div class="d-rule">Verify the feature name, payoff percentage, device condition, and offer eligibility in OPUS/CCKM before quoting.</div>`;
     } else if(r.state === 'tiered_final'){
       amountEl.innerHTML = `<span class="monthly-primary">$${r.monthly}/mo</span><span class="off">${money(r.total)} final</span>`;
-      detailEl.innerHTML = `<div class="d-monthly">Total: ${money(r.total)} spread over 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]} &middot; Tiered Offer<br>Device retail: ${money(state.phone.retail)}</div>`;
-      if(r.showAction) renderTierActionRow();
-      if(state.value){
-        tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
-        tradeAppliedNote.style.display='block';
-        tradeAppliedNote.setAttribute('aria-hidden','false');
+      if(r.viaNextUp || state.nextUp){
+        detailEl.innerHTML = `<div class="d-monthly">Tiered upgrade price &middot; ${money(r.total)} over 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]} &middot; ${nextUpFeatureLabel()}<br>AT&amp;T uses the old phone as the eligible turn-in/payoff device. <b>No separate trade-value bill credit applies.</b><br>Verify payoff percentage, phone condition, and tiered upgrade eligibility in OPUS/CCKM.</div>`;
+      } else {
+        detailEl.innerHTML = `<div class="d-monthly">Total: ${money(r.total)} spread over 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]} &middot; Tiered Offer<br>Device retail: ${money(state.phone.retail)}</div>`;
+        if(r.showAction) renderTierActionRow();
+        if(state.value){
+          tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
+          tradeAppliedNote.style.display='block';
+          tradeAppliedNote.setAttribute('aria-hidden','false');
+        }
       }
     } else if(r.state === 'tiered_not_offered'){
       const actionLabel = state.tierAction === 'new' ? 'New Line' : 'Upgrade';
       amountEl.innerHTML = '$0';
       detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo)<br>No tiered offer for <b>${actionLabel}</b> on this device — full retail applies.</div>`;
       renderTierActionRow();
-      if(state.value){
+      if(state.value && !state.nextUp){
         tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
         tradeAppliedNote.style.display='block';
         tradeAppliedNote.setAttribute('aria-hidden','false');
@@ -2841,7 +3076,7 @@
       amountEl.innerHTML = '$&mdash;';
       detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; retail ${money(state.phone.retail)}<br>This device is part of tiered offers — confirm exact promo in <a href="${CCKM}" target="_blank" rel="noopener noreferrer" style="color:#eaf3fb;">CCKM</a>. No trade-in required for the tiered promo.</div>`;
       renderTierActionRow();
-      if(state.value){
+      if(state.value && !state.nextUp){
         tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
         tradeAppliedNote.style.display='block';
         tradeAppliedNote.setAttribute('aria-hidden','false');
@@ -2850,7 +3085,7 @@
       amountEl.innerHTML = '$&mdash;';
       detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; retail ${money(state.phone.retail)}<br>This device is part of tiered offers — select New Line or Upgrade below to show the final price.</div>`;
       renderTierActionRow();
-      if(state.value){
+      if(state.value && !state.nextUp){
         tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
         tradeAppliedNote.style.display='block';
         tradeAppliedNote.setAttribute('aria-hidden','false');
@@ -2868,7 +3103,7 @@
       const cat = phoneCategory(state.phone);
       amountEl.innerHTML = '$0';
       detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">Value Plus / Mobile Share selected — all devices are full retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo). Research rerate opportunities before proceeding.</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.phone, state.galaxyAny, state.plan, 0)}`;
-      if(state.value){
+      if(state.value && !state.nextUp){
         tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
         tradeAppliedNote.style.display='block';
         tradeAppliedNote.setAttribute('aria-hidden','false');
@@ -2877,7 +3112,7 @@
       const cat = phoneCategory(state.phone);
       amountEl.innerHTML = '$0';
       detailEl.innerHTML = `<div class="d-rule" style="border-top:none;">No trade-in eligible — this device is full retail ${money(state.phone.retail)} ($${monthly(state.phone.retail)}/mo on 36-mo installments).</div>${betterPlanHintHtml(cat, state.value, state.pixel, state.phone, state.galaxyAny, state.plan, 0)}`;
-      if(state.value){
+      if(state.value && !state.nextUp){
         tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
         tradeAppliedNote.style.display='block';
         tradeAppliedNote.setAttribute('aria-hidden','false');
@@ -2925,6 +3160,78 @@
   setTimeout(openWhatsNewIfNeeded, 350);
   console.debug('Global Trade Tool initialized', VERSION);
 })();
+
+  // Version 2.0 welcome — show once per browser/device for this major release.
+  const V2_WELCOME_KEY = 'gtt_v2_welcome_seen';
+  const v2WelcomeBackdrop = el('v2WelcomeBackdrop');
+  function openV2Welcome(){
+    if(v2WelcomeBackdrop) v2WelcomeBackdrop.classList.add('show');
+  }
+  function closeV2Welcome(){
+    if(v2WelcomeBackdrop) v2WelcomeBackdrop.classList.remove('show');
+    try{ localStorage.setItem(V2_WELCOME_KEY,'1'); }catch(e){}
+  }
+  const v2StartBtn = el('v2WelcomeStart');
+  if(v2StartBtn) v2StartBtn.addEventListener('click', closeV2Welcome);
+  const v2WhatsNewBtn = el('v2WelcomeWhatsNew');
+  if(v2WhatsNewBtn) v2WhatsNewBtn.addEventListener('click', ()=>{
+    closeV2Welcome();
+    // Open the existing What's New / Recent Changes experience when available.
+    const candidates = ['whatsNewBtn','recentChangesBtn','recentOpenBtn','changesOpenBtn'];
+    for(const id of candidates){
+      const btn = el(id);
+      if(btn){ btn.click(); return; }
+    }
+    const target = document.querySelector('[data-tool="recent"], [data-tool="changes"], #recentChanges, #whatsNew');
+    if(target){
+      if(typeof target.click === 'function') target.click();
+      else target.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+  try{
+    if(localStorage.getItem(V2_WELCOME_KEY)!=='1'){
+      setTimeout(openV2Welcome,180);
+    }
+  }catch(e){
+    setTimeout(openV2Welcome,180);
+  }
+
 </script>
+
+  <div id="v2WelcomeBackdrop" class="v2-welcome-backdrop" role="dialog" aria-modal="true" aria-labelledby="v2WelcomeTitle">
+    <div class="v2-welcome">
+      <div class="v2-welcome-head">
+        <div class="v2-welcome-kicker">Global Trade Tool</div>
+        <div id="v2WelcomeTitle" class="v2-welcome-title">Welcome to Version 2.0</div>
+        <div class="v2-welcome-sub">A faster quoting flow with a built-in trade-in reference database and smarter step-by-step logic.</div>
+      </div>
+      <div class="v2-welcome-body">
+        <div class="v2-feature">
+          <div class="v2-feature-icon">1</div>
+          <div><b>314 trade-in model/storage records</b><span>Search many common Apple, Samsung, Pixel, and Motorola devices. Stored values can adjust automatically based on condition.</span></div>
+        </div>
+        <div class="v2-feature">
+          <div class="v2-feature-icon">2</div>
+          <div><b>Live condition-adjusted values</b><span>Good condition uses the stored value; cracks reduce it; power or activation-lock issues reduce it further.</span></div>
+        </div>
+        <div class="v2-feature">
+          <div class="v2-feature-icon">3</div>
+          <div><b>Guided quoting flow</b><span>Plan → phone getting → trade-in → Next Up. Each step unlocks only when the previous one is complete.</span></div>
+        </div>
+        <div class="v2-feature">
+          <div class="v2-feature-icon">4</div>
+          <div><b>Smarter Next Up checks</b><span>The old phone must be selected and in eligible condition. Tiered devices use the applicable upgrade price, without treating the turn-in value as a separate bill credit.</span></div>
+        </div>
+
+        <div class="v2-welcome-note"><b>Always verify trade values and promotion eligibility</b> using designated AT&amp;T tools / CCKM before quoting or completing the sale.</div>
+
+        <div class="v2-welcome-actions">
+          <button id="v2WelcomeWhatsNew" class="v2-welcome-btn secondary" type="button">View What’s New</button>
+          <button id="v2WelcomeStart" class="v2-welcome-btn primary" type="button">Start Using 2.0</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
