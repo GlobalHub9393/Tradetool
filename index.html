@@ -3092,7 +3092,7 @@
       <div class="compare-phone-title">${escapeHtml(phone.name)}</div>
       <div class="compare-phone-sub">${escapeHtml(phone.storage||'')} · ${escapeHtml(promo)}</div>
       <div class="compare-key">
-        <span>Est. device</span><b class="compare-price">${escapeHtml(String(monthlyAfterCredit(phone,r)).startsWith('$') ? monthlyAfterCredit(phone,r)+'/mo' : monthlyAfterCredit(phone,r))}</b>
+        <span>Est. device</span><b class="compare-price">${escapeHtml(String(monthlyAfter).startsWith('$') ? monthlyAfter+'/mo' : monthlyAfter)}</b>
         <span>MSRP</span><b>${money(phone.retail)}</b>
         <span>Total savings</span><b>${savings>0?money(savings):'—'}</b>
       </div>
@@ -3125,7 +3125,14 @@
     const pills=[];
     if(cheapest&&cheapest.monthly<9999) pills.push(`<span class="compare-summary-pill">Lowest monthly: ${escapeHtml(cheapest.p.name)}</span>`);
     if(biggest&&biggest.savings>0) pills.push(`<span class="compare-summary-pill">Biggest savings: ${escapeHtml(biggest.p.name)}</span>`);
-    box.innerHTML=`<div class="compare-summary-strip">${pills.join('')}</div><div class="compare-phone-grid">${phones.map(comparePhoneCard).join('')}</div><p style="margin:9px 0 0;color:var(--slate);font-size:12px;">Uses the current quote context. Verify final pricing and eligibility in OPUS/CCKM.</p>`;
+    const cards=phones.map(p=>{
+      try{return comparePhoneCard(p);}
+      catch(err){
+        console.error('Phone comparison render error',p,err);
+        return `<article class="compare-phone-card"><div class="compare-phone-title">${escapeHtml(comparePhoneLabel(p))}</div><div class="compare-phone-sub">Could not calculate this phone. Re-open comparison or verify the quote.</div></article>`;
+      }
+    }).join('');
+    box.innerHTML=`<div class="compare-summary-strip">${pills.join('')}</div><div class="compare-phone-grid">${cards}</div><p style="margin:9px 0 0;color:var(--slate);font-size:12px;">Uses the current quote context. Verify final pricing and eligibility in OPUS/CCKM.</p>`;
   }
   function openCompareFromQuote(){
     if(state.phone) compareState.ids[0]=state.phone.id;
