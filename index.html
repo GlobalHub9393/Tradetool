@@ -1225,7 +1225,7 @@
               <div class="compare-search-card" data-compare-slot="1"><div class="compare-search-head"><b>Phone 2</b></div><div class="compare-search"><input id="compareSearch1" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions1" class="compare-suggestions"></div></div></div>
               <div id="compareThirdWrap" class="compare-search-card" data-compare-slot="2" style="display:none;"><div class="compare-search-head"><b>Phone 3</b><button type="button" id="compareRemoveThird" class="admin-btn secondary" style="padding:6px 9px;">Remove</button></div><div class="compare-search"><input id="compareSearch2" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions2" class="compare-suggestions"></div></div></div>
             </div>
-            <div class="compare-controls"><button type="button" id="compareAddThird" class="admin-btn secondary">+ Add 3rd Phone</button><button type="button" id="compareClearAll" class="admin-btn secondary">Clear Comparison</button></div>
+            <div class="compare-controls"><button type="button" id="compareRun" class="admin-btn">Compare Phones</button><button type="button" id="compareAddThird" class="admin-btn secondary">+ Add 3rd Phone</button><button type="button" id="compareClearAll" class="admin-btn secondary">Clear Comparison</button></div>
             <div id="compareResult" class="compare-result"></div>
           </section>
 
@@ -3135,6 +3135,62 @@
     openTools('compare');
     setTimeout(()=>{ const i=compareSlotInput(1); if(i) i.focus(); },120);
   }
+
+  function normalizeCompareText(v){
+    return String(v||'')
+      .toLowerCase()
+      .replace(/[™®]/g,'')
+      .replace(/[^a-z0-9+]+/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+  }
+  function phoneFromVisibleCompareText(raw){
+    const q=normalizeCompareText(raw);
+    if(!q) return null;
+    const listed=PHONES.filter(isPhoneCurrentlyListed);
+
+    let match=listed.find(p=>normalizeCompareText(comparePhoneLabel(p))===q);
+    if(match) return match;
+
+    const exactName=listed.filter(p=>normalizeCompareText(p.name)===q);
+    if(exactName.length===1) return exactName[0];
+
+    const contains=listed.filter(p=>{
+      const label=normalizeCompareText(comparePhoneLabel(p));
+      return label.includes(q) || q.includes(label);
+    });
+    return contains.length===1 ? contains[0] : null;
+  }
+  function runComparisonFromVisibleInputs(){
+    let found=0;
+    const unresolved=[];
+    [0,1,2].forEach(i=>{
+      const input=compareSlotInput(i);
+      if(!input || (i===2 && !compareState.third)) return;
+      const raw=input.value.trim();
+      if(!raw){ compareState.ids[i]=null; return; }
+      const phone=phoneFromVisibleCompareText(raw);
+      if(phone){
+        compareState.ids[i]=phone.id;
+        input.value=comparePhoneLabel(phone);
+        const sug=compareSlotSuggestions(i);
+        if(sug) sug.classList.remove('open');
+        found++;
+      } else {
+        compareState.ids[i]=null;
+        unresolved.push(raw);
+      }
+    });
+    renderCompare();
+    const box=el('compareResult');
+    if(unresolved.length && box){
+      const safe=unresolved.map(escapeHtml).join(', ');
+      box.innerHTML=`<div style="margin:0 0 10px;padding:10px 12px;border-radius:10px;background:#fff7df;border:1px solid #efd18b;color:#6a4a00;font-size:12.5px;font-weight:700;">Couldn’t match: ${safe}. Tap a search suggestion for those phone(s).</div>`+box.innerHTML;
+    } else if(!found && box){
+      box.innerHTML='<p style="margin:0;color:var(--slate);font-size:13px;">Choose at least one phone to compare.</p>';
+    }
+  }
+
   function resolveCompareInput(i, allowUnique=false){
     const input=compareSlotInput(i), box=compareSlotSuggestions(i); if(!input)return false;
     const q=input.value.trim().toLowerCase();
@@ -3168,10 +3224,12 @@
       if(e.key==='Escape') compareSlotSuggestions(i).classList.remove('open');
       if(e.key==='Enter'){
         e.preventDefault();
-        if(!resolveCompareInput(i,true)) updateCompareSuggestions(i,true);
+        if(resolveCompareInput(i,true)) runComparisonFromVisibleInputs();
+        else updateCompareSuggestions(i,true);
       }
     });
   });
+  el('compareRun').addEventListener('click', runComparisonFromVisibleInputs);
   el('compareAddThird').addEventListener('click',()=>{compareState.third=true;syncCompareInputs();setTimeout(()=>compareSlotInput(2)?.focus(),60);});
   el('compareRemoveThird').addEventListener('click',()=>{compareState.third=false;compareState.ids[2]=null;syncCompareInputs();renderCompare();});
   el('compareClearAll').addEventListener('click',()=>{compareState.ids=[null,null,null];compareState.third=false;syncCompareInputs();renderCompare();});
