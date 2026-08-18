@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — v1.16</title>
+<title>Global Trade Tool — 3.01</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -684,6 +684,59 @@
     .gtt-fx-char,.gtt-fx-kicker,.gtt-fx-sub{animation:none!important;opacity:1!important;transform:none!important}
   }
 
+
+
+  /* === Global Trade Tool 3.01 === */
+  .tiered-savings-card{background:linear-gradient(135deg,rgba(59,192,240,.13),rgba(255,255,255,.07));border-color:rgba(59,192,240,.32)}
+  .tiered-savings-number{font-size:24px;font-weight:900;color:#7dd8f7;letter-spacing:-.02em;margin:2px 0 3px}
+  .tiered-savings-copy{font-size:12px;color:#d4e7f6;line-height:1.45}
+  .compare-launch-wrap{display:none;margin-top:12px}
+  .compare-launch-wrap.show{display:block}
+  .compare-launch-btn{width:100%;border:1.5px solid #9bcceb;background:#eef8ff;color:var(--blue);border-radius:11px;padding:11px 13px;font-weight:900;cursor:pointer;text-align:center}
+  .compare-launch-btn:hover{background:#dff2ff}
+  .compare-builder{display:grid;gap:10px}
+  .compare-search-card{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:12px;position:relative}
+  .compare-search-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+  .compare-search-head b{font-size:13px;color:var(--ink)}
+  .compare-search{position:relative}
+  .compare-search input{width:100%;padding:11px 12px;border-radius:10px;border:1.5px solid var(--line);font-size:14px;font-weight:700;background:#fff;color:var(--ink)}
+  .compare-search input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(5,104,174,.12)}
+  .compare-suggestions{display:none;position:absolute;left:0;right:0;top:46px;z-index:80;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px rgba(11,42,74,.16);max-height:240px;overflow:auto}
+  .compare-suggestions.open{display:block}
+  .compare-suggestion{display:block;width:100%;border:0;border-bottom:1px solid #edf2f6;background:#fff;padding:10px 11px;text-align:left;color:var(--ink);cursor:pointer}
+  .compare-suggestion:last-child{border-bottom:0}
+  .compare-suggestion:hover{background:#eef8ff}
+  .compare-suggestion b{display:block;font-size:13px}
+  .compare-suggestion span{display:block;font-size:11px;color:var(--slate);margin-top:2px}
+  .compare-controls{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 6px}
+  .compare-phone-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+  .compare-phone-card{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:13px;box-shadow:var(--shadow);min-width:0}
+  .compare-phone-card.best{border-color:#8bcff0;box-shadow:0 0 0 3px rgba(59,192,240,.08),var(--shadow)}
+  .compare-phone-title{font-size:15px;font-weight:900;color:var(--ink);line-height:1.25}
+  .compare-phone-sub{font-size:11px;color:var(--slate);margin-top:2px}
+  .compare-key{display:grid;grid-template-columns:1fr auto;gap:5px 10px;margin-top:10px;font-size:12px;align-items:baseline}
+  .compare-key span{color:var(--slate)}
+  .compare-key b{color:var(--ink);text-align:right}
+  .compare-key .compare-price{color:var(--blue);font-size:18px}
+  .compare-more{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+  .compare-more summary{cursor:pointer;color:var(--blue);font-size:12px;font-weight:900}
+  .compare-more-body{font-size:11.5px;color:var(--slate);line-height:1.5;padding-top:7px}
+  .compare-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+  .compare-badge{display:inline-flex;padding:4px 7px;border-radius:999px;background:#eef7fd;color:var(--blue);font-size:10px;font-weight:900}
+  .compare-summary-strip{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .compare-summary-pill{background:#eef8ff;border:1px solid #c8e5f6;border-radius:999px;padding:6px 9px;color:#234c66;font-size:11px;font-weight:800}
+  .whats-new-mobile-head,.login-mobile-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  @media(max-width:700px){
+    .compare-phone-grid{grid-template-columns:1fr}
+    .modal-backdrop{padding:0;align-items:stretch;justify-content:stretch}
+    .tools-modal-panel,.admin-panel,.whats-new-panel,.login-panel{width:100vw!important;max-width:none!important;height:100dvh;max-height:100dvh!important;border-radius:0!important;margin:0!important;overflow:auto;padding-bottom:calc(18px + env(safe-area-inset-bottom))}
+    .tools-head,.admin-head,.whats-new-mobile-head,.login-mobile-head{position:sticky;top:0;z-index:30;background:var(--card);padding-top:calc(10px + env(safe-area-inset-top));padding-bottom:10px;border-bottom:1px solid var(--line);margin-top:-8px}
+    .whats-new-mobile-head{background:#fff;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+    .login-mobile-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .modal-close-mobile{min-width:44px;min-height:44px;border-radius:11px;font-size:20px;line-height:1;display:inline-grid;place-items:center;padding:0}
+    .tools-close,.admin-head .admin-btn{min-height:44px}
+  }
+
 </style>
 </head>
 <body>
@@ -695,8 +748,8 @@
         <h1>Global Trade Tool <span id="headerMajorVersion" style="font-size:.54em;opacity:.72;vertical-align:middle;">3.0</span></h1>
       </div>
       <div style="margin-left:auto; text-align:right;">
-        <div class="sub" id="releaseMeta">August 2026 &middot; Last Updated 8/17/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Version 3.0</div>
+        <div class="sub" id="releaseMeta">August 2026 &middot; Last Updated 8/18/2026</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Version 3.01</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -790,6 +843,7 @@
         </div>
         <div id="tradeDbStatus" class="trade-db-status">Choose a trade-in phone or enter a value manually.</div>
         <span id="manualOverridePill" class="manual-override-pill">Manual value</span>
+        <div id="compareLaunchWrap" class="compare-launch-wrap"><button id="compareLaunchBtn" type="button" class="compare-launch-btn">📊 Compare this phone</button></div>
 
         <div class="condition-panel" id="tradeConditionPanel">
           <div class="condition-title">Device condition</div>
@@ -925,6 +979,11 @@
             <p id="summaryText">Pick a plan, phone, and trade-in value.</p>
             <div id="summaryReadable" class="rc-text"></div>
           </div>
+          <div id="tieredSavingsCard" class="readable-card tiered-savings-card" style="display:none;">
+            <div class="rc-title">Total savings vs MSRP</div>
+            <div id="tieredSavingsNumber" class="tiered-savings-number"></div>
+            <div id="tieredSavingsCopy" class="tiered-savings-copy"></div>
+          </div>
           <div id="promoUpdateCard" class="readable-card" style="display:none;">
             <div class="rc-title">Promo update</div>
             <div id="promoUpdateDetails" class="rc-text"></div>
@@ -942,7 +1001,7 @@
 
 <div id="adminLoginModal" class="modal-backdrop" aria-hidden="true">
   <div class="login-panel" role="dialog" aria-modal="true" aria-label="Administrator access">
-    <h2>Administrator Access</h2>
+    <div class="login-mobile-head"><h2 style="margin:0;">Administrator Access</h2><button type="button" id="adminLoginCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close admin login">×</button></div>
     <p>Enter the admin password to open the dashboard.</p>
     <input id="adminPasswordInput" type="password" autocomplete="current-password" placeholder="Password" />
     <div id="adminLoginError" class="login-error">Incorrect password.</div>
@@ -955,10 +1014,22 @@
 
 <div id="whatsNewModal" class="modal-backdrop whats-new-backdrop" aria-hidden="true">
   <div class="whats-new-panel" role="dialog" aria-modal="true" aria-labelledby="whatsNewTitle">
-    <div class="whats-new-kicker">Changes since last update</div>
-    <h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2>
+    <div class="whats-new-mobile-head">
+      <div><div class="whats-new-kicker">Changes since last update</div><h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2></div>
+      <button type="button" id="whatsNewCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close What’s New">×</button>
+    </div>
     <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.0</div>
-    <p class="whats-new-sub">This message appears once for each new published version.</p>
+    <p class="whats-new-sub">This message appears once per day on this browser.</p>
+
+    <section class="whats-new-section">
+      <h3>3.01 — Smarter quoting tools</h3>
+      <ul>
+        <li><b>Tiered offers:</b> More now shows total savings versus MSRP.</li>
+        <li><b>Phone Comparison:</b> type phones, compare up to three devices, and open comparison directly from the active quote.</li>
+        <li><b>Comparison details:</b> quick price/promo view with additional details tucked under More.</li>
+        <li><b>Mobile pop-ups:</b> close controls stay reachable on smaller screens.</li>
+      </ul>
+    </section>
 
     <section class="whats-new-section whats-new-upcoming">
       <h3>Upcoming 8/14 — Samsung tiered offers</h3>
@@ -1148,10 +1219,13 @@
       <button type="button" class="admin-btn secondary tools-back" data-tools-back>← Back to Tools</button>
           <section id="compareCard" class="tool-subcard">
             <p class="label"><span class="step">6</span>Phone comparison</p>
-            <div class="mini-grid">
-              <select id="compareA" class="tool-select"></select>
-              <select id="compareB" class="tool-select"></select>
+            <p style="margin:0 0 10px;color:var(--slate);font-size:12.5px;line-height:1.45;">Type up to three phones. Comparison keeps the current plan, trade value, activation type, Pixel/Galaxy special selections, and Next Up context.</p>
+            <div class="compare-builder">
+              <div class="compare-search-card" data-compare-slot="0"><div class="compare-search-head"><b>Phone 1</b></div><div class="compare-search"><input id="compareSearch0" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions0" class="compare-suggestions"></div></div></div>
+              <div class="compare-search-card" data-compare-slot="1"><div class="compare-search-head"><b>Phone 2</b></div><div class="compare-search"><input id="compareSearch1" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions1" class="compare-suggestions"></div></div></div>
+              <div id="compareThirdWrap" class="compare-search-card" data-compare-slot="2" style="display:none;"><div class="compare-search-head"><b>Phone 3</b><button type="button" id="compareRemoveThird" class="admin-btn secondary" style="padding:6px 9px;">Remove</button></div><div class="compare-search"><input id="compareSearch2" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions2" class="compare-suggestions"></div></div></div>
             </div>
+            <div class="compare-controls"><button type="button" id="compareAddThird" class="admin-btn secondary">+ Add 3rd Phone</button><button type="button" id="compareClearAll" class="admin-btn secondary">Clear Comparison</button></div>
             <div id="compareResult" class="compare-result"></div>
           </section>
 
@@ -1392,12 +1466,12 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.0';
+  const VERSION = 'Version 3.01';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.0', month:'August 2026', updated:'8/13/2026' };
+  let releaseInfo = { version:'Version 3.01', month:'August 2026', updated:'8/18/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -2823,11 +2897,25 @@
   function updateCopyArea(){
     const ready = !!(state.plan && state.phone);
     const fullCard = el('fullSummaryCard');
+    const savingsCard = el('tieredSavingsCard');
+    const savingsNumber = el('tieredSavingsNumber');
+    const savingsCopy = el('tieredSavingsCopy');
     const promoUpdateCard = el('promoUpdateCard');
     const promoUpdateDetails = el('promoUpdateDetails');
+    const currentResult = getResult();
     if(ready){
       el('summaryReadable').textContent = buildSummary();
       fullCard.style.display = 'block';
+      if(currentResult.state === 'tiered_final' && state.phone && Number.isFinite(Number(state.phone.retail))){
+        const savings = Math.max(0, Number(state.phone.retail) - Number(currentResult.total || 0));
+        savingsNumber.textContent = money(savings) + ' off MSRP';
+        savingsCopy.textContent = `${money(state.phone.retail)} MSRP − ${money(currentResult.total || 0)} total tiered device cost over 36 months.`;
+        savingsCard.style.display = 'block';
+      } else {
+        savingsCard.style.display = 'none';
+        savingsNumber.textContent = '';
+        savingsCopy.textContent = '';
+      }
       const promoDetails = datedPromoDetailHtml();
       if(promoDetails){
         promoUpdateDetails.innerHTML = promoDetails;
@@ -2839,6 +2927,9 @@
     } else {
       el('summaryReadable').textContent = '';
       fullCard.style.display = 'none';
+      savingsCard.style.display = 'none';
+      savingsNumber.textContent = '';
+      savingsCopy.textContent = '';
       promoUpdateDetails.innerHTML = '';
       promoUpdateCard.style.display = 'none';
     }
@@ -2926,25 +3017,125 @@
     }
     return '$' + monthly(phone.retail);
   }
+  const compareState = { ids:[null,null,null], third:false };
+  function comparePhoneLabel(p){ return p ? `${p.name}${p.storage ? ' '+p.storage : ''}` : ''; }
+  function compareSlotInput(i){ return el(`compareSearch${i}`); }
+  function compareSlotSuggestions(i){ return el(`compareSuggestions${i}`); }
   function buildCompareOptions(){
-    const opts = ['<option value="">Choose phone…</option>'].concat(PHONES.filter(isPhoneCurrentlyListed).map(p=>`<option value="${p.id}">${p.name}${p.storage?' '+p.storage:''}</option>`)).join('');
-    el('compareA').innerHTML = opts; el('compareB').innerHTML = opts;
+    // Kept for compatibility with older calls. The 3.01 comparison uses searchable inputs.
+    syncCompareInputs();
+  }
+  function syncCompareInputs(){
+    [0,1,2].forEach(i=>{
+      const input=compareSlotInput(i); if(!input)return;
+      const p=PHONES.find(x=>x.id===compareState.ids[i]);
+      input.value=p?comparePhoneLabel(p):'';
+    });
+    const third=el('compareThirdWrap'); if(third) third.style.display=compareState.third?'block':'none';
+    const add=el('compareAddThird'); if(add) add.style.display=compareState.third?'none':'inline-flex';
+  }
+  function updateCompareSuggestions(i, showAll=true){
+    const input=compareSlotInput(i), box=compareSlotSuggestions(i); if(!input||!box)return;
+    const q=input.value.trim().toLowerCase();
+    let matches=PHONES.filter(isPhoneCurrentlyListed);
+    if(q) matches=matches.filter(p=>comparePhoneLabel(p).toLowerCase().includes(q));
+    matches=matches.sort((a,b)=>comparePhoneLabel(a).localeCompare(comparePhoneLabel(b))).slice(0,60);
+    if(!q&&!showAll){box.classList.remove('open');return;}
+    box.innerHTML=matches.map(p=>`<button type="button" class="compare-suggestion" data-compare-id="${p.id}"><b>${escapeHtml(comparePhoneLabel(p))}</b><span>${money(p.retail)} MSRP${hasActiveTieredOffer(p)?' · tiered offer':''}</span></button>`).join('');
+    box.classList.toggle('open',matches.length>0);
+    box.querySelectorAll('[data-compare-id]').forEach(btn=>btn.addEventListener('click',()=>{
+      compareState.ids[i]=btn.dataset.compareId;
+      input.value=comparePhoneLabel(PHONES.find(p=>p.id===compareState.ids[i]));
+      box.classList.remove('open');
+      renderCompare();
+    }));
+  }
+  function comparisonSavings(phone,r){
+    if(!phone)return 0;
+    if(r.state==='tiered_final') return Math.max(0,Number(phone.retail)-Number(r.total||0));
+    if(r.state==='promo') return Math.max(0,Number(r.credit||0));
+    if(r.state==='nextup_promo') return Math.max(0,Number(r.credit||0));
+    return 0;
+  }
+  function comparisonTotalCost(phone,r){
+    if(r.state==='tiered_final') return Number(r.total||0);
+    if(r.state==='promo'||r.state==='nextup_promo') return Math.max(0,Number(phone.retail)-Number(r.credit||0));
+    return Number(phone.retail||0);
+  }
+  function comparisonPromoType(phone,r){
+    if(r.state==='tiered_final'||hasActiveTieredOffer(phone)) return 'Tiered offer';
+    if(r.state==='promo') return 'Trade-in promo';
+    if(r.state==='nextup_promo') return `${nextUpFeatureLabel()} promo`;
+    if(r.state==='promo_pending') return 'Promo pending';
+    return 'Full retail / no recurring promo';
+  }
+  function comparisonPromoRequirement(phone,r){
+    if(r.state==='tiered_final') return state.tierAction ? (state.tierAction==='new'?'New Line':'Upgrade') : 'Tiered eligibility';
+    if(r.state==='promo'){
+      const parts=[];
+      if(state.tradeDevice) parts.push(comparePhoneLabel({name:`${state.tradeDevice.brand} ${state.tradeDevice.model}`,storage:state.tradeStorage||''}));
+      else if(state.value!=null) parts.push(`${moneyWhole(state.value)} trade value`);
+      if(state.pixel) parts.push('qualifying Pixel');
+      if(state.galaxyAny!=='none') parts.push(samsungAnyConditionLabel());
+      return parts.join(' · ')||'Current trade selection';
+    }
+    return 'Verify in OPUS/CCKM';
+  }
+  function comparePhoneCard(phone){
+    const r=resultForPhone(phone);
+    const monthlyAfter=phoneMonthlyAfterCredit(phone,r);
+    const savings=comparisonSavings(phone,r);
+    const total=comparisonTotalCost(phone,r);
+    const promo=comparisonPromoType(phone,r);
+    const activation=state.tierAction==='new'?'New Line':state.tierAction==='upgrade'?'Upgrade':'Current quote context';
+    return `<article class="compare-phone-card" data-phone-id="${phone.id}">
+      <div class="compare-phone-title">${escapeHtml(phone.name)}</div>
+      <div class="compare-phone-sub">${escapeHtml(phone.storage||'')} · ${escapeHtml(promo)}</div>
+      <div class="compare-key">
+        <span>Est. device</span><b class="compare-price">${escapeHtml(String(monthlyAfterCredit(phone,r)).startsWith('$') ? monthlyAfterCredit(phone,r)+'/mo' : monthlyAfterCredit(phone,r))}</b>
+        <span>MSRP</span><b>${money(phone.retail)}</b>
+        <span>Total savings</span><b>${savings>0?money(savings):'—'}</b>
+      </div>
+      <div class="compare-badges"><span class="compare-badge">${escapeHtml(activation)}</span><span class="compare-badge">${escapeHtml(PLAN_LABEL[state.plan]||'Current plan')}</span></div>
+      <details class="compare-more"><summary>More details</summary><div class="compare-more-body">
+        <b>Estimated 36-mo device cost:</b> ${money(total)}<br>
+        <b>Promo:</b> ${escapeHtml(promo)}<br>
+        <b>Promo/Trade context:</b> ${escapeHtml(comparisonPromoRequirement(phone,r))}<br>
+        <b>Retail before promo:</b> ${money(phone.retail)}<br>
+        <b>Device key:</b> ${escapeHtml(phone.id)}<br>
+        Verify final eligibility and pricing in OPUS/CCKM.
+      </div></details>
+    </article>`;
   }
   function renderCompare(){
-    const a = PHONES.find(p=>p.id===el('compareA').value), b = PHONES.find(p=>p.id===el('compareB').value);
-    const box = el('compareResult');
-    if(!a || !b){ box.innerHTML = '<p style="margin:0;color:var(--slate);font-size:13px;">Pick two phones to compare using the current plan/trade selections.</p>'; return; }
-    const rows = [a,b].map(ph=>{
-      const r = resultForPhone(ph);
-      const promo = promoLabelForCompare(ph, r);
-      const est = phoneMonthlyAfterCredit(ph,r);
-      const estText = est.includes('/mo') || est === 'Select activation' ? est : est + '/mo';
-      return `<tr><td><b>${ph.name}${ph.storage?' '+ph.storage:''}</b></td><td>${money(ph.retail)}</td><td>${promo}</td><td><b>${estText}</b></td></tr>`;
-    }).join('');
-    box.innerHTML = `<table class="compare-table"><thead><tr><th>Phone</th><th>Retail</th><th>Promo</th><th>Est. Device</th></tr></thead><tbody>${rows}</tbody></table><p style="margin:8px 0 0;color:var(--slate);font-size:12px;">Uses current plan, trade value, Pixel/any-condition Galaxy selection, and activation type. Verify in OPUS/CCKM.</p>`;
+    const box=el('compareResult'); if(!box)return;
+    const phones=compareState.ids.map(id=>PHONES.find(p=>p.id===id)).filter(Boolean);
+    if(!phones.length){ box.innerHTML='<p style="margin:0;color:var(--slate);font-size:13px;">Type a phone above, or open comparison from an active quote.</p>'; return; }
+    const metrics=phones.map(p=>{const r=resultForPhone(p);return {p,r,monthly:parseFloat(String(phoneMonthlyAfterCredit(p,r)).replace(/[^0-9.]/g,''))||9999,savings:comparisonSavings(p,r)};});
+    const cheapest=[...metrics].sort((a,b)=>a.monthly-b.monthly)[0];
+    const biggest=[...metrics].sort((a,b)=>b.savings-a.savings)[0];
+    const pills=[];
+    if(cheapest&&cheapest.monthly<9999) pills.push(`<span class="compare-summary-pill">Lowest monthly: ${escapeHtml(cheapest.p.name)}</span>`);
+    if(biggest&&biggest.savings>0) pills.push(`<span class="compare-summary-pill">Biggest savings: ${escapeHtml(biggest.p.name)}</span>`);
+    box.innerHTML=`<div class="compare-summary-strip">${pills.join('')}</div><div class="compare-phone-grid">${phones.map(comparePhoneCard).join('')}</div><p style="margin:9px 0 0;color:var(--slate);font-size:12px;">Uses the current quote context. Verify final pricing and eligibility in OPUS/CCKM.</p>`;
   }
-  el('compareA').addEventListener('change', renderCompare);
-  el('compareB').addEventListener('change', renderCompare);
+  function openCompareFromQuote(){
+    if(state.phone) compareState.ids[0]=state.phone.id;
+    compareState.ids[1]=null;
+    if(!compareState.third) compareState.ids[2]=null;
+    syncCompareInputs();
+    openTools('compare');
+    setTimeout(()=>{ const i=compareSlotInput(1); if(i) i.focus(); },120);
+  }
+  [0,1,2].forEach(i=>{
+    const input=compareSlotInput(i); if(!input)return;
+    input.addEventListener('input',()=>{ compareState.ids[i]=null; updateCompareSuggestions(i,true); renderCompare(); });
+    input.addEventListener('focus',()=>updateCompareSuggestions(i,true));
+    input.addEventListener('keydown',e=>{ if(e.key==='Escape') compareSlotSuggestions(i).classList.remove('open'); });
+  });
+  el('compareAddThird').addEventListener('click',()=>{compareState.third=true;syncCompareInputs();setTimeout(()=>compareSlotInput(2)?.focus(),60);});
+  el('compareRemoveThird').addEventListener('click',()=>{compareState.third=false;compareState.ids[2]=null;syncCompareInputs();renderCompare();});
+  el('compareClearAll').addEventListener('click',()=>{compareState.ids=[null,null,null];compareState.third=false;syncCompareInputs();renderCompare();});
 
   function getHistory(){ try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');}catch(e){return [];} }
   function saveHistory(items){ localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0,10))); }
@@ -3504,7 +3695,7 @@
   function showToolsPage(page){
     ['toolsMenu','toolsChangesPage','toolsComparePage','toolsHistoryPage','toolsFaqPage'].forEach(id=>el(id).classList.remove('open'));
     if(page==='changes') el('toolsChangesPage').classList.add('open');
-    else if(page==='compare') el('toolsComparePage').classList.add('open');
+    else if(page==='compare'){ el('toolsComparePage').classList.add('open'); if(!compareState.ids[0] && state.phone){ compareState.ids[0]=state.phone.id; syncCompareInputs(); } }
     else if(page==='history') el('toolsHistoryPage').classList.add('open');
     else if(page==='faq') el('toolsFaqPage').classList.add('open');
     else if(page==='admin'){ closeTools(); openAdminLogin(); }
@@ -3512,6 +3703,13 @@
   }
   el('toolsOpenBtn').addEventListener('click', ()=>openTools('menu'));
   el('toolsClose').addEventListener('click', closeTools);
+
+  el('toolsModal').addEventListener('click',e=>{ if(e.target===el('toolsModal')) closeTools(); });
+  el('adminLoginModal').addEventListener('click',e=>{ if(e.target===el('adminLoginModal')) closeAdminLogin(); });
+
+  el('compareLaunchBtn').addEventListener('click', openCompareFromQuote);
+  el('whatsNewCloseTop').addEventListener('click', ()=>closeWhatsNew(true));
+  el('adminLoginCloseTop').addEventListener('click', closeAdminLogin);
   document.querySelectorAll('[data-tools-page]').forEach(btn=>btn.addEventListener('click',()=>showToolsPage(btn.dataset.toolsPage)));
   document.querySelectorAll('[data-tools-back]').forEach(btn=>btn.addEventListener('click',()=>showToolsPage('menu')));
 
@@ -3618,6 +3816,8 @@
   let lastShownCredit = null;
   function render(){
     updateStepLocks();
+    const compareLaunchWrap = el('compareLaunchWrap');
+    if(compareLaunchWrap) compareLaunchWrap.classList.toggle('show', !!(state.phone && tradeStepComplete()));
     summaryEl.textContent = buildShortSummary();
     updateCopyArea();
 
