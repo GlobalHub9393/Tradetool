@@ -725,6 +725,11 @@
   .compare-badge{display:inline-flex;padding:4px 7px;border-radius:999px;background:#eef7fd;color:var(--blue);font-size:10px;font-weight:900}
   .compare-summary-strip{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
   .compare-summary-pill{background:#eef8ff;border:1px solid #c8e5f6;border-radius:999px;padding:6px 9px;color:#234c66;font-size:11px;font-weight:800}
+  .compare-result-shell{margin-top:12px;border:1.5px solid #b9dcf5;background:#f8fcff;border-radius:14px;padding:12px;scroll-margin-top:86px}
+  .compare-result-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;font-size:13px;font-weight:900;color:var(--blue);letter-spacing:.04em;text-transform:uppercase}
+  .compare-result-status{font-size:10px;color:var(--slate);font-weight:800;letter-spacing:.02em;text-transform:none}
+  .compare-result-shell.has-results{border-color:#8bcff0;box-shadow:0 0 0 3px rgba(59,192,240,.08)}
+  .compare-result-shell.error{border-color:#e8b4b4;background:#fff8f8}
   .whats-new-mobile-head,.login-mobile-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
   @media(max-width:700px){
     .compare-phone-grid{grid-template-columns:1fr}
@@ -1226,7 +1231,10 @@
               <div id="compareThirdWrap" class="compare-search-card" data-compare-slot="2" style="display:none;"><div class="compare-search-head"><b>Phone 3</b><button type="button" id="compareRemoveThird" class="admin-btn secondary" style="padding:6px 9px;">Remove</button></div><div class="compare-search"><input id="compareSearch2" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions2" class="compare-suggestions"></div></div></div>
             </div>
             <div class="compare-controls"><button type="button" id="compareRun" class="admin-btn">Compare Phones</button><button type="button" id="compareAddThird" class="admin-btn secondary">+ Add 3rd Phone</button><button type="button" id="compareClearAll" class="admin-btn secondary">Clear Comparison</button></div>
-            <div id="compareResult" class="compare-result"></div>
+            <div id="compareResultShell" class="compare-result-shell">
+              <div class="compare-result-title"><span>Comparison Results</span><span id="compareResultStatus" class="compare-result-status">Waiting for phones</span></div>
+              <div id="compareResult" class="compare-result"></div>
+            </div>
           </section>
 
 
@@ -3108,32 +3116,70 @@
     </article>`;
   }
   function renderCompare(){
-    const box=el('compareResult'); if(!box)return;
-    // Safari/iOS may restore text fields without firing an input event. Reconcile exact labels here too.
-    [0,1,2].forEach(i=>{
-      if(compareState.ids[i]) return;
-      const input=compareSlotInput(i); if(!input || !input.value.trim()) return;
-      const q=input.value.trim().toLowerCase();
-      const match=PHONES.filter(isPhoneCurrentlyListed).find(p=>comparePhoneLabel(p).toLowerCase()===q || String(p.id||'').toLowerCase()===q);
-      if(match) compareState.ids[i]=match.id;
-    });
-    const phones=compareState.ids.map(id=>PHONES.find(p=>p.id===id)).filter(Boolean);
-    if(!phones.length){ box.innerHTML='<p style="margin:0;color:var(--slate);font-size:13px;">Type a phone above, or open comparison from an active quote.</p>'; return; }
-    const metrics=phones.map(p=>{const r=resultForPhone(p);return {p,r,monthly:parseFloat(String(phoneMonthlyAfterCredit(p,r)).replace(/[^0-9.]/g,''))||9999,savings:comparisonSavings(p,r)};});
-    const cheapest=[...metrics].sort((a,b)=>a.monthly-b.monthly)[0];
-    const biggest=[...metrics].sort((a,b)=>b.savings-a.savings)[0];
-    const pills=[];
-    if(cheapest&&cheapest.monthly<9999) pills.push(`<span class="compare-summary-pill">Lowest monthly: ${escapeHtml(cheapest.p.name)}</span>`);
-    if(biggest&&biggest.savings>0) pills.push(`<span class="compare-summary-pill">Biggest savings: ${escapeHtml(biggest.p.name)}</span>`);
-    const cards=phones.map(p=>{
-      try{return comparePhoneCard(p);}
-      catch(err){
-        console.error('Phone comparison render error',p,err);
-        return `<article class="compare-phone-card"><div class="compare-phone-title">${escapeHtml(comparePhoneLabel(p))}</div><div class="compare-phone-sub">Could not calculate this phone. Re-open comparison or verify the quote.</div></article>`;
+    const box=el('compareResult');
+    const shell=el('compareResultShell');
+    const status=el('compareResultStatus');
+    if(!box)return;
+    if(shell){ shell.classList.remove('has-results','error'); }
+    try{
+      // Safari/iOS may restore text fields without firing an input event.
+      [0,1,2].forEach(i=>{
+        if(compareState.ids[i]) return;
+        const input=compareSlotInput(i); if(!input || !input.value.trim()) return;
+        const match=phoneFromVisibleCompareText(input.value);
+        if(match) compareState.ids[i]=match.id;
+      });
+
+      const phones=compareState.ids.map(id=>PHONES.find(p=>p.id===id)).filter(Boolean);
+      if(!phones.length){
+        if(status) status.textContent='Waiting for phones';
+        box.innerHTML='<p style="margin:0;color:var(--slate);font-size:13px;">Choose at least two phones above, then tap <b>Compare Phones</b>.</p>';
+        return;
       }
-    }).join('');
-    box.innerHTML=`<div class="compare-summary-strip">${pills.join('')}</div><div class="compare-phone-grid">${cards}</div><p style="margin:9px 0 0;color:var(--slate);font-size:12px;">Uses the current quote context. Verify final pricing and eligibility in OPUS/CCKM.</p>`;
+
+      if(status) status.textContent=`${phones.length} phone${phones.length===1?'':'s'} selected`;
+
+      const metrics=phones.map(p=>{
+        try{
+          const r=resultForPhone(p);
+          const monthlyText=phoneMonthlyAfterCredit(p,r);
+          const monthly=parseFloat(String(monthlyText).replace(/[^0-9.]/g,''))||9999;
+          return {p,r,monthly,savings:comparisonSavings(p,r)};
+        }catch(err){
+          console.error('Comparison metric error',p,err);
+          return {p,r:null,monthly:9999,savings:0,error:err};
+        }
+      });
+
+      const validMetrics=metrics.filter(m=>!m.error);
+      const cheapest=validMetrics.length?[...validMetrics].sort((a,b)=>a.monthly-b.monthly)[0]:null;
+      const biggest=validMetrics.length?[...validMetrics].sort((a,b)=>b.savings-a.savings)[0]:null;
+      const pills=[];
+      if(cheapest&&cheapest.monthly<9999) pills.push(`<span class="compare-summary-pill">Lowest monthly: ${escapeHtml(cheapest.p.name)}</span>`);
+      if(biggest&&biggest.savings>0) pills.push(`<span class="compare-summary-pill">Biggest savings: ${escapeHtml(biggest.p.name)}</span>`);
+
+      const cards=metrics.map(m=>{
+        if(m.error){
+          return `<article class="compare-phone-card"><div class="compare-phone-title">${escapeHtml(comparePhoneLabel(m.p))}</div><div class="compare-phone-sub">Could not calculate this phone. Try another phone or verify the quote.</div></article>`;
+        }
+        try{return comparePhoneCard(m.p);}
+        catch(err){
+          console.error('Phone comparison render error',m.p,err);
+          return `<article class="compare-phone-card"><div class="compare-phone-title">${escapeHtml(comparePhoneLabel(m.p))}</div><div class="compare-phone-sub">Could not render this phone. Try another phone or verify the quote.</div></article>`;
+        }
+      }).join('');
+
+      box.innerHTML=`<div class="compare-summary-strip">${pills.join('')}</div><div class="compare-phone-grid">${cards}</div><p style="margin:9px 0 0;color:var(--slate);font-size:12px;">Uses the current quote context. Verify final pricing and eligibility in OPUS/CCKM.</p>`;
+      if(shell) shell.classList.add('has-results');
+      if(status) status.textContent='Ready';
+    }catch(err){
+      console.error('Phone comparison failed',err);
+      if(shell) shell.classList.add('error');
+      if(status) status.textContent='Could not calculate';
+      box.innerHTML=`<div style="padding:10px 12px;border-radius:10px;background:#fff0f0;color:#7a1f1f;font-size:12.5px;font-weight:700;">Comparison hit an error instead of hiding silently. Close Tools and try again. If this repeats, send this screen to TJ.</div>`;
+    }
   }
+
   function openCompareFromQuote(){
     if(state.phone) compareState.ids[0]=state.phone.id;
     compareState.ids[1]=null;
@@ -3169,6 +3215,9 @@
     return contains.length===1 ? contains[0] : null;
   }
   function runComparisonFromVisibleInputs(){
+    const shell=el('compareResultShell');
+    const status=el('compareResultStatus');
+    if(status) status.textContent='Calculating…';
     let found=0;
     const unresolved=[];
     [0,1,2].forEach(i=>{
@@ -3188,14 +3237,29 @@
         unresolved.push(raw);
       }
     });
+
     renderCompare();
+
     const box=el('compareResult');
     if(unresolved.length && box){
       const safe=unresolved.map(escapeHtml).join(', ');
       box.innerHTML=`<div style="margin:0 0 10px;padding:10px 12px;border-radius:10px;background:#fff7df;border:1px solid #efd18b;color:#6a4a00;font-size:12.5px;font-weight:700;">Couldn’t match: ${safe}. Tap a search suggestion for those phone(s).</div>`+box.innerHTML;
     } else if(!found && box){
       box.innerHTML='<p style="margin:0;color:var(--slate);font-size:13px;">Choose at least one phone to compare.</p>';
+      if(status) status.textContent='No phones selected';
     }
+
+    requestAnimationFrame(()=>{
+      setTimeout(()=>{
+        if(shell){
+          shell.scrollIntoView({behavior:'smooth',block:'start'});
+          const panel=shell.closest('.tools-modal-panel');
+          if(panel && shell.offsetTop > panel.scrollTop + panel.clientHeight - 180){
+            panel.scrollTo({top:Math.max(0,shell.offsetTop-90),behavior:'smooth'});
+          }
+        }
+      },80);
+    });
   }
 
   function resolveCompareInput(i, allowUnique=false){
