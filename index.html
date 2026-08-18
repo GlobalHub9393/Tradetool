@@ -3109,6 +3109,14 @@
   }
   function renderCompare(){
     const box=el('compareResult'); if(!box)return;
+    // Safari/iOS may restore text fields without firing an input event. Reconcile exact labels here too.
+    [0,1,2].forEach(i=>{
+      if(compareState.ids[i]) return;
+      const input=compareSlotInput(i); if(!input || !input.value.trim()) return;
+      const q=input.value.trim().toLowerCase();
+      const match=PHONES.filter(isPhoneCurrentlyListed).find(p=>comparePhoneLabel(p).toLowerCase()===q || String(p.id||'').toLowerCase()===q);
+      if(match) compareState.ids[i]=match.id;
+    });
     const phones=compareState.ids.map(id=>PHONES.find(p=>p.id===id)).filter(Boolean);
     if(!phones.length){ box.innerHTML='<p style="margin:0;color:var(--slate);font-size:13px;">Type a phone above, or open comparison from an active quote.</p>'; return; }
     const metrics=phones.map(p=>{const r=resultForPhone(p);return {p,r,monthly:parseFloat(String(phoneMonthlyAfterCredit(p,r)).replace(/[^0-9.]/g,''))||9999,savings:comparisonSavings(p,r)};});
@@ -3127,11 +3135,42 @@
     openTools('compare');
     setTimeout(()=>{ const i=compareSlotInput(1); if(i) i.focus(); },120);
   }
+  function resolveCompareInput(i, allowUnique=false){
+    const input=compareSlotInput(i), box=compareSlotSuggestions(i); if(!input)return false;
+    const q=input.value.trim().toLowerCase();
+    if(!q){ compareState.ids[i]=null; renderCompare(); return false; }
+    const listed=PHONES.filter(isPhoneCurrentlyListed);
+    let match=listed.find(p=>comparePhoneLabel(p).toLowerCase()===q || String(p.id||'').toLowerCase()===q);
+    if(!match && allowUnique){
+      const matches=listed.filter(p=>comparePhoneLabel(p).toLowerCase().includes(q));
+      if(matches.length===1) match=matches[0];
+    }
+    if(!match) return false;
+    compareState.ids[i]=match.id;
+    input.value=comparePhoneLabel(match);
+    if(box) box.classList.remove('open');
+    renderCompare();
+    return true;
+  }
   [0,1,2].forEach(i=>{
     const input=compareSlotInput(i); if(!input)return;
-    input.addEventListener('input',()=>{ compareState.ids[i]=null; updateCompareSuggestions(i,true); renderCompare(); });
+    input.addEventListener('input',()=>{
+      compareState.ids[i]=null;
+      // Exact phone names now select immediately instead of requiring a second tap.
+      if(!resolveCompareInput(i,false)){
+        updateCompareSuggestions(i,true);
+        renderCompare();
+      }
+    });
     input.addEventListener('focus',()=>updateCompareSuggestions(i,true));
-    input.addEventListener('keydown',e=>{ if(e.key==='Escape') compareSlotSuggestions(i).classList.remove('open'); });
+    input.addEventListener('blur',()=>setTimeout(()=>resolveCompareInput(i,true),120));
+    input.addEventListener('keydown',e=>{
+      if(e.key==='Escape') compareSlotSuggestions(i).classList.remove('open');
+      if(e.key==='Enter'){
+        e.preventDefault();
+        if(!resolveCompareInput(i,true)) updateCompareSuggestions(i,true);
+      }
+    });
   });
   el('compareAddThird').addEventListener('click',()=>{compareState.third=true;syncCompareInputs();setTimeout(()=>compareSlotInput(2)?.focus(),60);});
   el('compareRemoveThird').addEventListener('click',()=>{compareState.third=false;compareState.ids[2]=null;syncCompareInputs();renderCompare();});
@@ -3721,15 +3760,19 @@
     const day = String(d.getDate()).padStart(2,'0');
     return `${y}-${m}-${day}`;
   }
+  function whatsNewSeenKey(){
+    // Show once per browser each day, but always show again when a NEW VERSION lands that same day.
+    return `${localDateKey()}|${releaseInfo.version || VERSION}`;
+  }
   function closeWhatsNew(markSeen){
     const modal = el('whatsNewModal');
-    if(markSeen) localStorage.setItem(WHATS_NEW_DAILY_KEY, localDateKey());
+    if(markSeen) localStorage.setItem(WHATS_NEW_DAILY_KEY, whatsNewSeenKey());
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden','true');
     setTimeout(playGttLaunchFx, 120);
   }
   function openWhatsNewIfNeeded(){
-    if(localStorage.getItem(WHATS_NEW_DAILY_KEY) === localDateKey()){
+    if(localStorage.getItem(WHATS_NEW_DAILY_KEY) === whatsNewSeenKey()){
       setTimeout(playGttLaunchFx, 350);
       return;
     }
