@@ -614,16 +614,18 @@
   .live-db-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
   .live-db-pill{display:inline-flex;padding:3px 7px;border-radius:999px;background:#e8f5ff;color:var(--blue);font-size:10px;font-weight:800;margin-left:6px}
   .live-db-warning{background:#fff7e7;border:1px solid #f4d594;border-radius:10px;padding:9px 10px;color:#76530a;font-size:12px;margin-bottom:10px}
-  .admin-device-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:11px;margin-bottom:8px}
-  .admin-device-title{font-size:13px;font-weight:900}.admin-device-sub{font-size:11px;color:var(--slate);margin-top:3px}
-  .admin-device-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.admin-badge{font-size:10px;font-weight:900;border-radius:999px;padding:4px 7px;background:#f2f4f7;color:#667085}.admin-badge.on{background:#e9f8ef;color:#147a43}
-  .admin-device-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.admin-device-actions .admin-btn{flex:1;min-width:86px}
-  .admin-advanced{grid-column:1/-1;border:1px dashed #cbd5df;border-radius:10px;padding:9px;background:#fafcfd}.admin-advanced summary{cursor:pointer;font-size:11px;font-weight:900;color:#475467}
-  .admin-advanced-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:9px}
-  .admin-pending-bar{position:sticky;bottom:8px;z-index:90;display:none;align-items:center;justify-content:space-between;gap:8px;background:#111827;color:#fff;border-radius:14px;padding:10px 12px;margin-top:12px;box-shadow:0 8px 28px rgba(0,0,0,.24)}
-  .admin-pending-bar.show{display:flex}.admin-pending-count{font-size:12px;font-weight:900}.admin-pending-actions{display:flex;gap:6px;flex-wrap:wrap}.admin-pending-actions button{border:0;border-radius:9px;padding:8px 9px;font-size:10px;font-weight:900;cursor:pointer}
-  .admin-review{border:1px solid var(--line);border-radius:10px;margin-top:10px;max-height:40vh;overflow:auto}.admin-review div{padding:9px;border-bottom:1px solid #edf2f6;font-size:11px}.admin-review div:last-child{border-bottom:0}
-  @media(max-width:760px){.admin-advanced-grid{grid-template-columns:1fr}.admin-pending-bar{align-items:flex-start;flex-direction:column;width:100%;box-sizing:border-box}.admin-pending-actions{width:100%}.admin-pending-actions button{flex:1}}
+  .admin-pending-bar{position:sticky;bottom:8px;z-index:80;display:none;gap:8px;align-items:center;justify-content:space-between;background:#111827;color:#fff;border-radius:13px;padding:10px 12px;margin-top:10px;box-shadow:0 8px 24px rgba(0,0,0,.24)}
+  .admin-pending-bar.show{display:flex}
+  .admin-pending-count{font-size:12px;font-weight:900}
+  .admin-pending-actions{display:flex;gap:6px;flex-wrap:wrap}
+  .admin-pending-actions button{border:0;border-radius:8px;padding:8px 10px;font-size:10px;font-weight:900;cursor:pointer}
+  .live-db-advanced{grid-column:1/-1;border:1px dashed #cbd5df;border-radius:10px;padding:9px;background:#fafcfd}
+  .live-db-advanced summary{cursor:pointer;font-size:11px;font-weight:900;color:#475467}
+  .live-db-advanced-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:9px}
+  .admin-review-list{max-height:42vh;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:9px}
+  .admin-review-item{padding:9px 10px;border-bottom:1px solid #edf2f6;font-size:11px}.admin-review-item:last-child{border-bottom:0}
+  @media(max-width:760px){.admin-pending-bar{flex-direction:column;align-items:flex-start}.admin-pending-actions{width:100%}.admin-pending-actions button{flex:1}.live-db-advanced-grid{grid-template-columns:1fr}}
+
   @media(max-width:760px){.live-db-layout{grid-template-columns:1fr}.live-db-list{max-height:34vh}.live-db-grid{grid-template-columns:1fr}.live-db-field.wide{grid-column:auto}}
 
 
@@ -1055,7 +1057,7 @@
         <ul>
           <li><b>Galaxy S26 256GB:</b> $4.99/mo new line or $15.99/mo upgrade.</li>
           <li><b>Galaxy S26 512GB:</b> $11.99/mo new line or $22.99/mo upgrade.</li>
-          <li><b>Consumer tiered offer remains active.</b> CRU and FirstNet tiered availability for Galaxy S26 ended after 8/20.</li>
+          <li><b>Same national tiered offer for Consumer, CRU, and FirstNet.</b> The older CRU/FirstNet-specific S26 offer ended, but these customers can use the national tiered pricing.</li>
           <li>No trade-in is required for the standard consumer tiered offer. Verify final eligibility in CCKM.</li>
         </ul>
       </section>
@@ -1084,11 +1086,11 @@
       <section class="whats-new-section whats-new-latest">
         <h3>3.05 — Safer Management Admin</h3>
         <ul>
-          <li><b>Batch changes:</b> edit several records, review them, then apply everything together.</li>
-          <li><b>Devices:</b> safe everyday controls are separated from advanced database fields.</li>
-          <li><b>Add Device:</b> the device key is generated automatically from the name and storage.</li>
-          <li><b>Archive:</b> devices can be removed from selling/trade use without deleting their history.</li>
-          <li><b>No reload after Apply:</b> live data refreshes while Admin stays open and unlocked.</li>
+          <li><b>Batch editing:</b> changes are staged first, reviewed, then applied together.</li>
+          <li><b>No page reload:</b> Apply refreshes the database inside Admin, so you stay unlocked.</li>
+          <li><b>Safer device editing:</b> common fields stay visible while database keys and sorting live under Advanced.</li>
+          <li><b>Add Device:</b> device keys are generated automatically from phone name and storage.</li>
+          <li><b>Archive Device:</b> turns Sellable and Trade Eligible off without deleting the record.</li>
         </ul>
       </section>
       <section class="whats-new-section">
@@ -1377,7 +1379,7 @@
       <div class="mgmt-admin-head">
         <div>
           <h3>Management Control Center</h3>
-          <div class="mgmt-admin-sub">Make as many changes as you need, review them, then tap Apply Changes once.</div>
+          <div class="mgmt-admin-sub">Make multiple changes, review them, then tap Apply Changes once.</div>
         </div>
       </div>
 
@@ -1387,7 +1389,7 @@
           <div class="rule"><b>The #1 rule:</b> If an offer ends, use <b>Active → Off</b> or its end date whenever possible. Avoid deleting real offers. Keeping old records gives us history and makes mistakes easier to undo.</div>
 
           <h4>📱 Trade-In Phones</h4>
-          <p>Use this when a trade-in phone's value changes or a missing trade phone needs to be added. Search the phone, select it, change the value, stage it, then tap <b>Apply Changes</b>. For a new phone, tap <b>+ Add</b> and enter Brand, Model, Storage and Trade Value.</p>
+          <p>Use this when a trade-in phone's value changes or a missing trade phone needs to be added. Search the phone, select it, change the value, and tap <b>Save Changes</b>. For a new phone, tap <b>+ Add</b> and enter Brand, Model, Storage and Trade Value.</p>
 
           <h4>📱 Devices: Sold vs Trade-In</h4>
           <p><b>Phones We Sell</b> is now the main device record. <b>Sellable</b> decides whether the phone appears under “Phone Getting.” <b>Trade Eligible</b> decides whether that same SKU can be selected as a trade-in, and <b>Trade Value</b> stores its current reference value. When a phone stops being sold, turn <b>Sellable off</b> instead of deleting it so it can remain a trade-in later.</p>
@@ -1404,8 +1406,8 @@
           <h4>📰 What's New</h4>
           <p>Use What's New / Content for a short management-facing description of meaningful changes. Customers/reps will see What's New once per day on each browser after the app is configured to display the current Supabase content.</p>
 
-          <h4>✅ After Applying</h4>
-          <p>Review the pending changes, tap <b>Apply Changes</b>, and Admin refreshes the live data without reloading the page. Run one quote that uses the thing you changed.</p>
+          <h4>✅ After Saving</h4>
+          <p>The page reloads automatically. Run one quote that uses the thing you changed. If the result isn't what you expected, don't keep changing random fields — stop and verify the promotion setup.</p>
 
           <div class="rule"><b>Safe rule for management:</b> Trade values and simple tiered prices are straightforward. For a brand-new promotion structure or anything you're unsure about, send the official promo to TJ first so the underlying relationships can be checked.</div>
         </div>
@@ -1418,7 +1420,7 @@
         <button type="button" class="mgmt-card" data-mgmt-table="plans"><b>🧾 Plans</b><span>Add, rename, move or deactivate plans.</span></button>
       </div>
 
-      <div class="live-db-warning"><b>Safe editing:</b> Edits are staged in this browser first. Nothing changes in Supabase until you tap <b>Apply Changes</b>. Archive devices instead of deleting them.</div>
+      <div class="live-db-warning"><b>Safe editing:</b> Nothing changes in Supabase until you tap <b>Apply Changes</b>. Devices use Archive instead of permanent delete.</div>
 
       <div class="live-db-toolbar">
         <select id="liveDbTable" aria-label="Database area">
@@ -1444,12 +1446,12 @@
         <div id="liveDbList" class="live-db-list"></div>
         <div id="liveDbEditor" class="live-db-editor"><p class="admin-note">Choose a record on the left or tap <b>+ Add</b>.</p></div>
       </div>
-      <div id="adminPendingBar" class="admin-pending-bar">
-        <div id="adminPendingCount" class="admin-pending-count">0 pending changes</div>
+      <div id="liveDbPendingBar" class="admin-pending-bar">
+        <div id="liveDbPendingCount" class="admin-pending-count">0 pending changes</div>
         <div class="admin-pending-actions">
-          <button id="adminPendingReview" type="button">Review</button>
-          <button id="adminPendingDiscard" type="button">Discard</button>
-          <button id="adminPendingApply" type="button">Apply Changes</button>
+          <button type="button" id="liveDbPendingReview">Review</button>
+          <button type="button" id="liveDbPendingDiscard">Discard</button>
+          <button type="button" id="liveDbPendingApply">Apply Changes</button>
         </div>
       </div>
     </section>
@@ -1758,8 +1760,8 @@
     { id:'ip16-512', name:'iPhone 16', storage:'512GB', retail:1029.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null },
 
     // Galaxy S26 base model — tiered offers ended 7/30/2026. Trade-in and legacy Next Up offers remain active.
-    { id:'s26-256', name:'Galaxy S26', storage:'256GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:4.99, tieredMonthlyUpgrade:15.99, tieredSegments:['consumer'], promoCategory:'s26base' },
-    { id:'s26-512', name:'Galaxy S26', storage:'512GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:22.99, tieredSegments:['consumer'], promoCategory:'s26base' },
+    { id:'s26-256', name:'Galaxy S26', storage:'256GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:4.99, tieredMonthlyUpgrade:15.99, tieredSegments:['consumer','cru','firstnet'], promoCategory:'s26base' },
+    { id:'s26-512', name:'Galaxy S26', storage:'512GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:22.99, tieredSegments:['consumer','cru','firstnet'], promoCategory:'s26base' },
 
     // Galaxy S25 Edge — flat price, same for New or Upgrade
     { id:'s25edge-256', name:'Galaxy S25 Edge', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:20.99 },
@@ -2603,7 +2605,7 @@
       const is512 = id==='s26-512';
       const newPrice = is512 ? '$11.99/mo' : '$4.99/mo';
       const upgradePrice = is512 ? '$22.99/mo' : '$15.99/mo';
-      notes.push(`<div class="d-rule"><b>8/21/26:</b> Galaxy S26 ${is512?'512GB':'256GB'} consumer tiered pricing is <b>${newPrice} new line</b> or <b>${upgradePrice} upgrade</b>. CRU and FirstNet tiered availability ended after 8/20. No trade-in is required for the standard consumer tiered offer.</div>`);
+      notes.push(`<div class="d-rule"><b>8/21/26:</b> Galaxy S26 ${is512?'512GB':'256GB'} tiered pricing is <b>${newPrice} new line</b> or <b>${upgradePrice} upgrade</b> for Consumer, CRU, and FirstNet. No trade-in is required for the standard tiered offer.</div>`);
     } else if(id.startsWith('s25edge-')){
       notes.push(isSamsung814TieredActive()
         ? `<div class="d-rule"><b>8/14/26:</b> Galaxy S25 Edge 256GB tiered pricing is <b>$15.99/mo new line</b> or <b>$20.99/mo upgrade</b>. Next Up Anytime tiered upgrade is <b>$20.99/mo</b> with an eligible turn-in.</div>`
@@ -2637,7 +2639,7 @@
     }
     if(id.startsWith('s26-')){
       const is512 = id==='s26-512';
-      return `<b>Galaxy S26 ${is512?'512GB':'256GB'} — effective 8/21/26:</b> Consumer tiered pricing is ${is512?'$11.99':'$4.99'}/mo with a new line or ${is512?'$22.99':'$15.99'}/mo with an upgrade. CRU and FirstNet tiered availability ended after 8/20, while the national consumer tiered offer remains available. No trade-in is required for the standard consumer tiered offer. Verify final eligibility in CCKM before quoting.`;
+      return `<b>Galaxy S26 ${is512?'512GB':'256GB'} — effective 8/21/26:</b> Tiered pricing is ${is512?'$11.99':'$4.99'}/mo with a new line or ${is512?'$22.99':'$15.99'}/mo with an upgrade for Consumer, CRU, and FirstNet. The older segment-specific offer ended, but the national tiered offer remains available. No trade-in is required for the standard tiered offer. Verify final eligibility in CCKM before quoting.`;
     }
     if(id.startsWith('s25edge-')){
       return isSamsung814TieredActive()
@@ -3776,40 +3778,55 @@
   let liveDbMode = 'edit';
   let liveDbPending = [];
 
-  function pendingKey(c){ return `${c.table}:${JSON.stringify(c.filters||{})}:${c.action}`; }
-  function stageLiveDbChange(c){
-    const key=pendingKey(c), i=liveDbPending.findIndex(x=>pendingKey(x)===key);
-    if(i>=0) liveDbPending[i]=c; else liveDbPending.push(c);
-    renderPendingBar();
+  function liveDbPendingKey(c){
+    return `${c.table}|${c.action}|${JSON.stringify(c.filters||{})}`;
   }
-  function renderPendingBar(){
-    const bar=el('adminPendingBar'), count=el('adminPendingCount'); if(!bar||!count)return;
-    const n=liveDbPending.length; bar.classList.toggle('show',n>0);
+  function liveDbStage(c){
+    const key=liveDbPendingKey(c);
+    const i=liveDbPending.findIndex(x=>liveDbPendingKey(x)===key);
+    if(i>=0) liveDbPending[i]=c; else liveDbPending.push(c);
+    liveDbRenderPendingBar();
+  }
+  function liveDbRenderPendingBar(){
+    const bar=el('liveDbPendingBar'), count=el('liveDbPendingCount');
+    if(!bar||!count)return;
+    const n=liveDbPending.length;
+    bar.classList.toggle('show',n>0);
     count.textContent=`${n} pending change${n===1?'':'s'}`;
   }
-  function pendingDescription(c){
+  function liveDbDescribePending(c){
+    const action=c.action==='insert'?'ADD':c.action==='archive'?'ARCHIVE':'EDIT';
     const vals=Object.entries(c.data||{}).map(([k,v])=>`${k}: ${Array.isArray(v)?v.join(', '):v}`).join(' · ');
-    return `${c.label||c.table}${c.action==='insert'?' — ADD':c.action==='archive'?' — ARCHIVE':' — EDIT'}${vals?' · '+vals:''}`;
+    return `${action} — ${c.label||c.table}${vals?' · '+vals:''}`;
   }
-  function reviewPending(){
-    const cfg=liveDbConfig();
+  function liveDbReviewPending(){
     const box=el('liveDbEditor');
-    box.innerHTML=`<h3>Review Pending Changes</h3><p class="admin-note">Nothing below is live yet.</p><div class="admin-review">${liveDbPending.map(c=>`<div>${escapeHtml(pendingDescription(c))}</div>`).join('')}</div>`;
+    if(!box)return;
+    box.innerHTML=`<h3>Review Pending Changes</h3><p class="admin-note">These are not live yet.</p><div class="admin-review-list">${liveDbPending.map(c=>`<div class="admin-review-item">${escapeHtml(liveDbDescribePending(c))}</div>`).join('')||'<div class="admin-review-item">No pending changes.</div>'}</div>`;
   }
-  async function applyPending(){
+  async function liveDbApplyPending(){
     if(!liveDbPending.length)return;
-    const btn=el('adminPendingApply'); btn.disabled=true; const old=btn.textContent; btn.textContent='Applying…';
+    const btn=el('liveDbPendingApply');
+    const old=btn.textContent; btn.disabled=true; btn.textContent='Applying…';
     try{
       for(const c of liveDbPending){
-        if(c.action==='insert') await liveDbApi({action:'insert',table:c.table,data:c.data,changed_by:'GTT Admin'});
-        else await liveDbApi({action:'update',table:c.table,filters:c.filters,data:c.data,changed_by:'GTT Admin'});
+        if(c.action==='insert'){
+          await liveDbApi({action:'insert',table:c.table,data:c.data,changed_by:'GTT Admin'});
+        }else{
+          await liveDbApi({action:'update',table:c.table,filters:c.filters,data:c.data,changed_by:'GTT Admin'});
+        }
       }
-      const n=liveDbPending.length; liveDbPending=[];
-      renderPendingBar();
+      const n=liveDbPending.length;
+      liveDbPending=[];
+      liveDbRenderPendingBar();
       await liveDbLoad();
-      liveDbSetStatus(`✓ ${n} change${n===1?'':'s'} applied. Live data refreshed — Admin stayed open.`);
-    }catch(e){ liveDbSetStatus('Apply failed: '+e.message,true); alert('Could not apply all changes: '+e.message); }
-    finally{btn.disabled=false;btn.textContent=old;}
+      liveDbSetStatus(`✓ ${n} change${n===1?'':'s'} applied. Live data refreshed; Admin stayed open.`);
+    }catch(e){
+      liveDbSetStatus('Apply failed: '+e.message,true);
+      alert('Could not apply changes: '+e.message);
+    }finally{
+      btn.disabled=false; btn.textContent=old;
+    }
   }
 
   async function liveDbApi(payload){
@@ -3846,38 +3863,7 @@
     const cfg=liveDbConfig();
     const q=(el('liveDbSearch').value||'').trim().toLowerCase();
     const rows=q?liveDbRows.filter(r=>liveDbSearchText(r).includes(q)):liveDbRows;
-    if(liveDbTable()==='sellable_devices'){
-      box.innerHTML=rows.map(r=>{
-        const realIndex=liveDbRows.indexOf(r);
-        return `<div class="admin-device-card">
-          <div class="admin-device-title">${escapeHtml(cfg.label(r))}</div>
-          <div class="admin-device-sub">${escapeHtml(r.device_key||'')} · MSRP $${Number(r.retail_price||0).toFixed(2)}${r.trade_eligible?' · Trade $'+(r.trade_value??'—'):''}</div>
-          <div class="admin-device-badges">
-            <span class="admin-badge ${r.sellable===false?'':'on'}">Sellable ${r.sellable===false?'OFF':'ON'}</span>
-            <span class="admin-badge ${r.trade_eligible?'on':''}">Trade ${r.trade_eligible?'ON':'OFF'}</span>
-            <span class="admin-badge ${r.quick_pick?'on':''}">Quick Pick ${r.quick_pick?'ON':'OFF'}</span>
-          </div>
-          <div class="admin-device-actions">
-            <button class="admin-btn" type="button" data-live-edit="${realIndex}">Edit</button>
-            <button class="admin-btn secondary" type="button" data-live-sell="${realIndex}">${r.sellable===false?'Make Sellable':'Stop Selling'}</button>
-            <button class="admin-btn secondary" type="button" data-live-trade="${realIndex}">${r.trade_eligible?'Disable Trade':'Enable Trade'}</button>
-          </div>
-        </div>`;
-      }).join('')||'<div style="padding:14px;color:var(--slate);font-size:13px;">No matching records.</div>';
-      box.querySelectorAll('[data-live-edit]').forEach(b=>b.onclick=()=>{liveDbSelected=Number(b.dataset.liveEdit);liveDbMode='edit';liveDbRenderEditor(liveDbRows[liveDbSelected]);});
-      box.querySelectorAll('[data-live-sell]').forEach(b=>b.onclick=()=>{
-        const i=Number(b.dataset.liveSell), r=liveDbRows[i], val=r.sellable===false;
-        stageLiveDbChange({action:'update',table:'sellable_devices',filters:liveDbFiltersFor(r),data:{sellable:val},label:cfg.label(r)});
-        r.sellable=val; liveDbRenderList();
-      });
-      box.querySelectorAll('[data-live-trade]').forEach(b=>b.onclick=()=>{
-        const i=Number(b.dataset.liveTrade), r=liveDbRows[i], val=!r.trade_eligible;
-        stageLiveDbChange({action:'update',table:'sellable_devices',filters:liveDbFiltersFor(r),data:{trade_eligible:val},label:cfg.label(r)});
-        r.trade_eligible=val; liveDbRenderList();
-      });
-      return;
-    }
-    box.innerHTML = rows.map(r=>{
+    box.innerHTML = rows.map((r,i)=>{
       const realIndex=liveDbRows.indexOf(r);
       const active = liveDbSelected===realIndex ? ' selected' : '';
       return `<button type="button" class="live-db-row${active}" data-live-i="${realIndex}"><b>${escapeHtml(cfg.label(r))}</b><span>${escapeHtml(cfg.sub(r))}</span></button>`;
@@ -3910,29 +3896,47 @@
   }
   function liveDbRenderEditor(row){
     const box=el('liveDbEditor'); if(!box)return;
-    const cfg=liveDbConfig(), isNew=liveDbMode==='new';
-    if(!row && !isNew){box.innerHTML=`<h3>${escapeHtml(cfg.title)}</h3><p class="admin-note">Choose a record on the left or tap <b>+ Add</b>.</p>`;return;}
+    const cfg=liveDbConfig();
+    const isNew=liveDbMode==='new';
+    if(!row && !isNew){
+      box.innerHTML=`<h3>${escapeHtml(cfg.title)}</h3><p class="admin-note">Choose a record on the left or tap <b>+ Add</b>.</p>`;
+      return;
+    }
     const source=row||{};
-    let fieldsHtml;
+    let fieldsHtml='';
     if(liveDbTable()==='sellable_devices'){
-      const safe=new Set(['name','storage','retail_price','sellable','trade_eligible','trade_value','quick_pick','active','notes']);
-      const normal=cfg.fields.filter(f=>safe.has(f[0]));
-      const advanced=cfg.fields.filter(f=>!safe.has(f[0]));
-      fieldsHtml=normal.map(f=>liveDbFieldHtml(f,source,isNew)).join('')+
-        `<details class="admin-advanced"><summary>Advanced database fields</summary><div class="admin-advanced-grid">${advanced.map(f=>liveDbFieldHtml(f,source,isNew)).join('')}</div></details>`;
-    }else fieldsHtml=cfg.fields.map(f=>liveDbFieldHtml(f,source,isNew)).join('');
+      const safeKeys=new Set(['name','storage','retail_price','sellable','trade_eligible','trade_value','quick_pick','active','notes']);
+      const safe=cfg.fields.filter(f=>safeKeys.has(f[0]));
+      const advanced=cfg.fields.filter(f=>!safeKeys.has(f[0]));
+      fieldsHtml=safe.map(f=>liveDbFieldHtml(f,source,isNew)).join('')+
+        `<details class="live-db-advanced"><summary>Advanced fields</summary><div class="live-db-advanced-grid">${advanced.map(f=>liveDbFieldHtml(f,source,isNew)).join('')}</div></details>`;
+    }else{
+      fieldsHtml=cfg.fields.map(f=>liveDbFieldHtml(f,source,isNew)).join('');
+    }
     box.innerHTML=`
-      <h3>${isNew?'Add':'Edit'} ${escapeHtml(cfg.title)} ${!isNew?'<span class="live-db-pill">STAGED</span>':''}</h3>
+      <h3>${isNew?'Add':'Edit'} ${escapeHtml(cfg.title)} ${!isNew?'<span class="live-db-pill">STAGE FIRST</span>':''}</h3>
       <div class="live-db-grid">${fieldsHtml}</div>
       <div class="live-db-actions">
         <button type="button" id="liveDbSave" class="admin-btn">${isNew?'Stage New Record':'Stage Changes'}</button>
         ${!isNew&&liveDbTable()==='sellable_devices'?'<button type="button" id="liveDbDelete" class="admin-btn danger">Archive Device</button>':''}
         <button type="button" id="liveDbCancel" class="admin-btn secondary">Cancel</button>
       </div>`;
-    if(isNew&&liveDbTable()==='sellable_devices'){
-      const name=box.querySelector('[data-live-field="name"]'), storage=box.querySelector('[data-live-field="storage"]'), key=box.querySelector('[data-live-field="device_key"]');
-      const gen=()=>{if(!key||key.dataset.manual==='1')return; const n=(name?.value||'').toLowerCase().replace(/iphone/g,'ip').replace(/galaxy/g,'').replace(/pixel/g,'p').replace(/[^a-z0-9]+/g,'');const s=(storage?.value||'').toLowerCase().replace(/gb/g,'').replace(/[^a-z0-9]+/g,'');key.value=[n,s].filter(Boolean).join('-');};
-      name?.addEventListener('input',gen);storage?.addEventListener('input',gen);key?.addEventListener('input',()=>key.dataset.manual='1');gen();
+    if(isNew && liveDbTable()==='sellable_devices'){
+      const nameInput=box.querySelector('[data-live-field="name"]');
+      const storageInput=box.querySelector('[data-live-field="storage"]');
+      const keyInput=box.querySelector('[data-live-field="device_key"]');
+      const makeKey=()=>{
+        if(!keyInput || keyInput.dataset.manual==='1')return;
+        const n=(nameInput?.value||'').toLowerCase()
+          .replace(/iphone/g,'ip').replace(/galaxy/g,'').replace(/pixel/g,'p')
+          .replace(/[^a-z0-9]+/g,'');
+        const s=(storageInput?.value||'').toLowerCase().replace(/gb/g,'').replace(/[^a-z0-9]+/g,'');
+        keyInput.value=[n,s].filter(Boolean).join('-');
+      };
+      nameInput?.addEventListener('input',makeKey);
+      storageInput?.addEventListener('input',makeKey);
+      keyInput?.addEventListener('input',()=>keyInput.dataset.manual='1');
+      makeKey();
     }
     el('liveDbSave').addEventListener('click',liveDbSave);
     if(el('liveDbDelete')) el('liveDbDelete').addEventListener('click',liveDbDelete);
@@ -3962,25 +3966,29 @@
     try{
       const data=liveDbReadForm();
       if(liveDbMode==='new'){
-        stageLiveDbChange({action:'insert',table:liveDbTable(),data,label:cfg.label(data)});
+        liveDbStage({action:'insert',table:liveDbTable(),data,label:cfg.label(data)});
         liveDbSetStatus('New record staged. Keep editing or Review / Apply Changes.');
       }else{
         const original=liveDbRows[liveDbSelected];
-        stageLiveDbChange({action:'update',table:liveDbTable(),filters:liveDbFiltersFor(original),data,label:cfg.label(original)});
+        liveDbStage({action:'update',table:liveDbTable(),filters:liveDbFiltersFor(original),data,label:cfg.label(original)});
         Object.assign(original,data);
         liveDbSetStatus('Changes staged. Nothing is live until Apply Changes.');
       }
-      liveDbMode='edit';liveDbSelected=null;liveDbRenderList();liveDbRenderEditor(null);
-    }catch(e){alert('Could not stage change: '+e.message);liveDbSetStatus(e.message,true);}
+      liveDbMode='edit'; liveDbSelected=null; liveDbRenderList(); liveDbRenderEditor(null);
+    }catch(e){
+      alert('Could not stage change: '+e.message);
+      liveDbSetStatus(e.message,true);
+    }
   }
   async function liveDbDelete(){
     const original=liveDbRows[liveDbSelected]; if(!original)return;
     if(liveDbTable()!=='sellable_devices')return;
-    if(!confirm(`Archive "${liveDbConfig().label(original)}"? It will stop being sellable and trade eligible, but the record will be kept.`))return;
-    stageLiveDbChange({action:'archive',table:'sellable_devices',filters:liveDbFiltersFor(original),data:{sellable:false,trade_eligible:false},label:liveDbConfig().label(original)});
-    original.sellable=false;original.trade_eligible=false;
-    liveDbMode='edit';liveDbSelected=null;liveDbRenderList();liveDbRenderEditor(null);
-    liveDbSetStatus('Device archive staged. Nothing is live until Apply Changes.');
+    const cfg=liveDbConfig();
+    if(!confirm(`Archive "${cfg.label(original)}"? This keeps the record but turns Sellable and Trade Eligible off.`))return;
+    liveDbStage({action:'archive',table:'sellable_devices',filters:liveDbFiltersFor(original),data:{sellable:false,trade_eligible:false},label:cfg.label(original)});
+    original.sellable=false; original.trade_eligible=false;
+    liveDbMode='edit'; liveDbSelected=null; liveDbRenderList(); liveDbRenderEditor(null);
+    liveDbSetStatus('Archive staged. Nothing is live until Apply Changes.');
   }
   function liveDbAdd(){
     liveDbMode='new'; liveDbSelected=null; liveDbRenderList();
@@ -3994,9 +4002,16 @@
     el('liveDbSearch').addEventListener('input',liveDbRenderList);
     el('liveDbRefresh').addEventListener('click',liveDbLoad);
     el('liveDbAdd').addEventListener('click',liveDbAdd);
-    el('adminPendingReview').addEventListener('click',reviewPending);
-    el('adminPendingDiscard').addEventListener('click',()=>{if(!liveDbPending.length)return;if(confirm('Discard all pending changes?')){liveDbPending=[];renderPendingBar();liveDbLoad();}});
-    el('adminPendingApply').addEventListener('click',applyPending);
+    el('liveDbPendingReview').addEventListener('click',liveDbReviewPending);
+    el('liveDbPendingDiscard').addEventListener('click',()=>{
+      if(!liveDbPending.length)return;
+      if(confirm('Discard all pending changes?')){
+        liveDbPending=[];
+        liveDbRenderPendingBar();
+        liveDbLoad();
+      }
+    });
+    el('liveDbPendingApply').addEventListener('click',liveDbApplyPending);
     document.querySelectorAll('[data-mgmt-table]').forEach(card=>{
       card.addEventListener('click',()=>{
         const target=card.dataset.mgmtTable;
@@ -4428,9 +4443,10 @@
   console.debug('Global Trade Tool initialized', VERSION, '| Trade DB:', TRADE_DB_SOURCE);
 })();
 
+  const outerEl = id=>document.getElementById(id);
   // Version 2.0 welcome — show once per browser/device for this major release.
   const V2_WELCOME_KEY = 'gtt_v2_welcome_seen';
-  const v2WelcomeBackdrop = el('v2WelcomeBackdrop');
+  const v2WelcomeBackdrop = outerEl('v2WelcomeBackdrop');
   function openV2Welcome(){
     if(v2WelcomeBackdrop) v2WelcomeBackdrop.classList.add('show');
   }
@@ -4438,15 +4454,15 @@
     if(v2WelcomeBackdrop) v2WelcomeBackdrop.classList.remove('show');
     try{ localStorage.setItem(V2_WELCOME_KEY,'1'); }catch(e){}
   }
-  const v2StartBtn = el('v2WelcomeStart');
+  const v2StartBtn = outerEl('v2WelcomeStart');
   if(v2StartBtn) v2StartBtn.addEventListener('click', closeV2Welcome);
-  const v2WhatsNewBtn = el('v2WelcomeWhatsNew');
+  const v2WhatsNewBtn = outerEl('v2WelcomeWhatsNew');
   if(v2WhatsNewBtn) v2WhatsNewBtn.addEventListener('click', ()=>{
     closeV2Welcome();
     // Open the existing What's New / Recent Changes experience when available.
     const candidates = ['whatsNewBtn','recentChangesBtn','recentOpenBtn','changesOpenBtn'];
     for(const id of candidates){
-      const btn = el(id);
+      const btn = outerEl(id);
       if(btn){ btn.click(); return; }
     }
     const target = document.querySelector('[data-tool="recent"], [data-tool="changes"], #recentChanges, #whatsNew');
@@ -4468,8 +4484,8 @@
   function playGttLaunchFx(){
     if(gttLaunchFxPlayed) return;
     gttLaunchFxPlayed = true;
-    const wrap = el('gttLaunchFx');
-    const title = el('gttFxTitle');
+    const wrap = outerEl('gttLaunchFx');
+    const title = outerEl('gttFxTitle');
     if(!wrap || !title) return;
     const phrase = 'Global Trade Tool 3.0';
     title.innerHTML = '';
