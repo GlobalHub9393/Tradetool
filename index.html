@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — 3.03</title>
+<title>Global Trade Tool — 3.04</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -693,7 +693,7 @@
 
 
 
-  /* === Global Trade Tool 3.03 === */
+  /* === Global Trade Tool 3.04 === */
   .tiered-savings-card{background:linear-gradient(135deg,rgba(59,192,240,.13),rgba(255,255,255,.07));border-color:rgba(59,192,240,.32)}
   .tiered-savings-number{font-size:24px;font-weight:900;color:#7dd8f7;letter-spacing:-.02em;margin:2px 0 3px}
   .tiered-savings-copy{font-size:12px;color:#d4e7f6;line-height:1.45}
@@ -761,7 +761,7 @@
       </div>
       <div style="margin-left:auto; text-align:right;">
         <div class="sub" id="releaseMeta">August 2026 &middot; Last Updated 8/21/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Version 3.03</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Version 3.04</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -853,6 +853,7 @@
           <span class="dollar"><span class="sign">$</span><input type="text" id="trade" inputmode="decimal" placeholder="Enter or auto-fill value" autocomplete="off"></span>
           <button class="clearbtn" id="clearTrade">Clear Value</button>
         </div>
+        <div id="tieredTradeSkipNote" class="trade-applied-note" style="margin-top:10px;display:none;"><b>Trade-in not required.</b> This phone has an active tiered offer, so you can quote it without choosing Trade or No Trade. Select the customer’s current phone only if you need a Next Up / Next Up Anytime turn-in.</div>
         <div id="tradeDbStatus" class="trade-db-status">Choose a trade-in phone or enter a value manually.</div>
         <span id="manualOverridePill" class="manual-override-pill">Manual value</span>
         <div id="compareLaunchWrap" class="compare-launch-wrap"><button id="compareLaunchBtn" type="button" class="compare-launch-btn">📊 Compare this phone</button></div>
@@ -1030,7 +1031,7 @@
       <div><div class="whats-new-kicker">Changes since last update</div><h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2></div>
       <button type="button" id="whatsNewCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close What’s New">×</button>
     </div>
-    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.03</div>
+    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.04</div>
     <p class="whats-new-sub">This message appears once per day on this browser, and again when a new version launches.</p>
 
     <div class="whats-new-tabs" role="tablist" aria-label="What's New categories">
@@ -1071,6 +1072,15 @@
 
     <div id="whatsPaneBuilds" class="whats-new-pane" data-whats-pane="builds">
       <section class="whats-new-section whats-new-latest">
+        <h3>3.04 — Faster tiered quoting</h3>
+        <ul>
+          <li><b>Tiered phones:</b> reps no longer need to select a trade-in or tap No Trade before seeing the tiered quote.</li>
+          <li><b>Next Up stays protected:</b> selecting the customer's current phone is still required when using Next Up / Next Up Anytime because turn-in condition must be verified.</li>
+          <li><b>Trade step:</b> now clearly shows when trade-in is optional for a tiered offer.</li>
+        </ul>
+      </section>
+
+      <section class="whats-new-section">
         <h3>3.03 — Cleaner release history</h3>
         <ul>
           <li><b>What's New is now split:</b> Promo Updates and Build Updates.</li>
@@ -1321,7 +1331,7 @@
 <div id="adminModal" class="modal-backdrop" aria-hidden="true">
   <div class="admin-panel" role="dialog" aria-modal="true" aria-label="Admin dashboard">
     <div class="admin-head">
-      <div><div class="eyebrow">Global Trade Tool 3.03</div><h2 style="margin:0;">Live Admin</h2></div>
+      <div><div class="eyebrow">Global Trade Tool 3.04</div><h2 style="margin:0;">Live Admin</h2></div>
       <button type="button" id="adminClose" class="admin-btn secondary" style="margin-left:auto;">Close</button>
       <button type="button" id="adminLock" class="admin-btn danger">Lock Admin</button>
     </div>
@@ -1516,12 +1526,12 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.03';
+  const VERSION = 'Version 3.04';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.03', month:'August 2026', updated:'8/21/2026' };
+  let releaseInfo = { version:'Version 3.04', month:'August 2026', updated:'8/21/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -1897,6 +1907,9 @@
   const noTradeBtn = el('noTradeBtn');
 
   function tradeStepComplete(){
+    // Standard tiered offers do not require a trade-in selection.
+    // Keep the trade step available because Next Up / Next Up Anytime still needs the current phone selected.
+    if(state.phone && hasActiveTieredOffer(state.phone)) return true;
     return state.noTrade || !!state.tradeDevice || (state.tradeValueMode === 'manual' && state.value !== null && !isNaN(state.value));
   }
   function setStepLocked(cardId, locked, extraClass){
@@ -1910,7 +1923,8 @@
   function updateStepLocks(){
     setStepLocked('phonesCard', !state.plan);
     setStepLocked('tradeCard', !state.phone);
-    // Next Up requires an actual current/trade-in phone because condition must be verified.
+    // A normal tiered quote can skip trade entirely. Next Up remains available only after
+    // selecting the customer's current phone because turn-in condition must be verified.
     const nextLocked = !state.tradeDevice;
     setStepLocked('nextUpCard', nextLocked, state.noTrade ? 'no-trade-lock' : '');
     const nextCard = el('nextUpCard');
@@ -2634,6 +2648,16 @@
     document.querySelectorAll('#quick .chip').forEach(b=> b.disabled = false);
     updateTradeHelp();
 
+    const tieredSkip = el('tieredTradeSkipNote');
+    if(tieredSkip){
+      const showSkip = !!(state.phone && hasActiveTieredOffer(state.phone));
+      tieredSkip.style.display = showSkip ? 'block' : 'none';
+      if(showSkip && !state.tradeDevice && !state.noTrade && state.tradeValueMode!=='manual'){
+        tradeDbStatus.className='trade-db-status';
+        tradeDbStatus.textContent='Optional for this tiered quote — only choose a current phone if using Next Up / Next Up Anytime.';
+      }
+    }
+
     // The "any Google Pixel" floor only applies to Pixel Pro / Pro XL ladders.
     // Show the toggle only when it's relevant, and reset it whenever it isn't.
     const cat = phoneCategory(state.phone);
@@ -2933,13 +2957,13 @@
     cards.forEach(c=>c && c.classList.remove('step-complete'));
     if(state.plan) cards[0].classList.add('step-complete');
     if(state.phone) cards[1].classList.add('step-complete');
-    if(state.value !== null || state.pixel || state.galaxyAny !== 'none' || (state.phone && hasActiveTieredOffer(state.phone))) cards[2].classList.add('step-complete');
+    if(tradeStepComplete() || state.pixel || state.galaxyAny !== 'none') cards[2].classList.add('step-complete');
     if(state.nextUp && state.nextPaid !== null) cards[3].classList.add('step-complete');
 
     let next = 0;
     if(state.plan) next = 1;
     if(state.plan && state.phone) next = 2;
-    if(state.plan && state.phone && (state.value !== null || state.pixel || state.galaxyAny !== 'none' || hasActiveTieredOffer(state.phone))) next = 3;
+    if(state.plan && state.phone && (tradeStepComplete() || state.pixel || state.galaxyAny !== 'none')) next = 3;
     if(next !== lastProgressStep && cards[next]){
       cards[next].classList.remove('step-awake');
       void cards[next].offsetWidth;
@@ -3605,7 +3629,7 @@
 
 
 
-  // === Global Trade Tool 3.03 Live Database Admin ===
+  // === Global Trade Tool 3.04 Live Database Admin ===
   const LIVE_DB_CONFIG = {
     trade_devices:{
       title:'Trade-In Phones', pk:['id'], order:{column:'brand',ascending:true},
