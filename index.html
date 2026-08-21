@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — 3.01</title>
+<title>Global Trade Tool — 3.02</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -686,7 +686,7 @@
 
 
 
-  /* === Global Trade Tool 3.01 === */
+  /* === Global Trade Tool 3.02 === */
   .tiered-savings-card{background:linear-gradient(135deg,rgba(59,192,240,.13),rgba(255,255,255,.07));border-color:rgba(59,192,240,.32)}
   .tiered-savings-number{font-size:24px;font-weight:900;color:#7dd8f7;letter-spacing:-.02em;margin:2px 0 3px}
   .tiered-savings-copy{font-size:12px;color:#d4e7f6;line-height:1.45}
@@ -753,8 +753,8 @@
         <h1>Global Trade Tool <span id="headerMajorVersion" style="font-size:.54em;opacity:.72;vertical-align:middle;">3.0</span></h1>
       </div>
       <div style="margin-left:auto; text-align:right;">
-        <div class="sub" id="releaseMeta">August 2026 &middot; Last Updated 8/18/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Version 3.01</div>
+        <div class="sub" id="releaseMeta">August 2026 &middot; Last Updated 8/21/2026</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Version 3.02</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -1024,7 +1024,18 @@
       <button type="button" id="whatsNewCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close What’s New">×</button>
     </div>
     <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.0</div>
-    <p class="whats-new-sub">This message appears once per day on this browser.</p>
+    <p class="whats-new-sub">This message appears once per day on this browser, and again when a new version launches.</p>
+
+    <section class="whats-new-section">
+      <h3>3.02 — Live device controls + 8/21 offers</h3>
+      <ul>
+        <li><b>Galaxy S26:</b> 256GB is $4.99/mo new line or $15.99/mo upgrade; 512GB is $11.99/mo new line or $22.99/mo upgrade.</li>
+        <li><b>CRU / FirstNet:</b> Galaxy S26 256GB and 512GB are removed from CRU and FirstNet tiered offers effective 8/21, while the national consumer tiered offer remains available.</li>
+        <li><b>iPhone 16:</b> 256GB and 512GB tiered offers ended 8/20. The 128GB tiered offer remains.</li>
+        <li><b>Pixel Watch 5 bundle:</b> eligible Pixel Watch 5 models can receive up to $100 in monthly bill credits with a new wearable line and can be bundled with Pixel 11 / 11 Pro / 11 Pro XL. Verify in CCKM.</li>
+        <li><b>Device Admin:</b> phones can now be marked Sellable and/or Trade Eligible independently, with a maintained trade value.</li>
+      </ul>
+    </section>
 
     <section class="whats-new-section">
       <h3>3.01 — Smarter quoting tools</h3>
@@ -1282,7 +1293,7 @@
 <div id="adminModal" class="modal-backdrop" aria-hidden="true">
   <div class="admin-panel" role="dialog" aria-modal="true" aria-label="Admin dashboard">
     <div class="admin-head">
-      <div><div class="eyebrow">Global Trade Tool 3.0</div><h2 style="margin:0;">Live Admin</h2></div>
+      <div><div class="eyebrow">Global Trade Tool 3.02</div><h2 style="margin:0;">Live Admin</h2></div>
       <button type="button" id="adminClose" class="admin-btn secondary" style="margin-left:auto;">Close</button>
       <button type="button" id="adminLock" class="admin-btn danger">Lock Admin</button>
     </div>
@@ -1320,8 +1331,11 @@
           <h4>📱 Trade-In Phones</h4>
           <p>Use this when a trade-in phone's value changes or a missing trade phone needs to be added. Search the phone, select it, change the value, and tap <b>Save Changes</b>. For a new phone, tap <b>+ Add</b> and enter Brand, Model, Storage and Trade Value.</p>
 
-          <h4>🏷️ Phones & Tiered Offers</h4>
-          <p><b>Phones We Sell</b> controls the devices available to quote. <b>Tiered Prices</b> controls special monthly offers such as “iPhone 16 128GB — $7.99/mo.” New-line and upgrade pricing may be separate records. If a tiered offer ends, deactivate the applicable price rather than deleting the phone.</p>
+          <h4>📱 Devices: Sold vs Trade-In</h4>
+          <p><b>Phones We Sell</b> is now the main device record. <b>Sellable</b> decides whether the phone appears under “Phone Getting.” <b>Trade Eligible</b> decides whether that same SKU can be selected as a trade-in, and <b>Trade Value</b> stores its current reference value. When a phone stops being sold, turn <b>Sellable off</b> instead of deleting it so it can remain a trade-in later.</p>
+
+          <h4>🏷️ Tiered Offers</h4>
+          <p><b>Tiered Prices</b> controls special monthly offers. New-line and upgrade pricing are separate records. <b>Eligible Segments</b> accepts comma-separated values like <code>consumer</code> or <code>consumer,cru,firstnet</code>. If an offer ends, deactivate/end the applicable price rather than deleting the phone.</p>
 
           <h4>💰 Promotions</h4>
           <p>Use Promotions for the overall offer and <b>Trade Promo Tiers</b> for its dollar thresholds. Example: a tier can say a $290+ trade receives $1,100. Before changing several related promo records, verify the official offer first.</p>
@@ -1340,8 +1354,8 @@
       </details>
 
       <div class="mgmt-cards">
-        <button type="button" class="mgmt-card" data-mgmt-table="trade_devices"><b>📱 Trade-In Phones</b><span>Add phones or change trade values.</span></button>
-        <button type="button" class="mgmt-card" data-mgmt-table="tiered_prices"><b>🏷️ Tiered Offers</b><span>Change special monthly pricing or turn an offer off.</span></button>
+        <button type="button" class="mgmt-card" data-mgmt-table="sellable_devices"><b>📱 Devices</b><span>Control Sellable, Trade Eligible, trade value, MSRP and visibility.</span></button>
+        <button type="button" class="mgmt-card" data-mgmt-table="tiered_prices"><b>🏷️ Tiered Offers</b><span>Change special monthly pricing, eligible segments, or turn an offer off.</span></button>
         <button type="button" class="mgmt-card" data-mgmt-table="promotion_tiers"><b>💰 Promo Trade Tiers</b><span>Change trade thresholds and promotional credits.</span></button>
         <button type="button" class="mgmt-card" data-mgmt-table="plans"><b>🧾 Plans</b><span>Add, rename, move or deactivate plans.</span></button>
       </div>
@@ -1474,18 +1488,49 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.01';
+  const VERSION = 'Version 3.02';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.01', month:'August 2026', updated:'8/18/2026' };
+  let releaseInfo = { version:'Version 3.02', month:'August 2026', updated:'8/21/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
   function isAirTradePromoActive(){ return new Date() >= AIR_TRADE_START; }
-  function hasActiveTieredOffer(phone){
+  function currentTieredRowsFor(phone){
+    if(!phone || !Array.isArray(phone.tieredPriceRows)) return [];
+    const now = new Date();
+    return phone.tieredPriceRows.filter(r=>{
+      if(r.active===false) return false;
+      if(r.starts_at && now < new Date(r.starts_at)) return false;
+      if(r.ends_at && now >= new Date(r.ends_at)) return false;
+      const segs = Array.isArray(r.eligible_segments) ? r.eligible_segments : ['consumer','cru','firstnet'];
+      const seg = (typeof state !== 'undefined' && state.planSegment) ? state.planSegment : 'consumer';
+      return segs.includes(seg);
+    });
+  }
+  function tieredSegmentAllowed(phone){
     if(!phone) return false;
+    if(Array.isArray(phone.tieredPriceRows)) return currentTieredRowsFor(phone).length > 0;
+    if(Array.isArray(phone.tieredSegments)){
+      const seg = (typeof state !== 'undefined' && state.planSegment) ? state.planSegment : 'consumer';
+      return phone.tieredSegments.includes(seg);
+    }
+    return true;
+  }
+  function tieredPriceFor(phone, action){
+    if(!phone) return undefined;
+    if(Array.isArray(phone.tieredPriceRows)){
+      const activation = action === 'new' ? 'new_line' : 'upgrade';
+      const row = currentTieredRowsFor(phone).find(r=>r.activation_type===activation);
+      return row ? (row.monthly_price===null ? null : Number(row.monthly_price)) : null;
+    }
+    return action === 'new' ? phone.tieredMonthlyNew : phone.tieredMonthlyUpgrade;
+  }
+  function hasActiveTieredOffer(phone){
+    if(!phone || !tieredSegmentAllowed(phone)) return false;
+    if(Array.isArray(phone.tieredPriceRows)) return currentTieredRowsFor(phone).length > 0;
     if(isS26Base(phone)) return isS26TieredActive();
     if(isS25Edge(phone)) return isSamsung814TieredActive();
     return !!(phone.tieredOffer && !(isIphoneAir(phone) && isAirTradePromoActive()));
@@ -1497,7 +1542,7 @@
   function isS26TieredActive(){ return new Date() >= S26_TIERED_START; }
   function isS25Edge(phone){ return !!(phone && String(phone.id || '').startsWith('s25edge-')); }
   function isSamsung814TieredActive(){ return new Date() >= S26_TIERED_START; }
-  function isPhoneCurrentlyListed(phone){ return !!phone; }
+  function isPhoneCurrentlyListed(phone){ return !!(phone && phone.active !== false && phone.sellable !== false); }
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
   const PLAN_LABEL = { premium:"Premium", starter:"Starter", value:"Value", '55plus':"55+", valueplus_mobile:"Value Plus VL / Mobile Share" };
@@ -1643,16 +1688,16 @@
     // iPhone 16 — Updated 7/2/2026: all tiers now flat new/upgrade
     // 128GB $7.99 (was $2.99 new/$7.99 upgrade), 256GB $12.99 (was $7.99/$12.99), 512GB $17.99 (was $12.99/$17.99)
     { id:'ip16-128', name:'iPhone 16', storage:'128GB', retail:729.99, tieredOffer:true, tieredMonthlyNew:7.99, tieredMonthlyUpgrade:7.99 },
-    { id:'ip16-256', name:'iPhone 16', storage:'256GB', retail:829.99, tieredOffer:true, tieredMonthlyNew:12.99, tieredMonthlyUpgrade:12.99 },
-    { id:'ip16-512', name:'iPhone 16', storage:'512GB', retail:1029.99, tieredOffer:true, tieredMonthlyNew:17.99, tieredMonthlyUpgrade:17.99 },
+    { id:'ip16-256', name:'iPhone 16', storage:'256GB', retail:829.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null },
+    { id:'ip16-512', name:'iPhone 16', storage:'512GB', retail:1029.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null },
 
     // Galaxy S26 base model — tiered offers ended 7/30/2026. Trade-in and legacy Next Up offers remain active.
-    { id:'s26-256', name:'Galaxy S26', storage:'256GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:10.99, tieredMonthlyUpgrade:15.99, promoCategory:'s26base' },
-    { id:'s26-512', name:'Galaxy S26', storage:'512GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:undefined, tieredMonthlyUpgrade:undefined, promoCategory:'s26base' },
+    { id:'s26-256', name:'Galaxy S26', storage:'256GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:4.99, tieredMonthlyUpgrade:15.99, tieredSegments:['consumer'], promoCategory:'s26base' },
+    { id:'s26-512', name:'Galaxy S26', storage:'512GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:22.99, tieredSegments:['consumer'], promoCategory:'s26base' },
 
     // Galaxy S25 Edge — flat price, same for New or Upgrade
     { id:'s25edge-256', name:'Galaxy S25 Edge', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:20.99 },
-    { id:'s25edge-512', name:'Galaxy S25 Edge', storage:'512GB', retail:1219.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:20.99 },
+    { id:'s25edge-512', name:'Galaxy S25 Edge', storage:'512GB', retail:1219.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:25.99 },
 
     // amiGO Jr. Phone — $2.99/mo on a new line.
     { id:'amigojr', name:'amiGO Jr. Phone', storage:'128GB', retail:259.99, tieredOffer:true, tieredMonthlyNew:2.99, tieredMonthlyUpgrade:null }
@@ -1753,8 +1798,60 @@
     }
   }
 
+  async function loadCatalogFromSupabase(){
+    try{
+      const headers = { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization:`Bearer ${SUPABASE_PUBLISHABLE_KEY}` };
+      const [devRes,tierRes] = await Promise.all([
+        fetch(SUPABASE_URL + '/rest/v1/sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,quick_pick,active,sellable,trade_eligible,trade_value,sort_order,updated_at&order=sort_order.asc', {headers}),
+        fetch(SUPABASE_URL + '/rest/v1/tiered_prices?select=device_key,activation_type,monthly_price,months,active,starts_at,ends_at,eligible_segments,updated_at&order=device_key.asc', {headers})
+      ]);
+      if(!devRes.ok) throw new Error(`Sellable devices ${devRes.status}: ${await devRes.text()}`);
+      if(!tierRes.ok) throw new Error(`Tiered prices ${tierRes.status}: ${await tierRes.text()}`);
+      const devices = await devRes.json();
+      const tiers = await tierRes.json();
+      const inferBrand = name => /^iphone/i.test(name) ? 'Apple' : /^galaxy/i.test(name) ? 'Samsung' : /^pixel/i.test(name) ? 'Google' : (/moto|razr/i.test(name) ? 'Motorola' : 'Other');
+
+      devices.forEach(r=>{
+        let p = PHONES.find(x=>x.id===r.device_key);
+        if(!p) p = PHONES.find(x=>String(x.name).toLowerCase()===String(r.name).toLowerCase() && String(x.storage||'').toLowerCase()===String(r.storage||'').toLowerCase());
+        if(!p){
+          p={id:r.device_key,name:r.name,storage:r.storage||'',retail:Number(r.retail_price||0),tieredOffer:false};
+          PHONES.push(p);
+        }
+        p.id=r.device_key; p.name=r.name; p.storage=r.storage||''; p.retail=Number(r.retail_price||0);
+        p.promoCategory=r.promo_category_key||p.promoCategory; p.quickPick=!!r.quick_pick;
+        p.active=r.active!==false; p.sellable=r.sellable!==false; p.tradeEligible=!!r.trade_eligible;
+        p.tradeValue=r.trade_value===null||r.trade_value===''?null:Number(r.trade_value);
+        p.sortOrder=Number(r.sort_order||0); p.tieredPriceRows=[];
+
+        // Current sellable-device trade flags override the legacy duplicate entry for this exact SKU.
+        const keyMatch = d => String(d.model||'').toLowerCase()===String(r.name||'').toLowerCase() && String(d.storage||'').toLowerCase()===String(r.storage||'').toLowerCase();
+        const idx = TRADE_DB.findIndex(keyMatch);
+        if(r.trade_eligible){
+          const tradeRow={brand:inferBrand(r.name),model:r.name,storage:r.storage||'',value:r.trade_value===null||r.trade_value===''?null:Number(r.trade_value)};
+          if(idx>=0) TRADE_DB[idx]=tradeRow; else TRADE_DB.push(tradeRow);
+        }else if(idx>=0){
+          TRADE_DB.splice(idx,1);
+        }
+      });
+
+      tiers.forEach(r=>{
+        const p=PHONES.find(x=>x.id===r.device_key); if(!p)return;
+        if(!Array.isArray(p.tieredPriceRows)) p.tieredPriceRows=[];
+        p.tieredPriceRows.push(r);
+      });
+      PHONES.forEach(p=>{
+        if(Array.isArray(p.tieredPriceRows)) p.tieredOffer=p.tieredPriceRows.some(r=>r.active!==false);
+      });
+      console.info('Sellable/tiered catalog loaded from Supabase', devices.length, tiers.length);
+    }catch(err){
+      console.warn('Supabase sellable/tiered catalog unavailable; using HTML fallback.',err);
+    }
+  }
+
   await loadTradeDbFromSupabase();
-  const state = { plan:null, phone:null, value:null, tradePreset:null, pixel:false, galaxyAny:'none', nextUp:false, nextUpType:'anytime', nextPaid:null, tierAction:null,
+  await loadCatalogFromSupabase();
+  const state = { plan:null, planSegment:'consumer', pendingPlanSegment:null, phone:null, value:null, tradePreset:null, pixel:false, galaxyAny:'none', nextUp:false, nextUpType:'anytime', nextPaid:null, tierAction:null,
     noTrade:false, tradeDevice:null, tradeStorage:null, tradeBaseValue:null, tradeValueMode:null,
     tradeCondition:{power:null,lock:null,cracks:null}
   };
@@ -1900,6 +1997,8 @@
     b.addEventListener('click', ()=>{
       const key = b.dataset.plan;
       state.plan = key;
+      state.planSegment = state.pendingPlanSegment || 'consumer';
+      state.pendingPlanSegment = null;
       state.tierAction = null;
       document.querySelectorAll('#plans .chip').forEach(x=>{
         x.setAttribute('aria-pressed', x===b ? 'true' : 'false');
@@ -2012,7 +2111,7 @@
       const left=document.createElement('span'); left.style.fontWeight='700'; left.textContent=item.name;
       if(item.cru){ const tag=document.createElement('span'); tag.textContent=' (CRU)'; tag.style.cssText='color:#0568AE;font-weight:800;font-size:12px;'; left.appendChild(tag); }
       const right=document.createElement('span'); right.style.cssText='font-size:12px;color:#425b6f;font-weight:600;white-space:nowrap;'; right.textContent=item.isGroupLabel?'':'→ '+PLAN_LABEL[item.group];
-      li.appendChild(left);li.appendChild(right);li.addEventListener('click',()=>{ const btn=document.querySelector('#plans .chip[data-plan="'+item.group+'"]'); if(btn) btn.click(); planSearch.value=item.name; planSuggestions.classList.remove('open'); planSearch.setAttribute('aria-expanded','false'); });
+      li.appendChild(left);li.appendChild(right);li.addEventListener('click',()=>{ state.pendingPlanSegment = item.cru ? 'cru' : (String(item.name||'').toLowerCase().startsWith('firstnet') || String(item.name||'').toLowerCase().includes('firstnet') ? 'firstnet' : 'consumer'); const btn=document.querySelector('#plans .chip[data-plan="'+item.group+'"]'); if(btn) btn.click(); planSearch.value=item.name; planSuggestions.classList.remove('open'); planSearch.setAttribute('aria-expanded','false'); });
       planSuggestionsList.appendChild(li);
     });
     if(results.length){planSuggestions.classList.add('open');planSearch.setAttribute('aria-expanded','true');}else{planSuggestions.classList.remove('open');planSearch.setAttribute('aria-expanded','false');}
@@ -2554,7 +2653,7 @@
       // A Next Up turn-in is an upgrade, not an extra trade-in bill credit.
       // If the NEW phone has an active tiered UPGRADE price, use that tiered price.
       if(hasActiveTieredOffer(state.phone)){
-        const val = state.phone.tieredMonthlyUpgrade;
+        const val = tieredPriceFor(state.phone,'upgrade');
         if(val !== undefined && val !== null){
           const total = Math.round(Number(val) * 36 * 100)/100;
           return { state:'tiered_final', monthly:Number(val), total:total, showAction:false, viaNextUp:true };
@@ -2576,8 +2675,8 @@
     const tierPlans = ['premium','starter','value','55plus'];
 
     if(hasActiveTieredOffer(state.phone) && tierPlans.includes(state.plan)){
-      const newVal = state.phone.tieredMonthlyNew;
-      const upVal = state.phone.tieredMonthlyUpgrade;
+      const newVal = tieredPriceFor(state.phone,'new');
+      const upVal = tieredPriceFor(state.phone,'upgrade');
       const sameKnownPrice = newVal !== undefined && newVal !== null && upVal !== undefined && upVal !== null && Number(newVal) === Number(upVal);
       // When New Line and Upgrade are the same price, show the answer immediately.
       // Only ask activation type when the price or eligibility actually differs.
@@ -2586,8 +2685,7 @@
         return { state:'tiered_final', monthly:Number(newVal), total:total, showAction:false };
       }
       if(!state.tierAction) return { state:'tier_action_needed' };
-      const key = state.tierAction === 'new' ? 'tieredMonthlyNew' : 'tieredMonthlyUpgrade';
-      const val = state.phone[key];
+      const val = tieredPriceFor(state.phone,state.tierAction);
       if(val !== undefined && val !== null){
         const total = Math.round(val * 36 * 100)/100;
         return { state:'tiered_final', monthly:val, total: total, showAction:!sameKnownPrice };
@@ -3000,7 +3098,7 @@
   function tieredOfferLabel(phone){
     if(!phone || !hasActiveTieredOffer(phone)) return '';
     const fmt = v => (v === null || v === undefined) ? 'N/A' : '$' + Number(v).toFixed(2) + '/mo';
-    return `New: ${fmt(phone.tieredMonthlyNew)} · Upgrade: ${fmt(phone.tieredMonthlyUpgrade)}`;
+    return `New: ${fmt(tieredPriceFor(phone,'new'))} · Upgrade: ${fmt(tieredPriceFor(phone,'upgrade'))}`;
   }
   function promoLabelForCompare(phone, r){
     if(hasActiveTieredOffer(phone)){
@@ -3018,8 +3116,8 @@
     }
     if(r.state === 'tiered_final') return '$' + Number(r.monthly).toFixed(2);
     if(hasActiveTieredOffer(phone) && !state.tierAction){
-      const newPrice = phone.tieredMonthlyNew;
-      const upPrice = phone.tieredMonthlyUpgrade;
+      const newPrice = tieredPriceFor(phone,'new');
+      const upPrice = tieredPriceFor(phone,'upgrade');
       if(newPrice !== null && newPrice !== undefined && upPrice !== null && upPrice !== undefined && Number(newPrice) === Number(upPrice)) return '$' + Number(newPrice).toFixed(2);
       return 'Select activation';
     }
@@ -3479,7 +3577,7 @@
 
 
 
-  // === Global Trade Tool 3.0 Live Database Admin ===
+  // === Global Trade Tool 3.02 Live Database Admin ===
   const LIVE_DB_CONFIG = {
     trade_devices:{
       title:'Trade-In Phones', pk:['id'], order:{column:'brand',ascending:true},
@@ -3493,11 +3591,12 @@
     sellable_devices:{
       title:'Phones We Sell', pk:['device_key'], order:{column:'name',ascending:true},
       label:r=>`${r.name||''} ${r.storage||''}`.trim(),
-      sub:r=>`${r.device_key||''} · Retail $${r.retail_price??0} · ${r.promo_category_key||'no promo category'}`,
+      sub:r=>`${r.device_key||''} · Retail $${r.retail_price??0} · ${r.sellable===false?'NOT SOLD':'Sellable'} · ${r.trade_eligible?'Trade $'+(r.trade_value??'—'):'Not trade eligible'}`,
       fields:[
         ['device_key','Device Key','text'],['name','Name','text'],['storage','Storage','text'],
         ['retail_price','Retail Price','number'],['promo_category_key','Promo Category','text'],
-        ['quick_pick','Quick Pick','boolean'],['active','Active','boolean'],
+        ['sellable','Sellable / Show in Phone Getting','boolean'],['trade_eligible','Trade Eligible','boolean'],['trade_value','Trade Value','number'],
+        ['quick_pick','Quick Pick','boolean'],['active','Active Record','boolean'],
         ['sort_order','Sort Order','number'],['notes','Notes','textarea']
       ]
     },
@@ -3642,7 +3741,8 @@
   function escapeHtml(v){ return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function liveDbFieldHtml(def,row,isNew){
     const [key,label,type,opts]=def;
-    const raw=row&&row[key]!==undefined&&row[key]!==null?row[key]:'';
+    const rawValue=row&&row[key]!==undefined&&row[key]!==null?row[key]:'';
+    const raw=Array.isArray(rawValue)?rawValue.join(','):rawValue;
     const cfg=liveDbConfig();
     const isPk=cfg.pk.includes(key);
     const disabled=(!isNew&&isPk)?' disabled':'';
@@ -3688,6 +3788,7 @@
       if(!input)return;
       if(type==='boolean') data[key]=!!input.checked;
       else if(type==='number') data[key]=input.value.trim()===''?null:Number(input.value);
+      else if(key==='eligible_segments') data[key]=input.value.split(',').map(x=>x.trim()).filter(Boolean);
       else if(type==='json'){
         const s=input.value.trim(); data[key]=s?JSON.parse(s):{};
       } else data[key]=input.value.trim()===''?null:input.value.trim();
@@ -3726,7 +3827,7 @@
   }
   function liveDbAdd(){
     liveDbMode='new'; liveDbSelected=null; liveDbRenderList();
-    const defaults={active:true,sort_order:0,months:36,is_current:true,promo_eligible:true,quick_pick:false};
+    const defaults={active:true,sellable:true,trade_eligible:false,sort_order:0,months:36,is_current:true,promo_eligible:true,quick_pick:false,eligible_segments:['consumer','cru','firstnet']};
     liveDbRenderEditor(defaults);
   }
   function initLiveDbAdmin(){
