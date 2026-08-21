@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — 3.02</title>
+<title>Global Trade Tool — 3.03</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -534,6 +534,13 @@
   .whats-new-upcoming h3{color:#8a5a00;}
   .whats-new-actions{display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px;}
   .whats-new-actions .admin-btn{min-width:120px;}
+  .whats-new-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 4px;position:sticky;top:72px;z-index:25;background:#fff;padding:8px 0 6px}
+  .whats-new-tab{appearance:none;border:1.5px solid var(--line);background:#fff;color:var(--slate);border-radius:11px;padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer}
+  .whats-new-tab.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(5,104,174,.22)}
+  .whats-new-pane{display:none}
+  .whats-new-pane.active{display:block}
+  .whats-new-latest{border-color:#8ccff0;background:linear-gradient(180deg,#fafdff,#f4fbff)}
+  .whats-new-latest h3:before{content:'NEW ';display:inline-block;margin-right:6px;padding:2px 6px;border-radius:999px;background:var(--blue);color:#fff;font-size:9px;vertical-align:1px;letter-spacing:.06em}
   @media (max-width:700px){
     body{padding:10px;}
     .header-row{align-items:flex-start;gap:8px;}
@@ -686,7 +693,7 @@
 
 
 
-  /* === Global Trade Tool 3.02 === */
+  /* === Global Trade Tool 3.03 === */
   .tiered-savings-card{background:linear-gradient(135deg,rgba(59,192,240,.13),rgba(255,255,255,.07));border-color:rgba(59,192,240,.32)}
   .tiered-savings-number{font-size:24px;font-weight:900;color:#7dd8f7;letter-spacing:-.02em;margin:2px 0 3px}
   .tiered-savings-copy{font-size:12px;color:#d4e7f6;line-height:1.45}
@@ -754,7 +761,7 @@
       </div>
       <div style="margin-left:auto; text-align:right;">
         <div class="sub" id="releaseMeta">August 2026 &middot; Last Updated 8/21/2026</div>
-        <div class="version" id="versionBadge" title="Tap 5 times for admin">Version 3.02</div>
+        <div class="version" id="versionBadge" title="Tap 5 times for admin">Version 3.03</div>
         <button id="toolsOpenBtn" class="admin-open-btn tools-open-btn" type="button">☰ Tools</button>
         <button id="adminOpenBtn" class="admin-open-btn" type="button">Admin</button>
       </div>
@@ -1023,52 +1030,73 @@
       <div><div class="whats-new-kicker">Changes since last update</div><h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2></div>
       <button type="button" id="whatsNewCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close What’s New">×</button>
     </div>
-    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.0</div>
+    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.03</div>
     <p class="whats-new-sub">This message appears once per day on this browser, and again when a new version launches.</p>
 
-    <section class="whats-new-section">
-      <h3>3.02 — Live device controls + 8/21 offers</h3>
-      <ul>
-        <li><b>Galaxy S26:</b> 256GB is $4.99/mo new line or $15.99/mo upgrade; 512GB is $11.99/mo new line or $22.99/mo upgrade.</li>
-        <li><b>CRU / FirstNet:</b> Galaxy S26 256GB and 512GB are removed from CRU and FirstNet tiered offers effective 8/21, while the national consumer tiered offer remains available.</li>
-        <li><b>iPhone 16:</b> 256GB and 512GB tiered offers ended 8/20. The 128GB tiered offer remains.</li>
-        <li><b>Pixel Watch 5 bundle:</b> eligible Pixel Watch 5 models can receive up to $100 in monthly bill credits with a new wearable line and can be bundled with Pixel 11 / 11 Pro / 11 Pro XL. Verify in CCKM.</li>
-        <li><b>Device Admin:</b> phones can now be marked Sellable and/or Trade Eligible independently, with a maintained trade value.</li>
-      </ul>
-    </section>
+    <div class="whats-new-tabs" role="tablist" aria-label="What's New categories">
+      <button type="button" class="whats-new-tab active" data-whats-tab="promos" role="tab" aria-selected="true">Promo Updates</button>
+      <button type="button" class="whats-new-tab" data-whats-tab="builds" role="tab" aria-selected="false">Build Updates</button>
+    </div>
 
-    <section class="whats-new-section">
-      <h3>3.01 — Smarter quoting tools</h3>
-      <ul>
-        <li><b>Tiered offers:</b> More now shows total savings versus MSRP.</li>
-        <li><b>Phone Comparison:</b> type phones, compare up to three devices, and open comparison directly from the active quote.</li>
-        <li><b>Comparison details:</b> quick price/promo view with additional details tucked under More.</li>
-        <li><b>Mobile pop-ups:</b> close controls stay reachable on smaller screens.</li>
-      </ul>
-    </section>
+    <div id="whatsPanePromos" class="whats-new-pane active" data-whats-pane="promos">
+      <section class="whats-new-section whats-new-latest">
+        <h3>8/21 — Galaxy S26 tiered pricing updated</h3>
+        <ul>
+          <li><b>Galaxy S26 256GB:</b> $4.99/mo new line or $15.99/mo upgrade.</li>
+          <li><b>Galaxy S26 512GB:</b> $11.99/mo new line or $22.99/mo upgrade.</li>
+          <li><b>Consumer tiered offer remains active.</b> CRU and FirstNet tiered availability for Galaxy S26 ended after 8/20.</li>
+          <li>No trade-in is required for the standard consumer tiered offer. Verify final eligibility in CCKM.</li>
+        </ul>
+      </section>
 
-    <section class="whats-new-section whats-new-upcoming">
-      <h3>Upcoming 8/14 — Samsung tiered offers</h3>
-      <ul>
-        <li><b>Galaxy S26 256GB:</b> $10.99/mo new line or $15.99/mo upgrade.</li>
-        <li><b>Galaxy S25 Edge 256GB:</b> $15.99/mo new line or $20.99/mo upgrade.</li>
-        <li><b>Next Up Anytime tiered upgrade:</b> S26 $15.99/mo; S25 Edge $20.99/mo. Eligible turn-in required.</li>
-        <li><b>No trade-in required</b> for the standard tiered offers.</li>
-        <li><b>8/13 is the final day</b> for the S26 legacy Next Up early upgrade, Next Up Anytime premium upgrade, and Android premium trade-in offer paths.</li>
-      </ul>
-    </section>
+      <section class="whats-new-section">
+        <h3>8/20 — Apple + Pixel updates</h3>
+        <ul>
+          <li><b>iPhone 16 256GB and 512GB:</b> tiered offers ended after 8/20.</li>
+          <li><b>iPhone 16 128GB:</b> remains on its tiered offer.</li>
+          <li><b>Pixel Watch 5 bundle:</b> up to $100 in monthly bill credits with a new wearable line; can be combined with Pixel 11 / 11 Pro / 11 Pro XL on a new or upgrade line.</li>
+        </ul>
+      </section>
 
-    <section class="whats-new-section">
-      <h3>Current 8/12 — Pixel 11 launch</h3>
-      <ul>
-        <li><b>Pixel 11 Pro XL:</b> up to $1,350 with a $200+ trade on Extra 2.0 / Premium 2.0 / Elite 2.0 / qualifying legacy plans.</li>
-        <li><b>Pixel 11 Pro XL:</b> up to $1,150 with a $95–$199 trade; up to $1,000 with a $35+ trade or qualifying any-condition Pixel.</li>
-        <li><b>Pixel 11 Pro:</b> up to $1,150 with a $35+ trade or qualifying any-condition Pixel.</li>
-        <li><b>Pixel 11 256GB:</b> tiered offer at <b>$10.99/mo</b>.</li>
-        <li><b>Value 2.0:</b> up to $500 on Pixel 11 Pro / Pro XL with a $35+ trade or qualifying any-condition Pixel.</li>
-        <li>Pixel 10 Pro / Pro XL remain on their existing offers for now.</li>
-      </ul>
-    </section>
+      <section class="whats-new-section">
+        <h3>8/12 — Pixel 11 launch</h3>
+        <ul>
+          <li><b>Pixel 11 Pro XL:</b> up to $1,350 with a $200+ trade on qualifying Premium / Extra / Elite plans.</li>
+          <li><b>Pixel 11 Pro:</b> up to $1,150 with a $35+ trade or qualifying any-condition Pixel.</li>
+          <li><b>Pixel 11 256GB:</b> tiered offer at $10.99/mo.</li>
+          <li><b>Value 2.0:</b> up to $500 on Pixel 11 Pro / Pro XL with a $35+ trade or qualifying any-condition Pixel.</li>
+        </ul>
+      </section>
+    </div>
+
+    <div id="whatsPaneBuilds" class="whats-new-pane" data-whats-pane="builds">
+      <section class="whats-new-section whats-new-latest">
+        <h3>3.03 — Cleaner release history</h3>
+        <ul>
+          <li><b>What's New is now split:</b> Promo Updates and Build Updates.</li>
+          <li><b>Promo cards:</b> dated offer notes now track the current Galaxy S26 8/21 pricing instead of the old 8/14 launch note.</li>
+          <li><b>Device database:</b> Sellable and Trade Eligible are independent, so retired phones can remain available as trade-ins.</li>
+        </ul>
+      </section>
+
+      <section class="whats-new-section">
+        <h3>3.02 — Live device controls</h3>
+        <ul>
+          <li><b>Devices:</b> management can control Sellable, Trade Eligible, Trade Value, MSRP and visibility.</li>
+          <li><b>Tiered offers:</b> live pricing and segment eligibility are read from Supabase.</li>
+          <li><b>CRU / FirstNet:</b> tiered eligibility can be separated from consumer offers.</li>
+        </ul>
+      </section>
+
+      <section class="whats-new-section">
+        <h3>3.01 — Smarter quoting tools</h3>
+        <ul>
+          <li><b>Tiered offers:</b> More shows total savings versus MSRP.</li>
+          <li><b>Phone Comparison:</b> searchable comparison for up to three phones with current quote context.</li>
+          <li><b>Mobile pop-ups:</b> improved close controls and scrolling.</li>
+        </ul>
+      </section>
+    </div>
 
     <div class="whats-new-actions">
       <button type="button" id="whatsNewViewAll" class="admin-btn secondary">View All Changes</button>
@@ -1293,7 +1321,7 @@
 <div id="adminModal" class="modal-backdrop" aria-hidden="true">
   <div class="admin-panel" role="dialog" aria-modal="true" aria-label="Admin dashboard">
     <div class="admin-head">
-      <div><div class="eyebrow">Global Trade Tool 3.02</div><h2 style="margin:0;">Live Admin</h2></div>
+      <div><div class="eyebrow">Global Trade Tool 3.03</div><h2 style="margin:0;">Live Admin</h2></div>
       <button type="button" id="adminClose" class="admin-btn secondary" style="margin-left:auto;">Close</button>
       <button type="button" id="adminLock" class="admin-btn danger">Lock Admin</button>
     </div>
@@ -1488,12 +1516,12 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.02';
+  const VERSION = 'Version 3.03';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.02', month:'August 2026', updated:'8/21/2026' };
+  let releaseInfo = { version:'Version 3.03', month:'August 2026', updated:'8/21/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -2530,9 +2558,10 @@
       notes.push(`<div class="d-rule"><b>8/12/26:</b> Pixel 11 256GB tiered offer is <b>$10.99/mo</b>. Pixel 10 promos remain active for now.</div>`);
     }
     if(id.startsWith('s26-')){
-      notes.push(isS26TieredActive()
-        ? `<div class="d-rule"><b>8/14/26:</b> Galaxy S26 is now tiered — <b>$10.99/mo new line</b> or <b>$15.99/mo upgrade</b> on the 256GB model. No trade-in required for the tiered offer. Next Up Anytime uses the eligible tiered upgrade price with an eligible turn-in.</div>`
-        : `<div class="d-rule"><b>Coming 8/14:</b> Galaxy S26 moves to tiered pricing. <b>8/13 is the final day</b> for the current Android premium trade-in, legacy Next Up early upgrade, and Next Up Anytime premium upgrade paths.</div>`);
+      const is512 = id==='s26-512';
+      const newPrice = is512 ? '$11.99/mo' : '$4.99/mo';
+      const upgradePrice = is512 ? '$22.99/mo' : '$15.99/mo';
+      notes.push(`<div class="d-rule"><b>8/21/26:</b> Galaxy S26 ${is512?'512GB':'256GB'} consumer tiered pricing is <b>${newPrice} new line</b> or <b>${upgradePrice} upgrade</b>. CRU and FirstNet tiered availability ended after 8/20. No trade-in is required for the standard consumer tiered offer.</div>`);
     } else if(id.startsWith('s25edge-')){
       notes.push(isSamsung814TieredActive()
         ? `<div class="d-rule"><b>8/14/26:</b> Galaxy S25 Edge 256GB tiered pricing is <b>$15.99/mo new line</b> or <b>$20.99/mo upgrade</b>. Next Up Anytime tiered upgrade is <b>$20.99/mo</b> with an eligible turn-in.</div>`
@@ -2565,9 +2594,8 @@
       return `<b>iPhone 17 series — effective 7/31/26:</b> Extra 2.0 and above receive $700 with a $130+ trade or eligible turn-in. Starter / Starter SL receive $830 at $290+; the lower $130+ tier remains $700. iPhone 17 Pro and Pro Max retain the $1,100 top tier at $290+. Verify in CCKM before quoting.`;
     }
     if(id.startsWith('s26-')){
-      return isS26TieredActive()
-        ? `<b>Galaxy S26 — effective 8/14/26:</b> 256GB tiered pricing is $10.99/mo with a new line or $15.99/mo with an upgrade. No trade-in is required for the tiered offer. Next Up Anytime tiered upgrade is $15.99/mo with an eligible device turn-in. The previous Android premium trade-in, legacy Next Up early upgrade, and Next Up Anytime premium upgrade offers ended after 8/13. Verify exact storage and eligibility in CCKM before quoting.`
-        : `<b>Galaxy S26 — through 8/13/26:</b> Up to $900 on Starter / Starter SL or Extra 2.0 and above with a $35+ qualifying trade or a qualifying any-condition Galaxy S10, Note10, or Z Flip3 or newer. Value 2.0 receives up to $500. Legacy Next Up can receive up to $350 with an eligible early upgrade. These paths end after 8/13; tiered pricing begins 8/14. Verify in CCKM before quoting.`;
+      const is512 = id==='s26-512';
+      return `<b>Galaxy S26 ${is512?'512GB':'256GB'} — effective 8/21/26:</b> Consumer tiered pricing is ${is512?'$11.99':'$4.99'}/mo with a new line or ${is512?'$22.99':'$15.99'}/mo with an upgrade. CRU and FirstNet tiered availability ended after 8/20, while the national consumer tiered offer remains available. No trade-in is required for the standard consumer tiered offer. Verify final eligibility in CCKM before quoting.`;
     }
     if(id.startsWith('s25edge-')){
       return isSamsung814TieredActive()
@@ -3577,7 +3605,7 @@
 
 
 
-  // === Global Trade Tool 3.02 Live Database Admin ===
+  // === Global Trade Tool 3.03 Live Database Admin ===
   const LIVE_DB_CONFIG = {
     trade_devices:{
       title:'Trade-In Phones', pk:['id'], order:{column:'brand',ascending:true},
@@ -4011,6 +4039,13 @@
     modal.setAttribute('aria-hidden','false');
   }
   el('whatsNewGotIt').addEventListener('click', ()=>closeWhatsNew(true));
+  document.querySelectorAll('[data-whats-tab]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const key=btn.dataset.whatsTab;
+      document.querySelectorAll('[data-whats-tab]').forEach(b=>{ const on=b===btn; b.classList.toggle('active',on); b.setAttribute('aria-selected',on?'true':'false'); });
+      document.querySelectorAll('[data-whats-pane]').forEach(p=>p.classList.toggle('active',p.dataset.whatsPane===key));
+    });
+  });
   el('whatsNewViewAll').addEventListener('click', ()=>{ closeWhatsNew(true); openTools('changes'); });
   el('whatsNewModal').addEventListener('click', e=>{ if(e.target === el('whatsNewModal')) closeWhatsNew(true); });
   document.addEventListener('keydown', e=>{ if(e.key === 'Escape' && el('whatsNewModal').classList.contains('open')) closeWhatsNew(true); });
