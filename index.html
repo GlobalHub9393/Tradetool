@@ -530,6 +530,7 @@
   .whats-new-section h3{margin:0 0 6px;font-size:14px;color:var(--blue);}
   .whats-new-section ul{margin:6px 0 0;padding-left:20px;color:var(--ink);font-size:13px;line-height:1.5;}
   .whats-new-section li{margin:4px 0;}
+  .whats-new-live-body{margin:6px 0 0;color:var(--ink);font-size:13px;line-height:1.5;}
   .whats-new-upcoming{border-color:#f0d28e;background:#fffaf0;}
   .whats-new-upcoming h3{color:#8a5a00;}
   .whats-new-actions{display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px;}
@@ -1043,7 +1044,7 @@
       <div><div class="whats-new-kicker">Changes since last update</div><h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2></div>
       <button type="button" id="whatsNewCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close What’s New">×</button>
     </div>
-    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.05</div>
+    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.06</div>
     <p class="whats-new-sub">This message appears once per day on this browser, and again when a new version launches.</p>
 
     <div class="whats-new-tabs" role="tablist" aria-label="What's New categories">
@@ -1052,6 +1053,7 @@
     </div>
 
     <div id="whatsPanePromos" class="whats-new-pane active" data-whats-pane="promos">
+      <div id="whatsNewLivePromos"></div>
       <section class="whats-new-section whats-new-latest">
         <h3>8/21 — Galaxy S26 tiered pricing updated</h3>
         <ul>
@@ -1084,6 +1086,15 @@
 
     <div id="whatsPaneBuilds" class="whats-new-pane" data-whats-pane="builds">
       <section class="whats-new-section whats-new-latest">
+        <h3>3.06 — Fresh data + cache fix</h3>
+        <ul>
+          <li><b>What’s New is now live:</b> new promo announcements added in Supabase can appear here without another HTML upload.</li>
+          <li><b>Fresh Supabase reads:</b> launch data requests bypass browser caching so current pricing/content is requested each visit.</li>
+          <li><b>Same-day updates:</b> a new or edited Supabase announcement can trigger What’s New again even if the browser already saw it earlier that day.</li>
+          <li><b>Browser cache protection:</b> deploy the included <code>_headers</code> file with this build so Cloudflare Pages tells browsers not to retain stale app files.</li>
+        </ul>
+      </section>
+      <section class="whats-new-section">
         <h3>3.05 — Safer Management Admin</h3>
         <ul>
           <li><b>Batch editing:</b> changes are staged first, reviewed, then applied together.</li>
@@ -1556,12 +1567,12 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.05';
+  const VERSION = 'Version 3.06';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.05', month:'August 2026', updated:'8/21/2026' };
+  let releaseInfo = { version:'Version 3.06', month:'August 2026', updated:'8/28/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -1793,7 +1804,8 @@
     try{
       const endpoint = SUPABASE_URL + '/rest/v1/app_settings?select=setting_key,setting_value&setting_key=in.(current_version,release_month,last_updated)';
       const response = await fetch(endpoint,{
-        headers:{ apikey: SUPABASE_PUBLISHABLE_KEY }
+        headers:{ apikey: SUPABASE_PUBLISHABLE_KEY },
+        cache:'no-store'
       });
       if(!response.ok) throw new Error(`Supabase ${response.status}: ${await response.text()}`);
       const rows = await response.json();
@@ -1835,7 +1847,8 @@
         headers:{
           apikey: SUPABASE_PUBLISHABLE_KEY,
           Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
-        }
+        },
+        cache:'no-store'
       });
       if(!response.ok) throw new Error(`Supabase ${response.status}: ${await response.text()}`);
       const rows = await response.json();
@@ -1870,8 +1883,8 @@
     try{
       const headers = { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization:`Bearer ${SUPABASE_PUBLISHABLE_KEY}` };
       const [devRes,tierRes] = await Promise.all([
-        fetch(SUPABASE_URL + '/rest/v1/sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,quick_pick,active,sellable,trade_eligible,trade_value,sort_order,updated_at&order=sort_order.asc', {headers}),
-        fetch(SUPABASE_URL + '/rest/v1/tiered_prices?select=device_key,activation_type,monthly_price,months,active,starts_at,ends_at,eligible_segments,updated_at&order=device_key.asc', {headers})
+        fetch(SUPABASE_URL + '/rest/v1/sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,quick_pick,active,sellable,trade_eligible,trade_value,sort_order,updated_at&order=sort_order.asc', {headers,cache:'no-store'}),
+        fetch(SUPABASE_URL + '/rest/v1/tiered_prices?select=device_key,activation_type,monthly_price,months,active,starts_at,ends_at,eligible_segments,updated_at&order=device_key.asc', {headers,cache:'no-store'})
       ]);
       if(!devRes.ok) throw new Error(`Sellable devices ${devRes.status}: ${await devRes.text()}`);
       if(!tierRes.ok) throw new Error(`Tiered prices ${tierRes.status}: ${await tierRes.text()}`);
@@ -1925,6 +1938,85 @@
   };
 
   const el = id => document.getElementById(id);
+  let whatsNewContentRevision = 'embedded';
+
+  function whatsNewHash(value){
+    let h = 2166136261;
+    const s = String(value || '');
+    for(let i=0;i<s.length;i++){
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0).toString(36);
+  }
+
+  function whatsNewShortDate(value){
+    if(!value) return '';
+    const parts = String(value).slice(0,10).split('-');
+    if(parts.length !== 3) return '';
+    return `${Number(parts[1])}/${Number(parts[2])}`;
+  }
+
+  async function loadWhatsNewContentFromSupabase(){
+    const host = el('whatsNewLivePromos');
+    if(!host) return;
+    try{
+      const endpoint = SUPABASE_URL + '/rest/v1/content_items?select=id,content_key,content_type,title,body,effective_date,active,sort_order,metadata&active=eq.true&order=effective_date.desc,sort_order.asc&limit=50';
+      const response = await fetch(endpoint,{
+        headers:{
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          Authorization:`Bearer ${SUPABASE_PUBLISHABLE_KEY}`
+        },
+        cache:'no-store'
+      });
+      if(!response.ok) throw new Error(`Content ${response.status}: ${await response.text()}`);
+      const rows = await response.json();
+      if(!Array.isArray(rows)) return;
+
+      // 8/21 and older promo notes are preserved as embedded fallback cards below.
+      // Newer announcements/recent changes come from Supabase, so future content edits
+      // no longer require another index.html deployment.
+      const cutoff = '2026-08-21';
+      const liveRows = rows.filter(r=>{
+        if(!['announcement','recent_change'].includes(String(r.content_type||''))) return false;
+        let meta = r.metadata || {};
+        if(typeof meta === 'string'){
+          try{ meta = JSON.parse(meta); }catch(e){ meta = {}; }
+        }
+        if(meta && meta.category === 'app_update') return false;
+        const date = String(r.effective_date || '').slice(0,10);
+        return (date && date > cutoff) || (meta && meta.category === 'promo_update');
+      }).sort((a,b)=>{
+        const ad = String(a.effective_date||''), bd = String(b.effective_date||'');
+        if(ad !== bd) return bd.localeCompare(ad);
+        return Number(a.sort_order||0) - Number(b.sort_order||0);
+      });
+
+      whatsNewContentRevision = whatsNewHash(JSON.stringify(liveRows.map(r=>[
+        r.id,r.content_key,r.title,r.body,r.effective_date,r.sort_order,r.metadata
+      ])));
+
+      if(!liveRows.length){
+        host.innerHTML = '';
+        return;
+      }
+
+      host.innerHTML = liveRows.map((r,i)=>{
+        const date = whatsNewShortDate(r.effective_date);
+        const heading = `${date ? date + ' — ' : ''}${escapeHtml(r.title || 'Update')}`;
+        const body = escapeHtml(r.body || '').replace(/\n+/g,'<br>');
+        return `<section class="whats-new-section${i===0?' whats-new-latest':''}" data-live-content-id="${escapeHtml(r.id)}">
+          <h3>${heading}</h3>
+          ${body ? `<p class="whats-new-live-body">${body}</p>` : ''}
+        </section>`;
+      }).join('');
+
+      console.info('What’s New content loaded from Supabase:', liveRows.length);
+    }catch(err){
+      host.innerHTML = '';
+      console.warn('Supabase What’s New unavailable; using embedded promo cards.', err);
+    }
+  }
   const planSearch = el('planSearch'), planSuggestions = el('planSuggestions'), planSuggestionsList = el('planSuggestionsList');
   const phoneSearch = el('phoneSearch'), phoneSuggestions = el('phoneSuggestions'), phoneSuggestionsList = el('phoneSuggestionsList');
   const phonesQuick = el('phonesQuick');
@@ -4167,7 +4259,7 @@
   }
   function whatsNewSeenKey(){
     // Show once per browser each day, but always show again when a NEW VERSION lands that same day.
-    return `${localDateKey()}|${releaseInfo.version || VERSION}`;
+    return `${localDateKey()}|${releaseInfo.version || VERSION}|${whatsNewContentRevision}`;
   }
   function closeWhatsNew(markSeen){
     const modal = el('whatsNewModal');
@@ -4433,6 +4525,7 @@
   // initialize
   applyAdminData();
   await loadReleaseMetaFromSupabase();
+  await loadWhatsNewContentFromSupabase();
   buildQuickChips();
   buildCompareOptions();
   renderHistory();
