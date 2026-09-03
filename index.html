@@ -370,22 +370,174 @@
   .good-to-know{font-size:12.5px;line-height:1.45;color:#c6d9e9;}
   .promo-timing-chip{display:inline-flex;margin-top:9px;padding:6px 9px;border-radius:8px;background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.30);color:#fde68a;font-size:11px;font-weight:900;letter-spacing:.04em;}
 
-  /* Apple keynote drop banner */
-  .apple-event-wrap{max-width:1180px;margin:0 auto;padding:0 18px;position:relative;z-index:45;}
-  .apple-event-banner{overflow:hidden;max-height:0;opacity:0;transform:translateY(-10px);transition:max-height .48s cubic-bezier(.2,.8,.2,1),opacity .3s ease,transform .42s ease;margin-top:0;}
-  .apple-event-banner.open{max-height:260px;opacity:1;transform:translateY(0);margin-top:10px;}
-  .apple-event-card{background:linear-gradient(135deg,#111827,#20243a 58%,#2b2141);border:1px solid rgba(196,181,253,.30);border-radius:16px;padding:16px 16px 12px;color:#fff;box-shadow:0 10px 28px rgba(15,23,42,.18);}
-  .apple-event-kicker{font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#c4b5fd;}
-  .apple-event-title{font-size:19px;font-weight:900;margin-top:3px;}
-  .apple-event-time{font-size:12.5px;color:#cbd5e1;margin-top:2px;font-weight:650;}
-  .apple-countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:13px;}
-  .apple-count-box{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.11);border-radius:10px;padding:8px 5px;text-align:center;}
-  .apple-count-box b{display:block;font-size:22px;font-variant-numeric:tabular-nums;}
-  .apple-count-box span{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#aebdd0;font-weight:800;}
-  .apple-hide{display:block;width:100%;margin-top:10px;border:0;background:transparent;color:#cbd5e1;padding:7px;font-size:12px;font-weight:800;cursor:pointer;}
-  .apple-mini{display:none;width:100%;border:1px solid rgba(167,139,250,.30);border-radius:0 0 12px 12px;background:#171a28;color:#eee;padding:7px 12px;font-size:12px;font-weight:850;cursor:pointer;text-align:center;}
+  /* Apple keynote fabric banner */
+  .apple-event-wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 18px;
+    position:relative;
+    z-index:45;
+  }
+  .apple-event-banner{
+    overflow:visible;
+    max-height:0;
+    opacity:0;
+    transform:translateY(-18px) scaleY(.12);
+    transform-origin:top center;
+    transition:
+      max-height 1.45s cubic-bezier(.22,.78,.18,1),
+      transform 1.35s cubic-bezier(.22,.78,.18,1),
+      opacity .55s ease,
+      margin-top 1.1s ease;
+    margin-top:0;
+    pointer-events:none;
+  }
+  .apple-event-banner.open{
+    max-height:310px;
+    opacity:1;
+    transform:translateY(0) scaleY(1);
+    margin-top:18px;
+    pointer-events:auto;
+  }
+  .apple-event-card{
+    position:relative;
+    margin:0 12px;
+    padding:28px 22px 18px;
+    color:#fff;
+    text-align:center;
+    border:0;
+    border-radius:3px 3px 20px 20px / 3px 3px 12px 12px;
+    background:
+      linear-gradient(95deg,rgba(255,255,255,.035),rgba(255,255,255,0) 18%,rgba(255,255,255,.025) 42%,rgba(0,0,0,.035) 68%,rgba(255,255,255,.025)),
+      repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,rgba(0,0,0,.018) 1px 3px),
+      linear-gradient(145deg,#171827 0%,#262039 54%,#171925 100%);
+    box-shadow:
+      0 18px 24px rgba(15,23,42,.20),
+      inset 0 1px rgba(255,255,255,.06),
+      inset 10px 0 20px rgba(255,255,255,.025),
+      inset -12px 0 24px rgba(0,0,0,.08);
+  }
+  .apple-event-card::before{
+    content:"";
+    position:absolute;
+    left:-12px;
+    right:-12px;
+    top:-13px;
+    height:17px;
+    border-radius:999px;
+    background:linear-gradient(180deg,#4a4b55 0%,#22232b 42%,#121319 70%,#31323b 100%);
+    box-shadow:0 3px 5px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.16);
+  }
+  .apple-event-card::after{
+    content:"";
+    position:absolute;
+    left:8%;
+    right:8%;
+    bottom:-8px;
+    height:16px;
+    border-radius:0 0 50% 50%;
+    background:rgba(10,11,18,.16);
+    filter:blur(8px);
+    pointer-events:none;
+  }
+  .apple-event-kicker{
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:#d7ccff;
+    text-shadow:0 1px 8px rgba(0,0,0,.25);
+  }
+  .apple-event-title{
+    font-size:clamp(22px,4vw,30px);
+    font-weight:900;
+    margin-top:5px;
+    letter-spacing:-.02em;
+    text-shadow:0 2px 12px rgba(0,0,0,.25);
+  }
+  .apple-event-time{
+    font-size:12.5px;
+    color:#d2d8e4;
+    margin-top:3px;
+    font-weight:650;
+  }
+  .apple-countdown{
+    display:flex;
+    justify-content:center;
+    align-items:baseline;
+    gap:5px;
+    margin-top:16px;
+    font-variant-numeric:tabular-nums;
+  }
+  .apple-count-box{
+    min-width:56px;
+    padding:0 3px;
+    background:transparent;
+    border:0;
+    border-radius:0;
+    text-align:center;
+  }
+  .apple-count-box:not(:last-child)::after{
+    content:"·";
+    position:relative;
+    left:9px;
+    color:#817c96;
+    font-size:20px;
+  }
+  .apple-count-box b{
+    display:inline-block;
+    font-size:clamp(22px,5vw,32px);
+    line-height:1;
+    letter-spacing:-.03em;
+  }
+  .apple-count-box span{
+    display:block;
+    margin-top:5px;
+    font-size:8.5px;
+    text-transform:uppercase;
+    letter-spacing:.11em;
+    color:#aeb6c6;
+    font-weight:800;
+  }
+  .apple-hide{
+    display:block;
+    width:auto;
+    min-width:150px;
+    margin:16px auto 0;
+    border:0;
+    border-top:1px solid rgba(255,255,255,.12);
+    background:transparent;
+    color:#cfd4df;
+    padding:10px 18px 2px;
+    font-size:11.5px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .apple-mini{
+    display:none;
+    width:100%;
+    border:1px solid rgba(167,139,250,.30);
+    border-radius:0 0 12px 12px;
+    background:#171a28;
+    color:#eee;
+    padding:7px 12px;
+    font-size:12px;
+    font-weight:850;
+    cursor:pointer;
+    text-align:center;
+  }
   .apple-mini.show{display:block;}
-  @media(max-width:520px){.apple-event-wrap{padding:0 10px}.apple-count-box b{font-size:19px}}
+  @media(max-width:520px){
+    .apple-event-wrap{padding:0 8px;}
+    .apple-event-card{margin:0 5px;padding:25px 10px 16px;}
+    .apple-countdown{gap:1px;}
+    .apple-count-box{min-width:52px;}
+    .apple-count-box:not(:last-child)::after{left:7px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .apple-event-banner{transition:opacity .25s ease,max-height .25s ease;transform:none;}
+    .apple-event-banner.open{transform:none;}
+  }
 
   /* summary area */
   .summary{margin-top:12px; background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.14); border-radius:12px; padding:11px 12px;}
@@ -1105,7 +1257,7 @@
       <div><div class="whats-new-kicker">Changes since last update</div><h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2></div>
       <button type="button" id="whatsNewCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close What’s New">×</button>
     </div>
-    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.09</div>
+    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.10</div>
     <p class="whats-new-sub">This message appears once per day on this browser, and again when a new version launches.</p>
 
     <div class="whats-new-tabs" role="tablist" aria-label="What's New categories">
@@ -1118,6 +1270,15 @@
     </div>
     <div id="whatsPaneBuilds" class="whats-new-pane" data-whats-pane="builds">
       <section class="whats-new-section whats-new-latest">
+        <h3>3.10 — Fabric Apple banner</h3>
+        <ul>
+          <li><b>Apple countdown:</b> redesigned to look like a hanging fabric banner rather than a blocky card.</li>
+          <li><b>Slower motion:</b> the banner now falls and rolls up at a more deliberate speed.</li>
+          <li><b>Automatic roll-up:</b> after about 8.5 seconds it rolls itself into the compact countdown strip.</li>
+          <li>Tapping the compact strip drops the fabric banner again and restarts the auto-roll timer.</li>
+        </ul>
+      </section>
+      <section class="whats-new-section">
         <h3>3.09 — Cleaner quotes + Apple countdown</h3>
         <ul>
           <li><b>Apple Event:</b> live countdown banner through September 9 at 1 PM ET; Hide rolls it into a compact countdown strip.</li>
@@ -1626,12 +1787,12 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.09';
+  const VERSION = 'Version 3.10';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.09', month:'September 2026', updated:'9/3/2026' };
+  let releaseInfo = { version:'Version 3.10', month:'September 2026', updated:'9/3/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -3333,16 +3494,23 @@
 
   // ---- Apple Event countdown ----
   const APPLE_EVENT_AT = new Date('2026-09-09T13:00:00-04:00').getTime();
+  const APPLE_BANNER_OPEN_MS = 8500;
   const appleBanner = el('appleEventBanner'), appleMini = el('appleEventMini');
+  let appleAutoHideTimer = null;
+
   function appleCountdownText(ms){
     if(ms <= 0) return 'Event is live';
     const total=Math.floor(ms/1000), d=Math.floor(total/86400), h=Math.floor((total%86400)/3600), m=Math.floor((total%3600)/60);
     return `${d}d ${h}h ${m}m`;
   }
+
   function updateAppleCountdown(){
     const diff=APPLE_EVENT_AT-Date.now();
     if(diff<=0){
-      el('appleDays').textContent='LIVE'; el('appleHours').textContent='—'; el('appleMinutes').textContent='—'; el('appleSeconds').textContent='—';
+      el('appleDays').textContent='LIVE';
+      el('appleHours').textContent='—';
+      el('appleMinutes').textContent='—';
+      el('appleSeconds').textContent='—';
       el('appleMiniCountdown').textContent='Event is live';
       return;
     }
@@ -3353,17 +3521,42 @@
     el('appleSeconds').textContent=String(total%60).padStart(2,'0');
     el('appleMiniCountdown').textContent=appleCountdownText(diff);
   }
+
+  function scheduleAppleAutoHide(){
+    clearTimeout(appleAutoHideTimer);
+    appleAutoHideTimer=setTimeout(()=>hideAppleBanner(), APPLE_BANNER_OPEN_MS);
+  }
+
   function openAppleBanner(){
-    appleMini.classList.remove('show'); appleBanner.classList.add('open'); appleBanner.setAttribute('aria-hidden','false');
+    clearTimeout(appleAutoHideTimer);
+    appleMini.classList.remove('show');
+    appleBanner.classList.add('open');
+    appleBanner.setAttribute('aria-hidden','false');
+    scheduleAppleAutoHide();
   }
+
   function hideAppleBanner(){
-    appleBanner.classList.remove('open'); appleBanner.setAttribute('aria-hidden','true'); appleMini.classList.add('show');
+    clearTimeout(appleAutoHideTimer);
+    appleBanner.classList.remove('open');
+    appleBanner.setAttribute('aria-hidden','true');
+    // Let the cloth finish rolling before the compact strip appears.
+    setTimeout(()=>{
+      if(!appleBanner.classList.contains('open')) appleMini.classList.add('show');
+    },1050);
   }
+
   el('appleEventHide').addEventListener('click',hideAppleBanner);
   appleMini.addEventListener('click',openAppleBanner);
-  updateAppleCountdown(); setInterval(updateAppleCountdown,1000);
-  // Show the full banner after What's New is dismissed; if What's New is not opening, show it shortly after load.
-  setTimeout(()=>{ if(!el('whatsNewModal').classList.contains('show') && el('whatsNewModal').getAttribute('aria-hidden')!=='false') openAppleBanner(); },700);
+
+  updateAppleCountdown();
+  setInterval(updateAppleCountdown,1000);
+
+  // If What's New isn't open, let the banner fall shortly after load.
+  setTimeout(()=>{
+    if(!el('whatsNewModal').classList.contains('show') && el('whatsNewModal').getAttribute('aria-hidden')!=='false'){
+      openAppleBanner();
+    }
+  },900);
 
   // ---- Rotating tip strip ----
   let TIPS = [
