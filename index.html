@@ -1044,7 +1044,7 @@
       <div><div class="whats-new-kicker">Changes since last update</div><h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2></div>
       <button type="button" id="whatsNewCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close What’s New">×</button>
     </div>
-    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.06</div>
+    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.07</div>
     <p class="whats-new-sub">This message appears once per day on this browser, and again when a new version launches.</p>
 
     <div class="whats-new-tabs" role="tablist" aria-label="What's New categories">
@@ -1054,38 +1054,17 @@
 
     <div id="whatsPanePromos" class="whats-new-pane active" data-whats-pane="promos">
       <div id="whatsNewLivePromos"></div>
-      <section class="whats-new-section whats-new-latest">
-        <h3>8/21 — Galaxy S26 tiered pricing updated</h3>
-        <ul>
-          <li><b>Galaxy S26 256GB:</b> $4.99/mo new line or $15.99/mo upgrade.</li>
-          <li><b>Galaxy S26 512GB:</b> $11.99/mo new line or $22.99/mo upgrade.</li>
-          <li><b>Same national tiered offer for Consumer, CRU, and FirstNet.</b> The older CRU/FirstNet-specific S26 offer ended, but these customers can use the national tiered pricing.</li>
-          <li>No trade-in is required for the standard consumer tiered offer. Verify final eligibility in CCKM.</li>
-        </ul>
-      </section>
-
-      <section class="whats-new-section">
-        <h3>8/20 — Apple + Pixel updates</h3>
-        <ul>
-          <li><b>iPhone 16 256GB and 512GB:</b> tiered offers ended after 8/20.</li>
-          <li><b>iPhone 16 128GB:</b> remains on its tiered offer.</li>
-          <li><b>Pixel Watch 5 bundle:</b> up to $100 in monthly bill credits with a new wearable line; can be combined with Pixel 11 / 11 Pro / 11 Pro XL on a new or upgrade line.</li>
-        </ul>
-      </section>
-
-      <section class="whats-new-section">
-        <h3>8/12 — Pixel 11 launch</h3>
-        <ul>
-          <li><b>Pixel 11 Pro XL:</b> up to $1,350 with a $200+ trade on qualifying Premium / Extra / Elite plans.</li>
-          <li><b>Pixel 11 Pro:</b> up to $1,150 with a $35+ trade or qualifying any-condition Pixel.</li>
-          <li><b>Pixel 11 256GB:</b> tiered offer at $10.99/mo.</li>
-          <li><b>Value 2.0:</b> up to $500 on Pixel 11 Pro / Pro XL with a $35+ trade or qualifying any-condition Pixel.</li>
-        </ul>
-      </section>
     </div>
-
     <div id="whatsPaneBuilds" class="whats-new-pane" data-whats-pane="builds">
       <section class="whats-new-section whats-new-latest">
+        <h3>3.07 — Promo Updates fully live</h3>
+        <ul>
+          <li><b>Promo Updates is now 100% Supabase-driven.</b></li>
+          <li>Old hard-coded promo cards were removed from the HTML.</li>
+          <li>Archiving a What’s New item in Supabase now removes it from the live Promo Updates page.</li>
+        </ul>
+      </section>
+      <section class="whats-new-section">
         <h3>3.06 — Fresh data + cache fix</h3>
         <ul>
           <li><b>What’s New is now live:</b> new promo announcements added in Supabase can appear here without another HTML upload.</li>
@@ -1567,12 +1546,12 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.06';
+  const VERSION = 'Version 3.07';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.06', month:'August 2026', updated:'8/28/2026' };
+  let releaseInfo = { version:'Version 3.07', month:'September 2026', updated:'9/3/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
