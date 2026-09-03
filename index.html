@@ -255,8 +255,8 @@
   .display.result-orange .d-amount, .display.result-orange .monthly-primary { color:#fb923c; }
   .display.result-red { border-left-color:#ef4444; animation: pulse-red 3.85s ease-in-out infinite; }
   .display.result-red .d-amount { color:#fca5a5; }
-  .display.result-tiered { border-left-color:#3bc0f0; animation: pulse-blue 2.4s ease-in-out infinite; }
-  .display.result-tiered .monthly-primary { color: var(--cyan); }
+  .display.result-tiered { border-left-color:#a78bfa; box-shadow:0 10px 30px rgba(7,28,52,.30),0 0 22px rgba(167,139,250,.18); }
+  .display.result-tiered .monthly-primary { color:#ddd6fe; text-shadow:0 0 16px rgba(167,139,250,.22); }
 
   /* maximum promo: brightest green halo and price glow */
   .display.result-max{border-left-color:#65ff9f;animation:maxPromoPulse .92s ease-in-out infinite;}
@@ -350,6 +350,42 @@
 
   .clear-all{margin-top:14px; width:100%; padding:12px 16px; border-radius:11px; border:none; background:#ffeef0; color:#a32b2b; font-weight:700; cursor:pointer;}
   .clear-all:hover{background:#ffdbe0;}
+
+
+  /* 3.09 result card cleanup */
+  .activation-badge{display:inline-flex;align-items:center;margin:7px 0 2px;padding:5px 9px;border-radius:999px;background:rgba(167,139,250,.16);border:1px solid rgba(196,181,253,.35);color:#ede9fe;font-size:11px;font-weight:900;letter-spacing:.08em;}
+  .offer-headline{font-size:15px;color:#f4f8fc;font-weight:800;margin-top:8px;}
+  .offer-subline{font-size:13px;color:#b9d0e3;font-weight:650;margin-top:4px;line-height:1.4;}
+  .result-more summary{font-size:13px;font-weight:850;color:#eaf3fb;cursor:pointer;padding:10px 0;list-style:none;}
+  .result-more summary::-webkit-details-marker{display:none;}
+  .result-more summary::after{content:" ›";color:#a78bfa;}
+  .result-more[open] summary::after{content:" ↑";}
+  .offer-math{display:grid;gap:0;margin-top:2px;}
+  .offer-math-row{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.09);font-size:13px;color:#cfe2f3;}
+  .offer-math-row:last-child{border-bottom:none;}
+  .offer-math-row b{color:#fff;text-align:right;}
+  .offer-savings{margin-top:9px;padding:9px 10px;border-radius:9px;background:rgba(34,197,94,.10);border:1px solid rgba(74,222,128,.24);color:#b9f6cc;font-size:13px;font-weight:850;}
+  .offer-requirements{display:grid;gap:6px;margin-top:3px;color:#dceaf5;font-size:13px;font-weight:650;}
+  .offer-requirements span::before{content:"✓";color:#86efac;font-weight:900;margin-right:7px;}
+  .good-to-know{font-size:12.5px;line-height:1.45;color:#c6d9e9;}
+  .promo-timing-chip{display:inline-flex;margin-top:9px;padding:6px 9px;border-radius:8px;background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.30);color:#fde68a;font-size:11px;font-weight:900;letter-spacing:.04em;}
+
+  /* Apple keynote drop banner */
+  .apple-event-wrap{max-width:1180px;margin:0 auto;padding:0 18px;position:relative;z-index:45;}
+  .apple-event-banner{overflow:hidden;max-height:0;opacity:0;transform:translateY(-10px);transition:max-height .48s cubic-bezier(.2,.8,.2,1),opacity .3s ease,transform .42s ease;margin-top:0;}
+  .apple-event-banner.open{max-height:260px;opacity:1;transform:translateY(0);margin-top:10px;}
+  .apple-event-card{background:linear-gradient(135deg,#111827,#20243a 58%,#2b2141);border:1px solid rgba(196,181,253,.30);border-radius:16px;padding:16px 16px 12px;color:#fff;box-shadow:0 10px 28px rgba(15,23,42,.18);}
+  .apple-event-kicker{font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#c4b5fd;}
+  .apple-event-title{font-size:19px;font-weight:900;margin-top:3px;}
+  .apple-event-time{font-size:12.5px;color:#cbd5e1;margin-top:2px;font-weight:650;}
+  .apple-countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:13px;}
+  .apple-count-box{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.11);border-radius:10px;padding:8px 5px;text-align:center;}
+  .apple-count-box b{display:block;font-size:22px;font-variant-numeric:tabular-nums;}
+  .apple-count-box span{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#aebdd0;font-weight:800;}
+  .apple-hide{display:block;width:100%;margin-top:10px;border:0;background:transparent;color:#cbd5e1;padding:7px;font-size:12px;font-weight:800;cursor:pointer;}
+  .apple-mini{display:none;width:100%;border:1px solid rgba(167,139,250,.30);border-radius:0 0 12px 12px;background:#171a28;color:#eee;padding:7px 12px;font-size:12px;font-weight:850;cursor:pointer;text-align:center;}
+  .apple-mini.show{display:block;}
+  @media(max-width:520px){.apple-event-wrap{padding:0 10px}.apple-count-box b{font-size:19px}}
 
   /* summary area */
   .summary{margin-top:12px; background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.14); border-radius:12px; padding:11px 12px;}
@@ -782,7 +818,26 @@
     <div class="cckm-link">Promotions (CCKM): <a href="https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview" target="_blank" rel="noopener noreferrer">Open promotions in CCKM</a></div>
   </header>
 
-  <div class="layout">
+  
+<div id="appleEventWrap" class="apple-event-wrap">
+  <div id="appleEventBanner" class="apple-event-banner" aria-hidden="true">
+    <div class="apple-event-card">
+      <div class="apple-event-kicker">Apple Special Event</div>
+      <div class="apple-event-title">Surprise and shine.</div>
+      <div class="apple-event-time">September 9 · 1:00 PM ET</div>
+      <div class="apple-countdown" aria-label="Countdown to Apple keynote">
+        <div class="apple-count-box"><b id="appleDays">--</b><span>Days</span></div>
+        <div class="apple-count-box"><b id="appleHours">--</b><span>Hours</span></div>
+        <div class="apple-count-box"><b id="appleMinutes">--</b><span>Minutes</span></div>
+        <div class="apple-count-box"><b id="appleSeconds">--</b><span>Seconds</span></div>
+      </div>
+      <button id="appleEventHide" class="apple-hide" type="button">Hide countdown ↑</button>
+    </div>
+  </div>
+  <button id="appleEventMini" class="apple-mini" type="button"> Apple Event · <span id="appleMiniCountdown">Countdown</span> ↓</button>
+</div>
+
+<div class="layout">
     <main class="inputs">
 
       <!-- PLANS -->
@@ -975,7 +1030,7 @@
 
 
       <div style="display:flex; gap:10px; align-items:center;">
-        <button id="clearAll" class="clear-all" title="Clear all fields">Clear entire form</button>
+        <button id="clearAll" class="clear-all" title="Start a fresh quote">Start New Quote</button>
       </div>
     </main>
 
@@ -998,22 +1053,28 @@
       </div>
 
       <details id="resultMore" class="result-more">
-        <summary>More</summary>
+        <summary>View Offer Details</summary>
         <div class="result-more-body">
           <div id="fullSummaryCard" class="readable-card" style="display:none;">
-            <div class="rc-title">Summary</div>
-            <p id="summaryText">Pick a plan, phone, and trade-in value.</p>
-            <div id="summaryReadable" class="rc-text"></div>
+            <div class="rc-title">Your Offer</div>
+            <div id="offerMath" class="offer-math"></div>
+            <div id="offerSavingsPct" class="offer-savings" style="display:none;"></div>
           </div>
-          <div id="tieredSavingsCard" class="readable-card tiered-savings-card" style="display:none;">
-            <div class="rc-title">Total savings vs MSRP</div>
-            <div id="tieredSavingsNumber" class="tiered-savings-number"></div>
-            <div id="tieredSavingsCopy" class="tiered-savings-copy"></div>
+          <div id="offerRequirementsCard" class="readable-card" style="display:none;">
+            <div class="rc-title">Offer Requirements</div>
+            <div id="offerRequirements" class="offer-requirements"></div>
           </div>
           <div id="promoUpdateCard" class="readable-card" style="display:none;">
-            <div class="rc-title">Promo update</div>
+            <div class="rc-title">Offer Timing</div>
             <div id="promoUpdateDetails" class="rc-text"></div>
           </div>
+          <div id="goodToKnowCard" class="readable-card" style="display:none;">
+            <div class="rc-title">Good to Know</div>
+            <div class="good-to-know">Promotional savings are provided through monthly bill credits over 36 months when applicable. Credits may take 1–3 bill cycles to begin. Service, taxes, fees and other charges are separate. Verify eligibility in OPUS/CCKM before completing the sale.</div>
+          </div>
+          <div id="summaryText" style="display:none;"></div>
+          <div id="summaryReadable" style="display:none;"></div>
+          <div id="tieredSavingsCard" style="display:none;"><div id="tieredSavingsNumber"></div><div id="tieredSavingsCopy"></div></div>
         </div>
       </details>
 
@@ -1044,7 +1105,7 @@
       <div><div class="whats-new-kicker">Changes since last update</div><h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2></div>
       <button type="button" id="whatsNewCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close What’s New">×</button>
     </div>
-    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.08</div>
+    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.09</div>
     <p class="whats-new-sub">This message appears once per day on this browser, and again when a new version launches.</p>
 
     <div class="whats-new-tabs" role="tablist" aria-label="What's New categories">
@@ -1057,6 +1118,16 @@
     </div>
     <div id="whatsPaneBuilds" class="whats-new-pane" data-whats-pane="builds">
       <section class="whats-new-section whats-new-latest">
+        <h3>3.09 — Cleaner quotes + Apple countdown</h3>
+        <ul>
+          <li><b>Apple Event:</b> live countdown banner through September 9 at 1 PM ET; Hide rolls it into a compact countdown strip.</li>
+          <li><b>Price card:</b> tiered quotes now emphasize the monthly price and clearly label New Line vs Upgrade.</li>
+          <li><b>Offer Details:</b> MSRP, monthly price, 36-month device cost, promotional savings, requirements and customer-friendly notes.</li>
+          <li><b>Offer timing:</b> known starting/ending promo dates surface with the quote.</li>
+          <li><b>Tiered styling:</b> replaced the bright blue pulse with a calmer violet treatment.</li>
+        </ul>
+      </section>
+      <section class="whats-new-section">
         <h3>3.08 — Scheduled device availability</h3>
         <ul>
           <li><b>Phone launches and retirements can now schedule themselves.</b></li>
@@ -1555,12 +1626,12 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.08';
+  const VERSION = 'Version 3.09';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.08', month:'September 2026', updated:'9/3/2026' };
+  let releaseInfo = { version:'Version 3.09', month:'September 2026', updated:'9/3/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -3178,49 +3249,121 @@
   function updateCopyArea(){
     const ready = !!(state.plan && state.phone);
     const fullCard = el('fullSummaryCard');
-    const savingsCard = el('tieredSavingsCard');
-    const savingsNumber = el('tieredSavingsNumber');
-    const savingsCopy = el('tieredSavingsCopy');
+    const requirementsCard = el('offerRequirementsCard');
+    const requirements = el('offerRequirements');
+    const math = el('offerMath');
+    const savingsPct = el('offerSavingsPct');
+    const goodCard = el('goodToKnowCard');
     const promoUpdateCard = el('promoUpdateCard');
     const promoUpdateDetails = el('promoUpdateDetails');
     const currentResult = getResult();
+
     if(ready){
       el('summaryReadable').textContent = buildSummary();
-      fullCard.style.display = 'block';
-      if(currentResult.state === 'tiered_final' && state.phone && Number.isFinite(Number(state.phone.retail))){
-        const savings = Math.max(0, Number(state.phone.retail) - Number(currentResult.total || 0));
-        savingsNumber.textContent = money(savings) + ' off MSRP';
-        savingsCopy.textContent = `${money(state.phone.retail)} MSRP − ${money(currentResult.total || 0)} total tiered device cost over 36 months.`;
-        savingsCard.style.display = 'block';
+      const retail = Number(state.phone.retail || 0);
+      let monthlyCost = retail/36;
+      let totalCost = retail;
+      let savings = 0;
+      let requirementRows = [];
+
+      if(currentResult.state === 'tiered_final'){
+        monthlyCost = Number(currentResult.monthly || 0);
+        totalCost = Number(currentResult.total || monthlyCost*36);
+        savings = Math.max(0, retail-totalCost);
+        const action = (currentResult.viaNextUp || state.nextUp || state.tierAction==='upgrade') ? 'Upgrade' : (state.tierAction==='new' ? 'New Line' : 'New Line or Upgrade');
+        requirementRows = [action,'Eligible wireless plan','36-month installment agreement', state.nextUp ? 'Eligible Next Up turn-in required' : 'No trade-in required'];
+      } else if(currentResult.state === 'promo'){
+        const credit = Number(currentResult.credit || 0);
+        totalCost = Math.max(0, retail-credit);
+        monthlyCost = totalCost/36;
+        savings = Math.min(retail,credit);
+        requirementRows = ['New Line or Upgrade','Eligible wireless plan','36-month installment agreement',`Qualifying trade-in required${state.value!=null ? ' · '+moneyWhole(state.value)+' trade value' : ''}`];
+      } else if(currentResult.state === 'nextup_promo'){
+        const credit = Number(currentResult.credit || 0);
+        totalCost = Math.max(0, retail-credit);
+        monthlyCost = totalCost/36;
+        savings = Math.min(retail,credit);
+        requirementRows = ['Upgrade','Eligible wireless plan','36-month installment agreement',`${nextUpFeatureLabel()} eligibility and turn-in required`];
       } else {
-        savingsCard.style.display = 'none';
-        savingsNumber.textContent = '';
-        savingsCopy.textContent = '';
+        requirementRows = ['Selected plan and activation must be eligible','36-month installment agreement when financing'];
       }
+
+      math.innerHTML = `
+        <div class="offer-math-row"><span>Retail Price (MSRP)</span><b>${money(retail)}</b></div>
+        <div class="offer-math-row"><span>Your Monthly Price</span><b>$${monthlyCost.toFixed(2)}/mo</b></div>
+        <div class="offer-math-row"><span>36-Month Device Cost</span><b>${money(totalCost)}</b></div>
+        <div class="offer-math-row"><span>Total Promotional Savings</span><b>${money(savings)}</b></div>`;
+      if(savings > 0 && retail > 0){
+        savingsPct.textContent = `You save ${Math.round((savings/retail)*100)}% off the device price`;
+        savingsPct.style.display='block';
+      } else savingsPct.style.display='none';
+
+      requirements.innerHTML = requirementRows.map(x=>`<span>${x}</span>`).join('');
+      fullCard.style.display='block';
+      requirementsCard.style.display='block';
+      goodCard.style.display='block';
+
       const promoDetails = datedPromoDetailHtml();
       if(promoDetails){
         promoUpdateDetails.innerHTML = promoDetails;
-        promoUpdateCard.style.display = 'block';
+        promoUpdateCard.style.display='block';
       } else {
-        promoUpdateDetails.innerHTML = '';
-        promoUpdateCard.style.display = 'none';
+        promoUpdateDetails.innerHTML='';
+        promoUpdateCard.style.display='none';
       }
     } else {
-      el('summaryReadable').textContent = '';
-      fullCard.style.display = 'none';
-      savingsCard.style.display = 'none';
-      savingsNumber.textContent = '';
-      savingsCopy.textContent = '';
-      promoUpdateDetails.innerHTML = '';
-      promoUpdateCard.style.display = 'none';
+      math.innerHTML='';
+      requirements.innerHTML='';
+      savingsPct.style.display='none';
+      fullCard.style.display='none';
+      requirementsCard.style.display='none';
+      goodCard.style.display='none';
+      promoUpdateDetails.innerHTML='';
+      promoUpdateCard.style.display='none';
     }
-    copyBtn.style.display = 'none';
-    scriptBtn.style.display = 'none';
-    copyBtnText.textContent = 'Copy summary';
-    scriptBtnText.textContent = 'Copy customer wording';
+    el('tieredSavingsCard').style.display='none';
+    copyBtn.style.display='none';
+    scriptBtn.style.display='none';
+    copyBtnText.textContent='Copy summary';
+    scriptBtnText.textContent='Copy customer wording';
   }
   copyBtn.addEventListener('click', ()=> copyText(copyBtn, copyBtnText, summaryEl.textContent || '', 'Copy summary'));
   scriptBtn.addEventListener('click', ()=> copyText(scriptBtn, scriptBtnText, buildCustomerScript(), 'Copy customer wording'));
+
+
+  // ---- Apple Event countdown ----
+  const APPLE_EVENT_AT = new Date('2026-09-09T13:00:00-04:00').getTime();
+  const appleBanner = el('appleEventBanner'), appleMini = el('appleEventMini');
+  function appleCountdownText(ms){
+    if(ms <= 0) return 'Event is live';
+    const total=Math.floor(ms/1000), d=Math.floor(total/86400), h=Math.floor((total%86400)/3600), m=Math.floor((total%3600)/60);
+    return `${d}d ${h}h ${m}m`;
+  }
+  function updateAppleCountdown(){
+    const diff=APPLE_EVENT_AT-Date.now();
+    if(diff<=0){
+      el('appleDays').textContent='LIVE'; el('appleHours').textContent='—'; el('appleMinutes').textContent='—'; el('appleSeconds').textContent='—';
+      el('appleMiniCountdown').textContent='Event is live';
+      return;
+    }
+    const total=Math.floor(diff/1000);
+    el('appleDays').textContent=Math.floor(total/86400);
+    el('appleHours').textContent=String(Math.floor((total%86400)/3600)).padStart(2,'0');
+    el('appleMinutes').textContent=String(Math.floor((total%3600)/60)).padStart(2,'0');
+    el('appleSeconds').textContent=String(total%60).padStart(2,'0');
+    el('appleMiniCountdown').textContent=appleCountdownText(diff);
+  }
+  function openAppleBanner(){
+    appleMini.classList.remove('show'); appleBanner.classList.add('open'); appleBanner.setAttribute('aria-hidden','false');
+  }
+  function hideAppleBanner(){
+    appleBanner.classList.remove('open'); appleBanner.setAttribute('aria-hidden','true'); appleMini.classList.add('show');
+  }
+  el('appleEventHide').addEventListener('click',hideAppleBanner);
+  appleMini.addEventListener('click',openAppleBanner);
+  updateAppleCountdown(); setInterval(updateAppleCountdown,1000);
+  // Show the full banner after What's New is dismissed; if What's New is not opening, show it shortly after load.
+  setTimeout(()=>{ if(!el('whatsNewModal').classList.contains('show') && el('whatsNewModal').getAttribute('aria-hidden')!=='false') openAppleBanner(); },700);
 
   // ---- Rotating tip strip ----
   let TIPS = [
@@ -4264,6 +4407,7 @@
     return `${localDateKey()}|${releaseInfo.version || VERSION}|${whatsNewContentRevision}`;
   }
   function closeWhatsNew(markSeen){
+    setTimeout(openAppleBanner, 260);
     const modal = el('whatsNewModal');
     if(markSeen) localStorage.setItem(WHATS_NEW_DAILY_KEY, whatsNewSeenKey());
     modal.classList.remove('open');
@@ -4425,11 +4569,12 @@
       lastShownCredit = r.credit;
       detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>${nextUpFeatureLabel()} upgrade offer. Device must be at least <b>${nextUpThresholdPct()}% paid</b> and in eligible turn-in condition.<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>Estimated after credit: <b style="color:#fff;">$${netMo}/mo</b></div><div class="d-rule">Verify the feature name, payoff percentage, device condition, and offer eligibility in OPUS/CCKM before quoting.</div>`;
     } else if(r.state === 'tiered_final'){
-      amountEl.innerHTML = `<span class="monthly-primary">$${r.monthly}/mo</span><span class="off">${money(r.total)} final</span>`;
+      amountEl.innerHTML = `<span class="monthly-primary">$${r.monthly}/mo</span><span class="off">for 36 months</span>`;
+      const tierActionLabel = (r.viaNextUp || state.nextUp || state.tierAction === 'upgrade') ? 'UPGRADE' : (state.tierAction === 'new' ? 'NEW LINE' : 'NEW LINE / UPGRADE');
       if(r.viaNextUp || state.nextUp){
-        detailEl.innerHTML = `<div class="d-monthly">Tiered upgrade price &middot; ${money(r.total)} over 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]} &middot; ${nextUpFeatureLabel()}<br>AT&amp;T uses the old phone as the eligible turn-in/payoff device. <b>No separate trade-value bill credit applies.</b><br>Verify payoff percentage, phone condition, and tiered upgrade eligibility in OPUS/CCKM.</div>`;
+        detailEl.innerHTML = `<div class="activation-badge">UPGRADE</div><div class="offer-headline">${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</div><div class="offer-subline">${nextUpFeatureLabel()} tiered offer · ${money(r.total)} total device cost</div><div class="d-rule">AT&amp;T uses the old phone as the eligible turn-in/payoff device. <b>No separate trade-value bill credit applies.</b><br>Verify payoff percentage, phone condition, and tiered upgrade eligibility in OPUS/CCKM.</div>`;
       } else {
-        detailEl.innerHTML = `<div class="d-monthly">Total: ${money(r.total)} spread over 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]} &middot; Tiered Offer<br>Device retail: ${money(state.phone.retail)}</div>`;
+        detailEl.innerHTML = `<div class="activation-badge">${tierActionLabel}</div><div class="offer-headline">${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</div><div class="offer-subline">${money(r.total)} total device cost · No trade-in required</div>`;
         if(r.showAction) renderTierActionRow();
         if(state.value){
           tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
