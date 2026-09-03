@@ -1044,7 +1044,7 @@
       <div><div class="whats-new-kicker">Changes since last update</div><h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2></div>
       <button type="button" id="whatsNewCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close What’s New">×</button>
     </div>
-    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.07</div>
+    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.08</div>
     <p class="whats-new-sub">This message appears once per day on this browser, and again when a new version launches.</p>
 
     <div class="whats-new-tabs" role="tablist" aria-label="What's New categories">
@@ -1057,6 +1057,15 @@
     </div>
     <div id="whatsPaneBuilds" class="whats-new-pane" data-whats-pane="builds">
       <section class="whats-new-section whats-new-latest">
+        <h3>3.08 — Scheduled device availability</h3>
+        <ul>
+          <li><b>Phone launches and retirements can now schedule themselves.</b></li>
+          <li>Devices can have an Available From and Available Through time independent of Trade Eligible status.</li>
+          <li>S25 FE remains sellable through 9/3, then disappears from Phone Getting while remaining trade eligible.</li>
+          <li>S26 FE automatically appears on 9/4 with its active tiered pricing.</li>
+        </ul>
+      </section>
+      <section class="whats-new-section">
         <h3>3.07 — Promo Updates fully live</h3>
         <ul>
           <li><b>Promo Updates is now 100% Supabase-driven.</b></li>
@@ -1546,12 +1555,12 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.07';
+  const VERSION = 'Version 3.08';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.07', month:'September 2026', updated:'9/3/2026' };
+  let releaseInfo = { version:'Version 3.08', month:'September 2026', updated:'9/3/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -1600,7 +1609,19 @@
   function isS26TieredActive(){ return new Date() >= S26_TIERED_START; }
   function isS25Edge(phone){ return !!(phone && String(phone.id || '').startsWith('s25edge-')); }
   function isSamsung814TieredActive(){ return new Date() >= S26_TIERED_START; }
-  function isPhoneCurrentlyListed(phone){ return !!(phone && phone.active !== false && phone.sellable !== false); }
+  function isPhoneCurrentlyListed(phone){
+    if(!phone || phone.active === false || phone.sellable === false) return false;
+    const now = Date.now();
+    if(phone.availableFrom){
+      const start = new Date(phone.availableFrom).getTime();
+      if(!Number.isNaN(start) && now < start) return false;
+    }
+    if(phone.availableThrough){
+      const end = new Date(phone.availableThrough).getTime();
+      if(!Number.isNaN(end) && now > end) return false;
+    }
+    return true;
+  }
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
   const PLAN_LABEL = { premium:"Premium", starter:"Starter", value:"Value", '55plus':"55+", valueplus_mobile:"Value Plus VL / Mobile Share" };
@@ -1862,7 +1883,7 @@
     try{
       const headers = { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization:`Bearer ${SUPABASE_PUBLISHABLE_KEY}` };
       const [devRes,tierRes] = await Promise.all([
-        fetch(SUPABASE_URL + '/rest/v1/sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,quick_pick,active,sellable,trade_eligible,trade_value,sort_order,updated_at&order=sort_order.asc', {headers,cache:'no-store'}),
+        fetch(SUPABASE_URL + '/rest/v1/sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,quick_pick,active,sellable,trade_eligible,trade_value,available_from,available_through,sort_order,updated_at&order=sort_order.asc', {headers,cache:'no-store'}),
         fetch(SUPABASE_URL + '/rest/v1/tiered_prices?select=device_key,activation_type,monthly_price,months,active,starts_at,ends_at,eligible_segments,updated_at&order=device_key.asc', {headers,cache:'no-store'})
       ]);
       if(!devRes.ok) throw new Error(`Sellable devices ${devRes.status}: ${await devRes.text()}`);
@@ -1882,6 +1903,7 @@
         p.promoCategory=r.promo_category_key||p.promoCategory; p.quickPick=!!r.quick_pick;
         p.active=r.active!==false; p.sellable=r.sellable!==false; p.tradeEligible=!!r.trade_eligible;
         p.tradeValue=r.trade_value===null||r.trade_value===''?null:Number(r.trade_value);
+        p.availableFrom=r.available_from||null; p.availableThrough=r.available_through||null;
         p.sortOrder=Number(r.sort_order||0); p.tieredPriceRows=[];
 
         // Current sellable-device trade flags override the legacy duplicate entry for this exact SKU.
@@ -3749,6 +3771,7 @@
         ['device_key','Device Key','text'],['name','Name','text'],['storage','Storage','text'],
         ['retail_price','Retail Price','number'],['promo_category_key','Promo Category','text'],
         ['sellable','Sellable / Show in Phone Getting','boolean'],['trade_eligible','Trade Eligible','boolean'],['trade_value','Trade Value','number'],
+        ['available_from','Available From (ISO date/time)','text'],['available_through','Available Through (ISO date/time)','text'],
         ['quick_pick','Quick Pick','boolean'],['active','Active Record','boolean'],
         ['sort_order','Sort Order','number'],['notes','Notes','textarea']
       ]
