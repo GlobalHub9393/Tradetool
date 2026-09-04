@@ -1243,7 +1243,7 @@
       <div><div class="whats-new-kicker">Changes since last update</div><h2 id="whatsNewTitle" class="whats-new-title">What’s New</h2></div>
       <button type="button" id="whatsNewCloseTop" class="admin-btn secondary modal-close-mobile" aria-label="Close What’s New">×</button>
     </div>
-    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.11</div>
+    <div class="whats-new-version" id="whatsNewVersionBadge">Version 3.12</div>
     <p class="whats-new-sub">This message appears once per day on this browser, and again when a new version launches.</p>
 
     <div class="whats-new-tabs" role="tablist" aria-label="What's New categories">
@@ -1256,6 +1256,15 @@
     </div>
     <div id="whatsPaneBuilds" class="whats-new-pane" data-whats-pane="builds">
       <section class="whats-new-section whats-new-latest">
+        <h3>3.12 — Guided quote flow</h3>
+        <ul>
+          <li><b>Smart auto-advance:</b> selecting a plan, phone, trade choice and condition answers smoothly guides the rep to the next section.</li>
+          <li><b>Deliberate motion:</b> scrolling uses a slower eased animation instead of snapping between sections.</li>
+          <li><b>No annoying yank-back:</b> guided scrolling is limited to the first top-to-bottom pass, so editing an earlier answer later does not drag the rep through the form again.</li>
+          <li><b>Final reveal:</b> completing Next Up details smoothly brings the result card into view.</li>
+        </ul>
+      </section>
+      <section class="whats-new-section">
         <h3>3.11 — Cleaner result + smoother banner</h3>
         <ul>
           <li><b>Apple banner:</b> smoother roll-down/roll-up without the squashed-text effect.</li>
@@ -1783,12 +1792,12 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.11';
+  const VERSION = 'Version 3.12';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.11', month:'September 2026', updated:'9/3/2026' };
+  let releaseInfo = { version:'Version 3.12', month:'September 2026', updated:'9/3/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -2167,6 +2176,40 @@
   };
 
   const el = id => document.getElementById(id);
+
+  // 3.12 guided quote flow: smoothly advance only during the first top-to-bottom pass.
+  let guidedFlowStage = 0;
+  let guidedScrollRaf = 0;
+
+  function guidedScrollTo(target, duration=680, topOffset=78){
+    const node = typeof target === 'string' ? el(target) : target;
+    if(!node) return;
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const y = Math.max(0, window.scrollY + node.getBoundingClientRect().top - topOffset);
+      window.scrollTo(0,y);
+      return;
+    }
+    cancelAnimationFrame(guidedScrollRaf);
+    const startY = window.scrollY;
+    const endY = Math.max(0, startY + node.getBoundingClientRect().top - topOffset);
+    const distance = endY - startY;
+    if(Math.abs(distance) < 12) return;
+    const start = performance.now();
+    const ease = t => t < .5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+    const tick = now => {
+      const p = Math.min(1,(now-start)/duration);
+      window.scrollTo(0,startY + distance*ease(p));
+      if(p < 1) guidedScrollRaf = requestAnimationFrame(tick);
+    };
+    guidedScrollRaf = requestAnimationFrame(tick);
+  }
+
+  function guidedAdvance(stage, target, delay=170, duration=680){
+    if(guidedFlowStage > stage) return;
+    guidedFlowStage = stage + 1;
+    setTimeout(()=>guidedScrollTo(target,duration),delay);
+  }
+
   let whatsNewContentRevision = 'embedded';
 
   function whatsNewHash(value){
@@ -2383,6 +2426,7 @@
     document.querySelectorAll('#phonesRecent .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.phone === id ? 'true' : 'false'));
     updateControlsAfterSelection();
     render();
+    guidedAdvance(1, 'tradeCard', 190, 720);
   }
 
   // Plan selection
@@ -2403,6 +2447,7 @@
       planHelp.innerHTML = renderPlanHelp(key);
       updateControlsAfterSelection();
       render();
+      guidedAdvance(0, 'phonesCard', 190, 700);
     });
   });
 
@@ -2581,6 +2626,7 @@
     state.noTrade=false;
     if(noTradeBtn) noTradeBtn.setAttribute('aria-pressed','false');
     state.tradeDevice={brand,model}; state.tradeStorage=null; state.tradeValueMode='auto'; tradeDeviceSearch.value=`${brand} ${model}`; tradeDeviceSuggestions.classList.remove('open'); resetTradeCondition(); renderTradeStorage();
+    guidedAdvance(2, 'tradeConditionPanel', 240, 720);
   }
   function updateTradeDeviceSuggestions(showAll){
     const q=(tradeDeviceSearch.value||'').trim().toLowerCase(); tradeDeviceSuggestionsList.innerHTML='';
@@ -2601,16 +2647,17 @@
       clearNextUpSelection();
       noTradeBtn.setAttribute('aria-pressed','true');
       render();
+      guidedAdvance(2, 'nextUpCard', 190, 720);
     });
   }
   tradeDeviceSearch.addEventListener('input',()=>updateTradeDeviceSuggestions(true));
   tradeDeviceSearch.addEventListener('focus',()=>updateTradeDeviceSuggestions(true));
   el('tradeDeviceClear').addEventListener('click',()=>{state.noTrade=false;if(noTradeBtn)noTradeBtn.setAttribute('aria-pressed','false');state.tradeDevice=null;state.tradeStorage=null;state.tradeBaseValue=null;state.tradeValueMode=null;tradeDeviceSearch.value='';tradeDeviceSuggestions.classList.remove('open');tradeStorageRow.classList.remove('show');tradeConditionPanel.classList.remove('show');resetTradeCondition();state.pixel=false;pixelChk.checked=false;clearNextUpSelection();tradeDbStatus.className='trade-db-status';tradeDbStatus.textContent='Choose a trade-in phone or enter a value manually.';render();});
   tradeStorageSelect.addEventListener('change',()=>{state.tradeStorage=tradeStorageSelect.value;resetTradeCondition();applyTradeDatabaseValue();});
-  document.querySelectorAll('[data-cond]').forEach(b=>b.addEventListener('click',()=>{ const key=b.dataset.cond,val=b.dataset.answer==='yes'; state.tradeCondition[key]=val; document.querySelectorAll(`[data-cond="${key}"]`).forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false')); tradeConditionPanel.classList.toggle('condition-poor',conditionPoor());tradeConditionPanel.classList.toggle('condition-good',conditionComplete()&&!conditionPoor());applyTradeDatabaseValue(); }));
+  document.querySelectorAll('[data-cond]').forEach(b=>b.addEventListener('click',()=>{ const key=b.dataset.cond,val=b.dataset.answer==='yes'; state.tradeCondition[key]=val; document.querySelectorAll(`[data-cond="${key}"]`).forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false')); tradeConditionPanel.classList.toggle('condition-poor',conditionPoor());tradeConditionPanel.classList.toggle('condition-good',conditionComplete()&&!conditionPoor());applyTradeDatabaseValue(); if(conditionComplete()) guidedAdvance(3, 'nextUpCard', 220, 740); }));
 
   // Quick trade-value chips remain available as a manual shortcut.
-  document.querySelectorAll('#quick .chip').forEach(b=>b.addEventListener('click',()=>{const n=parseFloat(b.dataset.v);if(!isNaN(n)){state.noTrade=false;if(noTradeBtn)noTradeBtn.setAttribute('aria-pressed','false');state.value=n;state.tradeValueMode='manual';tradeEl.value=formatTradeValue(n);tradeDbStatus.className='trade-db-status manual';tradeDbStatus.textContent='Manual trade value entered — verify before quoting.';manualOverridePill.classList.add('show');render();}}));
+  document.querySelectorAll('#quick .chip').forEach(b=>b.addEventListener('click',()=>{const n=parseFloat(b.dataset.v);if(!isNaN(n)){state.noTrade=false;if(noTradeBtn)noTradeBtn.setAttribute('aria-pressed','false');state.value=n;state.tradeValueMode='manual';tradeEl.value=formatTradeValue(n);tradeDbStatus.className='trade-db-status manual';tradeDbStatus.textContent='Manual trade value entered — verify before quoting.';manualOverridePill.classList.add('show');render();guidedAdvance(2,'nextUpCard',190,720);}}));
   function parseTradeField(){ const n=parseFloat(tradeEl.value.replace(/[^0-9.]/g,'')); state.value=isNaN(n)?null:Math.round(n*100)/100; }
   tradeEl.addEventListener('input',()=>{state.noTrade=false;if(noTradeBtn)noTradeBtn.setAttribute('aria-pressed','false');parseTradeField();state.tradeValueMode='manual';tradeError.style.display='none';tradeDbStatus.className='trade-db-status manual';tradeDbStatus.textContent='Manual trade value entered — verify before quoting.';manualOverridePill.classList.add('show');render();});
   tradeEl.addEventListener('focus',()=>{tradeEl.value=tradeEl.value.replace(/[^0-9.]/g,'');tradeEl.select();});
@@ -2651,11 +2698,14 @@
       state.nextPaid = b.dataset.paid === 'yes';
       document.querySelectorAll('#nextPaidChips [data-paid]').forEach(x=>x.setAttribute('aria-pressed', x===b ? 'true' : 'false'));
       render();
+      guidedAdvance(4, 'display', 240, 820);
     });
   });
 
   // clear all & clear trade
   function resetAllFields(){
+    guidedFlowStage = 0;
+    cancelAnimationFrame(guidedScrollRaf);
     state.plan=null; state.phone=null; state.value=null; state.tradePreset=null; state.pixel=false; state.noTrade=false; state.galaxyAny='none'; state.nextUp=false; state.nextUpType='anytime'; state.nextPaid=null; state.tierAction=null; state.tradeDevice=null; state.tradeStorage=null; state.tradeBaseValue=null; state.tradeValueMode=null; state.tradeCondition={power:null,lock:null,cracks:null};
     document.querySelectorAll('#plans .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
     document.querySelectorAll('#phonesQuick .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
@@ -2759,8 +2809,8 @@
       <div style="color:var(--slate); font-size:13px;">Confirm in <a href="${CCKM}" target="_blank" rel="noopener noreferrer" style="color:#eaf3fb;">CCKM</a> if unsure.</div>
     </div>`;
     detailEl.appendChild(row);
-    document.getElementById('tierNew').addEventListener('click', ()=> { state.tierAction = 'new'; render(); });
-    document.getElementById('tierUp').addEventListener('click', ()=> { state.tierAction = 'upgrade'; render(); });
+    document.getElementById('tierNew').addEventListener('click', ()=> { state.tierAction = 'new'; render(); guidedAdvance(4,'display',120,760); });
+    document.getElementById('tierUp').addEventListener('click', ()=> { state.tierAction = 'upgrade'; render(); guidedAdvance(4,'display',120,760); });
   }
 
   // Next Up Turn In doesn't apply to a brand-new line activation (there's no existing
