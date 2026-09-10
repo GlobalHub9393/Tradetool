@@ -227,8 +227,9 @@ Return ONLY valid JSON:
 }`;
 
     const models = [
-      'gemini-2.5-flash',
-      'gemini-2.0-flash'
+      'gemini-3.8-flash',
+      'gemini-3.7-flash',
+      'gemini-3.6-flash'
     ];
 
     let lastError = null;
@@ -254,7 +255,8 @@ Return ONLY valid JSON:
               }],
               generationConfig:{
                 temperature:.15,
-                responseMimeType:'application/json'
+                responseMimeType:'application/json',
+                thinkingConfig:{thinkingLevel:'low'}
               }
             })
           }
