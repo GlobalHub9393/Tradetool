@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — 3.12</title>
+<title>Global Trade Tool — 4.0</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -952,10 +952,44 @@
   .apple-launch-static .apple-hide,.apple-launch-static .apple-mini{display:none!important;}
   @media(max-width:700px){.apple-launch-grid{grid-template-columns:1fr}.apple-launch-static .apple-event-card{padding:14px}}
 
+
+/* ===== Global Trade Tool 4.0 responsive shell ===== */
+:root{--v4-bg:#eef2f4;--v4-surface:#fff;--v4-alt:#f7f9fa;--v4-ink:#17232c;--v4-muted:#66757f;--v4-line:#d8e0e5;--v4-blue:#0878bd;--v4-navy:#12354d;--v4-green:#35c27d;--v4-shadow:0 18px 50px rgba(16,40,56,.14)}
+body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
+.v4-shell{min-height:100vh;max-width:1180px;margin:0 auto;background:var(--v4-surface);padding-bottom:76px}
+.v4-brand{background:linear-gradient(120deg,var(--v4-navy),#174a68 62%,#1d6688);color:#fff;padding:18px 16px 19px;position:relative;overflow:hidden}
+.v4-brand:after{content:"";position:absolute;right:-45px;top:-80px;width:190px;height:190px;border:28px solid rgba(255,255,255,.06);border-radius:50%}
+.v4-brandrow{position:relative;z-index:1;display:flex;justify-content:space-between;gap:18px}.v4-kicker{text-transform:uppercase;letter-spacing:.12em;font-size:8.5px;opacity:.72;font-weight:800}.v4-title{display:flex;align-items:center;gap:9px;margin-top:4px}.v4-title h1{color:#fff;font-size:24px;margin:0}.v4-db{width:8px;height:8px;border-radius:50%;background:#82909a;box-shadow:0 0 0 4px rgba(255,255,255,.08)}.v4-db.online{background:var(--v4-green);animation:v4pulse 1.8s ease-in-out infinite}@keyframes v4pulse{50%{opacity:.5;transform:scale(.88)}}.v4-ver{text-align:right;font-size:8px;opacity:.75;white-space:nowrap}.v4-ver strong{display:block;font-size:11px;color:#fff}.v4-sub{margin-top:7px;font-size:10.5px;opacity:.78}
+.v4-topnav{display:none;height:48px;border-bottom:1px solid var(--v4-line);background:var(--v4-surface)}.v4-topnav-inner{height:100%;display:flex}.v4-navbtn{flex:1;border:0;background:transparent;text-decoration:none;color:var(--v4-muted);font-size:11px;font-weight:750;position:relative;cursor:pointer}.v4-navbtn.active{color:var(--v4-blue)}.v4-navbtn.active:after{content:"";position:absolute;left:28%;right:28%;bottom:0;height:3px;background:var(--v4-blue);border-radius:3px 3px 0 0}
+.v4-launch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 16px;border-bottom:1px solid var(--v4-line);background:var(--v4-alt);cursor:pointer}.v4-launch b{font-size:9px;color:var(--v4-blue);letter-spacing:.08em;text-transform:uppercase}.v4-launch span{font-size:10px;color:var(--v4-muted);margin-left:8px}.v4-launch em{font-style:normal;font-size:9px;color:var(--v4-blue);font-weight:800}
+.v4-page{display:none}.v4-page.active{display:block}.v4-home{padding:25px 16px 34px}.v4-home h2,.v4-section h2{margin:0;font-size:19px;letter-spacing:-.025em}.v4-homeintro p,.v4-sectionlead{margin:5px 0 17px;color:var(--v4-muted);font-size:10.8px;line-height:1.5}.v4-lane{display:grid;grid-template-columns:46px 1fr 24px;gap:12px;align-items:center;min-height:118px;padding:18px 2px;border-top:1px solid var(--v4-line);text-decoration:none;color:inherit;cursor:pointer}.v4-lane:last-child{border-bottom:1px solid var(--v4-line)}.v4-num{font-size:12px;color:var(--v4-blue);font-weight:850;letter-spacing:.08em;align-self:start;padding-top:3px}.v4-copy h3{margin:0;font-size:23px;letter-spacing:-.035em}.v4-copy p{margin:7px 0 0;font-size:11px;line-height:1.5;color:var(--v4-muted);max-width:620px}.v4-hint{margin-top:10px;display:flex;gap:13px;flex-wrap:wrap;color:#7b8992;font-size:8.7px;text-transform:uppercase;letter-spacing:.06em;font-weight:750}.v4-arrow{text-align:right;font-size:24px;color:var(--v4-blue)}
+.v4-bottom{position:fixed;z-index:8000;left:0;right:0;bottom:0;border-top:1px solid var(--v4-line);background:rgba(255,255,255,.97);backdrop-filter:blur(16px);padding-bottom:env(safe-area-inset-bottom)}.v4-bottom-inner{max-width:620px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr)}.v4-bottom .v4-navbtn{min-height:58px;padding:8px 3px 7px;text-align:center;font-size:8.8px}.v4-ico{display:block;font-size:15px;line-height:1;margin-bottom:4px;font-weight:500}
+.v4-more-scrim{position:fixed;inset:0;z-index:9000;background:rgba(8,20,28,.44);display:none}.v4-more-scrim.open{display:block}.v4-more-sheet{position:absolute;left:0;right:0;bottom:0;background:var(--v4-surface);border-radius:18px 18px 0 0;padding:9px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:var(--v4-shadow)}.v4-grab{width:34px;height:4px;border-radius:4px;background:var(--v4-line);margin:1px auto 14px}.v4-morehead{display:flex;justify-content:space-between;align-items:center}.v4-morehead h3{font-size:18px;margin:0}.v4-close{border:0;background:none;color:var(--v4-muted);font-size:22px}.v4-morelink{display:grid;grid-template-columns:1fr 20px;align-items:center;min-height:58px;border-top:1px solid var(--v4-line);text-decoration:none;color:inherit;cursor:pointer}.v4-morelink strong{display:block;font-size:12px}.v4-morelink small{display:block;margin-top:3px;color:var(--v4-muted);font-size:9.5px}.v4-morelink i{font-style:normal;text-align:right;color:var(--v4-blue);font-size:18px}
+.v4-section{padding:24px 16px 36px}.v4-back{border:0;background:none;color:var(--v4-blue);font-weight:800;font-size:11px;padding:0 0 16px}.v4-search{width:100%;min-height:50px;border:1.5px solid var(--v4-line);border-radius:12px;background:var(--v4-surface);color:var(--v4-ink);padding:12px 14px;font-size:16px}.v4-search:focus{outline:none;border-color:var(--v4-blue);box-shadow:0 0 0 3px rgba(8,120,189,.12)}.v4-suggestions{border:1px solid var(--v4-line);border-top:0;max-height:280px;overflow:auto;display:none}.v4-suggestions.open{display:block}.v4-suggestion{display:flex;justify-content:space-between;gap:12px;padding:12px;border-bottom:1px solid var(--v4-line);cursor:pointer;font-size:11px}.v4-suggestion:last-child{border-bottom:0}.v4-suggestion span{color:var(--v4-muted)}.v4-storage{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.v4-chip{border:1px solid var(--v4-line);background:var(--v4-surface);color:var(--v4-ink);border-radius:9px;padding:10px 12px;font-weight:750}.v4-chip.on{background:var(--v4-blue);border-color:var(--v4-blue);color:#fff}.v4-simple-result{display:none;margin-top:20px;border-top:1px solid var(--v4-line)}.v4-simple-result.show{display:block}.v4-value{padding:20px 0;border-bottom:1px solid var(--v4-line)}.v4-value small{display:block;color:var(--v4-muted);font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}.v4-value strong{display:block;font-size:32px;margin-top:2px}.v4-opps{display:grid;gap:0}.v4-opp{padding:16px 0;border-bottom:1px solid var(--v4-line);display:grid;grid-template-columns:1fr auto;gap:12px}.v4-opp b{font-size:13px}.v4-opp p{margin:4px 0 0;color:var(--v4-muted);font-size:10px;line-height:1.4}.v4-credit{font-size:20px;font-weight:850;color:var(--v4-blue);white-space:nowrap}.v4-primary{margin-top:16px;border:0;border-radius:10px;background:var(--v4-blue);color:#fff;padding:12px 15px;font-weight:800}
+.v4-newsitem{border-top:1px solid var(--v4-line);padding:17px 0}.v4-newsitem:last-child{border-bottom:1px solid var(--v4-line)}.v4-date{font-size:9px;color:var(--v4-blue);font-weight:850;letter-spacing:.08em;text-transform:uppercase}.v4-newsitem h3{font-size:16px;margin:4px 0 6px}.v4-newsitem p,.v4-newsitem li{font-size:10.5px;line-height:1.55;color:var(--v4-muted)}.v4-newsitem ul{padding-left:18px}.v4-newsitem details{margin-top:10px}.v4-newsitem summary{color:var(--v4-blue);font-size:10.5px;font-weight:800;cursor:pointer}.v4-promo-grid{display:grid;gap:8px;margin-top:10px}.v4-promo{border-left:3px solid var(--v4-blue);padding:8px 10px;background:var(--v4-alt)}.v4-promo b{font-size:11px}.v4-promo span{display:block;margin-top:2px;color:var(--v4-muted);font-size:9.5px;line-height:1.4}
+.v4-beta-list{border-top:1px solid var(--v4-line)}.v4-beta-link{display:grid;grid-template-columns:1fr 22px;gap:12px;align-items:center;padding:17px 0;border-bottom:1px solid var(--v4-line);cursor:pointer}.v4-beta-link b{font-size:13px}.v4-beta-link span{display:block;color:var(--v4-muted);font-size:10px;margin-top:3px}.v4-beta-link i{font-style:normal;color:var(--v4-blue);font-size:20px;text-align:right}
+#tradePage{padding:18px}.legacy-app{max-width:1120px;margin:0 auto}.legacy-app>header{display:none!important}#tradePage #appleEventWrap{display:none!important}
+@media(min-width:768px){.v4-shell{padding-bottom:0}.v4-brand{padding:21px 24px 22px}.v4-title h1{font-size:29px}.v4-sub{font-size:11.5px}.v4-topnav{display:block}.v4-bottom{display:none}.v4-launch{padding:10px 24px}.v4-home,.v4-section{padding:34px 24px 48px}.v4-home h2,.v4-section h2{font-size:24px}.v4-lane{grid-template-columns:60px 1fr 30px;min-height:138px;padding:22px 6px;gap:18px}.v4-copy h3{font-size:29px}.v4-copy p{font-size:12px}.v4-more-sheet{width:360px;left:auto;right:22px;bottom:auto;top:116px;border-radius:12px;padding:14px 16px}.v4-grab{display:none}.v4-promo-grid{grid-template-columns:1fr 1fr}.v4-section{max-width:850px;margin:0 auto}}
+@media(prefers-color-scheme:dark){:root{--v4-bg:#0e151a;--v4-surface:#161e24;--v4-alt:#1b252c;--v4-ink:#edf3f6;--v4-muted:#98a7b1;--v4-line:#334149;--v4-blue:#55b9e8;--v4-navy:#0b2a3c;--v4-green:#4bd48e}.v4-bottom{background:rgba(22,30,36,.97)}.v4-more-scrim{background:rgba(0,0,0,.6)}#tradePage{background:#0e151a}.legacy-app{filter:none}}
+
 </style>
 </head>
 <body>
-<div class="app">
+
+<div id="v4Shell" class="v4-shell">
+  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.0</strong></div></div></header>
+  <nav class="v4-topnav"><div class="v4-topnav-inner"><button class="v4-navbtn active" data-v4go="home">Home</button><button class="v4-navbtn" data-v4go="trade">Trade Tool</button><button class="v4-navbtn" data-v4go="simple">Simple Tool</button><button class="v4-navbtn" data-v4more>More</button></div></nav>
+  <div class="v4-launch" data-v4go="news"><div><b>iPhone 18 Launch</b><span>9/9 announcement + 9/12 AT&amp;T promo guide</span></div><em>View →</em></div>
+  <section id="v4Home" class="v4-page active v4-home"><div class="v4-homeintro"><h2>What do you need?</h2><p>Full quote when you need the complete answer. Simple Tool when you just need the customer's trade opportunity fast.</p></div><div class="v4-lane" data-v4go="trade"><div class="v4-num">01</div><div class="v4-copy"><h3>Trade Tool</h3><p>The original GTT workflow with plans, activation type, device, trade value and current promotional result.</p><div class="v4-hint"><span>Full Quote</span><span>Current Promos</span><span>Exact Eligibility</span></div></div><div class="v4-arrow">›</div></div><div class="v4-lane" data-v4go="simple"><div class="v4-num">02</div><div class="v4-copy"><h3>Simple Tool</h3><p>Start with the customer's phone. See its current trade value and the strongest Apple, Samsung and Pixel opportunities.</p><div class="v4-hint"><span>Quick Lookup</span><span>Best Opportunity</span></div></div><div class="v4-arrow">›</div></div></section>
+  <section id="v4Simple" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Simple Tool</h2><p class="v4-sectionlead">What does this customer's phone get them? Search the phone, choose storage, and use the good-condition trade value as the promo reference.</p><input id="v4TradeSearch" class="v4-search" placeholder="Search trade-in phone…" autocomplete="off"><div id="v4Suggestions" class="v4-suggestions"></div><div id="v4Storage" class="v4-storage"></div><div id="v4SimpleResult" class="v4-simple-result"><div class="v4-value"><small>Current trade value · good condition</small><strong id="v4RawValue">$—</strong><div id="v4SelectedTrade" style="font-size:10px;color:var(--v4-muted);margin-top:4px"></div></div><div id="v4Opps" class="v4-opps"></div><button id="v4BuildQuote" class="v4-primary">Build Full Quote →</button></div></section>
+  <section id="v4News" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>What's New</h2><p class="v4-sectionlead">Only the changes reps need right now.</p><article class="v4-newsitem"><div class="v4-date">September 9</div><h3>Apple announces iPhone 18 lineup</h3><p>iPhone 18 Pro starts at <b>$1,199</b> (256GB) and iPhone 18 Pro Max starts at <b>$1,299</b> (256GB). Preorders begin <b>9/12</b> and availability begins <b>9/18</b>. iPhone Duo starts at <b>$1,999</b> (256GB), with preorder expected <b>10/16</b> and availability <b>10/23</b>.</p></article><article class="v4-newsitem"><div class="v4-date">Effective September 12</div><h3>iPhone 18 Pro / Pro Max promo quick guide</h3><div class="v4-promo-grid"><div class="v4-promo"><b>Premium / Elite — up to $1,200</b><span>iPhone 18 Pro / Pro Max. Any-condition iPhone 14+ excluding 16e, or $180+ trade value.</span></div><div class="v4-promo"><b>Extra / Starter — up to $930</b><span>iPhone 18 Pro / Pro Max or iPhone 17. Any-condition iPhone 14+ excluding 16e, or $130+ trade value.</span></div><div class="v4-promo"><b>Eligible plan — up to $500</b><span>iPhone 18 Pro / Pro Max or iPhone 17 with qualifying $130+ / iPhone 14+ path.</span></div><div class="v4-promo"><b>Eligible unlimited — up to $350</b><span>iPhone 18 Pro / Pro Max or iPhone 17. Any-condition iPhone, or $35–$129 trade value.</span></div></div><details><summary>Full 9/12 changes</summary><ul><li>iPhone 18 Pro and Pro Max are added to the trade-in offer.</li><li>iPhone 17 remains in the $930 / $500 / $350 offer tiers; it is not listed in the $1,200 tier.</li><li>iPhone Air, iPhone 17 Pro and iPhone 17 Pro Max leave this trade-in offer after 9/11.</li><li>iPhone 16's tiered offer ends after 9/11 and the device is removed from the sellable selection; it remains available as a trade-in device.</li><li>55+ remains tiered-only. Verify final eligibility in OPUS/CCKM.</li></ul></details></article><article class="v4-newsitem"><div class="v4-date">September 4</div><h3>Galaxy S26 FE</h3><p>Galaxy S26 FE 128GB launched at <b>$7.99/mo new line</b> and <b>$12.99/mo upgrade</b>. The S25 FE $13.99/mo new-line offer ended 9/3; S25 FE remains trade eligible.</p></article></section>
+  <section id="v4Beta" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Beta Tools</h2><p class="v4-sectionlead">Useful extras without crowding the main quote.</p><div class="v4-beta-list"><div class="v4-beta-link" data-v4tool="compare"><div><b>Phone Comparison</b><span>Compare up to three phones using the current quote context.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="history"><div><b>Recent History</b><span>Reload recent completed calculations.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="faq"><div><b>FAQ / Trade Help</b><span>Trade-ins, credits, plans and Next Up reference.</span></div><i>›</i></div></div></section>
+</div>
+<nav class="v4-bottom"><div class="v4-bottom-inner"><button class="v4-navbtn active" data-v4go="home"><span class="v4-ico">⌂</span>Home</button><button class="v4-navbtn" data-v4go="trade"><span class="v4-ico">▤</span>Trade Tool</button><button class="v4-navbtn" data-v4go="simple"><span class="v4-ico">⌕</span>Simple Tool</button><button class="v4-navbtn" data-v4more><span class="v4-ico">•••</span>More</button></div></nav>
+<div id="v4More" class="v4-more-scrim"><div class="v4-more-sheet"><div class="v4-grab"></div><div class="v4-morehead"><h3>More</h3><button id="v4MoreClose" class="v4-close">×</button></div><div class="v4-morelink" data-v4admin><div><strong>Admin</strong><small>Manage promotions, devices and app data.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="news"><div><strong>What's New</strong><small>iPhone launch, 9/12 promos and S26 FE.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="beta"><div><strong>Beta Tools</strong><small>Comparison, history and trade help.</small></div><i>›</i></div></div></div>
+
+<section id="tradePage" class="v4-page">
+<div class="legacy-app">
   <header>
     <div class="header-row">
       <div style="display:flex; flex-direction:column;">
@@ -1022,6 +1056,7 @@
 
         <div class="chips" id="plans">
           <button class="chip" data-plan="premium" aria-pressed="false">Premium</button>
+          <button class="chip" data-plan="extra" aria-pressed="false">Extra</button>
           <button class="chip" data-plan="starter" aria-pressed="false">Starter</button>
           <button class="chip" data-plan="value" aria-pressed="false">Value</button>
           <button class="chip" data-plan="55plus" aria-pressed="false">55+</button>
@@ -1253,6 +1288,7 @@
     </aside>
   </div>
 </div>
+</section>
 
 <div id="adminLoginModal" class="modal-backdrop" aria-hidden="true">
   <div class="login-panel" role="dialog" aria-modal="true" aria-label="Administrator access">
@@ -1822,12 +1858,12 @@
 
 <script>
 (async function(){
-  const VERSION = 'Version 3.12';
+  const VERSION = 'Version 4.0';
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
   const ADMIN_STORE_KEY = 'globalTradeToolAdminData_v2_test_0200';
   const HISTORY_KEY = 'globalTradeToolHistory_v2_test';
-  let releaseInfo = { version:'Version 3.12', month:'September 2026', updated:'9/3/2026' };
+  let releaseInfo = { version:'Version 4.0', month:'September 2026', updated:'9/3/2026' };
   const CCKM = "https://attone.lightning.force.com/lightning/r/Knowledge__kav/ka0fg000000eyyLAAQ/view?ws=%2Flightning%2Fr%2FKnowledge__kav%2Fka0fg000000fgcnAAA%2Fview";
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
@@ -1891,7 +1927,7 @@
   }
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
-  const PLAN_LABEL = { premium:"Premium", starter:"Starter", value:"Value", '55plus':"55+", valueplus_mobile:"Value Plus VL / Mobile Share" };
+  const PLAN_LABEL = { premium:"Premium", extra:"Extra", starter:"Starter", value:"Value", '55plus':"55+", valueplus_mobile:"Value Plus VL / Mobile Share" };
   const PROMO_CATEGORY_LABEL = {
     iphonePro:'iPhone Pro ladder',
     iphoneBase:'iPhone/Base ladder',
@@ -2790,6 +2826,8 @@
     starter:{ iphonePro:[{min:290,credit:830},{min:130,credit:700},{min:35,credit:350}], iphoneBase:[{min:290,credit:830},{min:130,credit:700},{min:35,credit:350}], iphoneAir:[{min:290,credit:830}], samsung:[{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixel11XL:[{min:95,credit:1150},{min:35,credit:1000}], pixel11Pro:[{min:35,credit:1150}], pixelXL:[{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:35,credit:1000}] },
     value:{ iphonePro:[{min:130,credit:500},{min:35,credit:350}], iphoneBase:[{min:130,credit:500},{min:35,credit:350}], iphoneAir:[{min:35,credit:500}], samsung:[{min:35,credit:500}], s26base:[{min:35,credit:500}], fold8:[{min:35,credit:500}], flip8:[{min:35,credit:500}], pixel11XL:[{min:35,credit:500}], pixel11Pro:[{min:35,credit:500}], pixelXL:[{min:35,credit:500}], pixelPro:[{min:35,credit:500}], razr:[{min:35,credit:500}] }
   };
+  // 4.0: Extra is a distinct plan group. Until Apple 9/12 cutover it mirrors Premium; Samsung/Pixel/Moto remain Premium-equivalent until changed.
+  LADDERS.extra = JSON.parse(JSON.stringify(LADDERS.premium));
   function savedAdminData(){
     try { return JSON.parse(localStorage.getItem(ADMIN_STORE_KEY) || '{}'); }
     catch(e){ return {}; }
@@ -2879,16 +2917,16 @@
     // Fold8 / Fold8 Ultra / Flip8 confirmed rules: qualifying newer Galaxy = $1,000,
     // qualifying older Galaxy = $500. Fold8 / Fold8 Ultra reach $1,900 only on Premium/Elite with $290+ TIV.
     if(id.startsWith('zfold8') || id.startsWith('zflip8')){
-      if(plan === 'premium' || plan === 'starter') return galaxyAny === 'high' ? 1000 : 500;
+      if(plan === 'premium' || plan === 'extra' || plan === 'starter') return galaxyAny === 'high' ? 1000 : 500;
       if(plan === 'value') return 500;
       return 0;
     }
     if(id.startsWith('s26-')){
-      if(plan === 'premium' || plan === 'starter') return 900;
+      if(plan === 'premium' || plan === 'extra' || plan === 'starter') return 900;
       if(plan === 'value') return 500;
       return 0;
     }
-    if(plan === 'premium') return galaxyAny === 'high' ? 1100 : 900;
+    if(plan === 'premium' || plan === 'extra') return galaxyAny === 'high' ? 1100 : 900;
     if(plan === 'starter') return 900;
     if(plan === 'value') return 500;
     return 0;
@@ -2913,7 +2951,7 @@
   // the customer is getting on their current plan for this exact phone + trade-in,
   // surface it as a small hint. Only compares the three ladder-based plan groups —
   // tiered-offer pricing doesn't vary by plan in this tool, so it's skipped there.
-  const LADDER_PLAN_GROUPS = ['premium','starter','value'];
+  const LADDER_PLAN_GROUPS = ['premium','extra','starter','value'];
   function betterPlanHint(cat, value, isPixelTrade, phone, galaxyAny, currentPlan, currentCredit){
     let bestPlan = null, bestCredit = currentCredit;
     LADDER_PLAN_GROUPS.forEach(p=>{
@@ -5056,6 +5094,36 @@
     <div class="gtt-fx-sub">Live promos. Live trade values. Live admin.</div>
   </div>
 </div>
+
+
+<script>
+(function(){
+ const $=id=>document.getElementById(id), pages={home:$('v4Home'),simple:$('v4Simple'),news:$('v4News'),beta:$('v4Beta'),trade:$('tradePage')};
+ function closeMore(){$('v4More').classList.remove('open')}
+ function go(name){Object.values(pages).forEach(p=>p&&p.classList.remove('active')); if(pages[name])pages[name].classList.add('active'); document.querySelectorAll('.v4-navbtn[data-v4go]').forEach(b=>b.classList.toggle('active',b.dataset.v4go===name)); closeMore(); window.scrollTo({top:0,behavior:'instant'});}
+ document.querySelectorAll('[data-v4go]').forEach(x=>x.addEventListener('click',e=>{e.preventDefault();go(x.dataset.v4go)}));
+ document.querySelectorAll('[data-v4more]').forEach(x=>x.addEventListener('click',()=> $('v4More').classList.add('open'))); $('v4MoreClose').onclick=closeMore; $('v4More').addEventListener('click',e=>{if(e.target===$('v4More'))closeMore()});
+ document.querySelector('[data-v4admin]').onclick=()=>{closeMore(); const b=$('adminOpenBtn'); if(b)b.click()};
+ document.querySelectorAll('[data-v4tool]').forEach(x=>x.addEventListener('click',()=>{ const open=$('toolsOpenBtn'); if(open)open.click(); setTimeout(()=>{const tile=document.querySelector('.tools-tile[data-tools-page="'+x.dataset.v4tool+'"]'); if(tile)tile.click()},40)}));
+ // Supabase status + version. 4.0 is the build version; database takes over once current_version is switched to 4.0.
+ const SB='https://uwomiirfvllcafijmkmk.supabase.co', KEY='sb_publishable_UMb8Nb5DG0w1dv9h5W5-2Q_0PinuBV4';
+ fetch(SB+'/rest/v1/app_settings?select=setting_key,setting_value&setting_key=in.(current_version,source_version)',{headers:{apikey:KEY,Authorization:'Bearer '+KEY},cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(rows=>{ $('v4DbDot').classList.add('online'); $('v4DbDot').title='Supabase connected'; const v=rows.find(x=>x.setting_key==='current_version'); if(v&&String(v.setting_value).includes('4.0'))$('v4Version').textContent='4.0'; }).catch(()=>{$('v4DbDot').title='Supabase connection unavailable'});
+ // Simple Tool uses live trade_devices, never embedded fallback when live fetch succeeds.
+ let tradeRows=[], selected=null;
+ const search=$('v4TradeSearch'), sugg=$('v4Suggestions'), storage=$('v4Storage');
+ fetch(SB+'/rest/v1/trade_devices?select=brand,model,storage,trade_value&active=eq.true&order=brand.asc,model.asc,storage.asc&limit=1500',{headers:{apikey:KEY,Authorization:'Bearer '+KEY},cache:'no-store'}).then(r=>r.json()).then(r=>{tradeRows=Array.isArray(r)?r:[]}).catch(()=>{});
+ function models(){const m=new Map;tradeRows.forEach(r=>{const k=r.brand+'|'+r.model;if(!m.has(k))m.set(k,{brand:r.brand,model:r.model,rows:[]});m.get(k).rows.push(r)});return [...m.values()]}
+ function renderSuggestions(){const q=search.value.trim().toLowerCase();if(!q){sugg.classList.remove('open');return}const hits=models().filter(x=>(x.brand+' '+x.model).toLowerCase().includes(q)).slice(0,60);sugg.innerHTML=hits.map((x,i)=>{const vals=x.rows.map(r=>Number(r.trade_value)).filter(Number.isFinite);const vr=vals.length?'$'+Math.min(...vals).toFixed(0)+(Math.min(...vals)!==Math.max(...vals)?'–$'+Math.max(...vals).toFixed(0):''):'verify';return '<div class="v4-suggestion" data-i="'+i+'"><b>'+x.brand+' '+x.model+'</b><span>'+vr+'</span></div>'}).join('');sugg.classList.toggle('open',!!hits.length);sugg.querySelectorAll('[data-i]').forEach(el=>el.onclick=()=>choose(hits[+el.dataset.i]))}
+ function choose(x){selected=x;search.value=x.brand+' '+x.model;sugg.classList.remove('open');storage.innerHTML='';$('v4SimpleResult').classList.remove('show');x.rows.sort((a,b)=>a.storage.localeCompare(b.storage,undefined,{numeric:true})).forEach(r=>{const b=document.createElement('button');b.className='v4-chip';b.textContent=r.storage;b.onclick=()=>{storage.querySelectorAll('.v4-chip').forEach(c=>c.classList.remove('on'));b.classList.add('on');showResult(r)};storage.appendChild(b)});if(x.rows.length===1)storage.firstChild.click()}
+ function bestOpps(r){const val=Number(r.trade_value)||0;const iphone=/iphone/i.test(r.model);const any14=iphone&&!/16e/i.test(r.model)&&(/iphone (1[4-9]|2\d)/i.test(r.model));const anyIphone=iphone;let apple=0,appleText='Good-condition value path';if(any14||val>=180){apple=1200;appleText='Potential Premium / Elite iPhone 18 Pro/Max top tier effective 9/12';}else if(any14||val>=130){apple=930;appleText='Potential Extra / Starter iPhone 18 Pro/Max or iPhone 17 tier effective 9/12';}else if(anyIphone||val>=35){apple=350;appleText='Potential eligible-unlimited iPhone tier effective 9/12';}
+ const samsung=val>=95?1100:val>=35?900:0; const pixel=val>=200?1350:val>=95?1150:val>=35?1000:0;return [['Apple',apple,appleText],['Samsung',samsung,'Best current opportunity based on trade value; qualifying any-condition Galaxy rules may improve eligibility.'],['Pixel',pixel,'Best current Pixel opportunity based on trade value; qualifying Pixel trade rules may improve eligibility.']]}
+ function showResult(r){$('v4RawValue').textContent='$'+Number(r.trade_value||0).toFixed(0);$('v4SelectedTrade').textContent=r.brand+' '+r.model+' · '+r.storage;$('v4Opps').innerHTML=bestOpps(r).map(o=>'<div class="v4-opp"><div><b>'+o[0]+'</b><p>'+o[2]+'</p></div><div class="v4-credit">'+(o[1]?'Up to $'+o[1].toLocaleString():'—')+'</div></div>').join('');$('v4SimpleResult').classList.add('show');$('v4BuildQuote').onclick=()=>{go('trade');setTimeout(()=>{const inp=$('tradeDeviceSearch');if(inp){inp.value=r.brand+' '+r.model;inp.dispatchEvent(new Event('input',{bubbles:true}))}},100)}}
+ search.addEventListener('input',renderSuggestions);search.addEventListener('focus',renderSuggestions);
+ // Keep legacy tools/admin modals above shell nav.
+ ['adminLoginModal','adminModal','toolsModal','whatsNewModal'].forEach(id=>{const e=$(id);if(e)e.style.zIndex='10000'});
+ window.GTT4={go};
+})();
+</script>
 
 </body>
 </html>
