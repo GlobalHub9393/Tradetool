@@ -4,18 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>GTT Identify Tool — Live Camera Beta</title>
+<title>GTT Identify Tool — Smart Camera Beta</title>
+
+<script type="module">
+  import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/vision_bundle.mjs";
+  window.MP_VISION = vision;
+</script>
+
 <style>
 :root{
   --bg:#f5f7f9;--card:#fff;--ink:#111820;--muted:#65727d;--line:#dbe2e7;
-  --blue:#0568ae;--good:#17854b;--danger:#c43b3b;
+  --blue:#0568ae;--good:#17854b;--danger:#c43b3b;--warn:#a66a00;
 }
 @media(prefers-color-scheme:dark){
-  :root{--bg:#0d1419;--card:#151f25;--ink:#edf3f6;--muted:#a7b4bc;--line:#314049;--blue:#65c6ee;--good:#69d89a;--danger:#ff8b8b}
+  :root{--bg:#0d1419;--card:#151f25;--ink:#edf3f6;--muted:#a7b4bc;--line:#314049;--blue:#65c6ee;--good:#69d89a;--danger:#ff8b8b;--warn:#ffd06f}
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.wrap{max-width:760px;margin:0 auto;padding:18px 14px 44px}
+.wrap{max-width:800px;margin:0 auto;padding:18px 14px 44px}
 .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .brand{font-size:18px;font-weight:900;letter-spacing:-.02em}
 .beta{font-size:10px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:5px 8px;color:var(--muted)}
@@ -28,16 +34,18 @@ button{appearance:none;border:0;border-radius:12px;padding:12px 14px;font-weight
 .primary{background:var(--blue);color:white;width:100%;font-size:16px;padding:14px}
 .secondary{background:transparent;color:var(--blue);border:1px solid var(--line)}
 .camera-shell{position:relative;overflow:hidden;border-radius:16px;background:#000;aspect-ratio:3/4;min-height:360px;display:flex;align-items:center;justify-content:center}
-video{width:100%;height:100%;object-fit:cover;background:#000}
-.overlay{position:absolute;inset:0;pointer-events:none}
-.guide{position:absolute;left:10%;right:10%;top:12%;bottom:12%;border:2px solid rgba(255,255,255,.8);border-radius:30px;box-shadow:0 0 0 9999px rgba(0,0,0,.12)}
-.guide:before,.guide:after{content:"";position:absolute;background:rgba(255,255,255,.9)}
-.guide:before{width:38px;height:2px;left:50%;top:-1px;transform:translateX(-50%)}
-.guide:after{width:2px;height:38px;left:-1px;top:50%;transform:translateY(-50%)}
-.camera-note{position:absolute;left:12px;right:12px;bottom:12px;background:rgba(0,0,0,.58);color:white;border-radius:12px;padding:9px 10px;font-size:12px;line-height:1.35;backdrop-filter:blur(8px)}
+video,canvas.overlay-canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+video{background:#000}
+canvas.overlay-canvas{pointer-events:none}
+.guide{position:absolute;left:10%;right:10%;top:10%;bottom:10%;border:2px solid rgba(255,255,255,.78);border-radius:30px;box-shadow:0 0 0 9999px rgba(0,0,0,.08);pointer-events:none}
+.camera-note{position:absolute;left:12px;right:12px;bottom:12px;background:rgba(0,0,0,.60);color:white;border-radius:12px;padding:9px 10px;font-size:12px;line-height:1.35;backdrop-filter:blur(8px);pointer-events:none}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .status{font-size:13px;color:var(--muted);text-align:center;margin:11px 0 0;min-height:20px}
 .error{color:var(--danger)!important}
+.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.metric{border:1px solid var(--line);border-radius:12px;padding:10px}
+.metric .k{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:900}
+.metric .v{font-size:16px;font-weight:850;margin-top:3px}
 .result{display:none}
 .best{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .best h2{font-size:24px;line-height:1.1;margin:3px 0}
@@ -49,16 +57,20 @@ video{width:100%;height:100%;object-fit:cover;background:#000}
 .alt{padding:8px 0;border-top:1px solid var(--line);font-size:13px}
 .alt:first-child{border-top:0}
 small{color:var(--muted)}
-canvas{display:none}
+.hidden{display:none}
+canvas.capture{display:none}
+@media(min-width:700px){
+  .metrics{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><div class="brand">GTT · Identify</div><div class="beta">Live camera beta</div></div>
+  <div class="top"><div class="brand">GTT · Identify</div><div class="beta">Smart camera beta</div></div>
 
   <div class="hero">
-    <h1>What phone is this?</h1>
-    <p>Hold the phone in front of the camera. Nothing is saved to Photos; the page grabs one frame only when you tap Identify.</p>
+    <h1>Hold it up. Let the camera work.</h1>
+    <p>This beta watches a short live-camera burst, tracks your hand, estimates the phone's size class from the phone-to-hand geometry, then sends the best frame plus those clues to Gemini.</p>
   </div>
 
   <div class="card">
@@ -70,20 +82,26 @@ canvas{display:none}
   </div>
 
   <div class="card">
-    <div class="camera-shell">
+    <div class="camera-shell" id="cameraShell">
       <video id="video" autoplay playsinline muted></video>
-      <div class="overlay">
-        <div class="guide"></div>
-        <div class="camera-note">Best first view: entire back of the phone, case removed if possible.</div>
-      </div>
+      <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
+      <div class="guide"></div>
+      <div class="camera-note" id="cameraNote">Use the rear camera. Hold the whole phone in your hand inside the guide.</div>
     </div>
     <div class="controls">
       <button id="startCamera" class="secondary" type="button">Start Camera</button>
       <button id="switchCamera" class="secondary" type="button">Switch Camera</button>
     </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="k">Hand tracking</div><div class="v" id="mHand">Waiting</div></div>
+      <div class="metric"><div class="k">Phone outline</div><div class="v" id="mPhone">Waiting</div></div>
+      <div class="metric"><div class="k">Phone / palm</div><div class="v" id="mRatio">—</div></div>
+      <div class="metric"><div class="k">Size class</div><div class="v" id="mSize">—</div></div>
+    </div>
   </div>
 
-  <button id="identifyBtn" class="primary" type="button" disabled>Identify</button>
+  <button id="identifyBtn" class="primary" type="button" disabled>Scan & Identify</button>
   <div id="status" class="status"></div>
 
   <div id="result" class="card result">
@@ -94,6 +112,11 @@ canvas{display:none}
         <small id="makerYear"></small>
       </div>
       <div id="confidence" class="conf">—</div>
+    </div>
+
+    <div class="section">
+      <h3>Measured camera clues</h3>
+      <p id="measureClues"></p>
     </div>
 
     <div class="section">
@@ -122,13 +145,17 @@ canvas{display:none}
     </div>
   </div>
 
-  <canvas id="captureCanvas"></canvas>
+  <canvas id="captureCanvas" class="capture"></canvas>
 </div>
 
-<script>
+<script type="module">
 const $ = id => document.getElementById(id);
 let stream = null;
 let facingMode = 'environment';
+let handLandmarker = null;
+let lastHand = null;
+let lastAnalysis = null;
+let trackingRAF = null;
 
 const saved = localStorage.getItem('gtt_identify_gemini_key');
 if(saved) $('apiKey').value = saved;
@@ -145,10 +172,38 @@ $('switchCamera').addEventListener('click', async ()=>{
   facingMode = facingMode === 'environment' ? 'user' : 'environment';
   await startCamera(facingMode);
 });
-$('identifyBtn').addEventListener('click', identify);
+$('identifyBtn').addEventListener('click', smartIdentify);
+
+function setStatus(msg, err=false){
+  $('status').textContent = msg || '';
+  $('status').classList.toggle('error', !!err);
+}
+
+async function initHandTracking(){
+  if(handLandmarker) return;
+  setStatus('Loading hand tracker…');
+  const vision = window.MP_VISION;
+  if(!vision) throw new Error('MediaPipe did not load.');
+  const {FilesetResolver, HandLandmarker} = vision;
+  const fileset = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
+  );
+  handLandmarker = await HandLandmarker.createFromOptions(fileset,{
+    baseOptions:{
+      modelAssetPath:"https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+      delegate:"GPU"
+    },
+    runningMode:"VIDEO",
+    numHands:1,
+    minHandDetectionConfidence:0.45,
+    minTrackingConfidence:0.45,
+    minHandPresenceConfidence:0.45
+  });
+}
 
 async function startCamera(mode='environment'){
   try{
+    await initHandTracking();
     if(stream) stream.getTracks().forEach(t=>t.stop());
     stream = await navigator.mediaDevices.getUserMedia({
       video:{
@@ -161,55 +216,222 @@ async function startCamera(mode='environment'){
     $('video').srcObject = stream;
     await $('video').play();
     $('identifyBtn').disabled = false;
-    setStatus('Camera ready. Hold the phone inside the guide and tap Identify.');
+    setStatus('Camera ready. Hold the phone normally in one hand.');
+    startTrackingLoop();
   }catch(err){
     console.error(err);
-    setStatus('Could not open camera. Make sure camera permission is allowed for this site.', true);
+    setStatus('Could not start the smart camera: ' + (err.message || err), true);
   }
 }
 
-function setStatus(msg, err=false){
-  $('status').textContent = msg || '';
-  $('status').classList.toggle('error', !!err);
+function startTrackingLoop(){
+  if(trackingRAF) cancelAnimationFrame(trackingRAF);
+  const loop = async ()=>{
+    try{
+      if(handLandmarker && $('video').readyState >= 2){
+        const now = performance.now();
+        const res = handLandmarker.detectForVideo($('video'), now);
+        lastHand = res?.landmarks?.[0] || null;
+        drawHand(lastHand);
+        $('mHand').textContent = lastHand ? 'Locked' : 'Searching';
+      }
+    }catch(e){}
+    trackingRAF = requestAnimationFrame(loop);
+  };
+  loop();
+}
+
+function drawHand(hand){
+  const c = $('overlayCanvas');
+  const v = $('video');
+  const shell = $('cameraShell');
+  const rect = shell.getBoundingClientRect();
+  const dpr = devicePixelRatio || 1;
+  c.width = Math.round(rect.width*dpr);
+  c.height = Math.round(rect.height*dpr);
+  c.style.width = rect.width+'px';
+  c.style.height = rect.height+'px';
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height);
+  if(!hand) return;
+  ctx.save();
+  ctx.scale(dpr,dpr);
+  ctx.strokeStyle='rgba(101,198,238,.9)';
+  ctx.fillStyle='rgba(101,198,238,.95)';
+  ctx.lineWidth=2;
+  const pts = hand.map(p=>({x:p.x*rect.width,y:p.y*rect.height}));
+  const bones=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+  for(const [a,b] of bones){ctx.beginPath();ctx.moveTo(pts[a].x,pts[a].y);ctx.lineTo(pts[b].x,pts[b].y);ctx.stroke();}
+  for(const p of pts){ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.fill();}
+  ctx.restore();
 }
 
 function captureFrame(){
   const video = $('video');
-  if(!video.videoWidth || !video.videoHeight) throw new Error('Camera frame is not ready yet.');
+  if(!video.videoWidth || !video.videoHeight) throw new Error('Camera frame is not ready.');
   const canvas = $('captureCanvas');
   const maxW = 1280;
-  const scale = Math.min(1, maxW / video.videoWidth);
-  canvas.width = Math.round(video.videoWidth * scale);
-  canvas.height = Math.round(video.videoHeight * scale);
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  return canvas.toDataURL('image/jpeg', .86).split(',')[1];
+  const scale = Math.min(1,maxW/video.videoWidth);
+  canvas.width = Math.round(video.videoWidth*scale);
+  canvas.height = Math.round(video.videoHeight*scale);
+  const ctx = canvas.getContext('2d',{willReadFrequently:true});
+  ctx.drawImage(video,0,0,canvas.width,canvas.height);
+  return {canvas,ctx};
 }
 
-async function identify(){
-  const key = $('apiKey').value.trim() || localStorage.getItem('gtt_identify_gemini_key');
-  if(!key) return setStatus('Add your Gemini API key first.', true);
-  if(!stream) return setStatus('Start the camera first.', true);
+function detectPhoneOutline(canvas, ctx){
+  // Heuristic: find strongest large near-rectangular edge region.
+  // This is deliberately simple beta CV, not a trained phone detector.
+  const w=canvas.width,h=canvas.height;
+  const data=ctx.getImageData(0,0,w,h).data;
+  const step=Math.max(2,Math.floor(Math.max(w,h)/420));
+  let minX=w,minY=h,maxX=0,maxY=0,count=0;
+  const cx=w/2, cy=h/2;
+  for(let y=step;y<h-step;y+=step){
+    for(let x=step;x<w-step;x+=step){
+      const i=(y*w+x)*4;
+      const ix=(y*w+(x+step))*4;
+      const iy=((y+step)*w+x)*4;
+      const lum=.299*data[i]+.587*data[i+1]+.114*data[i+2];
+      const lumX=.299*data[ix]+.587*data[ix+1]+.114*data[ix+2];
+      const lumY=.299*data[iy]+.587*data[iy+1]+.114*data[iy+2];
+      const edge=Math.abs(lum-lumX)+Math.abs(lum-lumY);
+      // favor middle 75% of frame so background edges don't dominate
+      const centerPenalty=(Math.abs(x-cx)/(w/2)+Math.abs(y-cy)/(h/2));
+      if(edge>70 && centerPenalty<1.45){
+        minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);count++;
+      }
+    }
+  }
+  if(count<100 || maxX<=minX || maxY<=minY) return null;
 
-  $('identifyBtn').disabled = true;
-  $('identifyBtn').textContent = 'Identifying…';
-  $('result').style.display = 'none';
-  setStatus('Analyzing this frame…');
+  // Clamp a broad box around central edge cloud.
+  let bw=maxX-minX,bh=maxY-minY;
+  const ar=Math.max(bw,bh)/Math.min(bw,bh);
+  return {x:minX,y:minY,w:bw,h:bh,aspect:ar,edgeCount:count};
+}
+
+function palmScaleFromHand(hand, canvasW, canvasH){
+  if(!hand) return null;
+  const dist=(a,b)=>{
+    const dx=(hand[a].x-hand[b].x)*canvasW;
+    const dy=(hand[a].y-hand[b].y)*canvasH;
+    return Math.hypot(dx,dy);
+  };
+  const palmWidth=dist(5,17);
+  const palmLength=dist(0,9);
+  const handSpan=dist(4,20);
+  return {palmWidth,palmLength,handSpan};
+}
+
+function sizeClassFromRatio(phoneBox, palm){
+  if(!phoneBox || !palm) return {ratio:null,size:'Unknown',score:0};
+  const phoneLong=Math.max(phoneBox.w,phoneBox.h);
+  const ref=Math.max(1,palm.palmLength);
+  const ratio=phoneLong/ref;
+
+  // Empirical rough classes for normal hold geometry; we'll tune from real tests.
+  let size='Medium';
+  if(ratio>=3.15) size='Very Large';
+  else if(ratio>=2.72) size='Large';
+  else if(ratio<2.15) size='Compact';
+
+  return {ratio,size,score:Math.min(1,Math.max(.2,(phoneBox.edgeCount||0)/2500))};
+}
+
+async function collectBurst(){
+  const samples=[];
+  const frames=14;
+  for(let i=0;i<frames;i++){
+    const {canvas,ctx}=captureFrame();
+    const box=detectPhoneOutline(canvas,ctx);
+    const palm=palmScaleFromHand(lastHand,canvas.width,canvas.height);
+    const sizing=sizeClassFromRatio(box,palm);
+    samples.push({
+      box,palm,sizing,
+      jpeg:canvas.toDataURL('image/jpeg',.82).split(',')[1],
+      canvasW:canvas.width,canvasH:canvas.height
+    });
+    setStatus(`Scanning… ${i+1}/${frames}`);
+    await new Promise(r=>setTimeout(r,85));
+  }
+  return samples;
+}
+
+function chooseBest(samples){
+  const usable=samples.filter(s=>s.box && s.palm && s.sizing.ratio);
+  const pool=usable.length?usable:samples.filter(s=>s.box);
+  if(!pool.length) return samples[Math.floor(samples.length/2)];
+  pool.sort((a,b)=>{
+    const sa=(a.box?.edgeCount||0)+(a.palm?600:0);
+    const sb=(b.box?.edgeCount||0)+(b.palm?600:0);
+    return sb-sa;
+  });
+  return pool[0];
+}
+
+function summarizeSamples(samples){
+  const ratios=samples.map(s=>s.sizing?.ratio).filter(Number.isFinite);
+  const median=arr=>{
+    const a=[...arr].sort((x,y)=>x-y);
+    return a.length?a[Math.floor(a.length/2)]:null;
+  };
+  const med=median(ratios);
+  const sizeVotes={};
+  for(const s of samples){
+    const k=s.sizing?.size;
+    if(k && k!=='Unknown') sizeVotes[k]=(sizeVotes[k]||0)+1;
+  }
+  const bestSize=Object.entries(sizeVotes).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'Unknown';
+  const handFrames=samples.filter(s=>s.palm).length;
+  const phoneFrames=samples.filter(s=>s.box).length;
+  return {medianRatio:med,sizeClass:bestSize,handFrames,phoneFrames,total:samples.length};
+}
+
+async function smartIdentify(){
+  const key=$('apiKey').value.trim()||localStorage.getItem('gtt_identify_gemini_key');
+  if(!key) return setStatus('Add your Gemini API key first.',true);
+  if(!stream) return setStatus('Start the camera first.',true);
+
+  $('identifyBtn').disabled=true;
+  $('identifyBtn').textContent='Scanning…';
+  $('result').style.display='none';
 
   try{
-    const imageData = captureFrame();
-    const prompt = `Identify the real physical smartphone shown in this image as precisely as the image supports.
+    const samples=await collectBurst();
+    const summary=summarizeSamples(samples);
+    const best=chooseBest(samples);
+
+    lastAnalysis=summary;
+    $('mHand').textContent=`${summary.handFrames}/${summary.total}`;
+    $('mPhone').textContent=`${summary.phoneFrames}/${summary.total}`;
+    $('mRatio').textContent=summary.medianRatio?summary.medianRatio.toFixed(2):'—';
+    $('mSize').textContent=summary.sizeClass;
+
+    if(!best?.jpeg) throw new Error('Could not capture a usable camera frame.');
+
+    setStatus('Sending best frame + size clues to Gemini…');
+
+    const prompt=`Identify the real physical smartphone shown in the image as precisely as the evidence supports.
+
+IMPORTANT: This is a real customer's physical phone unless the image gives overwhelming evidence otherwise. Do NOT call it a dummy, prototype, mockup, custom housing, or modified phone merely because its design is unfamiliar.
+
+Computer-vision clues from a short live-camera burst:
+- Hand landmarks detected in ${summary.handFrames} of ${summary.total} frames.
+- Phone-like outline detected in ${summary.phoneFrames} of ${summary.total} frames.
+- Median phone-long-edge / palm-length image ratio: ${summary.medianRatio ? summary.medianRatio.toFixed(3) : 'unavailable'}.
+- Estimated chassis size class from live geometry: ${summary.sizeClass}.
+These are approximate cues, not millimeter measurements. Use them to help distinguish visually similar size variants (for example Pro vs Pro Max, regular vs Plus/Ultra).
 
 Rules:
-- It can be ANY real phone from any manufacturer or year.
-- It may be powered off, damaged, or old.
-- Use visible hardware clues only.
-- Never pretend certainty when multiple models look alike.
-- Do not infer storage, carrier, chipset, or region unless physically visible.
-- Include useful dead-phone clues.
-- Include IMEI/model-number location guidance only when reasonably applicable; use cautious wording like "may be" or "check".
-- If another view would help, ask for exactly one specific next view.
-- Do not discuss trade-in value, resale value, promotions, or pricing.
+- It can be ANY real phone from any manufacturer/year.
+- Use the photo PLUS the size-class clue.
+- Do not infer storage, carrier, chipset, or region unless visible.
+- If exact variant cannot be justified, identify the family and say what additional view would resolve it.
+- Never invent certainty.
+- Include useful physical clues for a dead/powered-off phone.
+- Include cautious IMEI/model-number location guidance when helpful.
+- Do not discuss trade value, resale, promotions, or pricing.
 
 Return ONLY valid JSON:
 {
@@ -226,90 +448,73 @@ Return ONLY valid JSON:
   ]
 }`;
 
-    const models = [
-      'gemini-3.8-flash',
-      'gemini-3.7-flash',
-      'gemini-3.6-flash'
-    ];
-
-    let lastError = null;
-    let data = null;
+    const models=['gemini-3.7-flash','gemini-3.6-flash'];
+    let data=null,lastError=null;
 
     for(const model of models){
       try{
-        const resp = await fetch(
+        const resp=await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
           {
             method:'POST',
-            headers:{
-              'Content-Type':'application/json',
-              'x-goog-api-key':key
-            },
+            headers:{'Content-Type':'application/json','x-goog-api-key':key},
             body:JSON.stringify({
-              contents:[{
-                role:'user',
-                parts:[
-                  {text:prompt},
-                  {inlineData:{mimeType:'image/jpeg',data:imageData}}
-                ]
-              }],
+              contents:[{role:'user',parts:[
+                {text:prompt},
+                {inlineData:{mimeType:'image/jpeg',data:best.jpeg}}
+              ]}],
               generationConfig:{
-                temperature:.15,
-                responseMimeType:'application/json',
-                thinkingConfig:{thinkingLevel:'low'}
+                temperature:.1,
+                responseMimeType:'application/json'
               }
             })
           }
         );
-
-        const raw = await resp.json();
-        if(!resp.ok) throw new Error(raw?.error?.message || `${model} error ${resp.status}`);
-
-        let txt = raw?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('').trim();
+        const raw=await resp.json();
+        if(!resp.ok) throw new Error(raw?.error?.message||`${model} error ${resp.status}`);
+        let txt=raw?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('').trim();
         if(!txt) throw new Error(`${model} returned no identification.`);
-        txt = txt.replace(/^```json\s*/i,'').replace(/```$/,'').trim();
-        data = JSON.parse(txt);
+        txt=txt.replace(/^```json\s*/i,'').replace(/```$/,'').trim();
+        data=JSON.parse(txt);
         break;
-      }catch(err){
-        lastError = err;
-        console.warn(model, err);
-      }
+      }catch(e){lastError=e;console.warn(model,e)}
     }
+    if(!data) throw lastError||new Error('No Gemini model returned an identification.');
 
-    if(!data) throw lastError || new Error('No model returned an identification.');
-
-    renderResult(data);
-    setStatus('Identification complete. Camera is still live if you want another view.');
+    renderResult(data,summary);
+    setStatus('Done. Camera stays live for another scan.');
   }catch(err){
     console.error(err);
-    setStatus(err.message || 'Could not identify this phone.', true);
+    setStatus(err.message||'Could not identify this phone.',true);
   }finally{
-    $('identifyBtn').disabled = false;
-    $('identifyBtn').textContent = 'Identify';
+    $('identifyBtn').disabled=false;
+    $('identifyBtn').textContent='Scan & Identify';
   }
 }
 
-function renderResult(d){
-  const conf = Math.max(0,Math.min(100,Number(d.confidence)||0));
-  $('modelName').textContent = [d.manufacturer,d.model].filter(Boolean).join(' ') || 'Unknown phone';
-  $('makerYear').textContent = d.year ? `Approx. release: ${d.year}` : '';
-  $('confidence').textContent = `${Math.round(conf)}% confidence`;
+function renderResult(d,s){
+  const conf=Math.max(0,Math.min(100,Number(d.confidence)||0));
+  $('modelName').textContent=[d.manufacturer,d.model].filter(Boolean).join(' ')||'Unknown phone';
+  $('makerYear').textContent=d.year?`Approx. release: ${d.year}`:'';
+  $('confidence').textContent=`${Math.round(conf)}% confidence`;
 
-  $('evidence').textContent = Array.isArray(d.evidence) && d.evidence.length ? d.evidence.join(' • ') : 'No specific visual evidence returned.';
-  $('deadClues').textContent = Array.isArray(d.dead_phone_clues) && d.dead_phone_clues.length ? d.dead_phone_clues.join(' • ') : 'No additional physical clues returned.';
-  $('imeiHelp').textContent = d.imei_help || 'No reliable physical IMEI/model-number location guidance returned.';
+  $('measureClues').textContent=
+    `Hand tracked ${s.handFrames}/${s.total} frames. Phone outline ${s.phoneFrames}/${s.total}. `+
+    `Phone/palm ratio ${s.medianRatio?s.medianRatio.toFixed(2):'unavailable'}. Estimated size class: ${s.sizeClass}.`;
 
-  $('nextView').textContent = d.next_view || '';
-  $('nextViewSection').style.display = d.next_view ? 'block' : 'none';
+  $('evidence').textContent=Array.isArray(d.evidence)&&d.evidence.length?d.evidence.join(' • '):'No specific visual evidence returned.';
+  $('deadClues').textContent=Array.isArray(d.dead_phone_clues)&&d.dead_phone_clues.length?d.dead_phone_clues.join(' • '):'No additional physical clues returned.';
+  $('imeiHelp').textContent=d.imei_help||'No reliable physical IMEI/model-number location guidance returned.';
+  $('nextView').textContent=d.next_view||'';
+  $('nextViewSection').style.display=d.next_view?'block':'none';
 
-  const alts = Array.isArray(d.alternatives) ? d.alternatives : [];
-  $('alternatives').innerHTML = alts.slice(0,3).map(a=>{
-    const c = Number(a.confidence);
+  const alts=Array.isArray(d.alternatives)?d.alternatives:[];
+  $('alternatives').innerHTML=alts.slice(0,3).map(a=>{
+    const c=Number(a.confidence);
     return `<div class="alt"><b>${escapeHtml(a.model||'Unknown')}</b>${Number.isFinite(c)?` · ${Math.round(c)}%`:''}<br><small>${escapeHtml(a.difference||'')}</small></div>`;
   }).join('');
-  $('alternativesSection').style.display = alts.length ? 'block' : 'none';
-
-  $('result').style.display = 'block';
+  $('alternativesSection').style.display=alts.length?'block':'none';
+  $('result').style.display='block';
   $('result').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
@@ -317,8 +522,9 @@ function escapeHtml(s){
   return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-window.addEventListener('pagehide', ()=>{
+window.addEventListener('pagehide',()=>{
   if(stream) stream.getTracks().forEach(t=>t.stop());
+  if(trackingRAF) cancelAnimationFrame(trackingRAF);
 });
 </script>
 </body>
