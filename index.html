@@ -4720,11 +4720,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(markSeen) localStorage.setItem(WHATS_NEW_DAILY_KEY, whatsNewSeenKey());
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden','true');
-    setTimeout(playGttLaunchFx, 120);
+    // GTT 4.0: legacy 3.0 launch animation disabled.
   }
   function openWhatsNewIfNeeded(){
     if(localStorage.getItem(WHATS_NEW_DAILY_KEY) === whatsNewSeenKey()){
-      setTimeout(playGttLaunchFx, 350);
+      // GTT 4.0: legacy 3.0 launch animation disabled.
       return;
     }
     const modal = el('whatsNewModal');
@@ -4988,7 +4988,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   updateTradeHelp();
   renderCompare();
   render();
-  setTimeout(openWhatsNewIfNeeded, 350);
+  // GTT 4.0: What's New is opened intentionally from the launch strip / navigation.
+  // Legacy automatic daily popup disabled.
   console.debug('Global Trade Tool initialized', VERSION, '| Trade DB:', TRADE_DB_SOURCE);
 })();
 
@@ -5020,33 +5021,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       else target.scrollIntoView({behavior:'smooth',block:'start'});
     }
   });
-  try{
-    if(localStorage.getItem(V2_WELCOME_KEY)!=='1'){
-      setTimeout(openV2Welcome,180);
-    }
-  }catch(e){
-    setTimeout(openV2Welcome,180);
-  }
+  // GTT 4.0: obsolete Version 2 welcome is no longer auto-opened.
 
 
   let gttLaunchFxPlayed = false;
   function playGttLaunchFx(){
-    if(gttLaunchFxPlayed) return;
-    gttLaunchFxPlayed = true;
-    const wrap = outerEl('gttLaunchFx');
-    const title = outerEl('gttFxTitle');
-    if(!wrap || !title) return;
-    const phrase = 'Global Trade Tool 3.0';
-    title.innerHTML = '';
-    [...phrase].forEach((ch,i)=>{
-      const s=document.createElement('span');
-      s.className='gtt-fx-char';
-      s.style.animationDelay=(0.22 + i*0.045)+'s';
-      s.innerHTML = ch===' ' ? '&nbsp;' : ch;
-      title.appendChild(s);
-    });
-    wrap.classList.add('show');
-    setTimeout(()=>wrap.classList.remove('show'),2550);
+    // Retained as a no-op for compatibility with older internal handlers.
+    // GTT 4.0 does not use the legacy 3.0 startup animation.
+    return;
   }
 
 </script>
