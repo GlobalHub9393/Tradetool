@@ -4,35 +4,40 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>GTT Identify Tool — Beta Test</title>
+<title>GTT Identify Tool — Live Camera Beta</title>
 <style>
 :root{
   --bg:#f5f7f9;--card:#fff;--ink:#111820;--muted:#65727d;--line:#dbe2e7;
-  --blue:#0568ae;--cyan:#37b5e5;--good:#17854b;--warn:#9a6400;
+  --blue:#0568ae;--good:#17854b;--danger:#c43b3b;
 }
 @media(prefers-color-scheme:dark){
-  :root{--bg:#0d1419;--card:#151f25;--ink:#edf3f6;--muted:#a7b4bc;--line:#314049;--blue:#65c6ee;--cyan:#65c6ee;--good:#69d89a;--warn:#ffd271}
+  :root{--bg:#0d1419;--card:#151f25;--ink:#edf3f6;--muted:#a7b4bc;--line:#314049;--blue:#65c6ee;--good:#69d89a;--danger:#ff8b8b}
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.wrap{max-width:720px;margin:0 auto;padding:18px 14px 40px}
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px 44px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .brand{font-size:18px;font-weight:900;letter-spacing:-.02em}
 .beta{font-size:10px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:5px 8px;color:var(--muted)}
 .hero h1{font-size:30px;line-height:1.05;margin:6px 0 7px;letter-spacing:-.04em}
-.hero p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.45}
+.hero p{margin:0 0 14px;color:var(--muted);font-size:14px;line-height:1.45}
 .card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:14px;margin:12px 0}
 .keyrow{display:grid;grid-template-columns:1fr auto;gap:8px}
-input[type=password],input[type=text]{width:100%;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:11px;padding:12px;font-size:16px}
-button,.filebtn{appearance:none;border:0;border-radius:12px;padding:12px 14px;font-weight:850;font-size:14px;cursor:pointer}
+input{width:100%;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:11px;padding:12px;font-size:16px}
+button{appearance:none;border:0;border-radius:12px;padding:12px 14px;font-weight:850;font-size:14px;cursor:pointer}
 .primary{background:var(--blue);color:white;width:100%;font-size:16px;padding:14px}
 .secondary{background:transparent;color:var(--blue);border:1px solid var(--line)}
-.filebtn{display:flex;align-items:center;justify-content:center;background:var(--blue);color:white;width:100%;min-height:48px}
-#photoInput{position:absolute;left:-9999px}
-.preview{display:none;margin-top:12px;border-radius:14px;overflow:hidden;background:#000;min-height:220px;align-items:center;justify-content:center}
-.preview img{width:100%;max-height:460px;object-fit:contain;display:block}
-.hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:10px}
-.status{font-size:13px;color:var(--muted);text-align:center;margin:12px 0 0;min-height:20px}
+.camera-shell{position:relative;overflow:hidden;border-radius:16px;background:#000;aspect-ratio:3/4;min-height:360px;display:flex;align-items:center;justify-content:center}
+video{width:100%;height:100%;object-fit:cover;background:#000}
+.overlay{position:absolute;inset:0;pointer-events:none}
+.guide{position:absolute;left:10%;right:10%;top:12%;bottom:12%;border:2px solid rgba(255,255,255,.8);border-radius:30px;box-shadow:0 0 0 9999px rgba(0,0,0,.12)}
+.guide:before,.guide:after{content:"";position:absolute;background:rgba(255,255,255,.9)}
+.guide:before{width:38px;height:2px;left:50%;top:-1px;transform:translateX(-50%)}
+.guide:after{width:2px;height:38px;left:-1px;top:50%;transform:translateY(-50%)}
+.camera-note{position:absolute;left:12px;right:12px;bottom:12px;background:rgba(0,0,0,.58);color:white;border-radius:12px;padding:9px 10px;font-size:12px;line-height:1.35;backdrop-filter:blur(8px)}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.status{font-size:13px;color:var(--muted);text-align:center;margin:11px 0 0;min-height:20px}
+.error{color:var(--danger)!important}
 .result{display:none}
 .best{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .best h2{font-size:24px;line-height:1.1;margin:3px 0}
@@ -43,17 +48,17 @@ button,.filebtn{appearance:none;border:0;border-radius:12px;padding:12px 14px;fo
 .section p{font-size:13px;line-height:1.5;margin:0;color:var(--muted)}
 .alt{padding:8px 0;border-top:1px solid var(--line);font-size:13px}
 .alt:first-child{border-top:0}
-.error{color:#c43b3b!important}
 small{color:var(--muted)}
+canvas{display:none}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><div class="brand">GTT · Identify</div><div class="beta">Beta test</div></div>
+  <div class="top"><div class="brand">GTT · Identify</div><div class="beta">Live camera beta</div></div>
 
   <div class="hero">
     <h1>What phone is this?</h1>
-    <p>Take a clear photo of the phone. This test is meant for dead or unknown devices, so it does not require the screen to turn on.</p>
+    <p>Hold the phone in front of the camera. Nothing is saved to Photos; the page grabs one frame only when you tap Identify.</p>
   </div>
 
   <div class="card">
@@ -62,17 +67,23 @@ small{color:var(--muted)}
       <input id="apiKey" type="password" placeholder="Paste key for this device">
       <button id="saveKey" class="secondary" type="button">Save</button>
     </div>
-    <div class="hint">Saved only in this browser's local storage for this beta test. It is not written into the HTML file.</div>
   </div>
 
   <div class="card">
-    <label class="filebtn" for="photoInput">Take / Choose Photo</label>
-    <input id="photoInput" type="file" accept="image/*" capture="environment">
-    <div id="preview" class="preview"><img id="previewImg" alt="Phone preview"></div>
-    <div class="hint">Best first shot: remove the case and photograph the entire back, including the camera area. If it is ambiguous, the result will tell you which view to photograph next.</div>
+    <div class="camera-shell">
+      <video id="video" autoplay playsinline muted></video>
+      <div class="overlay">
+        <div class="guide"></div>
+        <div class="camera-note">Best first view: entire back of the phone, case removed if possible.</div>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="startCamera" class="secondary" type="button">Start Camera</button>
+      <button id="switchCamera" class="secondary" type="button">Switch Camera</button>
+    </div>
   </div>
 
-  <button id="identifyBtn" class="primary" type="button" disabled>Identify Phone</button>
+  <button id="identifyBtn" class="primary" type="button" disabled>Identify</button>
   <div id="status" class="status"></div>
 
   <div id="result" class="card result">
@@ -86,7 +97,7 @@ small{color:var(--muted)}
     </div>
 
     <div class="section">
-      <h3>Why it looks like this</h3>
+      <h3>Why</h3>
       <p id="evidence"></p>
     </div>
 
@@ -101,7 +112,7 @@ small{color:var(--muted)}
     </div>
 
     <div id="nextViewSection" class="section">
-      <h3>Need another view?</h3>
+      <h3>Next view</h3>
       <p id="nextView"></p>
     </div>
 
@@ -110,11 +121,14 @@ small{color:var(--muted)}
       <div id="alternatives"></div>
     </div>
   </div>
+
+  <canvas id="captureCanvas"></canvas>
 </div>
 
 <script>
 const $ = id => document.getElementById(id);
-let currentFile = null;
+let stream = null;
+let facingMode = 'environment';
 
 const saved = localStorage.getItem('gtt_identify_gemini_key');
 if(saved) $('apiKey').value = saved;
@@ -126,116 +140,150 @@ $('saveKey').addEventListener('click', ()=>{
   setStatus('API key saved on this device.');
 });
 
-$('photoInput').addEventListener('change', e=>{
-  const file = e.target.files && e.target.files[0];
-  if(!file) return;
-  currentFile = file;
-  $('previewImg').src = URL.createObjectURL(file);
-  $('preview').style.display = 'flex';
-  $('identifyBtn').disabled = false;
-  $('result').style.display = 'none';
-  setStatus('Photo ready.');
+$('startCamera').addEventListener('click', ()=>startCamera(facingMode));
+$('switchCamera').addEventListener('click', async ()=>{
+  facingMode = facingMode === 'environment' ? 'user' : 'environment';
+  await startCamera(facingMode);
 });
-
 $('identifyBtn').addEventListener('click', identify);
+
+async function startCamera(mode='environment'){
+  try{
+    if(stream) stream.getTracks().forEach(t=>t.stop());
+    stream = await navigator.mediaDevices.getUserMedia({
+      video:{
+        facingMode:{ideal:mode},
+        width:{ideal:1920},
+        height:{ideal:1080}
+      },
+      audio:false
+    });
+    $('video').srcObject = stream;
+    await $('video').play();
+    $('identifyBtn').disabled = false;
+    setStatus('Camera ready. Hold the phone inside the guide and tap Identify.');
+  }catch(err){
+    console.error(err);
+    setStatus('Could not open camera. Make sure camera permission is allowed for this site.', true);
+  }
+}
 
 function setStatus(msg, err=false){
   $('status').textContent = msg || '';
   $('status').classList.toggle('error', !!err);
 }
 
-function fileToBase64(file){
-  return new Promise((resolve,reject)=>{
-    const r = new FileReader();
-    r.onload = ()=>resolve(String(r.result).split(',')[1]);
-    r.onerror = reject;
-    r.readAsDataURL(file);
-  });
+function captureFrame(){
+  const video = $('video');
+  if(!video.videoWidth || !video.videoHeight) throw new Error('Camera frame is not ready yet.');
+  const canvas = $('captureCanvas');
+  const maxW = 1280;
+  const scale = Math.min(1, maxW / video.videoWidth);
+  canvas.width = Math.round(video.videoWidth * scale);
+  canvas.height = Math.round(video.videoHeight * scale);
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL('image/jpeg', .86).split(',')[1];
 }
 
 async function identify(){
   const key = $('apiKey').value.trim() || localStorage.getItem('gtt_identify_gemini_key');
   if(!key) return setStatus('Add your Gemini API key first.', true);
-  if(!currentFile) return setStatus('Take or choose a phone photo first.', true);
+  if(!stream) return setStatus('Start the camera first.', true);
 
   $('identifyBtn').disabled = true;
   $('identifyBtn').textContent = 'Identifying…';
   $('result').style.display = 'none';
-  setStatus('Looking at physical design, cameras, buttons and other clues…');
+  setStatus('Analyzing this frame…');
 
   try{
-    const imageData = await fileToBase64(currentFile);
-    const prompt = `You are a phone hardware identification assistant. Identify the physical phone in the attached image as precisely as the image supports.
+    const imageData = captureFrame();
+    const prompt = `Identify the real physical smartphone shown in this image as precisely as the image supports.
 
-IMPORTANT:
-- This is NOT limited to any supported-device catalog. It can be any real phone from any manufacturer or year.
-- The phone may be powered off, damaged, old, or have a dead screen.
-- Never invent certainty. Closely related generations can look nearly identical.
-- Use visible physical evidence: camera layout, lens count, flash/sensor placement, body shape, buttons, ports, stylus slot, branding, materials, dimensions/proportions, notch/punch-hole if visible, and distinctive design features.
-- If exact storage, carrier variant, chipset variant, or region cannot be determined visually, say so.
-- Give useful dead-phone identification clues for the likely model.
-- Give IMEI/model-number location guidance ONLY when reasonably applicable. Phrase variable locations as "may be" or "check".
-- If another photo would materially improve confidence, ask for ONE specific next view.
-- Do not discuss trade value, promotions, pricing, or resale value.
+Rules:
+- It can be ANY real phone from any manufacturer or year.
+- It may be powered off, damaged, or old.
+- Use visible hardware clues only.
+- Never pretend certainty when multiple models look alike.
+- Do not infer storage, carrier, chipset, or region unless physically visible.
+- Include useful dead-phone clues.
+- Include IMEI/model-number location guidance only when reasonably applicable; use cautious wording like "may be" or "check".
+- If another view would help, ask for exactly one specific next view.
+- Do not discuss trade-in value, resale value, promotions, or pricing.
 
-Return ONLY valid JSON matching this shape:
+Return ONLY valid JSON:
 {
-  "manufacturer": "string",
-  "model": "string",
-  "year": "string",
-  "confidence": 0,
-  "evidence": ["short visible clue", "short visible clue"],
-  "dead_phone_clues": ["useful confirmation clue", "useful confirmation clue"],
-  "imei_help": "short practical guidance",
-  "next_view": "specific next photo to take, or empty string",
-  "alternatives": [
-    {"model":"string","confidence":0,"difference":"short reason"}
+  "manufacturer":"string",
+  "model":"string",
+  "year":"string",
+  "confidence":0,
+  "evidence":["string","string"],
+  "dead_phone_clues":["string","string"],
+  "imei_help":"string",
+  "next_view":"string",
+  "alternatives":[
+    {"model":"string","confidence":0,"difference":"string"}
   ]
-}
+}`;
 
-Confidence must be 0-100. Keep alternatives to at most 3.`;
+    const models = [
+      'gemini-2.5-flash',
+      'gemini-2.0-flash'
+    ];
 
-    const body = {
-      contents:[{
-        role:"user",
-        parts:[
-          {text:prompt},
-          {inlineData:{mimeType: currentFile.type || "image/jpeg", data:imageData}}
-        ]
-      }],
-      generationConfig:{
-        temperature:0.2,
-        responseMimeType:"application/json"
+    let lastError = null;
+    let data = null;
+
+    for(const model of models){
+      try{
+        const resp = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+          {
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json',
+              'x-goog-api-key':key
+            },
+            body:JSON.stringify({
+              contents:[{
+                role:'user',
+                parts:[
+                  {text:prompt},
+                  {inlineData:{mimeType:'image/jpeg',data:imageData}}
+                ]
+              }],
+              generationConfig:{
+                temperature:.15,
+                responseMimeType:'application/json'
+              }
+            })
+          }
+        );
+
+        const raw = await resp.json();
+        if(!resp.ok) throw new Error(raw?.error?.message || `${model} error ${resp.status}`);
+
+        let txt = raw?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('').trim();
+        if(!txt) throw new Error(`${model} returned no identification.`);
+        txt = txt.replace(/^```json\s*/i,'').replace(/```$/,'').trim();
+        data = JSON.parse(txt);
+        break;
+      }catch(err){
+        lastError = err;
+        console.warn(model, err);
       }
-    };
+    }
 
-    const resp = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
-      {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "x-goog-api-key":key
-        },
-        body:JSON.stringify(body)
-      }
-    );
+    if(!data) throw lastError || new Error('No model returned an identification.');
 
-    const raw = await resp.json();
-    if(!resp.ok) throw new Error(raw?.error?.message || `Gemini error ${resp.status}`);
-
-    let text = raw?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('').trim();
-    if(!text) throw new Error('Gemini returned no identification.');
-    text = text.replace(/^```json\s*/i,'').replace(/```$/,'').trim();
-    const data = JSON.parse(text);
     renderResult(data);
-    setStatus('Identification complete.');
+    setStatus('Identification complete. Camera is still live if you want another view.');
   }catch(err){
     console.error(err);
     setStatus(err.message || 'Could not identify this phone.', true);
   }finally{
     $('identifyBtn').disabled = false;
-    $('identifyBtn').textContent = 'Identify Phone';
+    $('identifyBtn').textContent = 'Identify';
   }
 }
 
@@ -249,15 +297,16 @@ function renderResult(d){
   $('deadClues').textContent = Array.isArray(d.dead_phone_clues) && d.dead_phone_clues.length ? d.dead_phone_clues.join(' • ') : 'No additional physical clues returned.';
   $('imeiHelp').textContent = d.imei_help || 'No reliable physical IMEI/model-number location guidance returned.';
 
-  $('nextView').textContent = d.next_view || 'No additional photo requested.';
+  $('nextView').textContent = d.next_view || '';
   $('nextViewSection').style.display = d.next_view ? 'block' : 'none';
 
   const alts = Array.isArray(d.alternatives) ? d.alternatives : [];
-  $('alternatives').innerHTML = alts.map(a=>{
+  $('alternatives').innerHTML = alts.slice(0,3).map(a=>{
     const c = Number(a.confidence);
     return `<div class="alt"><b>${escapeHtml(a.model||'Unknown')}</b>${Number.isFinite(c)?` · ${Math.round(c)}%`:''}<br><small>${escapeHtml(a.difference||'')}</small></div>`;
   }).join('');
   $('alternativesSection').style.display = alts.length ? 'block' : 'none';
+
   $('result').style.display = 'block';
   $('result').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -265,6 +314,10 @@ function renderResult(d){
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
+window.addEventListener('pagehide', ()=>{
+  if(stream) stream.getTracks().forEach(t=>t.stop());
+});
 </script>
 </body>
 </html>
