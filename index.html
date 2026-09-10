@@ -1300,6 +1300,25 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   .v4-phone-product img{height:108px!important;padding:4px!important}
 }
 
+
+/* ===== GTT 4.0 plan selection simplification ===== */
+#tradePage .plan-reference-link{
+  display:inline-block;margin:10px 0 12px;color:var(--v4-blue)!important;
+  font-size:10.5px;font-weight:750;text-decoration:none
+}
+#tradePage .plan-reference-link:hover{text-decoration:underline}
+#tradePage #planHelp:empty{display:none!important}
+#tradePage #planHelp .typed-plan-list{display:none!important}
+#tradePage .plan-selected-note{color:var(--v4-muted);font-weight:700}
+#tradePage .plan-reference-section{margin-top:2px}
+#tradePage .plan-reference-title{
+  color:var(--v4-ink);font-size:14px;font-weight:850;margin-bottom:12px
+}
+@media(prefers-color-scheme:dark){
+ #tradePage .plan-reference-link{color:#72c9ef!important}
+ #tradePage .plan-reference-title{color:#edf3f6!important}
+}
+
 </style>
 </head>
 <body>
@@ -1420,12 +1439,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         <p class="label"><span class="step">1</span>What plan are they on?</p>
 
         <div class="plan-search" aria-hidden="false">
-          <input id="planSearch" placeholder="Search plan keywords (e.g. 'Business Unlimited Premium 3.0', 'Unlimited Choice')" aria-autocomplete="list" aria-controls="planSuggestions" aria-expanded="false" />
+          <input id="planSearch" placeholder="Type their plan name…" aria-autocomplete="list" aria-controls="planSuggestions" aria-expanded="false" />
           <button id="planClearSearch" title="Clear search">Clear</button>
           <div id="planSuggestions" class="suggestions" role="listbox" aria-label="Plan suggestions">
             <ul id="planSuggestionsList"></ul>
           </div>
         </div>
+
+        <a class="plan-reference-link" href="#planReference">Not sure which group? See which plan goes where →</a>
 
         <div class="chips" id="plans">
           <button class="chip" data-plan="premium" aria-pressed="false">Premium</button>
@@ -1433,7 +1454,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
           <button class="chip" data-plan="starter" aria-pressed="false">Starter</button>
           <button class="chip" data-plan="value" aria-pressed="false">Value</button>
           <button class="chip" data-plan="55plus" aria-pressed="false">55+</button>
-          <button class="chip" data-plan="valueplus_mobile" aria-pressed="false">Value Plus VL / Mobile Share</button>
+          <button class="chip" data-plan="valueplus_mobile" aria-pressed="false">Ineligible / Rerate</button>
         </div>
         <p id="planHelp" class="d-rule" style="color:var(--slate); border-top:1px solid var(--line); margin-top:13px; padding-top:11px; font-size:13px; display:none;"></p>
       </section>
@@ -1566,15 +1587,23 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         <p id="nextUpConditionWarning" style="margin-top:10px;padding:10px 12px;border-radius:10px;background:#fff1f1;border:1px solid #f2b8b8;color:#991b1b;font-weight:800;font-size:13px;display:none;">Poor condition selected — Next Up / Next Up Anytime cannot be used.</p>
       </section>
 
-      <details class="card" style="padding:14px 16px;">
-        <summary style="font-weight:700; cursor:pointer; color:var(--ink); font-size:14px;">Which plans are in each group?</summary>
+      <section id="planReference" class="card plan-reference-section" style="padding:14px 16px; scroll-margin-top:90px;">
+        <div class="plan-reference-title">Which plan goes where?</div>
         <div style="font-size:12px; color:var(--ink); margin-top:12px; line-height:1.45;">
           <div style="margin:0 0 12px;">
             <strong>Premium</strong>
             <div class="plan-ref-grid">
-              <div class="plan-ref-box consumer"><div class="plan-ref-head">Consumer</div><div class="plan-ref-list"><strong>Elite 2.0</strong> · <strong>Premium 2.0</strong> · <strong>Extra 2.0</strong> · <strong>Elite w/ HBO Max</strong> · <strong>Premium PL</strong> · <strong>Extra EL</strong></div></div>
-              <div class="plan-ref-box cru"><div class="plan-ref-head">CRU</div><div class="plan-ref-list"><strong>Business Unlimited Ultimate 3.0</strong> · <strong>Business Unlimited Premium 3.0</strong> · <strong>Business Unlimited Advanced 3.0</strong> · <strong>Business Unlimited Premium 2.0</strong> · <strong>Business Unlimited Advanced 2.0</strong></div></div>
+              <div class="plan-ref-box consumer"><div class="plan-ref-head">Consumer</div><div class="plan-ref-list"><strong>Elite 2.0</strong> · <strong>Premium 2.0</strong> · <strong>Elite w/ HBO Max</strong> · <strong>Premium PL</strong></div></div>
+              <div class="plan-ref-box cru"><div class="plan-ref-head">CRU</div><div class="plan-ref-list"><strong>Business Unlimited Ultimate 3.0</strong> · <strong>Business Unlimited Premium 3.0</strong> · <strong>Business Unlimited Premium 2.0</strong></div></div>
               <div class="plan-ref-box firstnet"><div class="plan-ref-head">FirstNet</div><div class="plan-ref-list"><strong>FirstNet Elite</strong> · <strong>FirstNet Premium</strong> · <strong>FirstNet Extra</strong></div></div>
+            </div>
+          </div>
+
+          <div style="margin:0 0 12px;">
+            <strong>Extra</strong>
+            <div class="plan-ref-grid">
+              <div class="plan-ref-box consumer"><div class="plan-ref-head">Consumer</div><div class="plan-ref-list"><strong>Extra 2.0</strong> · <strong>Extra EL</strong> · <strong>Unlimited Extra</strong></div></div>
+              <div class="plan-ref-box cru"><div class="plan-ref-head">CRU</div><div class="plan-ref-list"><strong>Business Unlimited Advanced 3.0</strong> · <strong>Business Unlimited Advanced 2.0</strong></div></div>
             </div>
           </div>
 
@@ -1596,11 +1625,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
             </div>
           </div>
 
-          <p class="plan-ref-compact"><strong style="color:#6b7b8c">Legacy eligible / searchable reference</strong><br>Unlimited Elite · Unlimited Extra · Unlimited Starter · Unlimited Premium · Unlimited Plus · Unlimited Plus Enhanced · Unlimited Choice · Unlimited Choice II · Unlimited &amp;More · Unlimited &amp;More Premium · Unlimited Your Way · Complete Connect · Legacy Unlimited / CRU / FirstNet Plans</p>
+          <p class="plan-ref-compact"><strong style="color:#6b7b8c">Legacy eligible / searchable reference</strong><br>Unlimited Elite · Unlimited Starter · Unlimited Premium · Unlimited Plus · Unlimited Plus Enhanced · Unlimited Choice · Unlimited Choice II · Unlimited &amp;More · Unlimited &amp;More Premium · Unlimited Your Way · Complete Connect · Legacy Unlimited / CRU / FirstNet Plans</p>
           <p class="plan-ref-compact" style="margin-top:8px;"><strong style="color:#6b7b8c">Not eligible / rerate recommended</strong><br>Value Plus VL · Mobile Share / Value / Advantage / Flex / Plus / Data · Nation 450 / 900 / 1350 · FamilyTalk · Individual Nation · Nation w/ Rollover · Senior Nation · Unity · Grandfathered iPhone Unlimited Data · Business Mobile Share · Business Pooled Nation · Business Nation · BusinessTalk</p>
           <p style="margin:10px 0 0; color:var(--slate); font-size:11px;">Always verify eligible and non-eligible plans in CCKM before quoting.</p>
         </div>
-      </details>
+      </section>
 
 
 
@@ -2300,7 +2329,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
 
   // Plan labels and membership text. Each group has regular plans and (optionally) a distinct CRU list.
-  const PLAN_LABEL = { premium:"Premium", extra:"Extra", starter:"Starter", value:"Value", '55plus':"55+", valueplus_mobile:"Value Plus VL / Mobile Share" };
+  const PLAN_LABEL = { premium:"Premium", extra:"Extra", starter:"Starter", value:"Value", '55plus':"55+", valueplus_mobile:"Ineligible / Rerate" };
   const PROMO_CATEGORY_LABEL = {
     iphonePro:'iPhone Pro ladder',
     iphoneBase:'iPhone/Base ladder',
@@ -2317,9 +2346,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   const PROMO_CATEGORY_KEYS = ['iphonePro','iphoneBase','iphoneAir','samsung','s26base','fold8','flip8','pixel11XL','pixel11Pro','pixelXL','pixelPro','razr'];
   const PLAN_MEMBERS = {
     premium:{
-      regular:['Elite 2.0','Premium 2.0','Extra 2.0','Elite w/ HBO Max','Premium PL','Extra EL'],
-      cru:['Business Unlimited Ultimate 3.0','Business Unlimited Premium 3.0','Business Unlimited Advanced 3.0','Business Unlimited Premium 2.0','Business Unlimited Advanced 2.0'],
+      regular:['Elite 2.0','Premium 2.0','Elite w/ HBO Max','Premium PL'],
+      cru:['Business Unlimited Ultimate 3.0','Business Unlimited Premium 3.0','Business Unlimited Premium 2.0'],
       firstnet:['FirstNet Elite','FirstNet Premium','FirstNet Extra']
+    },
+    extra:{
+      regular:['Extra 2.0','Extra EL','Unlimited Extra'],
+      cru:['Business Unlimited Advanced 3.0','Business Unlimited Advanced 2.0'],
+      firstnet:null
     },
     starter:{ regular:['Starter SL','Starter'], cru:['Business Unlimited Standard 2.0','Business Unlimited Standard'], firstnet:['FirstNet Starter'] },
     value:{ regular:['Value 2.0'], cru:['Business Unlimited Standard 3.0'], firstnet:['FirstNet Value 2.0'] },
@@ -2338,18 +2372,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       '</div>';
   }
   function renderPlanHelp(key){
-    const pm = PLAN_MEMBERS[key] || { regular:[], cru:null, firstnet:null };
-    let i = 0;
-    let html = '<div class="typed-plan-list">';
-    html += typedPlanBox('Consumer', pm.regular, 'consumer', i++);
-    html += typedPlanBox('CRU', pm.cru, 'cru', i++);
-    html += typedPlanBox('FirstNet', pm.firstnet, 'firstnet', i++);
-    html += '</div>';
     if(key === 'valueplus_mobile'){
-      html += '<div style="margin-top:8px; font-size:13px; color:#6b7b8c; font-weight:700;">Not eligible / rerate recommended.</div>';
+      return '<span class="plan-selected-note">Not promo eligible — rerate to an eligible current unlimited plan.</span>';
     }
-    html += '<div style="margin-top:8px; font-size:13px;">Confirm promos in <a href="' + CCKM + '" target="_blank" rel="noopener noreferrer" style="color:#0568AE;">CCKM</a>.</div>';
-    return html;
+    return '';
   }
 
   // Phone catalog: active trade-in or tiered-promo devices only. tieredMonthlyNew / Upgrade where known.
@@ -2896,21 +2922,21 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     // Premium group — current/recent consumer unlimited plans
     { name:'Elite 2.0',                  group:'premium' },
     { name:'Premium 2.0',                group:'premium', alt:'Prem 2.0' },
-    { name:'Extra 2.0',                  group:'premium' },
+    { name:'Extra 2.0',                  group:'extra' },
     { name:'Premium PL',                 group:'premium', alt:'Unlimited Premium PL' },
-    { name:'Extra EL',                   group:'premium', alt:'Unlimited Extra EL' },
+    { name:'Extra EL',                   group:'extra', alt:'Unlimited Extra EL' },
     { name:'Elite w/ HBO Max',           group:'premium', alt:'Unlimited Elite w/ HBO Max HBO Max Elite' },
 
     // Premium group — CRU / Business Unlimited plans as shown in OPUS
     { name:'Business Unlimited Ultimate 3.0', group:'premium', cru:true, alt:'Ultimate 3.0 BU Ultimate CRU' },
     { name:'Business Unlimited Premium 3.0',  group:'premium', cru:true, alt:'Premium 3.0 BU Premium CRU' },
-    { name:'Business Unlimited Advanced 3.0', group:'premium', cru:true, alt:'Advanced 3.0 Advance 3.0 BU Advanced CRU' },
+    { name:'Business Unlimited Advanced 3.0', group:'extra', cru:true, alt:'Advanced 3.0 Advance 3.0 BU Advanced CRU' },
     { name:'Business Unlimited Premium 2.0',  group:'premium', cru:true, alt:'Premium 2.0 BU Premium CRU' },
-    { name:'Business Unlimited Advanced 2.0', group:'premium', cru:true, alt:'Advanced 2.0 Advance 2.0 BU Advanced CRU' },
+    { name:'Business Unlimited Advanced 2.0', group:'extra', cru:true, alt:'Advanced 2.0 Advance 2.0 BU Advanced CRU' },
 
     // Premium group — legacy unlimited / eligible legacy search terms
     { name:'Unlimited Elite',            group:'premium' },
-    { name:'Unlimited Extra',            group:'premium' },
+    { name:'Unlimited Extra',            group:'extra' },
     { name:'Unlimited &More Premium',    group:'premium', alt:'Unlimited and More Premium' },
     { name:'Unlimited &More',            group:'premium', alt:'Unlimited and More' },
     { name:'Unlimited Plus',             group:'premium' },
