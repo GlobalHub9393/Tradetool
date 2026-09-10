@@ -1334,6 +1334,12 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 .pi-answer{margin-top:12px;border-radius:16px;padding:15px;background:var(--v4-ink);color:var(--v4-bg)}.pi-answer small{opacity:.72;font-size:9px;text-transform:uppercase;letter-spacing:.08em}.pi-credit{font-size:30px;font-weight:900;letter-spacing:-.04em;margin:4px 0}.pi-answer p{color:inherit;opacity:.82}
 .pi-missing{margin-top:10px;border:1px solid var(--v4-line);border-radius:13px;padding:11px;font-size:11px;color:var(--v4-muted)}
 .pi-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.pi-actions button{margin:0}
+.pi-follow{display:none;margin-top:12px;border:1px solid var(--v4-line);border-radius:16px;padding:14px;background:color-mix(in srgb,var(--v4-blue) 7%,var(--v4-card))}
+.pi-follow.show{display:block}.pi-follow h3{margin:0 0 4px;font-size:15px}.pi-follow p{margin:0 0 10px;color:var(--v4-muted);font-size:11px}
+.pi-followopts{display:flex;gap:7px;flex-wrap:wrap}.pi-followbtn{border:1px solid var(--v4-line);background:var(--v4-card);color:var(--v4-ink);border-radius:11px;padding:9px 11px;font-weight:800;cursor:pointer}
+.pi-followrow{display:grid;grid-template-columns:1fr auto;gap:8px}.pi-followrow input{width:100%;border:1px solid var(--v4-line);border-radius:11px;background:var(--v4-card);color:var(--v4-ink);padding:10px;font:inherit}
+.pi-dbnote{margin-top:8px;font-size:10px;color:var(--v4-muted)}
+
 @media(max-width:560px){.pi-actions{grid-template-columns:1fr}}
 </style>
 
@@ -1409,6 +1415,12 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 <div id="piKeyBox" class="pi-box">
   <h3>Gemini key</h3><p>Beta only. Uses the same locally saved key as the Identify test when available.</p>
   <div class="pi-keyrow"><input id="piKey" type="password" placeholder="Gemini API key"><button id="piSaveKey" type="button">Save</button></div>
+</div>
+
+<div id="piFollow" class="pi-follow">
+  <h3 id="piFollowTitle">One more thing</h3>
+  <p id="piFollowText"></p>
+  <div id="piFollowBody"></div>
 </div>
 
 <div id="piResult" class="pi-box pi-result">
@@ -5555,10 +5567,19 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
  search.addEventListener('input',renderSuggestions);search.addEventListener('focus',renderSuggestions);
 
- // Promo Investigator beta: Gemini parses rep language; deterministic GTT rules calculate the result.
- let piSellable=[];
- fetch(SB+'/rest/v1/sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,active,sellable&active=eq.true&sellable=eq.true&limit=1000',{headers:{apikey:KEY,Authorization:'Bearer '+KEY},cache:'no-store'})
-   .then(r=>r.json()).then(r=>{piSellable=Array.isArray(r)?r:[]}).catch(()=>{});
+ // Promo Investigator beta: Gemini parses rep language; Supabase promo tables + GTT rules decide the answer.
+ let piSellable=[], piPromos=[], piPromoDevices=[], piPromoPlans=[], piTiers=[], piSpecial=[], piPlanGroups=[];
+ const piHeaders={apikey:KEY,Authorization:'Bearer '+KEY};
+ const piGet=(path)=>fetch(SB+'/rest/v1/'+path,{headers:piHeaders,cache:'no-store'}).then(r=>r.ok?r.json():[]);
+ Promise.all([
+   piGet('sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,active,sellable&limit=1500'),
+   piGet('promotions?select=id,promo_key,name,promo_type,promo_category_key,starts_at,ends_at,active,priority,notes&active=eq.true&limit=1000'),
+   piGet('promotion_devices?select=promotion_id,device_key,active&active=eq.true&limit=2500'),
+   piGet('promotion_plan_groups?select=promotion_id,plan_group_key,active&active=eq.true&limit=2500'),
+   piGet('promotion_tiers?select=id,promotion_id,plan_group_key,min_trade_value,credit_amount,qualifier_type,qualifier_detail,sort_order,active&active=eq.true&limit=3000'),
+   piGet('special_trade_rules?select=id,rule_key,name,qualifier_type,qualifier_level,promo_category_key,device_key_prefix,plan_group_key,credit_amount,active,notes&active=eq.true&limit=1500'),
+   piGet('plan_groups?select=group_key,display_name,promo_eligible,active&active=eq.true&limit=100')
+ ]).then(([a,b,c,d,e,f,g])=>{piSellable=a||[];piPromos=b||[];piPromoDevices=c||[];piPromoPlans=d||[];piTiers=e||[];piSpecial=f||[];piPlanGroups=g||[]}).catch(()=>{});
 
  const PI_LADDERS={
    premium:{iphonePro:[[290,1100],[130,700],[35,350]],iphoneBase:[[130,700],[35,350]],iphoneAir:[[130,700]],samsung:[[95,1100],[35,900]],s26base:[[35,900]],fold8:[[290,1900],[95,1000],[35,500]],flip8:[[95,1000],[35,500]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[[200,1250],[35,1050]],pixelPro:[[35,1050]],razr:[[95,1320],[35,1000]]},
@@ -5569,48 +5590,107 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  PI_LADDERS.extra=JSON.parse(JSON.stringify(PI_LADDERS.premium));
 
  const piNorm=x=>String(x||'').toLowerCase().replace(/apple|samsung|galaxy|google/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+ const piMoney=n=>'$'+Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2});
+ const piEsc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function piFact(label,value){return '<div class="pi-fact"><small>'+piEsc(label)+'</small><b>'+piEsc(value||'Not specified')+'</b></div>'}
  function piBestMatch(q,rows,field){
-   const n=piNorm(q); if(!n)return null;
-   let best=null,score=-1;
+   const n=piNorm(q); if(!n)return null; let best=null,score=-1;
    rows.forEach(r=>{const x=piNorm(r[field]);let sc=0;if(x===n)sc=100;else if(x.includes(n)||n.includes(x))sc=70+Math.min(x.length,n.length);else{const a=new Set(n.split(' ')),b=x.split(' ');sc=b.filter(t=>a.has(t)).length*12}if(sc>score){score=sc;best=r}});
    return score>=12?best:null;
  }
  function piTradeMatch(q,storage){
-   const candidates=tradeRows.filter(r=>piNorm(r.model).includes(piNorm(q))||piNorm(q).includes(piNorm(r.model)));
-   if(!candidates.length)return piBestMatch(q,tradeRows,'model');
+   if(!q)return null;
+   const nq=piNorm(q);
+   let candidates=tradeRows.filter(r=>piNorm(r.model).includes(nq)||nq.includes(piNorm(r.model)));
+   if(!candidates.length){const b=piBestMatch(q,tradeRows,'model');return b}
    if(storage){const exact=candidates.find(r=>piNorm(r.storage)===piNorm(storage));if(exact)return exact}
    return candidates.sort((a,b)=>Number(b.trade_value)-Number(a.trade_value))[0];
  }
- function piDeviceMatch(q){
-   const uniq=[];const seen=new Set;piSellable.forEach(r=>{const k=r.name+'|'+r.storage;if(!seen.has(k)){seen.add(k);uniq.push(r)}});
-   return piBestMatch(q,uniq,'name');
+ function piDeviceMatches(q){
+   if(!q)return [];
+   const n=piNorm(q), map=new Map();
+   piSellable.forEach(r=>{const label=r.name||r.device_key;if(!label)return;const key=r.device_key||label;if(!map.has(key))map.set(key,r)});
+   // Also allow promotion device keys to surface future / non-sellable launch devices.
+   piPromoDevices.forEach(m=>{if(!map.has(m.device_key))map.set(m.device_key,{device_key:m.device_key,name:m.device_key.replace(/[_-]+/g,' '),storage:'',promo_category_key:''})});
+   return [...map.values()].map(r=>{
+     const a=piNorm(r.name),b=piNorm(r.device_key), toks=n.split(' ').filter(Boolean);
+     let score=0;
+     if(a===n||b===n)score=100;
+     else if(a.includes(n)||b.includes(n))score=85+Math.min(n.length,12);
+     else if(n.includes(a)||n.includes(b))score=76;
+     else score=Math.max(toks.filter(t=>a.includes(t)).length,toks.filter(t=>b.includes(t)).length)*14;
+     return {r,score};
+   }).filter(x=>x.score>=20).sort((a,b)=>b.score-a.score).map(x=>x.r);
  }
- function piPlan(x){x=String(x||'').toLowerCase();if(x.includes('premium')||x.includes('elite'))return 'premium';if(x.includes('extra')||x.includes('advanced'))return 'extra';if(x.includes('starter')||x.includes('standard'))return 'starter';if(x.includes('value'))return 'value';if(x.includes('55'))return '55';return null}
- function piCredit(plan,cat,val){
+ function piDeviceMatch(q){return piDeviceMatches(q)[0]||null}
+ function piPlan(x){
+   x=String(x||'').toLowerCase();
+   if(x.includes('premium')||x.includes('elite'))return 'premium';
+   if(x.includes('extra')||x.includes('advanced'))return 'extra';
+   if(x.includes('starter')||x.includes('standard'))return 'starter';
+   if(x.includes('value'))return 'value';
+   if(x.includes('55'))return '55';
+   if(x.includes('ineligible')||x.includes('rerate'))return 'ineligible';
+   return null;
+ }
+ function piFallbackCredit(plan,cat,val){
    const ladder=PI_LADDERS[plan]?.[cat];if(!ladder)return 0;
    for(const [min,credit] of ladder)if(val>=min)return credit;return 0;
  }
- function piMoney(n){return '$'+Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2})}
- function piFact(label,value){return '<div class="pi-fact"><small>'+label+'</small><b>'+String(value||'Not specified').replace(/[<>&]/g,'')+'</b></div>'}
+ function piDate(s){if(!s)return null;const d=new Date(s);return isNaN(d)?null:d}
+ function piPromoCandidates(target,plan){
+   if(!target)return [];
+   const did=target.device_key;
+   const mapped=new Set(piPromoDevices.filter(x=>x.device_key===did).map(x=>Number(x.promotion_id)));
+   let arr=piPromos.filter(p=>mapped.has(Number(p.id)) || (!!p.promo_category_key && p.promo_category_key===target.promo_category_key));
+   if(plan){
+     arr=arr.filter(p=>{
+       const plans=piPromoPlans.filter(x=>Number(x.promotion_id)===Number(p.id)).map(x=>x.plan_group_key);
+       const tierPlans=piTiers.filter(x=>Number(x.promotion_id)===Number(p.id)).map(x=>x.plan_group_key);
+       const all=[...new Set([...plans,...tierPlans])];
+       return !all.length || all.includes(plan);
+     });
+   }
+   const now=new Date();
+   arr.forEach(p=>{
+     const st=piDate(p.starts_at),en=piDate(p.ends_at);
+     p._state=st&&st>now?'upcoming':(en&&en<now?'ended':'current');
+   });
+   return arr.filter(p=>p._state!=='ended').sort((a,b)=>{
+     if(a._state!==b._state)return a._state==='current'?-1:1;
+     return Number(a.priority||999)-Number(b.priority||999);
+   });
+ }
+ function piDbTier(promo,plan,val){
+   if(!promo||!plan||val==null)return null;
+   const rows=piTiers.filter(t=>Number(t.promotion_id)===Number(promo.id)&&t.plan_group_key===plan)
+     .sort((a,b)=>Number(b.min_trade_value||0)-Number(a.min_trade_value||0));
+   return rows.find(t=>val>=Number(t.min_trade_value||0))||null;
+ }
+ function piFormatDate(v){const d=piDate(v);return d?d.toLocaleDateString(undefined,{month:'numeric',day:'numeric'}):''}
 
- const piKey=$('piKey'), piKeyBox=$('piKeyBox');
+ const piKey=$('piKey'), piKeyBox=$('piKeyBox'), piFollow=$('piFollow');
  const existingPiKey=localStorage.getItem('gtt_identify_gemini_key')||localStorage.getItem('gtt_promo_gemini_key')||'';
  if(existingPiKey){piKey.value=existingPiKey;piKeyBox.style.display='none'}
  $('piSaveKey').onclick=()=>{const k=piKey.value.trim();if(!k)return;$('piStatus').textContent='Key saved on this device.';localStorage.setItem('gtt_promo_gemini_key',k);localStorage.setItem('gtt_identify_gemini_key',k);piKeyBox.style.display='none'};
  document.querySelectorAll('.pi-example').forEach(b=>b.onclick=()=>{$('piAsk').value=b.textContent;$('piAsk').focus()});
- $('piAgain').onclick=()=>{$('piAsk').value='';$('piResult').classList.remove('show');$('piAsk').focus()};
+
+ let piState={d:null,x:null};
+ function piResetFollow(){piFollow.classList.remove('show');$('piFollowBody').innerHTML=''}
+ $('piAgain').onclick=()=>{$('piAsk').value='';$('piResult').classList.remove('show');piResetFollow();piState={d:null,x:null};$('piAsk').focus()};
 
  async function piParse(text,key){
    const prompt=`You parse AT&T wireless promo questions from retail-rep shorthand. Do NOT answer the promo and do NOT invent eligibility. Extract only facts stated or strongly unambiguous aliases.
 Return ONLY JSON with:
 {"trade_device":"","trade_storage":"","plan":"","target_device":"","target_storage":"","activation":"","condition":"","next_up":"","paid_percent":null,"effective_date":"","missing":[]}
 Rules:
-- "S22" means Galaxy S22, "S26 Ultra" means Galaxy S26 Ultra, etc.
+- "S22" means Galaxy S22, "S26 Ultra" means Galaxy S26 Ultra.
+- "18", when clearly referring to an iPhone in context, may be returned as "iPhone 18"; do not invent Pro/Pro Max/Duo unless stated.
 - plan may contain Premium, Elite, Extra, Starter, Value, 55+, or a named legacy/business plan.
 - activation is "upgrade", "new", or "".
 - condition only if explicitly stated.
-- Never invent storage, condition, Next Up, paid percentage, or activation.
-- missing should list information that may be needed but was not stated.
+- Never invent storage, condition, Next Up, paid percentage, plan, or activation.
+- missing should list absent information, but do not answer it.
 Question: ${text}`;
    let last;
    for(const model of ['gemini-3.7-flash','gemini-3.6-flash']){
@@ -5624,64 +5704,135 @@ Question: ${text}`;
  }
 
  function piEvaluate(d){
-   const plan=piPlan(d.plan), trade=piTradeMatch(d.trade_device,d.trade_storage), target=piDeviceMatch(d.target_device);
-   const missing=[];
-   if(!d.trade_device)missing.push('trade-in phone');
-   if(!d.plan)missing.push('plan');
-   if(!d.target_device)missing.push('phone they are getting');
-   if(plan==='55')missing.push('55+ uses tiered/special pricing — verify in the full Trade Tool');
-   if(!plan&&d.plan)missing.push('plan group could not be mapped');
-   if(d.activation==='')missing.push('new line vs upgrade may matter for some offers');
-   if(!d.condition)missing.push('trade condition / any-condition eligibility');
-
+   const plan=piPlan(d.plan), trade=piTradeMatch(d.trade_device,d.trade_storage);
+   const targetMatches=piDeviceMatches(d.target_device);
+   const target=targetMatches[0]||null;
    const val=trade?Number(trade.trade_value)||0:null;
+   const promos=piPromoCandidates(target,plan);
+   const bestPromo=promos[0]||null;
+   const dbTier=piDbTier(bestPromo,plan,val);
    const cat=target?.promo_category_key||null;
-   let credit=(plan&&cat&&val!=null)?piCredit(plan,cat,val):0;
-   let title='Need a little more information';
-   let body='I can parse the question, but GTT does not have enough structured information to calculate this promo yet.';
+   const fallback=(plan&&cat&&val!=null)?piFallbackCredit(plan,cat,val):0;
+   const credit=dbTier?Number(dbTier.credit_amount||0):fallback;
 
-   if(plan&&target&&trade){
-     if(credit>0){
+   let title='Need a little more information',body='I found the question, but I need a few details before GTT should commit to a promo.';
+   if(bestPromo && plan){
+     const when=bestPromo._state==='upcoming'&&bestPromo.starts_at?' Starts '+piFormatDate(bestPromo.starts_at)+'.':'';
+     if(trade && (dbTier||credit)){
        title='Up to '+piMoney(credit);
-       body=(trade.brand+' '+trade.model+(trade.storage?' · '+trade.storage:'')+' is currently '+piMoney(val)+' good-condition TIV. '+
-             (d.plan||plan)+' maps to '+plan.charAt(0).toUpperCase()+plan.slice(1)+' for this check. '+
-             target.name+' uses the '+(cat||'current')+' promo path.');
+       body=(bestPromo.name||bestPromo.promo_key||'Database promotion')+'.'+when+' '+trade.brand+' '+trade.model+' is currently '+piMoney(val)+' good-condition TIV.';
+     }else if(!trade){
+       title=bestPromo.name||bestPromo.promo_key||'Promo found in database';
+       body='GTT found a matching '+(bestPromo._state==='upcoming'?'upcoming ':'')+'database promotion for '+(target?.name||d.target_device)+' on '+(d.plan||plan)+'.'+when+' Tell me the trade-in phone so I can test the tier.';
      }else{
-       title='No standard trade tier found';
-       body='GTT matched the devices and plan, but the current standard trade-value ladder did not produce a credit. Check special/tiered/any-condition rules in the full Trade Tool.';
+       title=bestPromo.name||bestPromo.promo_key||'Promo found in database';
+       body='GTT found the database promotion, but the current trade-value tier did not produce a standard credit. Any-condition or special-rule eligibility may still apply and should be checked.';
+     }
+   }else if(plan&&target&&trade&&credit){
+     title='Up to '+piMoney(credit);
+     body='No mapped promotion row was found for this target, so GTT used its current fallback ladder. '+trade.brand+' '+trade.model+' is '+piMoney(val)+' good-condition TIV.';
+   }else if(target && !plan){
+     const raw=piPromoCandidates(target,null);
+     if(raw.length){
+       title='Promo found — which plan?';
+       const current=raw.find(p=>p._state==='current')||raw[0];
+       body='GTT found '+(current.name||current.promo_key||'a matching promotion')+' in Supabase for '+(target.name||d.target_device)+'. I need the customer’s plan before choosing the eligible tier.';
      }
    }
 
-   return {plan,trade,target,val,cat,credit,title,body,missing:[...new Set([...(d.missing||[]),...missing])]};
+   return {plan,trade,target,targetMatches,val,cat,promos,bestPromo,dbTier,credit,title,body};
+ }
+
+ function piNeedsQuestion(d,x){
+   if(!d.target_device)return {type:'text',field:'target_device',title:'Which phone are they getting?',text:'Give me the phone they want to buy.'};
+   // Broad target: if several close matches share the query, ask rather than invent a variant.
+   const n=piNorm(d.target_device);
+   const close=(x.targetMatches||[]).filter(r=>{
+     const a=piNorm(r.name||r.device_key);
+     return a.includes(n)||n.includes(a);
+   });
+   const unique=[...new Map(close.map(r=>[(r.name||r.device_key),r])).values()].slice(0,6);
+   if(unique.length>1 && !unique.some(r=>piNorm(r.name||r.device_key)===n)){
+     return {type:'targets',title:'Which one?',text:'I found more than one phone that matches “'+d.target_device+'”.',options:unique};
+   }
+   if(!d.plan)return {type:'plan',title:'What plan are they on?',text:'The promo can change by plan group, so I won’t guess.'};
+   if(x.plan==='ineligible')return null;
+   if(!d.trade_device)return {type:'text',field:'trade_device',title:'What are they trading?',text:'Tell me the trade-in phone. Storage is optional unless it changes the trade value.'};
+   if(!d.activation){
+     // Only ask transaction type when the matched promo/tiered pricing can reasonably depend on it.
+     const tiered=x.bestPromo && String(x.bestPromo.promo_type||'').toLowerCase()==='tiered';
+     if(tiered)return {type:'activation',title:'New line or upgrade?',text:'This offer can depend on the transaction type.'};
+   }
+   if(!d.condition){
+     const special=piSpecial.some(r=>(!r.plan_group_key||r.plan_group_key===x.plan)&&(!r.promo_category_key||r.promo_category_key===x.cat));
+     if(special)return {type:'condition',title:'What condition is the trade in?',text:'There are special/any-condition rules in the database, so condition can matter.'};
+   }
+   return null;
+ }
+
+ function piRenderFollow(q){
+   if(!q){piResetFollow();return}
+   $('piFollowTitle').textContent=q.title;$('piFollowText').textContent=q.text||'';const body=$('piFollowBody');body.innerHTML='';
+   const choose=(field,val)=>{piState.d[field]=val;piRefresh()};
+   if(q.type==='plan'){
+     const opts=[['Premium / Elite','Premium'],['Extra','Extra'],['Starter','Starter'],['Value 2.0','Value'],['55+','55+'],['Ineligible / Rerate','Ineligible']];
+     body.innerHTML='<div class="pi-followopts">'+opts.map(([a,b])=>'<button class="pi-followbtn" data-v="'+piEsc(b)+'">'+piEsc(a)+'</button>').join('')+'</div>';
+     body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>choose('plan',b.dataset.v));
+   }else if(q.type==='activation'){
+     body.innerHTML='<div class="pi-followopts"><button class="pi-followbtn" data-v="upgrade">Upgrade</button><button class="pi-followbtn" data-v="new">New line</button><button class="pi-followbtn" data-v="unsure">Not sure</button></div>';
+     body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>choose('activation',b.dataset.v==='unsure'?'':b.dataset.v));
+   }else if(q.type==='condition'){
+     body.innerHTML='<div class="pi-followopts"><button class="pi-followbtn" data-v="good">Good</button><button class="pi-followbtn" data-v="damaged">Damaged</button><button class="pi-followbtn" data-v="dead">Doesn’t turn on</button><button class="pi-followbtn" data-v="unsure">Not sure</button></div>';
+     body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>choose('condition',b.dataset.v));
+   }else if(q.type==='targets'){
+     body.innerHTML='<div class="pi-followopts">'+q.options.map((r,i)=>'<button class="pi-followbtn" data-i="'+i+'">'+piEsc(r.name||r.device_key)+'</button>').join('')+'</div>';
+     body.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>choose('target_device',q.options[+b.dataset.i].name||q.options[+b.dataset.i].device_key));
+   }else{
+     body.innerHTML='<div class="pi-followrow"><input id="piFollowInput" placeholder="Type the answer"><button id="piFollowGo" class="pi-btn" type="button">Continue</button></div>';
+     const inp=$('piFollowInput');$('piFollowGo').onclick=()=>{const v=inp.value.trim();if(v)choose(q.field,v)};inp.onkeydown=e=>{if(e.key==='Enter')$('piFollowGo').click()};setTimeout(()=>inp.focus(),50);
+   }
+   piFollow.classList.add('show');
  }
 
  function piRender(d,x){
    $('piFacts').innerHTML=[
      piFact('Trade',x.trade?(x.trade.brand+' '+x.trade.model+(d.trade_storage?' · '+d.trade_storage:'')):d.trade_device),
      piFact('Plan',d.plan),
-     piFact('Getting',x.target?x.target.name:d.target_device),
+     piFact('Getting',x.target?(x.target.name||x.target.device_key):d.target_device),
      piFact('Action',d.activation||'Not specified'),
      piFact('Trade value',x.val==null?'Not found':piMoney(x.val))
    ].join('');
-   $('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+x.title+'</div><p>'+x.body+'</p>';
-   $('piMissing').innerHTML=x.missing.length?'<b>Still verify:</b> '+x.missing.join(' · '):'<b>Nothing obvious missing from the question.</b>';
+   const dbLine=x.bestPromo?'<div class="pi-dbnote">Supabase promo: '+piEsc(x.bestPromo.name||x.bestPromo.promo_key)+' · '+(x.bestPromo._state==='upcoming'?'upcoming':'current')+'</div>':'<div class="pi-dbnote">No matching mapped Supabase promo row yet — fallback logic only if enough inputs exist.</div>';
+   $('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(x.body)+'</p>'+dbLine;
+   const q=piNeedsQuestion(d,x);
+   $('piMissing').innerHTML=q?'<b>GTT needs another answer before finishing this investigation.</b>':'<b>Investigation has enough information for this promo check.</b>';
    $('piResult').classList.add('show');
+   piRenderFollow(q);
+   $('piBuild').style.display=q?'none':'block';
    $('piBuild').onclick=()=>{
      go('trade');
      setTimeout(()=>{
-       if(x.target){const a=$('phoneSearch');if(a){a.value=x.target.name+(d.target_storage?' '+d.target_storage:'');a.dispatchEvent(new Event('input',{bubbles:true}))}}
+       if(x.target){const a=$('phoneSearch');if(a){a.value=x.target.name||x.target.device_key;a.dispatchEvent(new Event('input',{bubbles:true}))}}
        if(x.trade){const b=$('tradeDeviceSearch');if(b){b.value=x.trade.brand+' '+x.trade.model;b.dispatchEvent(new Event('input',{bubbles:true}))}}
      },120);
    };
+ }
+ function piRefresh(){
+   if(!piState.d)return;
+   piState.x=piEvaluate(piState.d);piRender(piState.d,piState.x);
+   const q=piNeedsQuestion(piState.d,piState.x);
+   $('piStatus').textContent=q?'Database checked · answer the follow-up below':'Parsed by Gemini · checked against GTT/Supabase';
  }
 
  $('piRun').onclick=async()=>{
    const text=$('piAsk').value.trim();const key=piKey.value.trim()||localStorage.getItem('gtt_promo_gemini_key')||localStorage.getItem('gtt_identify_gemini_key');
    if(!text){$('piStatus').textContent='Ask a promo question first.';return}
    if(!key){piKeyBox.style.display='block';$('piStatus').textContent='Add your Gemini key for the beta parser.';piKey.focus();return}
-   $('piRun').disabled=true;$('piRun').textContent='Investigating…';$('piStatus').textContent='Gemini is translating the question. GTT will do the promo math.';
-   try{const d=await piParse(text,key);const x=piEvaluate(d);piRender(d,x);$('piStatus').textContent='Parsed by Gemini · calculated by GTT';$('piResult').scrollIntoView({behavior:'smooth',block:'start'})}
-   catch(e){console.error(e);$('piStatus').textContent=e.message||'Could not investigate this question.'}
+   $('piRun').disabled=true;$('piRun').textContent='Investigating…';$('piStatus').textContent='Gemini is translating the question. GTT is loading the promo database.';
+   try{
+     const d=await piParse(text,key);piState.d=d;piRefresh();
+     $('piResult').scrollIntoView({behavior:'smooth',block:'start'});
+   }catch(e){console.error(e);$('piStatus').textContent=e.message||'Could not investigate this question.'}
    finally{$('piRun').disabled=false;$('piRun').textContent='Investigate Promo →'}
  };
 
