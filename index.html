@@ -1031,6 +1031,169 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 .v4-duo-art{height:88px;display:flex;align-items:center;justify-content:center;gap:2px}.v4-duo-art span{width:37px;height:72px;border:2px solid #818a91;background:linear-gradient(150deg,#e8e7e3,#fff,#aeb5ba);border-radius:7px}.v4-duo-art span:first-child{transform:perspective(90px) rotateY(13deg);transform-origin:right}.v4-duo-art span:last-child{transform:perspective(90px) rotateY(-13deg);transform-origin:left}
 .v4-launch-table-wrap{overflow-x:auto;border:1px solid var(--v4-line);border-radius:10px;margin-top:12px}.v4-launch-table{width:100%;border-collapse:collapse;min-width:540px;background:var(--v4-surface)}.v4-launch-table th,.v4-launch-table td{padding:9px 10px;border-bottom:1px solid var(--v4-line);font-size:9.5px;text-align:left;white-space:nowrap}.v4-launch-table thead th{background:var(--v4-alt);color:var(--v4-ink);font-weight:850}.v4-launch-table tbody th{color:var(--v4-muted);font-weight:750}.v4-launch-table tbody td{color:var(--v4-ink);font-weight:700}.v4-launch-table tr:last-child th,.v4-launch-table tr:last-child td{border-bottom:0}.v4-table-note{font-size:8.5px!important;margin-top:7px!important}
 
+
+/* ===== GTT 4.0 dark-mode cleanup for legacy quote controls ===== */
+@media(prefers-color-scheme:dark){
+  /* Device-condition panel was still carrying the old light theme */
+  #tradePage .condition-panel,
+  #tradePage .condition-card,
+  #tradePage .condition-box,
+  #tradePage [class*="condition"]{
+    color:var(--v4-ink);
+  }
+  #tradePage .condition-panel,
+  #tradePage .condition-card,
+  #tradePage .condition-box{
+    background:#172229!important;
+    border-color:#334149!important;
+  }
+
+  /* Known legacy condition wrapper: neutralize light inline/background styling */
+  #tradePage #conditionQuestions,
+  #tradePage #conditionWrap,
+  #tradePage #conditionBox,
+  #tradePage .trade-condition{
+    background:#172229!important;
+    color:#edf3f6!important;
+    border-color:#334149!important;
+  }
+  #tradePage #conditionQuestions *,
+  #tradePage #conditionWrap *,
+  #tradePage #conditionBox *,
+  #tradePage .trade-condition *{
+    color:inherit;
+  }
+
+  /* Question separators and labels */
+  #tradePage .condition-question,
+  #tradePage .condition-row{
+    border-color:#334149!important;
+    color:#edf3f6!important;
+  }
+  #tradePage .condition-question label,
+  #tradePage .condition-row label{
+    color:#edf3f6!important;
+  }
+
+  /* Yes / No controls: no white tiles in dark mode */
+  #tradePage .condition-panel button,
+  #tradePage .condition-card button,
+  #tradePage .condition-box button,
+  #tradePage #conditionQuestions button,
+  #tradePage #conditionWrap button,
+  #tradePage .trade-condition button{
+    background:#111a20!important;
+    color:#edf3f6!important;
+    border-color:#3b4b54!important;
+  }
+  #tradePage .condition-panel button[aria-pressed="true"],
+  #tradePage .condition-card button[aria-pressed="true"],
+  #tradePage .condition-box button[aria-pressed="true"],
+  #tradePage #conditionQuestions button[aria-pressed="true"],
+  #tradePage #conditionWrap button[aria-pressed="true"],
+  #tradePage .trade-condition button[aria-pressed="true"],
+  #tradePage .condition-panel button.selected,
+  #tradePage .condition-card button.selected,
+  #tradePage .condition-box button.selected{
+    background:rgba(85,185,232,.14)!important;
+    color:#72c9ef!important;
+    border-color:#55b9e8!important;
+  }
+
+  /* Plan-detail columns were using saturated legacy blue on a dark panel */
+  #tradePage .plan-details,
+  #tradePage .plan-detail,
+  #tradePage .plan-groups,
+  #tradePage .plan-group,
+  #tradePage .plan-list{
+    color:#b8c7d0!important;
+  }
+  #tradePage .plan-details a,
+  #tradePage .plan-detail a,
+  #tradePage .plan-groups a,
+  #tradePage .plan-group a,
+  #tradePage .plan-list a{
+    color:#72c9ef!important;
+  }
+  #tradePage .plan-details strong,
+  #tradePage .plan-detail strong,
+  #tradePage .plan-groups strong,
+  #tradePage .plan-group strong{
+    color:#dce7ec!important;
+  }
+
+  /* Legacy pale/white information boxes */
+  #tradePage .trade-help,
+  #tradePage .trade-help-box,
+  #tradePage .condition-help,
+  #tradePage .verify-box{
+    background:#172229!important;
+    color:#c6d2d9!important;
+    border-color:#334149!important;
+  }
+
+  /* Keep ordinary links readable without neon legacy blue */
+  #tradePage a{color:#72c9ef}
+}
+
+/* Make the full quote feel like one coherent 4.0 workspace */
+#tradePage .card{overflow:visible}
+#tradePage .inputs{align-content:start}
+#tradePage .display{align-self:start}
+
+
+/* ===== exact 4.0 cleanup from tablet QA ===== */
+@media(prefers-color-scheme:dark){
+  /* Trade condition questionnaire */
+  #tradePage .condition-panel{
+    background:#172229!important;
+    border-color:#334149!important;
+    color:#edf3f6!important;
+  }
+  #tradePage .condition-title,
+  #tradePage .condition-q-title{color:#edf3f6!important}
+  #tradePage .condition-q{border-color:#334149!important}
+  #tradePage .condition-buttons .chip{
+    background:#111a20!important;color:#edf3f6!important;border-color:#3b4b54!important
+  }
+  #tradePage .condition-buttons .chip[aria-pressed="true"]{
+    background:rgba(85,185,232,.14)!important;color:#72c9ef!important;
+    border-color:#55b9e8!important;box-shadow:inset 0 0 0 1px #55b9e8!important
+  }
+
+  /* "Which plans are in each group?" reference */
+  #tradePage .plan-ref-box,
+  #tradePage .plan-ref-box.consumer,
+  #tradePage .plan-ref-box.cru,
+  #tradePage .plan-ref-box.firstnet{
+    background:#111a20!important;border-color:#334149!important
+  }
+  #tradePage .plan-ref-head,
+  #tradePage .plan-ref-box.cru .plan-ref-head,
+  #tradePage .plan-ref-box.firstnet .plan-ref-head{
+    color:#8ea2ae!important
+  }
+  #tradePage .plan-ref-list,
+  #tradePage .plan-ref-box.cru .plan-ref-list,
+  #tradePage .plan-ref-box.firstnet .plan-ref-list,
+  #tradePage .plan-ref-list strong{
+    color:#c9d5db!important
+  }
+  #tradePage .plan-ref-compact{color:#aebdc5!important}
+  #tradePage .plan-ref-compact strong{color:#8ea2ae!important}
+
+  /* Inline legacy colors that otherwise stay almost black in dark mode */
+  #tradePage details.card summary{color:#edf3f6!important}
+  #tradePage details.card>div{color:#c9d5db!important}
+  #tradePage #nextUpHelp{color:#9fb0ba!important}
+}
+
+/* Reference section is useful, but visually secondary */
+#tradePage details.card:has(.plan-ref-grid){
+  border-left-color:var(--v4-line)!important;
+  box-shadow:none!important;
+}
+
 </style>
 </head>
 <body>
