@@ -5609,6 +5609,12 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function piDeviceMatches(q){
    if(!q)return [];
    const n=piNorm(q), map=new Map();
+   // Launch aliases: these are valid GTT targets even before sellable_devices rows are live.
+   [
+     {device_key:'iphone18pro',name:'iPhone 18 Pro',storage:'256GB',retail_price:1199.99,promo_category_key:'iphonePro'},
+     {device_key:'iphone18promax',name:'iPhone 18 Pro Max',storage:'256GB',retail_price:1299.99,promo_category_key:'iphonePro'},
+     {device_key:'iphoneduo',name:'iPhone Duo',storage:'256GB',retail_price:1999.99,promo_category_key:'iphoneDuo'}
+   ].forEach(r=>map.set(r.device_key,r));
    piSellable.forEach(r=>{const label=r.name||r.device_key;if(!label)return;const key=r.device_key||label;if(!map.has(key))map.set(key,r)});
    // Also allow promotion device keys to surface future / non-sellable launch devices.
    piPromoDevices.forEach(m=>{if(!map.has(m.device_key))map.set(m.device_key,{device_key:m.device_key,name:m.device_key.replace(/[_-]+/g,' '),storage:'',promo_category_key:''})});
@@ -5636,6 +5642,60 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function piFallbackCredit(plan,cat,val){
    const ladder=PI_LADDERS[plan]?.[cat];if(!ladder)return 0;
    for(const [min,credit] of ladder)if(val>=min)return credit;return 0;
+ }
+
+ function piIsIphone18ProTarget(target,d){
+   const x=piNorm((target?.name||target?.device_key||d?.target_device||''));
+   return x.includes('iphone 18 pro') || x.includes('18 pro');
+ }
+ function piIsIphone18Duo(target,d){
+   const x=piNorm((target?.name||target?.device_key||d?.target_device||''));
+   return x.includes('duo');
+ }
+ function piIsAnyConditionIphone14Plus(trade){
+   if(!trade || String(trade.brand||'').toLowerCase()!=='apple') return false;
+   const m=String(trade.model||'');
+   if(/16e/i.test(m)) return false;
+   const hit=m.match(/iPhone\s*(\d+)/i);
+   return !!hit && Number(hit[1])>=14;
+ }
+ function piApple18LaunchCredit(plan,trade,val){
+   if(!plan || !trade) return 0;
+   const any14=piIsAnyConditionIphone14Plus(trade);
+   if(plan==='premium'){
+     if(any14 || val>=180) return 1200;
+     if(val>=130) return 700;
+     if(val>=35) return 350;
+   }
+   if(plan==='extra' || plan==='starter'){
+     if(any14 || val>=130) return 930;
+     if(val>=35) return 350;
+   }
+   if(plan==='value'){
+     if(any14 || val>=130) return 500;
+     if(val>=35) return 350;
+   }
+   return 0;
+ }
+ function piNextUpStatus(d){
+   const pct=Number(d.paid_percent);
+   const nu=String(d.next_up||'').toLowerCase();
+   const mentionsBalance = !!d.next_up || Number.isFinite(pct) || /\b(owe|owes|owed|balance|paid off|paid|financ|installment)\b/i.test($('piAsk').value||'');
+   if(!mentionsBalance) return {mode:'paid_off',label:'Assumed paid off',promoOK:true,note:'No balance or Next Up was mentioned, so GTT assumes the trade phone is paid off.'};
+
+   if(nu==='anytime'){
+     if(Number.isFinite(pct) && pct>=33) return {mode:'anytime',label:'Next Up Anytime · eligible threshold met',promoOK:true,note:'Next Up Anytime requires at least 33% paid for the normal promotional path; the turn-in device must meet the applicable condition requirements.'};
+     if(Number.isFinite(pct) && pct<33) return {mode:'anytime',label:'Next Up Anytime · under 33%',promoOK:false,note:'Under 33% paid, the normal promo path is not available yet.'};
+     return {mode:'anytime',label:'Next Up Anytime',promoOK:null,note:'Need the paid percentage to determine whether the 33% threshold is met.'};
+   }
+   if(nu==='legacy'){
+     if(Number.isFinite(pct) && pct>=50) return {mode:'legacy',label:'Legacy Next Up · eligible threshold met',promoOK:true,note:'Legacy Next Up requires 50% paid before turn-in eligibility.'};
+     if(Number.isFinite(pct) && pct<50) return {mode:'legacy',label:'Legacy Next Up · under 50%',promoOK:false,note:'Legacy Next Up has not reached its 50% threshold.'};
+     return {mode:'legacy',label:'Legacy Next Up',promoOK:null,note:'Need the paid percentage to determine whether the 50% threshold is met.'};
+   }
+   if(nu==='unknown') return {mode:'unknown',label:'Next Up type unclear',promoOK:null,note:'Need to know whether this is Next Up Anytime ($10) or legacy Next Up ($6).'};
+   if(Number.isFinite(pct)) return {mode:'balance',label:pct+'% paid',promoOK:null,note:'A paid percentage was given, but the financing/Next Up type is unclear.'};
+   return {mode:'balance',label:'Balance mentioned',promoOK:null,note:'A remaining balance was mentioned; verify whether this is standard financing, Next Up Anytime, or legacy Next Up.'};
  }
  function piDate(s){if(!s)return null;const d=new Date(s);return isNaN(d)?null:d}
  function piPromoCandidates(target,plan){
@@ -5689,7 +5749,11 @@ Rules:
 - plan may contain Premium, Elite, Extra, Starter, Value, 55+, or a named legacy/business plan.
 - activation is "upgrade", "new", or "".
 - condition only if explicitly stated.
-- Never invent storage, condition, Next Up, paid percentage, plan, or activation.
+- Never invent storage, condition, plan, or activation.
+- If the rep explicitly says 33% paid, over 33%, one-third paid, or otherwise clearly references the 33% upgrade threshold, interpret next_up as "anytime" because that threshold is specific to Next Up Anytime.
+- If the rep says Next Up but does not distinguish Anytime vs legacy, return next_up as "unknown".
+- If the rep says 50% paid and explicitly references legacy Next Up, return next_up as "legacy".
+- Do not treat a normal trade-in question as Next Up. If there is no mention of an installment balance, amount owed, percentage paid, or Next Up, leave next_up blank.
 - missing should list absent information, but do not answer it.
 Question: ${text}`;
    let last;
@@ -5712,40 +5776,71 @@ Question: ${text}`;
    const bestPromo=promos[0]||null;
    const dbTier=piDbTier(bestPromo,plan,val);
    const cat=target?.promo_category_key||null;
-   const fallback=(plan&&cat&&val!=null)?piFallbackCredit(plan,cat,val):0;
-   const credit=dbTier?Number(dbTier.credit_amount||0):fallback;
+   const nextUp=piNextUpStatus(d);
+
+   let credit=0, source='database';
+   const is18pro=piIsIphone18ProTarget(target,d), isDuo=piIsIphone18Duo(target,d);
+
+   if(is18pro && !isDuo && plan && trade){
+     credit=piApple18LaunchCredit(plan,trade,val);
+     source='9/12 iPhone 18 launch rules';
+   }else{
+     const fallback=(plan&&cat&&val!=null)?piFallbackCredit(plan,cat,val):0;
+     credit=dbTier?Number(dbTier.credit_amount||0):fallback;
+     if(!dbTier && fallback) source='current GTT fallback ladder';
+   }
 
    let title='Need a little more information',body='I found the question, but I need a few details before GTT should commit to a promo.';
-   if(bestPromo && plan){
+
+   if(isDuo){
+     title='No iPhone Duo promo loaded';
+     body='GTT knows the iPhone Duo target, but no trade promotion is currently loaded for it.';
+   }else if(is18pro && !plan){
+     title='iPhone 18 Pro-family promo found — which plan?';
+     body='GTT has the 9/12 iPhone 18 Pro / Pro Max promo structure, but the credit changes by plan group.';
+   }else if(is18pro && plan && !trade){
+     title='Which phone are they trading?';
+     body='The 9/12 iPhone 18 Pro / Pro Max offer is loaded. I need the trade device to test the any-condition/TIV tier.';
+   }else if(is18pro && plan && trade){
+     if(nextUp.promoOK===false){
+       title='Next Up threshold not met';
+       body=nextUp.note;
+     }else if(credit>0){
+       title='Up to '+piMoney(credit);
+       body='9/12 iPhone 18 Pro / Pro Max promo. '+trade.brand+' '+trade.model+' is currently '+piMoney(val)+' good-condition TIV. '+nextUp.note;
+     }else{
+       title='No qualifying iPhone 18 trade tier found';
+       body='The 9/12 iPhone 18 promo rules did not produce a credit from the current plan/trade combination. '+nextUp.note;
+     }
+   }else if(bestPromo && plan){
      const when=bestPromo._state==='upcoming'&&bestPromo.starts_at?' Starts '+piFormatDate(bestPromo.starts_at)+'.':'';
      if(trade && (dbTier||credit)){
        title='Up to '+piMoney(credit);
-       body=(bestPromo.name||bestPromo.promo_key||'Database promotion')+'.'+when+' '+trade.brand+' '+trade.model+' is currently '+piMoney(val)+' good-condition TIV.';
+       body=(bestPromo.name||bestPromo.promo_key||'Database promotion')+'.'+when+' '+trade.brand+' '+trade.model+' is currently '+piMoney(val)+' good-condition TIV. '+nextUp.note;
      }else if(!trade){
        title=bestPromo.name||bestPromo.promo_key||'Promo found in database';
        body='GTT found a matching '+(bestPromo._state==='upcoming'?'upcoming ':'')+'database promotion for '+(target?.name||d.target_device)+' on '+(d.plan||plan)+'.'+when+' Tell me the trade-in phone so I can test the tier.';
      }else{
        title=bestPromo.name||bestPromo.promo_key||'Promo found in database';
-       body='GTT found the database promotion, but the current trade-value tier did not produce a standard credit. Any-condition or special-rule eligibility may still apply and should be checked.';
+       body='GTT found the database promotion, but the current trade-value tier did not produce a standard credit. Any-condition or special-rule eligibility may still apply and should be checked. '+nextUp.note;
      }
    }else if(plan&&target&&trade&&credit){
      title='Up to '+piMoney(credit);
-     body='No mapped promotion row was found for this target, so GTT used its current fallback ladder. '+trade.brand+' '+trade.model+' is '+piMoney(val)+' good-condition TIV.';
+     body='GTT used its current promo ladder. '+trade.brand+' '+trade.model+' is '+piMoney(val)+' good-condition TIV. '+nextUp.note;
    }else if(target && !plan){
      const raw=piPromoCandidates(target,null);
      if(raw.length){
        title='Promo found — which plan?';
        const current=raw.find(p=>p._state==='current')||raw[0];
-       body='GTT found '+(current.name||current.promo_key||'a matching promotion')+' in Supabase for '+(target.name||d.target_device)+'. I need the customer’s plan before choosing the eligible tier.';
+       body='GTT found '+(current.name||current.promo_key||'a matching promotion')+' for '+(target.name||d.target_device)+'. I need the customer’s plan before choosing the eligible tier.';
      }
    }
 
-   return {plan,trade,target,targetMatches,val,cat,promos,bestPromo,dbTier,credit,title,body};
+   return {plan,trade,target,targetMatches,val,cat,promos,bestPromo,dbTier,credit,title,body,nextUp,source,is18pro,isDuo};
  }
-
  function piNeedsQuestion(d,x){
    if(!d.target_device)return {type:'text',field:'target_device',title:'Which phone are they getting?',text:'Give me the phone they want to buy.'};
-   // Broad target: if several close matches share the query, ask rather than invent a variant.
+
    const n=piNorm(d.target_device);
    const close=(x.targetMatches||[]).filter(r=>{
      const a=piNorm(r.name||r.device_key);
@@ -5755,11 +5850,23 @@ Question: ${text}`;
    if(unique.length>1 && !unique.some(r=>piNorm(r.name||r.device_key)===n)){
      return {type:'targets',title:'Which one?',text:'I found more than one phone that matches “'+d.target_device+'”.',options:unique};
    }
-   if(!d.plan)return {type:'plan',title:'What plan are they on?',text:'The promo can change by plan group, so I won’t guess.'};
+
+   if(!d.plan)return {type:'plan',title:'What plan are they on?',text:'The promo changes by plan group, so I won’t guess.'};
    if(x.plan==='ineligible')return null;
    if(!d.trade_device)return {type:'text',field:'trade_device',title:'What are they trading?',text:'Tell me the trade-in phone. Storage is optional unless it changes the trade value.'};
+
+   // Paid-off is the default. Only interrogate Next Up when the rep gave a clue that a balance/Next Up exists.
+   if(x.nextUp?.mode==='unknown'){
+     return {type:'nextup',title:'Which Next Up?',text:'You mentioned Next Up, but the threshold is different for Anytime ($10) and legacy ($6).'};
+   }
+   if((x.nextUp?.mode==='anytime' || x.nextUp?.mode==='legacy') && x.nextUp.promoOK===null){
+     return {type:'percent',title:'About what percent is paid?',text:x.nextUp.mode==='anytime'?'Next Up Anytime needs 33% paid for the normal promo path.':'Legacy Next Up needs 50% paid.'};
+   }
+   if(x.nextUp?.mode==='balance' && x.nextUp.promoOK===null){
+     return {type:'nextup',title:'Is this Next Up?',text:'A balance/paid percentage was mentioned. Tell me whether it is Next Up Anytime, legacy Next Up, or standard financing.'};
+   }
+
    if(!d.activation){
-     // Only ask transaction type when the matched promo/tiered pricing can reasonably depend on it.
      const tiered=x.bestPromo && String(x.bestPromo.promo_type||'').toLowerCase()==='tiered';
      if(tiered)return {type:'activation',title:'New line or upgrade?',text:'This offer can depend on the transaction type.'};
    }
@@ -5769,7 +5876,6 @@ Question: ${text}`;
    }
    return null;
  }
-
  function piRenderFollow(q){
    if(!q){piResetFollow();return}
    $('piFollowTitle').textContent=q.title;$('piFollowText').textContent=q.text||'';const body=$('piFollowBody');body.innerHTML='';
@@ -5784,6 +5890,12 @@ Question: ${text}`;
    }else if(q.type==='condition'){
      body.innerHTML='<div class="pi-followopts"><button class="pi-followbtn" data-v="good">Good</button><button class="pi-followbtn" data-v="damaged">Damaged</button><button class="pi-followbtn" data-v="dead">Doesn’t turn on</button><button class="pi-followbtn" data-v="unsure">Not sure</button></div>';
      body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>choose('condition',b.dataset.v));
+   }else if(q.type==='nextup'){
+     body.innerHTML='<div class="pi-followopts"><button class="pi-followbtn" data-v="anytime">Next Up Anytime · $10</button><button class="pi-followbtn" data-v="legacy">Legacy Next Up · $6</button><button class="pi-followbtn" data-v="standard">Standard financing</button></div>';
+     body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{piState.d.next_up=b.dataset.v==='standard'?'':b.dataset.v;if(b.dataset.v==='standard')piState.d.paid_percent=null;piRefresh()});
+   }else if(q.type==='percent'){
+     body.innerHTML='<div class="pi-followrow"><input id="piFollowInput" type="number" inputmode="decimal" placeholder="Percent paid"><button id="piFollowGo" class="pi-btn" type="button">Continue</button></div>';
+     const inp=$('piFollowInput');$('piFollowGo').onclick=()=>{const v=Number(inp.value);if(Number.isFinite(v)){piState.d.paid_percent=v;piRefresh()}};inp.onkeydown=e=>{if(e.key==='Enter')$('piFollowGo').click()};setTimeout(()=>inp.focus(),50);
    }else if(q.type==='targets'){
      body.innerHTML='<div class="pi-followopts">'+q.options.map((r,i)=>'<button class="pi-followbtn" data-i="'+i+'">'+piEsc(r.name||r.device_key)+'</button>').join('')+'</div>';
      body.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>choose('target_device',q.options[+b.dataset.i].name||q.options[+b.dataset.i].device_key));
@@ -5800,9 +5912,10 @@ Question: ${text}`;
      piFact('Plan',d.plan),
      piFact('Getting',x.target?(x.target.name||x.target.device_key):d.target_device),
      piFact('Action',d.activation||'Not specified'),
-     piFact('Trade value',x.val==null?'Not found':piMoney(x.val))
+     piFact('Trade value',x.val==null?'Not found':piMoney(x.val)),
+     piFact('Financing',x.nextUp?.label||'Assumed paid off')
    ].join('');
-   const dbLine=x.bestPromo?'<div class="pi-dbnote">Supabase promo: '+piEsc(x.bestPromo.name||x.bestPromo.promo_key)+' · '+(x.bestPromo._state==='upcoming'?'upcoming':'current')+'</div>':'<div class="pi-dbnote">No matching mapped Supabase promo row yet — fallback logic only if enough inputs exist.</div>';
+   const dbLine=x.is18pro?'<div class="pi-dbnote">Promo source: 9/12 iPhone 18 Pro / Pro Max launch rules</div>':(x.bestPromo?'<div class="pi-dbnote">Supabase promo: '+piEsc(x.bestPromo.name||x.bestPromo.promo_key)+' · '+(x.bestPromo._state==='upcoming'?'upcoming':'current')+'</div>':'<div class="pi-dbnote">No matching mapped Supabase promo row yet — fallback logic only if enough inputs exist.</div>');
    $('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(x.body)+'</p>'+dbLine;
    const q=piNeedsQuestion(d,x);
    $('piMissing').innerHTML=q?'<b>GTT needs another answer before finishing this investigation.</b>':'<b>Investigation has enough information for this promo check.</b>';
