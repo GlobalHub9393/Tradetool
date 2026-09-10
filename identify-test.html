@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>GTT Identify Tool — Beta Test</title>
+<style>
+:root{
+  --bg:#f5f7f9;--card:#fff;--ink:#111820;--muted:#65727d;--line:#dbe2e7;
+  --blue:#0568ae;--cyan:#37b5e5;--good:#17854b;--warn:#9a6400;
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0d1419;--card:#151f25;--ink:#edf3f6;--muted:#a7b4bc;--line:#314049;--blue:#65c6ee;--cyan:#65c6ee;--good:#69d89a;--warn:#ffd271}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:18px 14px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.brand{font-size:18px;font-weight:900;letter-spacing:-.02em}
+.beta{font-size:10px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:5px 8px;color:var(--muted)}
+.hero h1{font-size:30px;line-height:1.05;margin:6px 0 7px;letter-spacing:-.04em}
+.hero p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.45}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:14px;margin:12px 0}
+.keyrow{display:grid;grid-template-columns:1fr auto;gap:8px}
+input[type=password],input[type=text]{width:100%;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:11px;padding:12px;font-size:16px}
+button,.filebtn{appearance:none;border:0;border-radius:12px;padding:12px 14px;font-weight:850;font-size:14px;cursor:pointer}
+.primary{background:var(--blue);color:white;width:100%;font-size:16px;padding:14px}
+.secondary{background:transparent;color:var(--blue);border:1px solid var(--line)}
+.filebtn{display:flex;align-items:center;justify-content:center;background:var(--blue);color:white;width:100%;min-height:48px}
+#photoInput{position:absolute;left:-9999px}
+.preview{display:none;margin-top:12px;border-radius:14px;overflow:hidden;background:#000;min-height:220px;align-items:center;justify-content:center}
+.preview img{width:100%;max-height:460px;object-fit:contain;display:block}
+.hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:10px}
+.status{font-size:13px;color:var(--muted);text-align:center;margin:12px 0 0;min-height:20px}
+.result{display:none}
+.best{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.best h2{font-size:24px;line-height:1.1;margin:3px 0}
+.conf{white-space:nowrap;font-size:12px;font-weight:900;padding:6px 9px;border-radius:999px;background:color-mix(in srgb,var(--good) 13%,transparent);color:var(--good)}
+.label{font-size:10px;text-transform:uppercase;letter-spacing:.09em;font-weight:900;color:var(--muted);margin-bottom:4px}
+.section{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.section h3{font-size:13px;margin:0 0 6px}
+.section p{font-size:13px;line-height:1.5;margin:0;color:var(--muted)}
+.alt{padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.alt:first-child{border-top:0}
+.error{color:#c43b3b!important}
+small{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="brand">GTT · Identify</div><div class="beta">Beta test</div></div>
+
+  <div class="hero">
+    <h1>What phone is this?</h1>
+    <p>Take a clear photo of the phone. This test is meant for dead or unknown devices, so it does not require the screen to turn on.</p>
+  </div>
+
+  <div class="card">
+    <div class="label">Gemini API key</div>
+    <div class="keyrow">
+      <input id="apiKey" type="password" placeholder="Paste key for this device">
+      <button id="saveKey" class="secondary" type="button">Save</button>
+    </div>
+    <div class="hint">Saved only in this browser's local storage for this beta test. It is not written into the HTML file.</div>
+  </div>
+
+  <div class="card">
+    <label class="filebtn" for="photoInput">Take / Choose Photo</label>
+    <input id="photoInput" type="file" accept="image/*" capture="environment">
+    <div id="preview" class="preview"><img id="previewImg" alt="Phone preview"></div>
+    <div class="hint">Best first shot: remove the case and photograph the entire back, including the camera area. If it is ambiguous, the result will tell you which view to photograph next.</div>
+  </div>
+
+  <button id="identifyBtn" class="primary" type="button" disabled>Identify Phone</button>
+  <div id="status" class="status"></div>
+
+  <div id="result" class="card result">
+    <div class="best">
+      <div>
+        <div class="label">Most likely</div>
+        <h2 id="modelName">—</h2>
+        <small id="makerYear"></small>
+      </div>
+      <div id="confidence" class="conf">—</div>
+    </div>
+
+    <div class="section">
+      <h3>Why it looks like this</h3>
+      <p id="evidence"></p>
+    </div>
+
+    <div class="section">
+      <h3>Dead-phone clues</h3>
+      <p id="deadClues"></p>
+    </div>
+
+    <div class="section">
+      <h3>IMEI / model-number help</h3>
+      <p id="imeiHelp"></p>
+    </div>
+
+    <div id="nextViewSection" class="section">
+      <h3>Need another view?</h3>
+      <p id="nextView"></p>
+    </div>
+
+    <div id="alternativesSection" class="section">
+      <h3>Other possibilities</h3>
+      <div id="alternatives"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let currentFile = null;
+
+const saved = localStorage.getItem('gtt_identify_gemini_key');
+if(saved) $('apiKey').value = saved;
+
+$('saveKey').addEventListener('click', ()=>{
+  const key = $('apiKey').value.trim();
+  if(!key) return setStatus('Paste your Gemini API key first.', true);
+  localStorage.setItem('gtt_identify_gemini_key', key);
+  setStatus('API key saved on this device.');
+});
+
+$('photoInput').addEventListener('change', e=>{
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  currentFile = file;
+  $('previewImg').src = URL.createObjectURL(file);
+  $('preview').style.display = 'flex';
+  $('identifyBtn').disabled = false;
+  $('result').style.display = 'none';
+  setStatus('Photo ready.');
+});
+
+$('identifyBtn').addEventListener('click', identify);
+
+function setStatus(msg, err=false){
+  $('status').textContent = msg || '';
+  $('status').classList.toggle('error', !!err);
+}
+
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const r = new FileReader();
+    r.onload = ()=>resolve(String(r.result).split(',')[1]);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+async function identify(){
+  const key = $('apiKey').value.trim() || localStorage.getItem('gtt_identify_gemini_key');
+  if(!key) return setStatus('Add your Gemini API key first.', true);
+  if(!currentFile) return setStatus('Take or choose a phone photo first.', true);
+
+  $('identifyBtn').disabled = true;
+  $('identifyBtn').textContent = 'Identifying…';
+  $('result').style.display = 'none';
+  setStatus('Looking at physical design, cameras, buttons and other clues…');
+
+  try{
+    const imageData = await fileToBase64(currentFile);
+    const prompt = `You are a phone hardware identification assistant. Identify the physical phone in the attached image as precisely as the image supports.
+
+IMPORTANT:
+- This is NOT limited to any supported-device catalog. It can be any real phone from any manufacturer or year.
+- The phone may be powered off, damaged, old, or have a dead screen.
+- Never invent certainty. Closely related generations can look nearly identical.
+- Use visible physical evidence: camera layout, lens count, flash/sensor placement, body shape, buttons, ports, stylus slot, branding, materials, dimensions/proportions, notch/punch-hole if visible, and distinctive design features.
+- If exact storage, carrier variant, chipset variant, or region cannot be determined visually, say so.
+- Give useful dead-phone identification clues for the likely model.
+- Give IMEI/model-number location guidance ONLY when reasonably applicable. Phrase variable locations as "may be" or "check".
+- If another photo would materially improve confidence, ask for ONE specific next view.
+- Do not discuss trade value, promotions, pricing, or resale value.
+
+Return ONLY valid JSON matching this shape:
+{
+  "manufacturer": "string",
+  "model": "string",
+  "year": "string",
+  "confidence": 0,
+  "evidence": ["short visible clue", "short visible clue"],
+  "dead_phone_clues": ["useful confirmation clue", "useful confirmation clue"],
+  "imei_help": "short practical guidance",
+  "next_view": "specific next photo to take, or empty string",
+  "alternatives": [
+    {"model":"string","confidence":0,"difference":"short reason"}
+  ]
+}
+
+Confidence must be 0-100. Keep alternatives to at most 3.`;
+
+    const body = {
+      contents:[{
+        role:"user",
+        parts:[
+          {text:prompt},
+          {inlineData:{mimeType: currentFile.type || "image/jpeg", data:imageData}}
+        ]
+      }],
+      generationConfig:{
+        temperature:0.2,
+        responseMimeType:"application/json"
+      }
+    };
+
+    const resp = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "x-goog-api-key":key
+        },
+        body:JSON.stringify(body)
+      }
+    );
+
+    const raw = await resp.json();
+    if(!resp.ok) throw new Error(raw?.error?.message || `Gemini error ${resp.status}`);
+
+    let text = raw?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('').trim();
+    if(!text) throw new Error('Gemini returned no identification.');
+    text = text.replace(/^```json\s*/i,'').replace(/```$/,'').trim();
+    const data = JSON.parse(text);
+    renderResult(data);
+    setStatus('Identification complete.');
+  }catch(err){
+    console.error(err);
+    setStatus(err.message || 'Could not identify this phone.', true);
+  }finally{
+    $('identifyBtn').disabled = false;
+    $('identifyBtn').textContent = 'Identify Phone';
+  }
+}
+
+function renderResult(d){
+  const conf = Math.max(0,Math.min(100,Number(d.confidence)||0));
+  $('modelName').textContent = [d.manufacturer,d.model].filter(Boolean).join(' ') || 'Unknown phone';
+  $('makerYear').textContent = d.year ? `Approx. release: ${d.year}` : '';
+  $('confidence').textContent = `${Math.round(conf)}% confidence`;
+
+  $('evidence').textContent = Array.isArray(d.evidence) && d.evidence.length ? d.evidence.join(' • ') : 'No specific visual evidence returned.';
+  $('deadClues').textContent = Array.isArray(d.dead_phone_clues) && d.dead_phone_clues.length ? d.dead_phone_clues.join(' • ') : 'No additional physical clues returned.';
+  $('imeiHelp').textContent = d.imei_help || 'No reliable physical IMEI/model-number location guidance returned.';
+
+  $('nextView').textContent = d.next_view || 'No additional photo requested.';
+  $('nextViewSection').style.display = d.next_view ? 'block' : 'none';
+
+  const alts = Array.isArray(d.alternatives) ? d.alternatives : [];
+  $('alternatives').innerHTML = alts.map(a=>{
+    const c = Number(a.confidence);
+    return `<div class="alt"><b>${escapeHtml(a.model||'Unknown')}</b>${Number.isFinite(c)?` · ${Math.round(c)}%`:''}<br><small>${escapeHtml(a.difference||'')}</small></div>`;
+  }).join('');
+  $('alternativesSection').style.display = alts.length ? 'block' : 'none';
+  $('result').style.display = 'block';
+  $('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+</body>
+</html>
