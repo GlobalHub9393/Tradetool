@@ -956,7 +956,7 @@
 /* ===== Global Trade Tool 4.0 responsive shell ===== */
 :root{--v4-bg:#eef2f4;--v4-surface:#fff;--v4-alt:#f7f9fa;--v4-ink:#17232c;--v4-muted:#66757f;--v4-line:#d8e0e5;--v4-blue:#0878bd;--v4-navy:#12354d;--v4-green:#35c27d;--v4-shadow:0 18px 50px rgba(16,40,56,.14)}
 body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
-.v4-shell{min-height:100vh;max-width:1180px;margin:0 auto;background:var(--v4-surface);padding-bottom:76px}
+.v4-shell{min-height:0;max-width:1180px;margin:0 auto;background:var(--v4-surface);padding-bottom:76px}
 .v4-brand{background:linear-gradient(120deg,var(--v4-navy),#174a68 62%,#1d6688);color:#fff;padding:18px 16px 19px;position:relative;overflow:hidden}
 .v4-brand:after{content:"";position:absolute;right:-45px;top:-80px;width:190px;height:190px;border:28px solid rgba(255,255,255,.06);border-radius:50%}
 .v4-brandrow{position:relative;z-index:1;display:flex;justify-content:space-between;gap:18px}.v4-kicker{text-transform:uppercase;letter-spacing:.12em;font-size:8.5px;opacity:.72;font-weight:800}.v4-title{display:flex;align-items:center;gap:9px;margin-top:4px}.v4-title h1{color:#fff;font-size:24px;margin:0}.v4-db{width:8px;height:8px;border-radius:50%;background:#82909a;box-shadow:0 0 0 4px rgba(255,255,255,.08)}.v4-db.online{background:var(--v4-green);animation:v4pulse 1.8s ease-in-out infinite}@keyframes v4pulse{50%{opacity:.5;transform:scale(.88)}}.v4-ver{text-align:right;font-size:8px;opacity:.75;white-space:nowrap}.v4-ver strong{display:block;font-size:11px;color:#fff}.v4-sub{margin-top:7px;font-size:10.5px;opacity:.78}
@@ -972,6 +972,65 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 @media(min-width:768px){.v4-shell{padding-bottom:0}.v4-brand{padding:21px 24px 22px}.v4-title h1{font-size:29px}.v4-sub{font-size:11.5px}.v4-topnav{display:block}.v4-bottom{display:none}.v4-launch{padding:10px 24px}.v4-home,.v4-section{padding:34px 24px 48px}.v4-home h2,.v4-section h2{font-size:24px}.v4-lane{grid-template-columns:60px 1fr 30px;min-height:138px;padding:22px 6px;gap:18px}.v4-copy h3{font-size:29px}.v4-copy p{font-size:12px}.v4-more-sheet{width:360px;left:auto;right:22px;bottom:auto;top:116px;border-radius:12px;padding:14px 16px}.v4-grab{display:none}.v4-promo-grid{grid-template-columns:1fr 1fr}.v4-section{max-width:850px;margin:0 auto}}
 @media(prefers-color-scheme:dark){:root{--v4-bg:#0e151a;--v4-surface:#161e24;--v4-alt:#1b252c;--v4-ink:#edf3f6;--v4-muted:#98a7b1;--v4-line:#334149;--v4-blue:#55b9e8;--v4-navy:#0b2a3c;--v4-green:#4bd48e}.v4-bottom{background:rgba(22,30,36,.97)}.v4-more-scrim{background:rgba(0,0,0,.6)}#tradePage{background:#0e151a}.legacy-app{filter:none}}
 
+
+/* ===== GTT 4.0 Trade Tool visual rebuild ===== */
+#tradePage{padding:0 16px 42px!important;background:var(--v4-surface)!important;max-width:1180px;margin:0 auto}
+#tradePage.active{display:block!important}
+#tradePage .legacy-app{max-width:none;margin:0}
+#tradePage .v4-trade-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding:26px 2px 18px;border-bottom:1px solid var(--v4-line);margin-bottom:18px}
+#tradePage .v4-trade-intro h2{margin:0;color:var(--v4-ink);font-size:26px;letter-spacing:-.035em}
+#tradePage .v4-trade-intro p{margin:5px 0 0;color:var(--v4-muted);font-size:11px;line-height:1.5}
+#tradePage .v4-trade-badge{flex:0 0 auto;border:1px solid var(--v4-line);border-radius:999px;padding:7px 10px;color:var(--v4-blue);font-size:9px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
+#tradePage .layout{gap:18px}
+#tradePage .inputs{gap:12px}
+#tradePage .card{background:var(--v4-alt);border:1px solid var(--v4-line);border-radius:12px;box-shadow:none;padding:16px 16px 17px;color:var(--v4-ink)}
+#tradePage .card.needs-choice{border-color:rgba(8,120,189,.38);box-shadow:none}
+#tradePage .card.step-complete{border-color:rgba(8,120,189,.62);box-shadow:inset 3px 0 0 var(--v4-blue)}
+#tradePage .label{color:var(--v4-ink);font-size:12px;letter-spacing:0;text-transform:none;font-weight:820;margin-bottom:12px}
+#tradePage .step{width:23px;height:23px;margin-right:9px;background:var(--v4-blue);font-size:11px;box-shadow:none}
+#tradePage .group-title{color:var(--v4-muted);font-size:9px;text-transform:uppercase;letter-spacing:.07em}
+#tradePage .chips{gap:7px}
+#tradePage .chip{min-height:42px;border:1px solid var(--v4-line);border-radius:9px;background:var(--v4-surface);color:var(--v4-ink);box-shadow:none;padding:9px 12px;font-size:12px}
+#tradePage .chip:hover{border-color:var(--v4-blue)}
+#tradePage .chip[aria-pressed="true"]{background:rgba(8,120,189,.12);border-color:var(--v4-blue);color:var(--v4-blue);box-shadow:inset 0 0 0 1px var(--v4-blue)}
+#tradePage .plan-search input,#tradePage #trade,#tradePage select{background:var(--v4-surface)!important;color:var(--v4-ink)!important;border-color:var(--v4-line)!important;box-shadow:none!important}
+#tradePage .plan-search input:focus,#tradePage #trade:focus{border-color:var(--v4-blue)!important;box-shadow:0 0 0 3px rgba(8,120,189,.10)!important}
+#tradePage .plan-search button,#tradePage .clearbtn{color:var(--v4-blue)}
+#tradePage .suggestions{background:var(--v4-surface);border-color:var(--v4-line);box-shadow:var(--v4-shadow)}
+#tradePage .suggestions li{color:var(--v4-ink);border-color:var(--v4-line)}
+#tradePage .d-rule,#tradePage .sub,#tradePage .trade-verify-note,#tradePage .trade-preset-copy{color:var(--v4-muted)!important}
+#tradePage .verify-banner{border-radius:10px!important;background:rgba(8,120,189,.07)!important;border:1px solid rgba(8,120,189,.22)!important;color:var(--v4-ink)!important}
+#tradePage .display{border-radius:12px;box-shadow:none}
+#tradePage .tip-strip{border-radius:10px}
+#tradePage .cckm-link,#tradePage #toolsOpenBtn,#tradePage #adminOpenBtn,#tradePage #appleEventWrap{display:none!important}
+@media(min-width:768px){
+ #tradePage{padding:0 24px 50px!important}
+ #tradePage .v4-trade-intro{padding-top:30px}
+ #tradePage .v4-trade-intro h2{font-size:30px}
+ #tradePage .inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+ #tradePage .inputs>.card{height:100%}
+ #tradePage .inputs>.result-card,#tradePage .inputs>#resultCard,#tradePage .inputs>.verify-banner,#tradePage .inputs>.tip-strip{grid-column:1/-1}
+}
+@media(max-width:767px){#tradePage{padding-bottom:82px!important}#tradePage .v4-trade-intro{padding-top:20px}#tradePage .v4-trade-intro h2{font-size:23px}#tradePage .v4-trade-badge{display:none}}
+@media(prefers-color-scheme:dark){
+ #tradePage .card{background:#182229}
+ #tradePage .chip{background:#111a20}
+ #tradePage .chip[aria-pressed="true"]{background:rgba(85,185,232,.12);color:#72c9ef}
+ #tradePage .plan-search input,#tradePage #trade,#tradePage select{background:#111a20!important}
+ #tradePage .suggestions{background:#111a20}
+ #tradePage .trade-help-warning,#tradePage .trade-applied-note,#tradePage .trade-preset-note{background:#17262f!important;color:var(--v4-ink)!important;border-color:#334149!important}
+}
+
+
+.v4-phone-visuals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.v4-phone-product{text-align:center;padding:14px 6px 10px;background:var(--v4-alt);border:1px solid var(--v4-line);border-radius:12px}
+.v4-phone-product>b{display:block;margin-top:9px;font-size:10px;color:var(--v4-ink)}.v4-phone-product small{display:block;margin-top:2px;font-size:8.5px;color:var(--v4-muted)}
+.v4-phone-art{width:43px;height:82px;margin:auto;border:2px solid #71818b;border-radius:10px;position:relative;background:linear-gradient(155deg,#aab8c0,#eef4f7 48%,#6e7d86)}
+.v4-phone-art.max{width:47px;height:88px;background:linear-gradient(155deg,#6c1823,#b34352 48%,#391016)}
+.v4-phone-art .cam{position:absolute;width:8px;height:8px;border:2px solid #202a30;border-radius:50%;background:#0b1115}.v4-phone-art .c1{left:6px;top:7px}.v4-phone-art .c2{left:17px;top:7px}.v4-phone-art .c3{left:11px;top:18px}.v4-phone-art .island{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:16px;height:4px;border-radius:5px;background:#0a0f12}
+.v4-duo-art{height:88px;display:flex;align-items:center;justify-content:center;gap:2px}.v4-duo-art span{width:37px;height:72px;border:2px solid #818a91;background:linear-gradient(150deg,#e8e7e3,#fff,#aeb5ba);border-radius:7px}.v4-duo-art span:first-child{transform:perspective(90px) rotateY(13deg);transform-origin:right}.v4-duo-art span:last-child{transform:perspective(90px) rotateY(-13deg);transform-origin:left}
+.v4-launch-table-wrap{overflow-x:auto;border:1px solid var(--v4-line);border-radius:10px;margin-top:12px}.v4-launch-table{width:100%;border-collapse:collapse;min-width:540px;background:var(--v4-surface)}.v4-launch-table th,.v4-launch-table td{padding:9px 10px;border-bottom:1px solid var(--v4-line);font-size:9.5px;text-align:left;white-space:nowrap}.v4-launch-table thead th{background:var(--v4-alt);color:var(--v4-ink);font-weight:850}.v4-launch-table tbody th{color:var(--v4-muted);font-weight:750}.v4-launch-table tbody td{color:var(--v4-ink);font-weight:700}.v4-launch-table tr:last-child th,.v4-launch-table tr:last-child td{border-bottom:0}.v4-table-note{font-size:8.5px!important;margin-top:7px!important}
+
 </style>
 </head>
 <body>
@@ -982,8 +1041,49 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   <div class="v4-launch" data-v4go="news"><div><b>iPhone 18 Launch</b><span>9/9 announcement + 9/12 AT&amp;T promo guide</span></div><em>View →</em></div>
   <section id="v4Home" class="v4-page active v4-home"><div class="v4-homeintro"><h2>What do you need?</h2><p>Full quote when you need the complete answer. Simple Tool when you just need the customer's trade opportunity fast.</p></div><div class="v4-lane" data-v4go="trade"><div class="v4-num">01</div><div class="v4-copy"><h3>Trade Tool</h3><p>The original GTT workflow with plans, activation type, device, trade value and current promotional result.</p><div class="v4-hint"><span>Full Quote</span><span>Current Promos</span><span>Exact Eligibility</span></div></div><div class="v4-arrow">›</div></div><div class="v4-lane" data-v4go="simple"><div class="v4-num">02</div><div class="v4-copy"><h3>Simple Tool</h3><p>Start with the customer's phone. See its current trade value and the strongest Apple, Samsung and Pixel opportunities.</p><div class="v4-hint"><span>Quick Lookup</span><span>Best Opportunity</span></div></div><div class="v4-arrow">›</div></div></section>
   <section id="v4Simple" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Simple Tool</h2><p class="v4-sectionlead">What does this customer's phone get them? Search the phone, choose storage, and use the good-condition trade value as the promo reference.</p><input id="v4TradeSearch" class="v4-search" placeholder="Search trade-in phone…" autocomplete="off"><div id="v4Suggestions" class="v4-suggestions"></div><div id="v4Storage" class="v4-storage"></div><div id="v4SimpleResult" class="v4-simple-result"><div class="v4-value"><small>Current trade value · good condition</small><strong id="v4RawValue">$—</strong><div id="v4SelectedTrade" style="font-size:10px;color:var(--v4-muted);margin-top:4px"></div></div><div id="v4Opps" class="v4-opps"></div><button id="v4BuildQuote" class="v4-primary">Build Full Quote →</button></div></section>
-  <section id="v4News" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>What's New</h2><p class="v4-sectionlead">Only the changes reps need right now.</p><article class="v4-newsitem"><div class="v4-date">September 9</div><h3>Apple announces iPhone 18 lineup</h3><p>iPhone 18 Pro starts at <b>$1,199</b> (256GB) and iPhone 18 Pro Max starts at <b>$1,299</b> (256GB). Preorders begin <b>9/12</b> and availability begins <b>9/18</b>. iPhone Duo starts at <b>$1,999</b> (256GB), with preorder expected <b>10/16</b> and availability <b>10/23</b>.</p></article><article class="v4-newsitem"><div class="v4-date">Effective September 12</div><h3>iPhone 18 Pro / Pro Max promo quick guide</h3><div class="v4-promo-grid"><div class="v4-promo"><b>Premium / Elite — up to $1,200</b><span>iPhone 18 Pro / Pro Max. Any-condition iPhone 14+ excluding 16e, or $180+ trade value.</span></div><div class="v4-promo"><b>Extra / Starter — up to $930</b><span>iPhone 18 Pro / Pro Max or iPhone 17. Any-condition iPhone 14+ excluding 16e, or $130+ trade value.</span></div><div class="v4-promo"><b>Eligible plan — up to $500</b><span>iPhone 18 Pro / Pro Max or iPhone 17 with qualifying $130+ / iPhone 14+ path.</span></div><div class="v4-promo"><b>Eligible unlimited — up to $350</b><span>iPhone 18 Pro / Pro Max or iPhone 17. Any-condition iPhone, or $35–$129 trade value.</span></div></div><details><summary>Full 9/12 changes</summary><ul><li>iPhone 18 Pro and Pro Max are added to the trade-in offer.</li><li>iPhone 17 remains in the $930 / $500 / $350 offer tiers; it is not listed in the $1,200 tier.</li><li>iPhone Air, iPhone 17 Pro and iPhone 17 Pro Max leave this trade-in offer after 9/11.</li><li>iPhone 16's tiered offer ends after 9/11 and the device is removed from the sellable selection; it remains available as a trade-in device.</li><li>55+ remains tiered-only. Verify final eligibility in OPUS/CCKM.</li></ul></details></article><article class="v4-newsitem"><div class="v4-date">September 4</div><h3>Galaxy S26 FE</h3><p>Galaxy S26 FE 128GB launched at <b>$7.99/mo new line</b> and <b>$12.99/mo upgrade</b>. The S25 FE $13.99/mo new-line offer ended 9/3; S25 FE remains trade eligible.</p></article></section>
-  <section id="v4Beta" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Beta Tools</h2><p class="v4-sectionlead">Useful extras without crowding the main quote.</p><div class="v4-beta-list"><div class="v4-beta-link" data-v4tool="compare"><div><b>Phone Comparison</b><span>Compare up to three phones using the current quote context.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="history"><div><b>Recent History</b><span>Reload recent completed calculations.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="faq"><div><b>FAQ / Trade Help</b><span>Trade-ins, credits, plans and Next Up reference.</span></div><i>›</i></div></div></section>
+  <section id="v4News" class="v4-page v4-section">
+  <button class="v4-back" data-v4go="home">← Home</button>
+  <h2>What's New</h2>
+  <p class="v4-sectionlead">iPhone launch information, the 9/12 promo guide, and the S26 FE update.</p>
+  <article class="v4-newsitem">
+    <div class="v4-date">September 9</div><h3>Apple announces the iPhone 18 lineup</h3>
+    <div class="v4-phone-visuals">
+      <div class="v4-phone-product"><div class="v4-phone-art pro"><span class="cam c1"></span><span class="cam c2"></span><span class="cam c3"></span><span class="island"></span></div><b>iPhone 18 Pro</b><small>From $1,199</small></div>
+      <div class="v4-phone-product"><div class="v4-phone-art max"><span class="cam c1"></span><span class="cam c2"></span><span class="cam c3"></span><span class="island"></span></div><b>iPhone 18 Pro Max</b><small>From $1,299</small></div>
+      <div class="v4-phone-product"><div class="v4-duo-art"><span></span><span></span></div><b>iPhone Duo</b><small>From $1,999</small></div>
+    </div>
+    <div class="v4-launch-table-wrap"><table class="v4-launch-table">
+      <thead><tr><th></th><th>18 Pro</th><th>18 Pro Max</th><th>Duo</th></tr></thead>
+      <tbody>
+        <tr><th>Starts at</th><td>$1,199</td><td>$1,299</td><td>$1,999</td></tr>
+        <tr><th>Base storage</th><td>256GB</td><td>256GB</td><td>256GB</td></tr>
+        <tr><th>Apple monthly*</th><td>$49.95</td><td>$54.12</td><td>$83.29</td></tr>
+        <tr><th>Preorder</th><td>9/12</td><td>9/12</td><td>10/16</td></tr>
+        <tr><th>Release</th><td>9/18</td><td>9/18</td><td>10/23</td></tr>
+        <tr><th>AT&amp;T max trade</th><td>Up to $1,200</td><td>Up to $1,200</td><td>No promo loaded</td></tr>
+      </tbody>
+    </table></div>
+    <p class="v4-table-note">*Apple 24-month monthly price shown for quick reference. AT&amp;T installment pricing may differ.</p>
+  </article>
+  <article class="v4-newsitem">
+    <div class="v4-date">Effective September 12</div><h3>iPhone promo quick guide</h3>
+    <div class="v4-promo-grid">
+      <div class="v4-promo"><b>Premium / Elite — up to $1,200</b><span>iPhone 18 Pro / Pro Max. Any-condition iPhone 14+ excluding 16e, or $180+ trade value.</span></div>
+      <div class="v4-promo"><b>Extra / Starter — up to $930</b><span>iPhone 18 Pro / Pro Max or iPhone 17. Any-condition iPhone 14+ excluding 16e, or $130+ trade value.</span></div>
+      <div class="v4-promo"><b>Eligible plan — up to $500</b><span>iPhone 18 Pro / Pro Max or iPhone 17 with qualifying $130+ / iPhone 14+ path.</span></div>
+      <div class="v4-promo"><b>Eligible unlimited — up to $350</b><span>iPhone 18 Pro / Pro Max or iPhone 17. Any-condition iPhone, or $35–$129 trade value.</span></div>
+    </div>
+    <details><summary>Open full 9/12 changes</summary><ul>
+      <li>iPhone 18 Pro and Pro Max are added to the trade-in offer.</li>
+      <li>iPhone 17 remains in the $930 / $500 / $350 tiers; it is not listed in the $1,200 tier.</li>
+      <li>iPhone Air, iPhone 17 Pro and iPhone 17 Pro Max leave this trade-in offer after 9/11.</li>
+      <li>iPhone 16's tiered offer ends after 9/11 and it leaves the sellable selection. It remains a trade-in device.</li>
+      <li>55+ remains tiered-only. Verify final eligibility in OPUS / CCKM.</li>
+    </ul></details>
+  </article>
+  <article class="v4-newsitem"><div class="v4-date">September 4</div><h3>Galaxy S26 FE</h3><p>Galaxy S26 FE 128GB launched at <b>$7.99/mo new line</b> and <b>$12.99/mo upgrade</b>. The S25 FE $13.99/mo new-line offer ended 9/3; S25 FE remains trade eligible.</p></article>
+</section>
+<section id="v4Beta" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Beta Tools</h2><p class="v4-sectionlead">Useful extras without crowding the main quote.</p><div class="v4-beta-list"><div class="v4-beta-link" data-v4tool="compare"><div><b>Phone Comparison</b><span>Compare up to three phones using the current quote context.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="history"><div><b>Recent History</b><span>Reload recent completed calculations.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="faq"><div><b>FAQ / Trade Help</b><span>Trade-ins, credits, plans and Next Up reference.</span></div><i>›</i></div></div></section>
 </div>
 <nav class="v4-bottom"><div class="v4-bottom-inner"><button class="v4-navbtn active" data-v4go="home"><span class="v4-ico">⌂</span>Home</button><button class="v4-navbtn" data-v4go="trade"><span class="v4-ico">▤</span>Trade Tool</button><button class="v4-navbtn" data-v4go="simple"><span class="v4-ico">⌕</span>Simple Tool</button><button class="v4-navbtn" data-v4more><span class="v4-ico">•••</span>More</button></div></nav>
 <div id="v4More" class="v4-more-scrim"><div class="v4-more-sheet"><div class="v4-grab"></div><div class="v4-morehead"><h3>More</h3><button id="v4MoreClose" class="v4-close">×</button></div><div class="v4-morelink" data-v4admin><div><strong>Admin</strong><small>Manage promotions, devices and app data.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="news"><div><strong>What's New</strong><small>iPhone launch, 9/12 promos and S26 FE.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="beta"><div><strong>Beta Tools</strong><small>Comparison, history and trade help.</small></div><i>›</i></div></div></div>
@@ -1037,6 +1137,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     </div>
   </div>
   <button id="appleEventMini" class="apple-mini" type="button" hidden> Apple Event · <span id="appleMiniCountdown">Event complete</span></button>
+</div>
+
+<div class="v4-trade-intro">
+  <div><h2>Trade Tool</h2><p>Build the full quote with the live plan, device, trade and promo logic.</p></div>
+  <div class="v4-trade-badge">Full Quote</div>
 </div>
 
 <div class="layout">
