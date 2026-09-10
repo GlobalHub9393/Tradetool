@@ -1320,6 +1320,23 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 }
 
 </style>
+
+<style id="promo-investigator-css">
+.pi-box{margin-top:16px;border:1px solid var(--v4-line);border-radius:18px;padding:16px;background:var(--v4-card)}
+.pi-box h3{margin:0 0 5px;font-size:16px}.pi-box p{margin:0;color:var(--v4-muted);font-size:12px;line-height:1.45}
+.pi-keyrow{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}.pi-keyrow input,.pi-ask{width:100%;border:1px solid var(--v4-line);border-radius:13px;background:var(--v4-card);color:var(--v4-ink);font:inherit}
+.pi-keyrow input{padding:11px}.pi-keyrow button,.pi-btn{border:0;border-radius:12px;background:var(--v4-blue);color:#fff;font-weight:800;padding:10px 13px;cursor:pointer}
+.pi-ask{min-height:112px;padding:13px;resize:vertical;margin-top:8px;font-size:15px;line-height:1.45}
+.pi-examples{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.pi-example{border:1px solid var(--v4-line);background:transparent;color:var(--v4-muted);border-radius:999px;padding:7px 9px;font-size:10px;cursor:pointer}
+.pi-run{width:100%;margin-top:10px;padding:13px;font-size:14px}.pi-status{text-align:center;color:var(--v4-muted);font-size:11px;min-height:18px;margin-top:8px}
+.pi-result{display:none;margin-top:14px}.pi-result.show{display:block}
+.pi-understood{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.pi-fact{border:1px solid var(--v4-line);border-radius:11px;padding:8px 10px}.pi-fact small{display:block;color:var(--v4-muted);font-size:9px;text-transform:uppercase;letter-spacing:.06em}.pi-fact b{font-size:12px}
+.pi-answer{margin-top:12px;border-radius:16px;padding:15px;background:var(--v4-ink);color:var(--v4-bg)}.pi-answer small{opacity:.72;font-size:9px;text-transform:uppercase;letter-spacing:.08em}.pi-credit{font-size:30px;font-weight:900;letter-spacing:-.04em;margin:4px 0}.pi-answer p{color:inherit;opacity:.82}
+.pi-missing{margin-top:10px;border:1px solid var(--v4-line);border-radius:13px;padding:11px;font-size:11px;color:var(--v4-muted)}
+.pi-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.pi-actions button{margin:0}
+@media(max-width:560px){.pi-actions{grid-template-columns:1fr}}
+</style>
+
 </head>
 <body>
 
@@ -1371,10 +1388,46 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   </article>
   <article class="v4-newsitem"><div class="v4-date">September 4</div><h3>Galaxy S26 FE</h3><p>Galaxy S26 FE 128GB launched at <b>$7.99/mo new line</b> and <b>$12.99/mo upgrade</b>. The S25 FE $13.99/mo new-line offer ended 9/3; S25 FE remains trade eligible.</p></article>
 </section>
-<section id="v4Beta" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Beta Tools</h2><p class="v4-sectionlead">Useful extras without crowding the main quote.</p><div class="v4-beta-list"><div class="v4-beta-link" data-v4tool="compare"><div><b>Phone Comparison</b><span>Compare up to three phones using the current quote context.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="history"><div><b>Recent History</b><span>Reload recent completed calculations.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="faq"><div><b>FAQ / Trade Help</b><span>Trade-ins, credits, plans and Next Up reference.</span></div><i>›</i></div></div></section>
+<section id="v4Investigator" class="v4-page v4-section">
+<button class="v4-back" data-v4go="beta">← Beta Tools</button>
+<h2>Promo Investigator</h2>
+<p class="v4-sectionlead">Ask a promo question the way you would say it to another rep. Gemini only interprets the question; GTT uses live device data and its promo rules for the answer.</p>
+
+<div class="pi-box">
+  <h3>Ask GTT</h3>
+  <p>Shorthand is fine. Missing information should be called out instead of guessed.</p>
+  <textarea id="piAsk" class="pi-ask" placeholder="Example: S22 on Extra upgrading to S26 Ultra"></textarea>
+  <div class="pi-examples">
+    <button class="pi-example" type="button">S22 on Extra upgrading to S26 Ultra</button>
+    <button class="pi-example" type="button">iPhone 14 Pro on Starter getting an iPhone 17</button>
+    <button class="pi-example" type="button">What can a 13 Pro Max on Premium get toward a 17 Pro Max?</button>
+  </div>
+  <button id="piRun" class="pi-btn pi-run" type="button">Investigate Promo →</button>
+  <div id="piStatus" class="pi-status"></div>
+</div>
+
+<div id="piKeyBox" class="pi-box">
+  <h3>Gemini key</h3><p>Beta only. Uses the same locally saved key as the Identify test when available.</p>
+  <div class="pi-keyrow"><input id="piKey" type="password" placeholder="Gemini API key"><button id="piSaveKey" type="button">Save</button></div>
+</div>
+
+<div id="piResult" class="pi-box pi-result">
+  <h3>I understood…</h3>
+  <div id="piFacts" class="pi-understood"></div>
+  <div id="piAnswer" class="pi-answer"></div>
+  <div id="piMissing" class="pi-missing"></div>
+  <div class="pi-actions">
+    <button id="piAgain" class="pi-btn" type="button">Ask Another</button>
+    <button id="piBuild" class="pi-btn" type="button">Build Full Quote →</button>
+  </div>
+</div>
+</section>
+
+<section id="v4Beta" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Beta Tools</h2><p class="v4-sectionlead">Useful extras without crowding the main quote.</p><div class="v4-beta-list">
+<div class="v4-beta-link" data-v4go="investigator"><div><b>Promo Investigator</b><span>Ask a promo question in normal rep language. AI interprets; GTT checks the rules.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="compare"><div><b>Phone Comparison</b><span>Compare up to three phones using the current quote context.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="history"><div><b>Recent History</b><span>Reload recent completed calculations.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="faq"><div><b>FAQ / Trade Help</b><span>Trade-ins, credits, plans and Next Up reference.</span></div><i>›</i></div></div></section>
 </div>
 <nav class="v4-bottom"><div class="v4-bottom-inner"><button class="v4-navbtn active" data-v4go="home"><span class="v4-ico">⌂</span>Home</button><button class="v4-navbtn" data-v4go="trade"><span class="v4-ico">▤</span>Trade Tool</button><button class="v4-navbtn" data-v4go="simple"><span class="v4-ico">⌕</span>Simple Tool</button><button class="v4-navbtn" data-v4more><span class="v4-ico">•••</span>More</button></div></nav>
-<div id="v4More" class="v4-more-scrim"><div class="v4-more-sheet"><div class="v4-grab"></div><div class="v4-morehead"><h3>More</h3><button id="v4MoreClose" class="v4-close">×</button></div><div class="v4-morelink" data-v4admin><div><strong>Admin</strong><small>Manage promotions, devices and app data.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="news"><div><strong>What's New</strong><small>iPhone launch, 9/12 promos and S26 FE.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="beta"><div><strong>Beta Tools</strong><small>Comparison, history and trade help.</small></div><i>›</i></div></div></div>
+<div id="v4More" class="v4-more-scrim"><div class="v4-more-sheet"><div class="v4-grab"></div><div class="v4-morehead"><h3>More</h3><button id="v4MoreClose" class="v4-close">×</button></div><div class="v4-morelink" data-v4admin><div><strong>Admin</strong><small>Manage promotions, devices and app data.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="news"><div><strong>What's New</strong><small>iPhone launch, 9/12 promos and S26 FE.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="beta"><div><strong>Beta Tools</strong><small>Promo Investigator, comparison, history and trade help.</small></div><i>›</i></div></div></div>
 
 <section id="tradePage" class="v4-page">
 <div class="legacy-app">
@@ -5479,7 +5532,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
 <script>
 (function(){
- const $=id=>document.getElementById(id), pages={home:$('v4Home'),simple:$('v4Simple'),news:$('v4News'),beta:$('v4Beta'),trade:$('tradePage')};
+ const $=id=>document.getElementById(id), pages={home:$('v4Home'),simple:$('v4Simple'),news:$('v4News'),beta:$('v4Beta'),investigator:$('v4Investigator'),trade:$('tradePage')};
  function closeMore(){$('v4More').classList.remove('open')}
  function go(name){Object.values(pages).forEach(p=>p&&p.classList.remove('active')); if(pages[name])pages[name].classList.add('active'); document.querySelectorAll('.v4-navbtn[data-v4go]').forEach(b=>b.classList.toggle('active',b.dataset.v4go===name)); closeMore(); window.scrollTo({top:0,behavior:'instant'});}
  document.querySelectorAll('[data-v4go]').forEach(x=>x.addEventListener('click',e=>{e.preventDefault();go(x.dataset.v4go)}));
@@ -5499,7 +5552,139 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function bestOpps(r){const val=Number(r.trade_value)||0;const iphone=/iphone/i.test(r.model);const any14=iphone&&!/16e/i.test(r.model)&&(/iphone (1[4-9]|2\d)/i.test(r.model));const anyIphone=iphone;let apple=0,appleText='Good-condition value path';if(any14||val>=180){apple=1200;appleText='Potential Premium / Elite iPhone 18 Pro/Max top tier effective 9/12';}else if(any14||val>=130){apple=930;appleText='Potential Extra / Starter iPhone 18 Pro/Max or iPhone 17 tier effective 9/12';}else if(anyIphone||val>=35){apple=350;appleText='Potential eligible-unlimited iPhone tier effective 9/12';}
  const samsung=val>=95?1100:val>=35?900:0; const pixel=val>=200?1350:val>=95?1150:val>=35?1000:0;return [['Apple',apple,appleText],['Samsung',samsung,'Best current opportunity based on trade value; qualifying any-condition Galaxy rules may improve eligibility.'],['Pixel',pixel,'Best current Pixel opportunity based on trade value; qualifying Pixel trade rules may improve eligibility.']]}
  function showResult(r){$('v4RawValue').textContent='$'+Number(r.trade_value||0).toFixed(0);$('v4SelectedTrade').textContent=r.brand+' '+r.model+' · '+r.storage;$('v4Opps').innerHTML=bestOpps(r).map(o=>'<div class="v4-opp"><div><b>'+o[0]+'</b><p>'+o[2]+'</p></div><div class="v4-credit">'+(o[1]?'Up to $'+o[1].toLocaleString():'—')+'</div></div>').join('');$('v4SimpleResult').classList.add('show');$('v4BuildQuote').onclick=()=>{go('trade');setTimeout(()=>{const inp=$('tradeDeviceSearch');if(inp){inp.value=r.brand+' '+r.model;inp.dispatchEvent(new Event('input',{bubbles:true}))}},100)}}
+
  search.addEventListener('input',renderSuggestions);search.addEventListener('focus',renderSuggestions);
+
+ // Promo Investigator beta: Gemini parses rep language; deterministic GTT rules calculate the result.
+ let piSellable=[];
+ fetch(SB+'/rest/v1/sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,active,sellable&active=eq.true&sellable=eq.true&limit=1000',{headers:{apikey:KEY,Authorization:'Bearer '+KEY},cache:'no-store'})
+   .then(r=>r.json()).then(r=>{piSellable=Array.isArray(r)?r:[]}).catch(()=>{});
+
+ const PI_LADDERS={
+   premium:{iphonePro:[[290,1100],[130,700],[35,350]],iphoneBase:[[130,700],[35,350]],iphoneAir:[[130,700]],samsung:[[95,1100],[35,900]],s26base:[[35,900]],fold8:[[290,1900],[95,1000],[35,500]],flip8:[[95,1000],[35,500]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[[200,1250],[35,1050]],pixelPro:[[35,1050]],razr:[[95,1320],[35,1000]]},
+   extra:null,
+   starter:{iphonePro:[[290,830],[130,700],[35,350]],iphoneBase:[[290,830],[130,700],[35,350]],iphoneAir:[[290,830]],samsung:[[35,900]],s26base:[[35,900]],fold8:[[95,1000],[35,500]],flip8:[[95,1000],[35,500]],pixel11XL:[[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[[35,1050]],pixelPro:[[35,1050]],razr:[[35,1000]]},
+   value:{iphonePro:[[130,500],[35,350]],iphoneBase:[[130,500],[35,350]],iphoneAir:[[35,500]],samsung:[[35,500]],s26base:[[35,500]],fold8:[[35,500]],flip8:[[35,500]],pixel11XL:[[35,500]],pixel11Pro:[[35,500]],pixelXL:[[35,500]],pixelPro:[[35,500]],razr:[[35,500]]}
+ };
+ PI_LADDERS.extra=JSON.parse(JSON.stringify(PI_LADDERS.premium));
+
+ const piNorm=x=>String(x||'').toLowerCase().replace(/apple|samsung|galaxy|google/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+ function piBestMatch(q,rows,field){
+   const n=piNorm(q); if(!n)return null;
+   let best=null,score=-1;
+   rows.forEach(r=>{const x=piNorm(r[field]);let sc=0;if(x===n)sc=100;else if(x.includes(n)||n.includes(x))sc=70+Math.min(x.length,n.length);else{const a=new Set(n.split(' ')),b=x.split(' ');sc=b.filter(t=>a.has(t)).length*12}if(sc>score){score=sc;best=r}});
+   return score>=12?best:null;
+ }
+ function piTradeMatch(q,storage){
+   const candidates=tradeRows.filter(r=>piNorm(r.model).includes(piNorm(q))||piNorm(q).includes(piNorm(r.model)));
+   if(!candidates.length)return piBestMatch(q,tradeRows,'model');
+   if(storage){const exact=candidates.find(r=>piNorm(r.storage)===piNorm(storage));if(exact)return exact}
+   return candidates.sort((a,b)=>Number(b.trade_value)-Number(a.trade_value))[0];
+ }
+ function piDeviceMatch(q){
+   const uniq=[];const seen=new Set;piSellable.forEach(r=>{const k=r.name+'|'+r.storage;if(!seen.has(k)){seen.add(k);uniq.push(r)}});
+   return piBestMatch(q,uniq,'name');
+ }
+ function piPlan(x){x=String(x||'').toLowerCase();if(x.includes('premium')||x.includes('elite'))return 'premium';if(x.includes('extra')||x.includes('advanced'))return 'extra';if(x.includes('starter')||x.includes('standard'))return 'starter';if(x.includes('value'))return 'value';if(x.includes('55'))return '55';return null}
+ function piCredit(plan,cat,val){
+   const ladder=PI_LADDERS[plan]?.[cat];if(!ladder)return 0;
+   for(const [min,credit] of ladder)if(val>=min)return credit;return 0;
+ }
+ function piMoney(n){return '$'+Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2})}
+ function piFact(label,value){return '<div class="pi-fact"><small>'+label+'</small><b>'+String(value||'Not specified').replace(/[<>&]/g,'')+'</b></div>'}
+
+ const piKey=$('piKey'), piKeyBox=$('piKeyBox');
+ const existingPiKey=localStorage.getItem('gtt_identify_gemini_key')||localStorage.getItem('gtt_promo_gemini_key')||'';
+ if(existingPiKey){piKey.value=existingPiKey;piKeyBox.style.display='none'}
+ $('piSaveKey').onclick=()=>{const k=piKey.value.trim();if(!k)return;$('piStatus').textContent='Key saved on this device.';localStorage.setItem('gtt_promo_gemini_key',k);localStorage.setItem('gtt_identify_gemini_key',k);piKeyBox.style.display='none'};
+ document.querySelectorAll('.pi-example').forEach(b=>b.onclick=()=>{$('piAsk').value=b.textContent;$('piAsk').focus()});
+ $('piAgain').onclick=()=>{$('piAsk').value='';$('piResult').classList.remove('show');$('piAsk').focus()};
+
+ async function piParse(text,key){
+   const prompt=`You parse AT&T wireless promo questions from retail-rep shorthand. Do NOT answer the promo and do NOT invent eligibility. Extract only facts stated or strongly unambiguous aliases.
+Return ONLY JSON with:
+{"trade_device":"","trade_storage":"","plan":"","target_device":"","target_storage":"","activation":"","condition":"","next_up":"","paid_percent":null,"effective_date":"","missing":[]}
+Rules:
+- "S22" means Galaxy S22, "S26 Ultra" means Galaxy S26 Ultra, etc.
+- plan may contain Premium, Elite, Extra, Starter, Value, 55+, or a named legacy/business plan.
+- activation is "upgrade", "new", or "".
+- condition only if explicitly stated.
+- Never invent storage, condition, Next Up, paid percentage, or activation.
+- missing should list information that may be needed but was not stated.
+Question: ${text}`;
+   let last;
+   for(const model of ['gemini-3.7-flash','gemini-3.6-flash']){
+     try{
+       const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0,responseMimeType:'application/json'}})});
+       const j=await r.json();if(!r.ok)throw new Error(j?.error?.message||'Gemini error');
+       let t=j?.candidates?.[0]?.content?.parts?.map(x=>x.text||'').join('').trim();if(!t)throw new Error('No parser response');t=t.replace(/^```json\s*/i,'').replace(/```$/,'').trim();return JSON.parse(t);
+     }catch(e){last=e}
+   }
+   throw last||new Error('Could not parse question');
+ }
+
+ function piEvaluate(d){
+   const plan=piPlan(d.plan), trade=piTradeMatch(d.trade_device,d.trade_storage), target=piDeviceMatch(d.target_device);
+   const missing=[];
+   if(!d.trade_device)missing.push('trade-in phone');
+   if(!d.plan)missing.push('plan');
+   if(!d.target_device)missing.push('phone they are getting');
+   if(plan==='55')missing.push('55+ uses tiered/special pricing — verify in the full Trade Tool');
+   if(!plan&&d.plan)missing.push('plan group could not be mapped');
+   if(d.activation==='')missing.push('new line vs upgrade may matter for some offers');
+   if(!d.condition)missing.push('trade condition / any-condition eligibility');
+
+   const val=trade?Number(trade.trade_value)||0:null;
+   const cat=target?.promo_category_key||null;
+   let credit=(plan&&cat&&val!=null)?piCredit(plan,cat,val):0;
+   let title='Need a little more information';
+   let body='I can parse the question, but GTT does not have enough structured information to calculate this promo yet.';
+
+   if(plan&&target&&trade){
+     if(credit>0){
+       title='Up to '+piMoney(credit);
+       body=(trade.brand+' '+trade.model+(trade.storage?' · '+trade.storage:'')+' is currently '+piMoney(val)+' good-condition TIV. '+
+             (d.plan||plan)+' maps to '+plan.charAt(0).toUpperCase()+plan.slice(1)+' for this check. '+
+             target.name+' uses the '+(cat||'current')+' promo path.');
+     }else{
+       title='No standard trade tier found';
+       body='GTT matched the devices and plan, but the current standard trade-value ladder did not produce a credit. Check special/tiered/any-condition rules in the full Trade Tool.';
+     }
+   }
+
+   return {plan,trade,target,val,cat,credit,title,body,missing:[...new Set([...(d.missing||[]),...missing])]};
+ }
+
+ function piRender(d,x){
+   $('piFacts').innerHTML=[
+     piFact('Trade',x.trade?(x.trade.brand+' '+x.trade.model+(d.trade_storage?' · '+d.trade_storage:'')):d.trade_device),
+     piFact('Plan',d.plan),
+     piFact('Getting',x.target?x.target.name:d.target_device),
+     piFact('Action',d.activation||'Not specified'),
+     piFact('Trade value',x.val==null?'Not found':piMoney(x.val))
+   ].join('');
+   $('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+x.title+'</div><p>'+x.body+'</p>';
+   $('piMissing').innerHTML=x.missing.length?'<b>Still verify:</b> '+x.missing.join(' · '):'<b>Nothing obvious missing from the question.</b>';
+   $('piResult').classList.add('show');
+   $('piBuild').onclick=()=>{
+     go('trade');
+     setTimeout(()=>{
+       if(x.target){const a=$('phoneSearch');if(a){a.value=x.target.name+(d.target_storage?' '+d.target_storage:'');a.dispatchEvent(new Event('input',{bubbles:true}))}}
+       if(x.trade){const b=$('tradeDeviceSearch');if(b){b.value=x.trade.brand+' '+x.trade.model;b.dispatchEvent(new Event('input',{bubbles:true}))}}
+     },120);
+   };
+ }
+
+ $('piRun').onclick=async()=>{
+   const text=$('piAsk').value.trim();const key=piKey.value.trim()||localStorage.getItem('gtt_promo_gemini_key')||localStorage.getItem('gtt_identify_gemini_key');
+   if(!text){$('piStatus').textContent='Ask a promo question first.';return}
+   if(!key){piKeyBox.style.display='block';$('piStatus').textContent='Add your Gemini key for the beta parser.';piKey.focus();return}
+   $('piRun').disabled=true;$('piRun').textContent='Investigating…';$('piStatus').textContent='Gemini is translating the question. GTT will do the promo math.';
+   try{const d=await piParse(text,key);const x=piEvaluate(d);piRender(d,x);$('piStatus').textContent='Parsed by Gemini · calculated by GTT';$('piResult').scrollIntoView({behavior:'smooth',block:'start'})}
+   catch(e){console.error(e);$('piStatus').textContent=e.message||'Could not investigate this question.'}
+   finally{$('piRun').disabled=false;$('piRun').textContent='Investigate Promo →'}
+ };
+
  // Keep legacy tools/admin modals above shell nav.
  ['adminLoginModal','adminModal','toolsModal','whatsNewModal'].forEach(id=>{const e=$(id);if(e)e.style.zIndex='10000'});
  window.GTT4={go};
