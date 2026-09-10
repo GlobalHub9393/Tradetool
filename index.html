@@ -1194,6 +1194,86 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   box-shadow:none!important;
 }
 
+
+/* ===== GTT 4.0 tablet dark-mode contrast pass ===== */
+.v4-phone-product img{
+  width:100%;height:118px;object-fit:contain;display:block;background:#fff;border-radius:8px
+}
+@media(min-width:700px){.v4-phone-product img{height:170px}}
+@media(prefers-color-scheme:dark){
+  #tradePage{--ink:#edf3f6;--slate:#aebdc5;--line:#334149}
+
+  /* Active cards */
+  #tradePage .card,
+  #tradePage .card *{text-shadow:none}
+  #tradePage .card{color:#edf3f6!important}
+  #tradePage .label,
+  #tradePage .group-title,
+  #tradePage .sub,
+  #tradePage .d-rule,
+  #tradePage .trade-preset-copy,
+  #tradePage .trade-verify-note,
+  #tradePage .quick-value-label{color:#aebdc5!important}
+  #tradePage .label{color:#edf3f6!important}
+
+  /* Plan reference copy */
+  #tradePage .plan-ref-box{background:#111a20!important;border-color:#334149!important}
+  #tradePage .plan-ref-head{color:#9fb0ba!important}
+  #tradePage .plan-ref-list,
+  #tradePage .plan-ref-list strong,
+  #tradePage .plan-ref-compact,
+  #tradePage .plan-ref-compact strong{color:#cbd7dd!important}
+
+  /* Condition panel */
+  #tradePage .condition-panel,
+  #tradePage .condition-panel.condition-good,
+  #tradePage .condition-panel.condition-poor{
+    background:#111a20!important;border-color:#334149!important;color:#edf3f6!important
+  }
+  #tradePage .condition-title,
+  #tradePage .condition-q-title{color:#edf3f6!important}
+  #tradePage .condition-q{border-color:#334149!important}
+
+  /* Next Up/help copy */
+  #tradePage #nextUpCard,
+  #tradePage #nextUpCard p,
+  #tradePage #nextUpCard .sub,
+  #tradePage #nextUpCard label{color:#dce6eb!important}
+  #tradePage #nextUpCard .sub{color:#aebdc5!important}
+
+  /* Locked steps: readable dim state, not black-on-black */
+  #tradePage .card.step-locked{
+    opacity:1!important;filter:none!important;
+    background:#141c21!important;border-color:#29363e!important
+  }
+  #tradePage .card.step-locked::before{
+    content:"";position:absolute;inset:0;background:rgba(8,13,16,.38);
+    border-radius:inherit;z-index:4;pointer-events:none
+  }
+  #tradePage .card.step-locked::after{
+    z-index:6;background:#26333b!important;border-color:#465862!important;
+    color:#d7e1e6!important
+  }
+  #tradePage .card.step-locked > *{position:relative;z-index:3}
+  #tradePage .card.step-locked .label,
+  #tradePage .card.step-locked .condition-title,
+  #tradePage .card.step-locked .condition-q-title{color:#b7c5cc!important}
+  #tradePage .card.step-locked .sub,
+  #tradePage .card.step-locked p,
+  #tradePage .card.step-locked .quick-value-label{color:#82939d!important}
+  #tradePage .card.step-locked input,
+  #tradePage .card.step-locked select,
+  #tradePage .card.step-locked .chip{
+    color:#91a1aa!important;background:#10171b!important;border-color:#2c3941!important
+  }
+
+  /* Result panel secondary copy */
+  #tradePage .display .sub,
+  #tradePage .display .fine,
+  #tradePage .display .hint,
+  #tradePage .display p{color:#c3d1d8}
+}
+
 </style>
 </head>
 <body>
@@ -1211,22 +1291,22 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   <article class="v4-newsitem">
     <div class="v4-date">September 9</div><h3>Apple announces the iPhone 18 lineup</h3>
     <div class="v4-phone-visuals">
-      <div class="v4-phone-product"><div class="v4-phone-art pro"><span class="cam c1"></span><span class="cam c2"></span><span class="cam c3"></span><span class="island"></span></div><b>iPhone 18 Pro</b><small>From $1,199</small></div>
-      <div class="v4-phone-product"><div class="v4-phone-art max"><span class="cam c1"></span><span class="cam c2"></span><span class="cam c3"></span><span class="island"></span></div><b>iPhone 18 Pro Max</b><small>From $1,299</small></div>
-      <div class="v4-phone-product"><div class="v4-duo-art"><span></span><span></span></div><b>iPhone Duo</b><small>From $1,999</small></div>
+      <div class="v4-phone-product"><img src="iphone18pro.jpg" alt="iPhone 18 Pro"><b>iPhone 18 Pro</b><small>From $1,199.99</small></div>
+      <div class="v4-phone-product"><img src="iphone18promax.jpg" alt="iPhone 18 Pro Max"><b>iPhone 18 Pro Max</b><small>From $1,299.99</small></div>
+      <div class="v4-phone-product"><img src="iphoneduo.jpg" alt="iPhone Duo"><b>iPhone Duo</b><small>From $1,999.99</small></div>
     </div>
     <div class="v4-launch-table-wrap"><table class="v4-launch-table">
       <thead><tr><th></th><th>18 Pro</th><th>18 Pro Max</th><th>Duo</th></tr></thead>
       <tbody>
-        <tr><th>Starts at</th><td>$1,199</td><td>$1,299</td><td>$1,999</td></tr>
+        <tr><th>AT&amp;T MSRP</th><td>$1,199.99</td><td>$1,299.99</td><td>$1,999.99</td></tr>
         <tr><th>Base storage</th><td>256GB</td><td>256GB</td><td>256GB</td></tr>
-        <tr><th>Apple monthly*</th><td>$49.95</td><td>$54.12</td><td>$83.29</td></tr>
+        <tr><th>AT&amp;T / 36 mo.</th><td>$33.33/mo</td><td>$36.11/mo</td><td>$55.56/mo</td></tr>
         <tr><th>Preorder</th><td>9/12</td><td>9/12</td><td>10/16</td></tr>
         <tr><th>Release</th><td>9/18</td><td>9/18</td><td>10/23</td></tr>
         <tr><th>AT&amp;T max trade</th><td>Up to $1,200</td><td>Up to $1,200</td><td>No promo loaded</td></tr>
       </tbody>
     </table></div>
-    <p class="v4-table-note">*Apple 24-month monthly price shown for quick reference. AT&amp;T installment pricing may differ.</p>
+    <p class="v4-table-note">*AT&amp;T installment amounts shown as confirmed MSRP divided over 36 months; taxes and other charges not included.</p>
   </article>
   <article class="v4-newsitem">
     <div class="v4-date">Effective September 12</div><h3>iPhone promo quick guide</h3>
@@ -1304,7 +1384,6 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
 <div class="v4-trade-intro">
   <div><h2>Trade Tool</h2><p>Build the full quote with the live plan, device, trade and promo logic.</p></div>
-  <div class="v4-trade-badge">Full Quote</div>
 </div>
 
 <div class="layout">
@@ -5377,3 +5456,5 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
 </body>
 </html>
+
+<!-- GTT 4.0 QA: decorative Full Quote badge removed; AT&T 36-month launch pricing corrected. -->
