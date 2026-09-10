@@ -6,11 +6,6 @@
 <meta name="theme-color" content="#ffffff">
 <title>GTT Identify Tool — Smart Camera Beta</title>
 
-<script type="module">
-  import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/vision_bundle.mjs";
-  window.MP_VISION = vision;
-</script>
-
 <style>
 :root{
   --bg:#f5f7f9;--card:#fff;--ink:#111820;--muted:#65727d;--line:#dbe2e7;
@@ -63,6 +58,7 @@ canvas.capture{display:none}
   .metrics{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/vision_bundle.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -148,7 +144,7 @@ canvas.capture{display:none}
   <canvas id="captureCanvas" class="capture"></canvas>
 </div>
 
-<script type="module">
+<script>
 const $ = id => document.getElementById(id);
 let stream = null;
 let facingMode = 'environment';
@@ -182,9 +178,13 @@ function setStatus(msg, err=false){
 async function initHandTracking(){
   if(handLandmarker) return;
   setStatus('Loading hand tracker…');
-  const vision = window.MP_VISION;
-  if(!vision) throw new Error('MediaPipe did not load.');
-  const {FilesetResolver, HandLandmarker} = vision;
+  // tasks-vision classic bundle may expose symbols either directly or under vision.
+  const vision = window.vision || window;
+  const FilesetResolver = vision.FilesetResolver || window.FilesetResolver;
+  const HandLandmarker = vision.HandLandmarker || window.HandLandmarker;
+  if(!FilesetResolver || !HandLandmarker){
+    throw new Error('Hand tracking library did not load. Camera identification can still work, but hand sizing is unavailable.');
+  }
   const fileset = await FilesetResolver.forVisionTasks(
     "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
   );
@@ -203,7 +203,13 @@ async function initHandTracking(){
 
 async function startCamera(mode='environment'){
   try{
-    await initHandTracking();
+    try{
+      await initHandTracking();
+    }catch(mpErr){
+      console.warn('Hand tracking unavailable:', mpErr);
+      handLandmarker = null;
+      $('mHand').textContent = 'Unavailable';
+    }
     if(stream) stream.getTracks().forEach(t=>t.stop());
     stream = await navigator.mediaDevices.getUserMedia({
       video:{
@@ -216,7 +222,7 @@ async function startCamera(mode='environment'){
     $('video').srcObject = stream;
     await $('video').play();
     $('identifyBtn').disabled = false;
-    setStatus('Camera ready. Hold the phone normally in one hand.');
+    setStatus(handLandmarker ? 'Camera ready. Hold the phone normally in one hand.' : 'Camera ready. Hand tracking is unavailable, but you can still test identification.');
     startTrackingLoop();
   }catch(err){
     console.error(err);
