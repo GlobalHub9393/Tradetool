@@ -1274,6 +1274,32 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   #tradePage .display p{color:#c3d1d8}
 }
 
+
+/* ===== GTT 4.0 launch image fit — transparent GitHub PNGs ===== */
+.v4-phone-product{
+  min-width:0;
+  overflow:hidden;
+}
+.v4-phone-product img{
+  display:block!important;
+  width:100%!important;
+  height:132px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  padding:8px!important;
+  box-sizing:border-box!important;
+  background:transparent!important;
+  border-radius:0!important;
+}
+@media(min-width:700px){
+  .v4-phone-product img{height:190px!important;padding:10px!important}
+}
+@media(max-width:520px){
+  .v4-phone-visuals{gap:6px!important}
+  .v4-phone-product{padding:10px 3px 8px!important}
+  .v4-phone-product img{height:108px!important;padding:4px!important}
+}
+
 </style>
 </head>
 <body>
@@ -1291,9 +1317,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   <article class="v4-newsitem">
     <div class="v4-date">September 9</div><h3>Apple announces the iPhone 18 lineup</h3>
     <div class="v4-phone-visuals">
-      <div class="v4-phone-product"><img src="iphone18pro.jpg" alt="iPhone 18 Pro"><b>iPhone 18 Pro</b><small>From $1,199.99</small></div>
-      <div class="v4-phone-product"><img src="iphone18promax.jpg" alt="iPhone 18 Pro Max"><b>iPhone 18 Pro Max</b><small>From $1,299.99</small></div>
-      <div class="v4-phone-product"><img src="iphoneduo.jpg" alt="iPhone Duo"><b>iPhone Duo</b><small>From $1,999.99</small></div>
+      <div class="v4-phone-product"><img src="iphone18pro.png" alt="iPhone 18 Pro"><b>iPhone 18 Pro</b><small>From $1,199.99</small></div>
+      <div class="v4-phone-product"><img src="iphone18promax.png" alt="iPhone 18 Pro Max"><b>iPhone 18 Pro Max</b><small>From $1,299.99</small></div>
+      <div class="v4-phone-product"><img src="iphoneduo.png" alt="iPhone Duo"><b>iPhone Duo</b><small>From $1,999.99</small></div>
     </div>
     <div class="v4-launch-table-wrap"><table class="v4-launch-table">
       <thead><tr><th></th><th>18 Pro</th><th>18 Pro Max</th><th>Duo</th></tr></thead>
