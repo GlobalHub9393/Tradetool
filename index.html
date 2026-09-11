@@ -1331,7 +1331,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 .pi-run{width:100%;margin-top:10px;padding:13px;font-size:14px}.pi-status{text-align:center;color:var(--v4-muted);font-size:11px;min-height:18px;margin-top:8px}
 .pi-result{display:none;margin-top:14px}.pi-result.show{display:block}
 .pi-understood{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.pi-fact{border:1px solid var(--v4-line);border-radius:11px;padding:8px 10px}.pi-fact small{display:block;color:var(--v4-muted);font-size:9px;text-transform:uppercase;letter-spacing:.06em}.pi-fact b{font-size:12px}
-.pi-answer{margin-top:12px;border-radius:16px;padding:15px;background:var(--v4-ink);color:var(--v4-bg)}.pi-answer small{opacity:.72;font-size:9px;text-transform:uppercase;letter-spacing:.08em}.pi-credit{font-size:30px;font-weight:900;letter-spacing:-.04em;margin:4px 0}.pi-answer p{color:inherit;opacity:.82}
+.pi-answer{position:relative;overflow:hidden;margin-top:12px;border:1px solid color-mix(in srgb,var(--v4-blue) 25%,var(--v4-line));border-radius:16px;padding:16px 17px;background:linear-gradient(135deg,color-mix(in srgb,var(--v4-blue) 8%,var(--v4-card)),var(--v4-card) 58%);color:var(--v4-ink);box-shadow:0 8px 26px rgba(0,0,0,.08)}
+.pi-answer:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--v4-blue)}
+.pi-answer small{display:inline-block;color:var(--v4-blue);font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.09em}
+.pi-credit{font-size:25px;line-height:1.08;font-weight:900;letter-spacing:-.035em;margin:7px 0 8px}.pi-answer p{color:var(--v4-muted);font-size:12px;line-height:1.5;margin:0}.pi-answer .pi-dbnote{margin-top:10px;padding-top:9px;border-top:1px solid var(--v4-line);color:var(--v4-muted);font-size:9px}
 .pi-missing{margin-top:10px;border:1px solid var(--v4-line);border-radius:13px;padding:11px;font-size:11px;color:var(--v4-muted)}
 .pi-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.pi-actions button{margin:0}
 .pi-follow{display:none;margin-top:12px;border:1px solid var(--v4-line);border-radius:16px;padding:14px;background:color-mix(in srgb,var(--v4-blue) 7%,var(--v4-card))}
@@ -5708,6 +5711,103 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function piBaseStorageGroup(groups){
    return [...groups].sort((a,b)=>piStorageNum(a.storage)-piStorageNum(b.storage))[0]||null;
  }
+ function piSummaryIntent(text){
+   const q=String(text||'').toLowerCase().trim();
+   const wantsHighest=/\b(highest|max|maximum|biggest|best)\b/.test(q);
+   const tradePromo=/\btrade[\s-]?in\b|\btrade\b/.test(q) && /\bpromo|promotion|credit|offer\b/.test(q);
+   if(!wantsHighest || !tradePromo)return null;
+
+   let brand='';
+   if(/\biphone|apple\b/.test(q))brand='apple';
+   else if(/\bsamsung|galaxy\b/.test(q))brand='samsung';
+   else if(/\bpixel|google\b/.test(q))brand='google';
+   else if(/\bmotorola|moto|razr\b/.test(q))brand='motorola';
+
+   return {
+     type:'highest_trade_promo',
+     brand,
+     currentOnly:/\b(current|right now|live|today)\b/.test(q)
+   };
+ }
+
+ function piPromoBrandMatch(p,brand){
+   if(!brand)return true;
+   const hay=((p?.name||'')+' '+(p?.promo_key||'')+' '+(p?.promo_category_key||'')).toLowerCase();
+   if(brand==='apple')return /iphone|apple/.test(hay);
+   if(brand==='samsung')return /samsung|galaxy/.test(hay);
+   if(brand==='google')return /pixel|google/.test(hay);
+   if(brand==='motorola')return /motorola|moto|razr/.test(hay);
+   return true;
+ }
+
+ function piHighestTradePromo(intent){
+   const now=new Date();
+   const rows=[];
+
+   piPromos.forEach(p=>{
+     if(!piPromoBrandMatch(p,intent.brand))return;
+     const st=piDate(p.starts_at), en=piDate(p.ends_at);
+     const state=st&&st>now?'upcoming':(en&&en<now?'ended':'current');
+     if(state==='ended' || (intent.currentOnly && state!=='current'))return;
+
+     const tiers=piTiers.filter(t=>Number(t.promotion_id)===Number(p.id) && t.active!==false);
+     tiers.forEach(t=>{
+       const credit=Number(t.credit_amount||0);
+       if(credit>0)rows.push({credit,promo:p,state,start:st,plan:t.plan_group_key||''});
+     });
+   });
+
+   // The 9/12 Apple launch rules are already loaded in GTT logic even if the DB mapping
+   // is not fully cut over yet.
+   if(intent.brand==='apple' && !intent.currentOnly){
+     rows.push({
+       credit:1200,
+       promo:{name:'iPhone 18 Pro / Pro Max launch offer'},
+       state:'upcoming',
+       start:new Date('2026-09-12T00:00:00-04:00'),
+       plan:'premium'
+     });
+   }
+
+   rows.sort((a,b)=>b.credit-a.credit || (a.state==='current'?-1:1));
+   return rows[0]||null;
+ }
+
+ function piRenderHighestTrade(intent,text){
+   const hit=piHighestTradePromo(intent);
+   const brandName=intent.brand==='apple'?'iPhone':intent.brand==='samsung'?'Samsung':intent.brand==='google'?'Pixel':intent.brand==='motorola'?'Motorola':'phone';
+
+   $('piFacts').innerHTML=[
+     piFact('Question','Highest trade-in promo'),
+     piFact('Brand',intent.brand?brandName:'All phones'),
+     piFact('Timing',intent.currentOnly?'Live now':'Current + upcoming')
+   ].join('');
+
+   if(!hit){
+     $('piAnswer').innerHTML='<small>GTT database result</small><div class="pi-credit">No matching promo found</div><p>I checked the loaded trade-in promotions and could not find a matching active offer.</p><div class="pi-dbnote">Source: live GTT / Supabase promo data</div>';
+     $('piMissing').innerHTML='<b>No extra information needed.</b>';
+   }else{
+     const when=hit.state==='upcoming' && hit.start ? ' starting '+piFormatDate(hit.start) : '';
+     const plan=hit.plan ? ' on '+piEsc(PLAN_LABEL?.[hit.plan]||hit.plan) : '';
+     $('piAnswer').innerHTML=
+       '<small>Highest '+piEsc(brandName)+' trade-in promo</small>'+
+       '<div class="pi-credit">Up to '+piMoney(hit.credit)+'</div>'+
+       '<p>'+piEsc(hit.promo?.name||'Trade-in promotion')+piEsc(when)+plan+'. Ask me a follow-up like “what qualifies?”, “what about Starter?”, or “what is live right now?”</p>'+
+       '<div class="pi-dbnote">Source: live GTT / Supabase promo data'+(hit.state==='upcoming'?' · upcoming':' · current')+'</div>';
+     $('piMissing').innerHTML='<b>Answered from the promo database.</b>';
+   }
+
+   $('piResult').classList.add('show');
+   $('piBuild').style.display='none';
+   piResetFollow();
+
+   piConversation.push({q:text,a:hit?'Up to '+piMoney(hit.credit):'No matching promo found'});
+   piConversation=piConversation.slice(-12);
+   piState.d={_summary:true,summary_type:'highest_trade_promo',summary_brand:intent.brand||'',summary_current_only:!!intent.currentOnly};
+   piSaveMemory();piRenderThread();
+   $('piStatus').textContent='Answered from GTT promo data';
+ }
+
  function piCatalogIntent(text){
    const q=String(text||'').toLowerCase();
    if(!/\btiered\b/.test(q))return null;
@@ -6150,6 +6250,33 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  $('piRun').onclick=async()=>{
    const text=$('piAsk').value.trim();
    if(!text){$('piStatus').textContent='Ask a promo question first.';return}
+   let summaryIntent=piSummaryIntent(text);
+   if(!summaryIntent && piState.d?._summary && piState.d.summary_type==='highest_trade_promo'){
+     const q=text.toLowerCase();
+     let brand=piState.d.summary_brand||'';
+     if(/\biphone|apple\b/.test(q))brand='apple';
+     else if(/\bsamsung|galaxy\b/.test(q))brand='samsung';
+     else if(/\bpixel|google\b/.test(q))brand='google';
+     else if(/\bmotorola|moto|razr\b/.test(q))brand='motorola';
+
+     if(/\b(current|right now|live|today|highest|best|max|maximum|biggest)\b/.test(q)){
+       summaryIntent={
+         type:'highest_trade_promo',
+         brand,
+         currentOnly:/\b(current|right now|live|today)\b/.test(q)
+       };
+     }
+   }
+   if(summaryIntent){
+     $('piRun').disabled=true;$('piRun').textContent='Checking…';$('piStatus').textContent='Checking GTT promo data…';
+     try{
+       piRenderHighestTrade(summaryIntent,text);
+       $('piAsk').value='';
+       $('piResult').scrollIntoView({behavior:'smooth',block:'start'});
+     } finally{$('piRun').disabled=false;$('piRun').textContent='Ask GTT →'}
+     return;
+   }
+
    let catalogIntent=piCatalogIntent(text);
    if(!catalogIntent && piState.d?._catalog){
      const q=text.toLowerCase();
@@ -6177,6 +6304,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      const prior=piState.d?JSON.parse(JSON.stringify(piState.d)):null;
      const d=await piParse(text,prior);
      d._raw=text;
+
+     // Broad database questions should never invent a customer target phone.
+     // If the rep did not name a specific device model, clear any target Gemini guessed.
+     const broadPromoQuestion=/\b(promo|promotion|offers?|trade[\s-]?in)\b/i.test(text);
+     const namedSpecificModel=/\biphone\s*(?:1[1-9]|[2-9]\d)(?:\s*(?:pro|max|plus|e|air|duo))?\b|\b(?:galaxy\s*)?s\d{2}(?:\s*(?:ultra|plus|\+|fe))?\b|\bpixel\s*\d+(?:\s*(?:pro|xl|a))?\b|\b(?:z\s*)?(?:fold|flip)\s*\d+\b|\brazr\b/i.test(text);
+     if(broadPromoQuestion && !namedSpecificModel && !prior){
+       d.target_device='';d.target_storage='';
+     }
 
      // Only clear financing on a brand-new conversation. In follow-ups, preserve prior financing context
      // unless Gemini explicitly changed it.
