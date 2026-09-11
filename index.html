@@ -1404,7 +1404,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 <section id="v4Investigator" class="v4-page v4-section">
 <button class="v4-back" data-v4go="beta">← Beta Tools</button>
 <h2>Promo Investigator</h2>
-<p class="v4-sectionlead">Ask a promo question the way you would say it to another rep. Gemini only interprets the question; GTT uses live device data and its promo rules for the answer.</p>
+<p class="v4-sectionlead">Ask a promo question the way you would say it to another rep. GTT AI interprets the question securely; live device data and promo rules still determine the answer.</p>
 
 <div class="pi-box">
   <h3>Ask GTT</h3>
@@ -1418,11 +1418,6 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   <div class="pi-memorybar"><span><b>Conversation memory on</b> · follow-ups keep the current customer/promo context</span><button id="piStartOverTop" class="pi-startover" type="button">Start Over</button></div>
   <button id="piRun" class="pi-btn pi-run" type="button">Ask GTT →</button>
   <div id="piStatus" class="pi-status"></div>
-</div>
-
-<div id="piKeyBox" class="pi-box">
-  <h3>Gemini key</h3><p>Beta only. Uses the same locally saved key as the Identify test when available.</p>
-  <div class="pi-keyrow"><input id="piKey" type="password" placeholder="Gemini API key"><button id="piSaveKey" type="button">Save</button></div>
 </div>
 
 <div id="piFollow" class="pi-follow">
@@ -5867,10 +5862,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  }
  function piFormatDate(v){const d=piDate(v);return d?d.toLocaleDateString(undefined,{month:'numeric',day:'numeric'}):''}
 
- const piKey=$('piKey'), piKeyBox=$('piKeyBox'), piFollow=$('piFollow');
- const existingPiKey=localStorage.getItem('gtt_identify_gemini_key')||localStorage.getItem('gtt_promo_gemini_key')||'';
- if(existingPiKey){piKey.value=existingPiKey;piKeyBox.style.display='none'}
- $('piSaveKey').onclick=()=>{const k=piKey.value.trim();if(!k)return;$('piStatus').textContent='Key saved on this device.';localStorage.setItem('gtt_promo_gemini_key',k);localStorage.setItem('gtt_identify_gemini_key',k);piKeyBox.style.display='none'};
+ const piFollow=$('piFollow');
+ const PI_AI_FUNCTION='https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-ai';
  document.querySelectorAll('.pi-example').forEach(b=>b.onclick=()=>{$('piAsk').value=b.textContent;$('piAsk').focus()});
 
  let piState={d:null,x:null};
@@ -5898,59 +5891,23 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  $('piStartOverTop').onclick=piStartOver;
  $('piAgain').onclick=()=>{$('piAsk').value='';piResetFollow();$('piStatus').textContent='Memory kept — ask your follow-up.';$('piAsk').focus()};
 
- async function piParse(text,key,existingState=null){
-   const existing=existingState?JSON.stringify({
-     trade_device:existingState.trade_device||'',
-     trade_storage:existingState.trade_storage||'',
-     plan:existingState.plan||'',
-     target_device:existingState.target_device||'',
-     target_storage:existingState.target_storage||'',
-     activation:existingState.activation||'',
-     condition:existingState.condition||'',
-     next_up:existingState.next_up||'',
-     paid_percent:existingState.paid_percent??null,
-     effective_date:existingState.effective_date||''
-   }):'{}';
-
-   const prompt=`You parse AT&T wireless promo questions from retail-rep shorthand.
-This is a CONTINUING CONVERSATION. Merge the user's new message into the existing structured context.
-Do NOT answer the promo and do NOT invent eligibility.
-
-Existing structured context:
-${existing}
-
-New user message:
-${text}
-
-Return ONLY the COMPLETE MERGED JSON state:
-{"trade_device":"","trade_storage":"","plan":"","target_device":"","target_storage":"","activation":"","condition":"","next_up":"","paid_percent":null,"effective_date":"","missing":[]}
-
-Rules:
-- Preserve existing fields unless the new message explicitly changes, corrects, replaces, or clears them.
-- A short follow-up like "What about Starter?" means update plan to Starter and preserve the other customer/device details.
-- "Actually it's a 14 Pro" should replace the relevant device only when context makes clear which device is being corrected.
-- "What if they get the Pro Max instead?" updates target_device and preserves everything else.
-- "S22" means Galaxy S22, "S26 Ultra" means Galaxy S26 Ultra.
-- "18", when clearly referring to an iPhone in context, may be returned as "iPhone 18"; do not invent Pro/Pro Max/Duo unless stated.
-- plan may contain Premium, Elite, Extra, Starter, Value, 55+, or a named legacy/business plan.
-- activation is "upgrade", "new", or "".
-- condition only if explicitly stated.
-- Never invent storage, condition, plan, activation, Next Up status, or paid percentage.
-- If the rep explicitly says 33% paid, over 33%, one-third paid, or otherwise clearly references the 33% upgrade threshold, interpret next_up as "anytime".
-- If the rep says Next Up but does not distinguish Anytime vs legacy, return next_up as "unknown".
-- If the rep says 50% paid and explicitly references legacy Next Up, return next_up as "legacy".
-- Do not treat a normal trade-in question as Next Up. If there is no mention of an installment balance, amount owed, percentage paid, or Next Up AND the existing context had no financing info, leave next_up blank.
-- missing should list absent information, but do not answer it.`;
-
-   let last;
-   for(const model of ['gemini-3.7-flash','gemini-3.6-flash']){
-     try{
-       const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0,responseMimeType:'application/json'}})});
-       const j=await r.json();if(!r.ok)throw new Error(j?.error?.message||'Gemini error');
-       let t=j?.candidates?.[0]?.content?.parts?.map(x=>x.text||'').join('').trim();if(!t)throw new Error('No parser response');t=t.replace(/^```json\s*/i,'').replace(/```$/,'').trim();return JSON.parse(t);
-     }catch(e){last=e}
-   }
-   throw last||new Error('Could not parse question');
+ async function piParse(text,existingState=null){
+   const r=await fetch(PI_AI_FUNCTION,{
+     method:'POST',
+     headers:{
+       'Content-Type':'application/json',
+       'apikey':KEY
+     },
+     body:JSON.stringify({
+       task:'promo_parse',
+       message:text,
+       state:existingState||null
+     })
+   });
+   const j=await r.json().catch(()=>({}));
+   if(!r.ok)throw new Error(j?.error||'GTT AI service is unavailable.');
+   if(!j?.state)throw new Error('GTT AI returned no parsed state.');
+   return j.state;
  }
  function piEvaluate(d){
    const plan=piPlan(d.plan), trade=piTradeMatch(d.trade_device,d.trade_storage);
@@ -6191,7 +6148,7 @@ Rules:
  }
 
  $('piRun').onclick=async()=>{
-   const text=$('piAsk').value.trim();const key=piKey.value.trim()||localStorage.getItem('gtt_promo_gemini_key')||localStorage.getItem('gtt_identify_gemini_key');
+   const text=$('piAsk').value.trim();
    if(!text){$('piStatus').textContent='Ask a promo question first.';return}
    let catalogIntent=piCatalogIntent(text);
    if(!catalogIntent && piState.d?._catalog){
@@ -6215,11 +6172,10 @@ Rules:
      } finally{$('piRun').disabled=false;$('piRun').textContent='Ask GTT →'}
      return;
    }
-   if(!key){piKeyBox.style.display='block';$('piStatus').textContent='Add your Gemini key for the beta parser.';piKey.focus();return}
-   $('piRun').disabled=true;$('piRun').textContent='Investigating…';$('piStatus').textContent='Gemini is translating the question. GTT is loading the promo database.';
+   $('piRun').disabled=true;$('piRun').textContent='Investigating…';$('piStatus').textContent='GTT AI is translating the question. GTT is loading the promo database.';
    try{
      const prior=piState.d?JSON.parse(JSON.stringify(piState.d)):null;
-     const d=await piParse(text,key,prior);
+     const d=await piParse(text,prior);
      d._raw=text;
 
      // Only clear financing on a brand-new conversation. In follow-ups, preserve prior financing context
