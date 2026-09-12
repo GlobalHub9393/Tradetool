@@ -2806,8 +2806,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       const response = await fetch(endpoint,{
         headers:{
           apikey: SUPABASE_PUBLISHABLE_KEY,
-          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
-        },
+                  },
         cache:'no-store'
       });
       if(!response.ok) throw new Error(`Supabase ${response.status}: ${await response.text()}`);
@@ -2841,15 +2840,19 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
   async function loadCatalogFromSupabase(){
     try{
-      const headers = { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization:`Bearer ${SUPABASE_PUBLISHABLE_KEY}` };
+      const headers = { apikey: SUPABASE_PUBLISHABLE_KEY };
       const [devRes,tierRes] = await Promise.all([
         fetch(SUPABASE_URL + '/rest/v1/sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,quick_pick,active,sellable,trade_eligible,trade_value,image_url,available_from,available_through,sort_order,updated_at&order=sort_order.asc', {headers,cache:'no-store'}),
         fetch(SUPABASE_URL + '/rest/v1/tiered_prices?select=device_key,activation_type,monthly_price,months,active,starts_at,ends_at,eligible_segments,updated_at&order=device_key.asc', {headers,cache:'no-store'})
       ]);
       if(!devRes.ok) throw new Error(`Sellable devices ${devRes.status}: ${await devRes.text()}`);
-      if(!tierRes.ok) throw new Error(`Tiered prices ${tierRes.status}: ${await tierRes.text()}`);
       const devices = await devRes.json();
-      const tiers = await tierRes.json();
+      let tiers = [];
+      if(tierRes.ok){
+        tiers = await tierRes.json();
+      }else{
+        console.warn('Tiered prices unavailable; continuing with sellable device catalog so images and phone data still load.', tierRes.status);
+      }
       const inferBrand = name => /^iphone/i.test(name) ? 'Apple' : /^galaxy/i.test(name) ? 'Samsung' : /^pixel/i.test(name) ? 'Google' : (/moto|razr/i.test(name) ? 'Motorola' : 'Other');
 
       devices.forEach(r=>{
@@ -2886,7 +2889,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       PHONES.forEach(p=>{
         if(Array.isArray(p.tieredPriceRows)) p.tieredOffer=p.tieredPriceRows.some(r=>r.active!==false);
       });
-      console.info('Sellable/tiered catalog loaded from Supabase', devices.length, tiers.length);
+      console.info('Sellable/tiered catalog loaded from Supabase', devices.length, tiers.length, 'with images:', devices.filter(d=>d.image_url).length);
     }catch(err){
       console.warn('Supabase sellable/tiered catalog unavailable; using HTML fallback.',err);
     }
@@ -2961,8 +2964,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       const response = await fetch(endpoint,{
         headers:{
           apikey: SUPABASE_PUBLISHABLE_KEY,
-          Authorization:`Bearer ${SUPABASE_PUBLISHABLE_KEY}`
-        },
+                  },
         cache:'no-store'
       });
       if(!response.ok) throw new Error(`Content ${response.status}: ${await response.text()}`);
@@ -5488,7 +5490,46 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   el('testCalculator').addEventListener('click',()=>{ const bad = PHONES.filter(p=>!p.id||!p.name||typeof p.retail!=='number'); alert(bad.length ? `Found ${bad.length} phone records needing review.` : 'Calculator data test passed.'); });
 
   // Result-card phone art (Trade Tool only)
-  // Images now come directly from the public Supabase Storage URL stored in sellable_devices.image_url.
+  // Primary source: sellable_devices.image_url. Bucket-name fallback keeps artwork working even if a phone
+  // was loaded from the embedded catalog before Supabase finished or a cached record lacks image_url.
+  const PHONE_BUCKET_BASE = SUPABASE_URL + '/storage/v1/object/public/gtt-phone-images/';
+  const PHONE_BUCKET_FILES = {
+    'amigo jr. phone':'amigo-jr-phone.jpg',
+    'galaxy a17 5g':'galaxy-a17-5g.webp',
+    'galaxy a37':'galaxy-a37.png',
+    'galaxy a57 5g':'galaxy-a57-5g.jpg',
+    'galaxy s25 edge':'galaxy-s25-edge.jpg',
+    'galaxy s25 fe':'galaxy-s25-fe.png',
+    'galaxy s26':'galaxy-s26.jpg',
+    'galaxy s26+':'galaxy-s26.png',
+    'galaxy s26 fe':'galaxy-s26-fe.webp',
+    'galaxy s26 ultra':'galaxy-s26-ultra.png',
+    'galaxy z flip8':'galaxy-z-flip8.jpg',
+    'galaxy z fold8':'galaxy-z-fold8.jpg',
+    'galaxy z fold8 ultra':'galaxy-z-fold8-ultra.png',
+    'iphone 17':'iphone-17.webp',
+    'iphone 17 pro':'iphone-17-pro.png',
+    'iphone 17 pro max':'iphone-17-pro-max.webp',
+    'iphone 17e':'iphone-17e.png',
+    'iphone air':'iphone-air.jpg',
+    'iphone 18 pro':'iphone18pro-promax.png',
+    'iphone 18 pro max':'iphone18pro-promax.png',
+    'moto edge (2026)':'moto-edge-2026.jpg',
+    'moto g (2026)':'moto-g-2026.png',
+    'moto razr+ (2026)':'moto-razr-2026.jpg',
+    'pixel 10':'pixel-10.webp',
+    'pixel 10 pro':'pixel-10-pro.webp',
+    'pixel 10 pro xl':'pixel-10-pro-xl.png',
+    'pixel 10a':'pixel-10a.png',
+    'pixel 11':'pixel-11.jpg',
+    'pixel 11 pro':'pixel-11-pro.jpg',
+    'pixel 11 pro xl':'pixel-11-pro-xl.png',
+    'razr ultra':'razr-ultra.jpg'
+  };
+  function bucketFallbackUrl(phone){
+    const f = phone && PHONE_BUCKET_FILES[String(phone.name||'').trim().toLowerCase()];
+    return f ? PHONE_BUCKET_BASE + encodeURIComponent(f) : '';
+  }
   function renderPhoneArt(result){
     const wrap=el('resultPhoneArt'), img=el('resultPhoneImg'), fallback=el('resultPhoneFallback'), displayEl=el('display');
     if(!wrap||!img||!fallback||!displayEl) return;
@@ -5500,7 +5541,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       return;
     }
 
-    const directUrl = String(current.imageUrl||'').trim();
+    const directUrl = String(current.imageUrl||bucketFallbackUrl(current)||'').trim();
     img.style.display='none';
     fallback.classList.add('show');
     img.onload=()=>{
@@ -5799,11 +5840,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  document.querySelectorAll('[data-v4tool]').forEach(x=>x.addEventListener('click',()=>{ const open=$('toolsOpenBtn'); if(open)open.click(); setTimeout(()=>{const tile=document.querySelector('.tools-tile[data-tools-page="'+x.dataset.v4tool+'"]'); if(tile)tile.click()},40)}));
  // Supabase status + version. 4.0 is the build version; database takes over once current_version is switched to 4.0.
  const SB='https://uwomiirfvllcafijmkmk.supabase.co', KEY='sb_publishable_UMb8Nb5DG0w1dv9h5W5-2Q_0PinuBV4';
- fetch(SB+'/rest/v1/app_settings?select=setting_key,setting_value&setting_key=in.(current_version,source_version)',{headers:{apikey:KEY,Authorization:'Bearer '+KEY},cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(rows=>{ $('v4DbDot').classList.add('online'); $('v4DbDot').title='Supabase connected'; const v=rows.find(x=>x.setting_key==='current_version'); if(v&&String(v.setting_value).includes('4.0'))$('v4Version').textContent='4.0'; }).catch(()=>{$('v4DbDot').title='Supabase connection unavailable'});
+ fetch(SB+'/rest/v1/app_settings?select=setting_key,setting_value&setting_key=in.(current_version,source_version)',{headers:{apikey:KEY},cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(rows=>{ $('v4DbDot').classList.add('online'); $('v4DbDot').title='Supabase connected'; const v=rows.find(x=>x.setting_key==='current_version'); if(v&&String(v.setting_value).includes('4.0'))$('v4Version').textContent='4.0'; }).catch(()=>{$('v4DbDot').title='Supabase connection unavailable'});
  // Simple Tool uses live trade_devices, never embedded fallback when live fetch succeeds.
  let tradeRows=[], selected=null;
  const search=$('v4TradeSearch'), sugg=$('v4Suggestions'), storage=$('v4Storage');
- fetch(SB+'/rest/v1/trade_devices?select=brand,model,storage,trade_value&active=eq.true&order=brand.asc,model.asc,storage.asc&limit=1500',{headers:{apikey:KEY,Authorization:'Bearer '+KEY},cache:'no-store'}).then(r=>r.json()).then(r=>{tradeRows=Array.isArray(r)?r:[]}).catch(()=>{});
+ fetch(SB+'/rest/v1/trade_devices?select=brand,model,storage,trade_value&active=eq.true&order=brand.asc,model.asc,storage.asc&limit=1500',{headers:{apikey:KEY},cache:'no-store'}).then(r=>r.json()).then(r=>{tradeRows=Array.isArray(r)?r:[]}).catch(()=>{});
  function models(){const m=new Map;tradeRows.forEach(r=>{const k=r.brand+'|'+r.model;if(!m.has(k))m.set(k,{brand:r.brand,model:r.model,rows:[]});m.get(k).rows.push(r)});return [...m.values()]}
  function renderSuggestions(){const q=search.value.trim().toLowerCase();if(!q){sugg.classList.remove('open');return}const hits=models().filter(x=>(x.brand+' '+x.model).toLowerCase().includes(q)).slice(0,60);sugg.innerHTML=hits.map((x,i)=>{const vals=x.rows.map(r=>Number(r.trade_value)).filter(Number.isFinite);const vr=vals.length?'$'+Math.min(...vals).toFixed(0)+(Math.min(...vals)!==Math.max(...vals)?'–$'+Math.max(...vals).toFixed(0):''):'verify';return '<div class="v4-suggestion" data-i="'+i+'"><b>'+x.brand+' '+x.model+'</b><span>'+vr+'</span></div>'}).join('');sugg.classList.toggle('open',!!hits.length);sugg.querySelectorAll('[data-i]').forEach(el=>el.onclick=()=>choose(hits[+el.dataset.i]))}
  function choose(x){selected=x;search.value=x.brand+' '+x.model;sugg.classList.remove('open');storage.innerHTML='';$('v4SimpleResult').classList.remove('show');x.rows.sort((a,b)=>a.storage.localeCompare(b.storage,undefined,{numeric:true})).forEach(r=>{const b=document.createElement('button');b.className='v4-chip';b.textContent=r.storage;b.onclick=()=>{storage.querySelectorAll('.v4-chip').forEach(c=>c.classList.remove('on'));b.classList.add('on');showResult(r)};storage.appendChild(b)});if(x.rows.length===1)storage.firstChild.click()}
@@ -5827,7 +5868,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
  // Promo Investigator beta: Gemini parses rep language; Supabase promo tables + GTT rules decide the answer.
  let piSellable=[], piPromos=[], piPromoDevices=[], piPromoPlans=[], piTiers=[], piSpecial=[], piPlanGroups=[], piTieredPrices=[], piPlans=[];
- const piHeaders={apikey:KEY,Authorization:'Bearer '+KEY};
+ const piHeaders={apikey:KEY};
  const piGet=(path)=>fetch(SB+'/rest/v1/'+path,{headers:piHeaders,cache:'no-store'}).then(r=>r.ok?r.json():[]);
  Promise.all([
    piGet('sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,active,sellable&limit=1500'),
