@@ -3555,7 +3555,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     // Only apply local phone/promo/tip edits made against this exact release.
     // This prevents stale browser data from restoring phones or promo ladders removed in a newer upload.
     const savedMatchesRelease = data.backupVersion === VERSION;
-    if(savedMatchesRelease && Array.isArray(data.phones)){ PHONES.splice(0, PHONES.length, ...data.phones); }
+    // Phone catalog is live from Supabase. Never replace it with an older browser-local copy,
+    // because that strips live fields such as sellable_devices.image_url.
+    // Legacy local phone backups are intentionally ignored.
     if(savedMatchesRelease && data.ladders && typeof data.ladders === 'object'){ Object.keys(LADDERS).forEach(k=>delete LADDERS[k]); Object.assign(LADDERS, data.ladders); }
     if(savedMatchesRelease && Array.isArray(data.tips)){ TIPS.splice(0, TIPS.length, ...data.tips); }
     const vb = el('versionBadge'), rm = el('releaseMeta');
