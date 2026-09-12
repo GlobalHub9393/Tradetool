@@ -3014,7 +3014,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       badge.className = 'recent-badge';
       badge.textContent = 'recent';
       b.appendChild(badge);
-      b.addEventListener('click', () => choosePhone(p.id));
+      b.addEventListener('click', () => choosePhone(p.id, true));
       phonesRecent.appendChild(b);
     });
   }
@@ -3038,7 +3038,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       b.dataset.phone = p.id;
       b.textContent = p.name;
       b.setAttribute('aria-pressed','false');
-      b.addEventListener('click', ()=> choosePhone(p.id));
+      b.addEventListener('click', ()=> choosePhone(p.id, true));
       phonesQuick.appendChild(b);
     });
   }
@@ -3066,9 +3066,23 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
 
   // Choose phone
-  function choosePhone(id){
+  function clearPhoneSelection(){
+    state.phone = null;
+    state.tierAction = null;
+    document.querySelectorAll('#phonesQuick .chip, #phonesRecent .chip').forEach(b => b.setAttribute('aria-pressed','false'));
+    phoneSearch.value = '';
+    phoneSuggestions.classList.remove('open'); phoneSearch.setAttribute('aria-expanded','false');
+    updateControlsAfterSelection();
+    render();
+  }
+
+  function choosePhone(id, allowToggle=false){
     const p = PHONES.find(x=>x.id===id);
     if(!p) return;
+    if(allowToggle && state.phone && state.phone.id===id){
+      clearPhoneSelection();
+      return;
+    }
     state.phone = p;
     state.tierAction = null;
     document.querySelectorAll('#phonesQuick .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.phone === id ? 'true' : 'false'));
@@ -3086,6 +3100,22 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   document.querySelectorAll('#plans .chip').forEach(b=>{
     b.addEventListener('click', ()=>{
       const key = b.dataset.plan;
+      const isSelected = state.plan === key && b.getAttribute('aria-pressed') === 'true';
+      if(isSelected){
+        state.plan = null;
+        state.planSegment = 'consumer';
+        state.pendingPlanSegment = null;
+        state.tierAction = null;
+        document.querySelectorAll('#plans .chip').forEach(x=>{
+          x.setAttribute('aria-pressed','false');
+          x.classList.remove('plan-lock-flash');
+        });
+        planHelp.style.display = 'none';
+        planHelp.innerHTML = '';
+        updateControlsAfterSelection();
+        render();
+        return;
+      }
       state.plan = key;
       state.planSegment = state.pendingPlanSegment || 'consumer';
       state.pendingPlanSegment = null;
@@ -3295,6 +3325,15 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
   if(noTradeBtn){
     noTradeBtn.addEventListener('click',()=>{
+      if(state.noTrade){
+        state.noTrade=false;
+        noTradeBtn.setAttribute('aria-pressed','false');
+        tradeDbStatus.className='trade-db-status';
+        tradeDbStatus.textContent='Choose a trade-in phone or enter a value manually.';
+        updateControlsAfterSelection();
+        render();
+        return;
+      }
       state.noTrade=true;
       state.tradeDevice=null; state.tradeStorage=null; state.tradeBaseValue=null; state.tradeValueMode=null; state.value=null;
       tradeDeviceSearch.value=''; tradeDeviceSuggestions.classList.remove('open'); tradeStorageRow.classList.remove('show'); tradeConditionPanel.classList.remove('show');
