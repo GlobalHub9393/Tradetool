@@ -245,15 +245,15 @@
   .display{background:linear-gradient(160deg,var(--navy1),var(--navy2)); color:#eaf3fb; border-radius:18px;
     padding:22px 22px 20px; box-shadow:0 10px 30px rgba(7,28,52,.30); position:sticky; bottom:12px;
     max-height:74vh; overflow:auto; border-left:5px solid transparent; transition:border-color .25s ease;}
-  .result-phone-art{position:absolute;top:10px;right:8px;width:124px;height:154px;display:none;align-items:center;justify-content:center;z-index:20;pointer-events:none;}
+  .result-phone-art{float:right;position:relative;margin:2px 0 12px 16px;width:96px;height:118px;display:none;align-items:flex-start;justify-content:flex-end;z-index:1;pointer-events:none;shape-outside:inset(0 round 14px);shape-margin:10px;}
   .display.has-phone-art .result-phone-art{display:flex;}
-  .result-phone-art img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;opacity:0;transition:opacity .16s ease;filter:drop-shadow(0 12px 18px rgba(0,0,0,.28));}
-  .result-phone-fallback{display:none;width:94px;height:126px;border:1px solid rgba(159,208,239,.28);border-radius:16px;align-items:center;justify-content:center;flex-direction:column;gap:7px;color:#8faabd;background:rgba(255,255,255,.035);}
+  .result-phone-art img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:right top;filter:drop-shadow(0 12px 18px rgba(0,0,0,.28));}
+  .result-phone-fallback{display:none;width:84px;height:108px;border:1px solid rgba(159,208,239,.28);border-radius:16px;align-items:center;justify-content:center;flex-direction:column;gap:7px;color:#8faabd;background:rgba(255,255,255,.035);}
   .result-phone-fallback.show{display:flex;}
   .phone-silhouette{width:42px;height:74px;border:2px solid currentColor;border-radius:9px;position:relative;opacity:.72;}
   .phone-silhouette:before{content:"";position:absolute;left:50%;top:5px;transform:translateX(-50%);width:14px;height:3px;border-radius:4px;background:currentColor;}
   .result-phone-fallback small{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
-  .display.has-phone-art .d-label,.display.has-phone-art .d-amount{padding-right:140px;}
+  .display.has-phone-art .d-label,.display.has-phone-art .d-amount{padding-right:0;}
 
 
   /* result color states — each promo keeps its matching colored glow */
@@ -275,7 +275,7 @@
   }
   .display.result-max::before{display:none;}
   .display.result-max > *{position:relative;z-index:1;}
-  .display.result-max > .result-phone-art{position:absolute;z-index:20;}
+  .display.result-max > .result-phone-art{position:relative;z-index:1;}
   .display.result-max .d-amount,.display.result-max .monthly-primary{
     color:#6ef0a3;
     text-shadow:0 0 10px rgba(74,222,128,.18);
@@ -1379,9 +1379,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 }
 
   @media (max-width: 620px){
-    .result-phone-art{top:8px;right:6px;width:86px;height:108px;}
-    .display.has-phone-art .d-label,.display.has-phone-art .d-amount{padding-right:94px;}
-    .result-phone-fallback{width:70px;height:94px;border-radius:12px;}
+    .result-phone-art{margin:0 0 10px 12px;width:72px;height:92px;}
+    .display.has-phone-art .d-label,.display.has-phone-art .d-amount{padding-right:0;}
+    .result-phone-fallback{width:62px;height:82px;border-radius:12px;}
     .phone-silhouette{width:31px;height:55px;border-radius:7px;}
   }
 </style>
@@ -1885,7 +1885,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
     <aside class="display" id="display" aria-live="polite">
       <div id="resultPhoneArt" class="result-phone-art" aria-hidden="true">
-        <img id="resultPhoneImg" alt="" loading="eager" fetchpriority="high" decoding="async">
+        <img id="resultPhoneImg" alt="" loading="lazy" decoding="async">
         <div id="resultPhoneFallback" class="result-phone-fallback"><span class="phone-silhouette"></span><small>No image</small></div>
       </div>
       <div class="d-label">Eligible credit</div>
@@ -5537,39 +5537,29 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     const show = !!(current && ['promo','nextup_promo','tiered_final','promo_pending','zero','full_retail','full_retail_rerate','tiered_not_offered','tiered_confirm_cckm','tier_action_needed','nextup_no_payoff','nextup_not_eligible'].includes(result.state));
     displayEl.classList.toggle('has-phone-art',show);
     if(!show){
-      img.onload=null;
-      img.onerror=null;
-      img.removeAttribute('src');
-      img.style.opacity='0';
-      fallback.classList.remove('show');
+      img.onload=null; img.onerror=null; img.removeAttribute('src'); img.style.display='none'; fallback.classList.remove('show');
       return;
     }
 
     const directUrl = String(current.imageUrl||bucketFallbackUrl(current)||'').trim();
-    img.style.opacity='0';
+    img.style.display='none';
     fallback.classList.add('show');
-
-    const showImage=()=>{
-      if(!img.naturalWidth) return;
+    img.onload=()=>{
       fallback.classList.remove('show');
-      img.style.opacity='1';
+      img.style.display='block';
     };
-    const showFallback=()=>{
-      img.style.opacity='0';
+    img.onerror=()=>{
+      img.style.display='none';
       fallback.classList.add('show');
     };
 
-    img.onload=showImage;
-    img.onerror=showFallback;
-
     if(directUrl){
       const u = directUrl.startsWith('/') ? location.origin + directUrl : directUrl;
-      // Keep the image element rendered while it loads. Safari/iPad can defer a hidden lazy image forever.
-      if(img.src !== u) img.src = u;
-      if(img.complete && img.naturalWidth > 0) showImage();
+      // Reset first so selecting a different phone always reloads the current DB URL.
+      img.removeAttribute('src');
+      img.src = u;
     }else{
       img.removeAttribute('src');
-      showFallback();
     }
   }
 
