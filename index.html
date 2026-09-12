@@ -1400,6 +1400,46 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
 
 @media(max-width:560px){.pi-actions{grid-template-columns:1fr}}
+
+/* Promo Investigator UI polish — presentation only; calculation/AI logic unchanged */
+.pi-result-v2{padding:14px 14px 16px}
+.pi-result-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.pi-result-head>div{display:flex;align-items:center;gap:7px;min-width:0}
+.pi-result-head b{font-size:13px}
+.pi-result-head small{color:var(--v4-muted);font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pi-live-dot{width:8px;height:8px;border-radius:50%;background:#41d98b;box-shadow:0 0 0 4px color-mix(in srgb,#41d98b 14%,transparent);flex:0 0 auto}
+.pi-context-toggle{border:1px solid var(--v4-line);background:transparent;color:var(--v4-muted);border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800;cursor:pointer}
+.pi-result-v2 .pi-answer{margin-top:0;padding:17px 18px}
+.pi-result-v2 .pi-credit{font-size:22px;margin-top:6px}
+.pi-result-v2 .pi-missing{margin-top:8px;background:color-mix(in srgb,var(--v4-card) 82%,transparent);padding:9px 11px}
+.pi-result-v2 .pi-context-panel{display:none;margin-top:10px;padding:11px;border:1px solid var(--v4-line);border-radius:13px;background:color-mix(in srgb,var(--v4-card) 92%,var(--v4-blue) 8%)}
+.pi-result-v2.show-context .pi-context-panel{display:block}
+.pi-context-title{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--v4-muted);margin-bottom:7px}
+.pi-result-v2 .pi-understood{margin-top:0;gap:6px}
+.pi-result-v2 .pi-fact{padding:7px 9px;background:var(--v4-card);border-radius:10px}
+.pi-result-v2 .pi-fact small{font-size:8px}
+.pi-result-v2 .pi-fact b{font-size:11px}
+.pi-history{margin-top:10px;border-top:1px solid var(--v4-line);padding-top:9px}
+.pi-history summary{cursor:pointer;color:var(--v4-muted);font-size:10px;font-weight:800;list-style:none}
+.pi-history summary::-webkit-details-marker{display:none}
+.pi-history summary:after{content:' ▾';font-size:9px}
+.pi-history[open] summary:after{content:' ▴'}
+.pi-history .pi-thread{margin-top:7px}
+.pi-history .pi-thread.show{display:block}
+.pi-history .label{display:none}
+.pi-threadturn{padding:8px 0}
+.pi-threadq{font-size:10px!important;color:var(--v4-ink)}
+.pi-threada{font-size:10px!important;line-height:1.45!important}
+.pi-actions{margin-top:12px;grid-template-columns:1fr auto}
+.pi-followup-btn{min-height:44px}
+.pi-build-btn{background:transparent!important;color:var(--v4-blue)!important;border:1px solid color-mix(in srgb,var(--v4-blue) 45%,var(--v4-line))!important;white-space:nowrap}
+@media(max-width:560px){
+  .pi-result-head small{display:none}
+  .pi-actions{grid-template-columns:1fr}
+  .pi-build-btn{width:100%}
+  .pi-result-v2{padding:12px}
+  .pi-result-v2 .pi-answer{padding:15px}
+}
 </style>
 
 
@@ -1531,15 +1571,27 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   <div id="piFollowBody"></div>
 </div>
 
-<div id="piResult" class="pi-box pi-result">
-  <div id="piThread" class="pi-thread"></div>
-  <h3>I understood…</h3>
-  <div id="piFacts" class="pi-understood"></div>
+<div id="piResult" class="pi-box pi-result pi-result-v2">
+  <div class="pi-result-head">
+    <div><span class="pi-live-dot"></span><b>GTT Answer</b><small>Verified against current GTT data</small></div>
+    <button class="pi-context-toggle" type="button" onclick="this.closest('.pi-result-v2').classList.toggle('show-context')">Context</button>
+  </div>
   <div id="piAnswer" class="pi-answer"></div>
   <div id="piMissing" class="pi-missing"></div>
+
+  <div class="pi-context-panel">
+    <div class="pi-context-title">Current context</div>
+    <div id="piFacts" class="pi-understood"></div>
+  </div>
+
+  <details id="piHistoryWrap" class="pi-history">
+    <summary>Conversation history</summary>
+    <div id="piThread" class="pi-thread"></div>
+  </details>
+
   <div class="pi-actions">
-    <button id="piAgain" class="pi-btn" type="button">Ask Follow-Up</button>
-    <button id="piBuild" class="pi-btn" type="button">Build Full Quote →</button>
+    <button id="piAgain" class="pi-btn pi-followup-btn" type="button">Ask Follow-Up</button>
+    <button id="piBuild" class="pi-btn pi-build-btn" type="button">Build Full Quote →</button>
   </div>
 </div>
 </section>
