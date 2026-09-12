@@ -6290,7 +6290,20 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    const targetQ=route?.target_device||d?.target_device||'';
    if(targetQ){const t=piDeviceMatch(targetQ);if(t)target={device_key:t.device_key,name:t.name,storage:t.storage,retail_price:Number(t.retail_price||0),promo_category_key:t.promo_category_key}}
    const quote=x?{title:x.title,body:x.body,plan:x.plan,trade_value:x.val,credit:x.credit,tiered:!!x.tiered?.isTiered,target:target,trade:trade,next_up:x.nextUp?.label||'',needs_more:!!piNeedsQuestion(d,x)}:null;
-   return {route,quote,trade,target,plan_key:planKey,promotions:promos,special_rules:specials,tiered_offers:tiered,sellable_devices:sellable,plan_matches:plans,source:'Live GTT/Supabase data plus deterministic GTT quote logic'};
+   const financing=x?.nextUp?{
+     mode:x.nextUp.mode||'',
+     label:x.nextUp.label||'',
+     promo_eligible:x.nextUp.promoOK,
+     note:x.nextUp.note||'',
+     verified_rule:x.nextUp.mode==='anytime'
+       ? (x.nextUp.promoOK===true
+          ? 'Next Up Anytime at 33% or more paid qualifies for the normal promotional upgrade path. The customer does NOT need to pay off the remaining installment balance first; the existing device is turned in under Next Up Anytime and must meet the applicable turn-in condition requirements.'
+          : x.nextUp.promoOK===false
+            ? 'Next Up Anytime below 33% paid has not reached the normal promo threshold. Do not tell the rep that paying off is required unless GTT has a separate verified rule for that scenario.'
+            : 'Next Up Anytime requires the paid percentage to determine whether the 33% normal-promo threshold is met.')
+       : ''
+   }:null;
+   return {route,quote,trade,target,plan_key:planKey,financing,promotions:promos,special_rules:specials,tiered_offers:tiered,sellable_devices:sellable,plan_matches:plans,source:'Live GTT/Supabase data plus deterministic GTT quote logic'};
  }
  function piRenderSmartGeneric(answer,verified){
    $('piFacts').innerHTML=[piFact('Question type',verified?.route?.intent||'GTT lookup'),piFact('Plan',verified?.plan_key||verified?.route?.plan||''),piFact('Device',verified?.target?.name||verified?.route?.target_device||''),piFact('Trade',verified?.trade?(verified.trade.brand+' '+verified.trade.model):verified?.route?.trade_device||'')].join('');
@@ -6467,8 +6480,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      if(tiered)return {type:'activation',title:'New line or upgrade?',text:'This offer can depend on the transaction type.'};
    }
    if(!d.condition){
+     // If the selected trade already qualifies through an ANY-CONDITION rule, asking condition adds no value.
+     const anyConditionAlreadyQualifies=!!(x.trade&&x.target&&piSpecialCredit(x.plan,x.target,x.trade)>0);
      const special=piSpecial.some(r=>(!r.plan_group_key||r.plan_group_key===x.plan)&&(!r.promo_category_key||r.promo_category_key===x.cat));
-     if(special)return {type:'condition',title:'What condition is the trade in?',text:'There are special/any-condition rules in the database, so condition can matter.'};
+     if(special&&!anyConditionAlreadyQualifies)return {type:'condition',title:'What condition is the trade in?',text:'There are special/any-condition rules in the database, so condition can matter.'};
    }
    return null;
  }
@@ -6564,7 +6579,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
        piRender(d,x);
        const q=piNeedsQuestion(d,x);
        const dbLine=x.tiered?.isTiered?'<div class="pi-dbnote">Promo source: live Supabase tiered_prices</div>':(x.bestPromo?'<div class="pi-dbnote">Promo source: live GTT / Supabase promotion data</div>':'<div class="pi-dbnote">Promo source: deterministic GTT rules + live data</div>');
-       $('piAnswer').innerHTML='<small>GTT verified answer</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(smart?.answer||x.body)+'</p>'+dbLine;
+       // On a follow-up, do not leave the previous deterministic quote amount as the headline.
+       // The smart answer may be explaining how to reach a different offer, so a stale "Up to $930" header is misleading.
+       const answerHeadline=(prior||piConversation.length)?'Verified answer':x.title;
+       $('piAnswer').innerHTML='<small>GTT verified answer</small><div class="pi-credit">'+piEsc(answerHeadline)+'</div><p>'+piEsc(smart?.answer||x.body)+'</p>'+dbLine;
        if(smart?.needs_followup && smart?.followup)$('piMissing').innerHTML='<b>'+piEsc(smart.followup)+'</b>';
        $('piBuild').style.display=q?'none':'block';
      }else{
