@@ -2583,7 +2583,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     // iPhone Air (256/512/1TB) — category iphoneBase
     { id:'ipair', name:'iPhone Air', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:9.99, promoCategory:'iphoneAir' },
     { id:'ipair-512', name:'iPhone Air', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:15.99, promoCategory:'iphoneAir' },
-    { id:'ipair-1tb', name:'iPhone Air', storage:'1TB', retail:1499.99, tieredOffer:true, tieredMonthlyNew:17.99, tieredMonthlyUpgrade:21.99, promoCategory:'iphoneAir' },
+    { id:'ipair-1tb', name:'iPhone Air', storage:'1TB', retail:1699.99, tieredOffer:true, tieredMonthlyNew:17.99, tieredMonthlyUpgrade:21.99, promoCategory:'iphoneAir' },
 
     // Galaxy S26 Ultra (256/512/1TB) — category samsung
     { id:'s26u', name:'Galaxy S26 Ultra', storage:'256GB', retail:1299.99, tieredOffer:false },
@@ -3452,11 +3452,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   // Promo ladders effective 7/31/2026.
   const LADDERS = {
     // 9/12 Apple launch rules. No $700 Apple tier.
-    // iPhone 18 Pro / Pro Max: Premium 1200 @ 180+, 500 @ 130+, 350 @ 35+;
+    // iPhone 18 Pro / Pro Max: Premium 1200 @ 180+, 930 @ 130+, 350 @ 35+;
     // Extra/Starter 930 @ 130+, 350 @ 35+; Value 500 @ 130+, 350 @ 35+.
     // iPhone 17: Premium/Extra/Starter 930 @ 130+, 350 @ 35+; Value 500 @ 130+, 350 @ 35+.
-    premium:{ iphonePro:[{min:180,credit:1200},{min:130,credit:500},{min:35,credit:350}], iphoneBase:[{min:130,credit:930},{min:35,credit:350}], iphoneAir:[], samsung:[{min:95,credit:1100},{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:290,credit:1900},{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixel11XL:[{min:200,credit:1350},{min:95,credit:1150},{min:35,credit:1000}], pixel11Pro:[{min:35,credit:1150}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
-    extra:{ iphonePro:[{min:130,credit:930},{min:35,credit:350}], iphoneBase:[{min:130,credit:930},{min:35,credit:350}], iphoneAir:[], samsung:[{min:95,credit:1100},{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:290,credit:1900},{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixel11XL:[{min:200,credit:1350},{min:95,credit:1150},{min:35,credit:1000}], pixel11Pro:[{min:35,credit:1150}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
+    premium:{ iphonePro:[{min:180,credit:1200},{min:130,credit:930},{min:35,credit:350}], iphoneBase:[{min:130,credit:930},{min:35,credit:350}], iphoneAir:[], samsung:[{min:95,credit:1100},{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:290,credit:1900},{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixel11XL:[{min:200,credit:1350},{min:95,credit:1150},{min:35,credit:1000}], pixel11Pro:[{min:35,credit:1150}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
+    extra:{ iphonePro:[{min:130,credit:930},{min:35,credit:350}], iphoneBase:[{min:130,credit:930},{min:35,credit:350}], iphoneAir:[], samsung:[{min:95,credit:1100},{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixel11XL:[{min:200,credit:1350},{min:95,credit:1150},{min:35,credit:1000}], pixel11Pro:[{min:35,credit:1150}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
     starter:{ iphonePro:[{min:130,credit:930},{min:35,credit:350}], iphoneBase:[{min:130,credit:930},{min:35,credit:350}], iphoneAir:[], samsung:[{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:95,credit:1000},{min:35,credit:500}], flip8:[{min:95,credit:1000},{min:35,credit:500}], pixel11XL:[{min:95,credit:1150},{min:35,credit:1000}], pixel11Pro:[{min:35,credit:1150}], pixelXL:[{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:35,credit:1000}] },
     value:{ iphonePro:[{min:130,credit:500},{min:35,credit:350}], iphoneBase:[{min:130,credit:500},{min:35,credit:350}], iphoneAir:[], samsung:[{min:35,credit:500}], s26base:[{min:35,credit:500}], fold8:[{min:35,credit:500}], flip8:[{min:35,credit:500}], pixel11XL:[{min:35,credit:500}], pixel11Pro:[{min:35,credit:500}], pixelXL:[{min:35,credit:500}], pixelPro:[{min:35,credit:500}], razr:[{min:35,credit:500}] }
   };
@@ -3569,6 +3569,24 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(state.galaxyAny === 'base') return 'a qualifying any-condition Galaxy S10 / Note10 / Z Flip3 or newer';
     return '';
   }
+  function appleAnyConditionFloor(plan, phone){
+    const t=state.tradeDevice;
+    if(!t || String(t.brand||'').toLowerCase()!=='apple' || !/iphone/i.test(String(t.model||''))) return 0;
+    const model=String(t.model||'');
+    const hit=model.match(/iPhone\s*(\d+)/i);
+    const any14=!!hit && Number(hit[1])>=14 && !/16e/i.test(model);
+    const id=String(phone?.id||'').toLowerCase();
+    const is18=id.startsWith('iphone18pro');
+    const is17=id==='ip17' || id.startsWith('ip17-');
+    if(!is18 && !is17) return 0;
+    if(any14){
+      if(is18 && plan==='premium') return 1200;
+      if(plan==='premium' || plan==='extra' || plan==='starter') return 930;
+      if(plan==='value') return 500;
+    }
+    if(plan==='premium' || plan==='extra' || plan==='starter' || plan==='value') return 350;
+    return 0;
+  }
   function computeCredit(plan, cat, value, isPixelTrade, phone, galaxyAny){
     if(plan==='valueplus_mobile') return 0;
     if(!plan || plan==='other') return 0;
@@ -3577,6 +3595,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(value!==null && !isNaN(value)) for(const t of ladder) if(value >= t.min){ c = t.credit; break; }
     if(isPixelCat(cat) && isPixelTrade) c = Math.max(c, pixelFloor(cat, plan));
     c = Math.max(c, samsungAnyConditionFloor(plan, phone, galaxyAny));
+    c = Math.max(c, appleAnyConditionFloor(plan, phone));
     return c;
   }
 
@@ -5733,8 +5752,20 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function models(){const m=new Map;tradeRows.forEach(r=>{const k=r.brand+'|'+r.model;if(!m.has(k))m.set(k,{brand:r.brand,model:r.model,rows:[]});m.get(k).rows.push(r)});return [...m.values()]}
  function renderSuggestions(){const q=search.value.trim().toLowerCase();if(!q){sugg.classList.remove('open');return}const hits=models().filter(x=>(x.brand+' '+x.model).toLowerCase().includes(q)).slice(0,60);sugg.innerHTML=hits.map((x,i)=>{const vals=x.rows.map(r=>Number(r.trade_value)).filter(Number.isFinite);const vr=vals.length?'$'+Math.min(...vals).toFixed(0)+(Math.min(...vals)!==Math.max(...vals)?'–$'+Math.max(...vals).toFixed(0):''):'verify';return '<div class="v4-suggestion" data-i="'+i+'"><b>'+x.brand+' '+x.model+'</b><span>'+vr+'</span></div>'}).join('');sugg.classList.toggle('open',!!hits.length);sugg.querySelectorAll('[data-i]').forEach(el=>el.onclick=()=>choose(hits[+el.dataset.i]))}
  function choose(x){selected=x;search.value=x.brand+' '+x.model;sugg.classList.remove('open');storage.innerHTML='';$('v4SimpleResult').classList.remove('show');x.rows.sort((a,b)=>a.storage.localeCompare(b.storage,undefined,{numeric:true})).forEach(r=>{const b=document.createElement('button');b.className='v4-chip';b.textContent=r.storage;b.onclick=()=>{storage.querySelectorAll('.v4-chip').forEach(c=>c.classList.remove('on'));b.classList.add('on');showResult(r)};storage.appendChild(b)});if(x.rows.length===1)storage.firstChild.click()}
- function bestOpps(r){const val=Number(r.trade_value)||0;const iphone=/iphone/i.test(r.model);const any14=iphone&&!/16e/i.test(r.model)&&(/iphone (1[4-9]|2\d)/i.test(r.model));const anyIphone=iphone;let apple=0,appleText='Good-condition value path';if(any14||val>=180){apple=1200;appleText='Potential Premium / Elite iPhone 18 Pro/Max top tier effective 9/12';}else if(any14||val>=130){apple=930;appleText='Potential Extra / Starter iPhone 18 Pro/Max or iPhone 17 tier effective 9/12';}else if(anyIphone||val>=35){apple=350;appleText='Potential eligible-unlimited iPhone tier effective 9/12';}
- const samsung=val>=95?1100:val>=35?900:0; const pixel=val>=200?1350:val>=95?1150:val>=35?1000:0;return [['Apple',apple,appleText],['Samsung',samsung,'Best current opportunity based on trade value; qualifying any-condition Galaxy rules may improve eligibility.'],['Pixel',pixel,'Best current Pixel opportunity based on trade value; qualifying Pixel trade rules may improve eligibility.']]}
+ function bestOpps(r){
+  const val=Number(r.trade_value)||0, brand=String(r.brand||''), model=String(r.model||'');
+  const iphone=/iphone/i.test(model), any14=iphone&&!/16e/i.test(model)&&(/iphone\s*(1[4-9]|2\d)/i.test(model));
+  let apple=0,appleText='Good-condition value path';
+  if(any14||val>=180){apple=1200;appleText='Up to $1,200 on Premium for iPhone 18 Pro/Max; iPhone 14+ qualifies in any condition.'}
+  else if(val>=130){apple=930;appleText='Up to $930 on Premium / Extra / Starter for iPhone 18 Pro/Max or iPhone 17.'}
+  else if(iphone||val>=35){apple=350;appleText='Up to $350 on an eligible unlimited plan; any iPhone qualifies in any condition.'}
+  const galaxy=/samsung/i.test(brand), highGalaxy=galaxy&&(/Galaxy S(2[2-9]|[3-9]\d)/i.test(model)||/Z Flip(4|5|6|7|8)/i.test(model)||/Z Fold(3|4|5|6|7|8)/i.test(model)), baseGalaxy=galaxy&&(/Galaxy S(1[0-9]|2[0-9])/i.test(model)||/Note\s*10/i.test(model)||/Z Flip(3|4|5|6|7|8)/i.test(model)||/Z Fold(3|4|5|6|7|8)/i.test(model));
+  let samsung=val>=290?1900:val>=95?1100:val>=35?900:0;
+  if(highGalaxy) samsung=Math.max(samsung,1100); else if(baseGalaxy) samsung=Math.max(samsung,900);
+  const isPixel=/google/i.test(brand)||/pixel/i.test(model); let pixel=val>=200?1350:val>=95?1150:val>=35?1000:0; if(isPixel)pixel=Math.max(pixel,1150);
+  const moto=val>=95?1320:val>=35?1000:0;
+  return [['Apple',apple,appleText],['Samsung',samsung,highGalaxy||baseGalaxy?'Qualifying Galaxy any-condition path included.':'Best current Samsung opportunity from trade value.'],['Pixel',pixel,isPixel?'Any Google Pixel qualifies for the Pixel 11 Pro any-condition offer.':'Best current Pixel opportunity from trade value.'],['Motorola',moto,'Razr Ultra: up to $1,320 at $95+ TIV or $1,000 at $35-$94.']]
+ }
  function showResult(r){$('v4RawValue').textContent='$'+Number(r.trade_value||0).toFixed(0);$('v4SelectedTrade').textContent=r.brand+' '+r.model+' · '+r.storage;$('v4Opps').innerHTML=bestOpps(r).map(o=>'<div class="v4-opp"><div><b>'+o[0]+'</b><p>'+o[2]+'</p></div><div class="v4-credit">'+(o[1]?'Up to $'+o[1].toLocaleString():'—')+'</div></div>').join('');$('v4SimpleResult').classList.add('show');$('v4BuildQuote').onclick=()=>{go('trade');setTimeout(()=>{const inp=$('tradeDeviceSearch');if(inp){inp.value=r.brand+' '+r.model;inp.dispatchEvent(new Event('input',{bubbles:true}))}},100)}}
 
  search.addEventListener('input',renderSuggestions);search.addEventListener('focus',renderSuggestions);
@@ -5755,12 +5786,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  ]).then(([a,b,c,d,e,f,g,h])=>{piSellable=a||[];piPromos=b||[];piPromoDevices=c||[];piPromoPlans=d||[];piTiers=e||[];piSpecial=f||[];piPlanGroups=g||[];piTieredPrices=h||[]}).catch(()=>{});
 
  const PI_LADDERS={
-   premium:{iphonePro:[[290,1100],[130,700],[35,350]],iphoneBase:[[130,700],[35,350]],iphoneAir:[[130,700]],samsung:[[95,1100],[35,900]],s26base:[[35,900]],fold8:[[290,1900],[95,1000],[35,500]],flip8:[[95,1000],[35,500]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[[200,1250],[35,1050]],pixelPro:[[35,1050]],razr:[[95,1320],[35,1000]]},
-   extra:null,
-   starter:{iphonePro:[[290,830],[130,700],[35,350]],iphoneBase:[[290,830],[130,700],[35,350]],iphoneAir:[[290,830]],samsung:[[35,900]],s26base:[[35,900]],fold8:[[95,1000],[35,500]],flip8:[[95,1000],[35,500]],pixel11XL:[[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[[35,1050]],pixelPro:[[35,1050]],razr:[[35,1000]]},
-   value:{iphonePro:[[130,500],[35,350]],iphoneBase:[[130,500],[35,350]],iphoneAir:[[35,500]],samsung:[[35,500]],s26base:[[35,500]],fold8:[[35,500]],flip8:[[35,500]],pixel11XL:[[35,500]],pixel11Pro:[[35,500]],pixelXL:[[35,500]],pixelPro:[[35,500]],razr:[[35,500]]}
+   premium:{iphonePro:[[180,1200],[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],samsung:[[95,1100],[35,900]],s26base:[[35,900]],fold8:[[290,1900],[95,1000],[35,500]],flip8:[[95,1000],[35,500]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[],pixelPro:[],razr:[[95,1320],[35,1000]]},
+   extra:{iphonePro:[[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],samsung:[[95,1100],[35,900]],s26base:[[35,900]],fold8:[[95,1000],[35,500]],flip8:[[95,1000],[35,500]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[],pixelPro:[],razr:[[95,1320],[35,1000]]},
+   starter:{iphonePro:[[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],samsung:[[35,900]],s26base:[[35,900]],fold8:[[95,1000],[35,500]],flip8:[[95,1000],[35,500]],pixel11XL:[[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[],pixelPro:[],razr:[[35,1000]]},
+   value:{iphonePro:[[130,500],[35,350]],iphoneBase:[[130,500],[35,350]],iphoneAir:[],samsung:[[35,500]],s26base:[[35,500]],fold8:[[35,500]],flip8:[[35,500]],pixel11XL:[[35,500]],pixel11Pro:[[35,500]],pixelXL:[],pixelPro:[],razr:[[35,500]]}
  };
- PI_LADDERS.extra=JSON.parse(JSON.stringify(PI_LADDERS.premium));
 
  const piNorm=x=>String(x||'').toLowerCase().replace(/apple|samsung|galaxy|google/g,'').replace(/[^a-z0-9]+/g,' ').trim();
  const piMoney=n=>'$'+Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2});
@@ -5774,10 +5804,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function piTradeMatch(q,storage){
    if(!q)return null;
    const nq=piNorm(q);
-   let candidates=tradeRows.filter(r=>piNorm(r.model).includes(nq)||nq.includes(piNorm(r.model)));
+   let candidates=tradeRows.filter(r=>piNorm(r.model)===nq);
+   if(!candidates.length)candidates=tradeRows.filter(r=>piNorm(r.model).includes(nq)||nq.includes(piNorm(r.model)));
    if(!candidates.length){const b=piBestMatch(q,tradeRows,'model');return b}
    if(storage){const exact=candidates.find(r=>piNorm(r.storage)===piNorm(storage));if(exact)return exact}
-   return candidates.sort((a,b)=>Number(b.trade_value)-Number(a.trade_value))[0];
+   return candidates.sort((a,b)=>piStorageNum(a.storage)-piStorageNum(b.storage))[0];
  }
  function piDeviceMatches(q){
    if(!q)return [];
@@ -5844,7 +5875,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    const any14=piIsAnyConditionIphone14Plus(trade);
    if(plan==='premium'){
      if(any14 || val>=180) return 1200;
-     if(val>=130) return 700;
+     if(val>=130) return 930;
      if(val>=35) return 350;
    }
    if(plan==='extra' || plan==='starter'){
@@ -5856,6 +5887,39 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      if(val>=35) return 350;
    }
    return 0;
+ }
+ function piGalaxyLevel(trade){
+   if(!trade || String(trade.brand||'').toLowerCase()!=='samsung') return null;
+   const m=String(trade.model||'');
+   if(/Galaxy S(2[2-9]|[3-9]\d)/i.test(m)||/Z Flip(4|5|6|7|8)/i.test(m)||/Z Fold(3|4|5|6|7|8)/i.test(m)) return 'high';
+   if(/Galaxy S(1[0-9]|2[0-9])/i.test(m)||/Note\s*10/i.test(m)||/Z Flip3/i.test(m)||/Z Fold3/i.test(m)) return 'base';
+   return null;
+ }
+ function piSpecialCredit(plan,target,trade){
+   if(!plan||!target||!trade)return 0;
+   const key=String(target.device_key||''), cat=target.promo_category_key||null, brand=String(trade.brand||'').toLowerCase(), model=String(trade.model||'');
+   let best=0;
+   piSpecial.forEach(r=>{
+     if(r.active===false)return;
+     if(r.plan_group_key && r.plan_group_key!==plan)return;
+     if(r.promo_category_key && r.promo_category_key!==cat)return;
+     if(r.device_key_prefix && !key.startsWith(String(r.device_key_prefix)))return;
+     let ok=false;
+     if(r.qualifier_type==='any_iphone'){
+       if(brand==='apple'&&/iphone/i.test(model)){
+         if(r.qualifier_level==='any_year_any_condition')ok=true;
+         else if(r.qualifier_level==='iphone14_plus_excluding_16e'){
+           const hit=model.match(/iPhone\s*(\d+)/i);ok=!!hit&&Number(hit[1])>=14&&!/16e/i.test(model);
+         }
+       }
+     }else if(r.qualifier_type==='any_pixel'){
+       ok=(brand==='google'||/pixel/i.test(model));
+     }else if(r.qualifier_type==='any_galaxy'){
+       const level=piGalaxyLevel(trade); ok=r.qualifier_level==='high'?level==='high':r.qualifier_level==='base'?(level==='base'||level==='high'):false;
+     }
+     if(ok)best=Math.max(best,Number(r.credit_amount||0));
+   });
+   return best;
  }
  function piActiveTieredRowsForKey(key){
    const now=new Date();
@@ -6239,7 +6303,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    }else{
      const fallback=(plan&&cat&&val!=null)?piFallbackCredit(plan,cat,val):0;
      credit=dbTier?Number(dbTier.credit_amount||0):fallback;
-     if(!dbTier && fallback) source='current GTT fallback ladder';
+     const special=piSpecialCredit(plan,target,trade);
+     if(special>credit){credit=special;source='Supabase any-condition / special rule';}
+     else if(!dbTier && fallback) source='current GTT fallback ladder';
    }
 
    let title='Need a little more information',body='I found the question, but I need a few details before GTT should commit to a promo.';
