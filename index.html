@@ -1319,6 +1319,35 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  #tradePage .plan-reference-title{color:#edf3f6!important}
 }
 
+
+/* ===== 4.0 launch cleanup: compact trade lookup + collapsible plan reference ===== */
+#tradePage .plan-reference-section{height:auto!important;min-height:0!important;overflow:hidden!important}
+#tradePage .plan-reference-summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:14px 16px;color:var(--v4-ink);user-select:none}
+#tradePage .plan-reference-summary::-webkit-details-marker{display:none}
+#tradePage .plan-reference-summary span:first-child{display:flex;flex-direction:column;gap:2px}
+#tradePage .plan-reference-summary b{font-size:13px}
+#tradePage .plan-reference-summary small{font-size:9.5px;color:var(--v4-muted);font-weight:650}
+#tradePage .plan-reference-chevron{font-size:18px;color:var(--v4-muted);transition:transform .18s ease}
+#tradePage .plan-reference-section[open] .plan-reference-chevron{transform:rotate(180deg)}
+#tradePage .plan-reference-body{padding:2px 16px 15px;border-top:1px solid var(--v4-line)}
+#tradePage #tradeCard .no-trade-row{margin-top:10px;padding:0;display:flex;align-items:center;gap:10px}
+#tradePage #tradeCard .no-trade-btn{min-width:88px;min-height:42px;padding:8px 12px;border-radius:11px}
+#tradePage #tradeCard .no-trade-copy{font-size:11px;line-height:1.35;color:var(--v4-muted)}
+#tradePage #tradeCard .trade-storage-row{margin:10px 0 0}
+#tradePage #tradeCard .trade-storage-row select{padding:10px 12px!important;border-radius:11px!important}
+#tradePage #tradeCard .tradewrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;margin-top:10px!important}
+#tradePage #tradeCard .tradewrap .dollar{min-width:0}
+#tradePage #tradeCard #trade{height:48px!important;font-size:20px!important;padding-top:8px!important;padding-bottom:8px!important}
+#tradePage #tradeCard .clearbtn{height:42px!important;padding:0 12px!important;white-space:nowrap}
+#tradePage #tradeCard .trade-db-status{margin:8px 2px 0;font-size:10.5px;line-height:1.4}
+#tradePage #tradeCard .compare-launch-wrap{margin-top:10px}
+#tradePage #tradeCard .compare-launch-btn{min-height:42px!important;padding:9px 12px!important;border-radius:11px!important;font-size:11px!important}
+#tradePage #tradeCard .condition-panel{margin-top:10px;padding:12px!important;border-radius:12px!important}
+#tradePage #tradeCard .condition-title{font-size:15px!important;margin-bottom:8px!important}
+#tradePage #tradeCard .condition-q{padding:9px 0!important}
+#tradePage #tradeCard .condition-q-title{font-size:12px!important;margin-bottom:7px!important}
+#tradePage #tradeCard .condition-buttons{display:flex!important;gap:7px!important}
+#tradePage #tradeCard .condition-buttons .chip{min-width:70px!important;padding:8px 12px!important}
 </style>
 
 <style id="promo-investigator-css">
@@ -1342,6 +1371,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 .pi-followopts{display:flex;gap:7px;flex-wrap:wrap}.pi-followbtn{border:1px solid var(--v4-line);background:var(--v4-card);color:var(--v4-ink);border-radius:11px;padding:9px 11px;font-weight:800;cursor:pointer}
 .pi-followrow{display:grid;grid-template-columns:1fr auto;gap:8px}.pi-followrow input{width:100%;border:1px solid var(--v4-line);border-radius:11px;background:var(--v4-card);color:var(--v4-ink);padding:10px;font:inherit}
 .pi-dbnote{margin-top:8px;font-size:10px;color:var(--v4-muted)}
+.pi-capabilities{margin:9px 1px 2px;color:var(--v4-muted);font-size:10px;line-height:1.45}.pi-capabilities b{color:var(--v4-ink)}
+.pi-examples{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.pi-example{max-width:100%;white-space:normal;text-align:left}
 .pi-memorybar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding:9px 11px;border:1px solid var(--v4-line);border-radius:12px;color:var(--v4-muted);font-size:10px}
 .pi-memorybar b{color:var(--v4-ink);font-size:11px}.pi-startover{border:1px solid var(--v4-line);background:transparent;color:var(--v4-muted);border-radius:999px;padding:6px 9px;font-size:10px;font-weight:800;cursor:pointer}
 .pi-thread{display:none;margin-top:12px}.pi-thread.show{display:block}.pi-threadturn{border-top:1px solid var(--v4-line);padding:9px 0}.pi-threadturn:first-child{border-top:0}.pi-threadq{font-size:11px;font-weight:800}.pi-threada{font-size:10px;color:var(--v4-muted);margin-top:3px;line-height:1.4}
@@ -1412,11 +1443,15 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 <div class="pi-box">
   <h3>Ask GTT</h3>
   <p>Shorthand is fine. Missing information should be called out instead of guessed.</p>
-  <textarea id="piAsk" class="pi-ask" placeholder="Example: S22 on Extra upgrading to S26 Ultra"></textarea>
+  <textarea id="piAsk" class="pi-ask" placeholder="Ask about a customer, trade value, promo, tiered phone, plan, or follow up on the last answer…"></textarea>
+  <div class="pi-capabilities"><b>Try anything:</b> customer scenarios · highest promos · tiered device lists · trade values · plan changes · follow-up questions</div>
   <div class="pi-examples">
+    <button class="pi-example" type="button">What are the tiered iPhones?</button>
+    <button class="pi-example" type="button">What is the highest trade-in promo for iPhones?</button>
+    <button class="pi-example" type="button">iPhone 12 on Value upgrading to a 17e</button>
     <button class="pi-example" type="button">S22 on Extra upgrading to S26 Ultra</button>
-    <button class="pi-example" type="button">iPhone 14 Pro on Starter getting an iPhone 17</button>
-    <button class="pi-example" type="button">What can a 13 Pro Max on Premium get toward a 17 Pro Max?</button>
+    <button class="pi-example" type="button">13 Pro Max on Premium getting an 18 Pro Max</button>
+    <button class="pi-example" type="button">What if they're on Starter instead?</button>
   </div>
   <div class="pi-memorybar"><span><b>Conversation memory on</b> · follow-ups keep the current customer/promo context</span><button id="piStartOverTop" class="pi-startover" type="button">Start Over</button></div>
   <button id="piRun" class="pi-btn pi-run" type="button">Ask GTT →</button>
@@ -1518,7 +1553,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
           </div>
         </div>
 
-        <a class="plan-reference-link" href="#planReference">Not sure which group? See which plan goes where →</a>
+        <a class="plan-reference-link" href="#planReference" id="planReferenceJump">Not sure which group? See which plan goes where →</a>
 
         <div class="chips" id="plans">
           <button class="chip" data-plan="premium" aria-pressed="false">Premium</button>
@@ -1659,9 +1694,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         <p id="nextUpConditionWarning" style="margin-top:10px;padding:10px 12px;border-radius:10px;background:#fff1f1;border:1px solid #f2b8b8;color:#991b1b;font-weight:800;font-size:13px;display:none;">Poor condition selected — Next Up / Next Up Anytime cannot be used.</p>
       </section>
 
-      <section id="planReference" class="card plan-reference-section" style="padding:14px 16px; scroll-margin-top:90px;">
-        <div class="plan-reference-title">Which plan goes where?</div>
-        <div style="font-size:12px; color:var(--ink); margin-top:12px; line-height:1.45;">
+      <details id="planReference" class="card plan-reference-section" style="padding:0; scroll-margin-top:90px;">
+        <summary class="plan-reference-summary"><span><b>Which plan goes where?</b><small>Consumer · CRU · FirstNet · legacy reference</small></span><span class="plan-reference-chevron">⌄</span></summary>
+        <div class="plan-reference-body" style="font-size:12px; color:var(--ink); line-height:1.45;">
           <div style="margin:0 0 12px;">
             <strong>Premium</strong>
             <div class="plan-ref-grid">
@@ -1701,7 +1736,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
           <p class="plan-ref-compact" style="margin-top:8px;"><strong style="color:#6b7b8c">Not eligible / rerate recommended</strong><br>Value Plus VL · Mobile Share / Value / Advantage / Flex / Plus / Data · Nation 450 / 900 / 1350 · FamilyTalk · Individual Nation · Nation w/ Rollover · Senior Nation · Unity · Grandfathered iPhone Unlimited Data · Business Mobile Share · Business Pooled Nation · Business Nation · BusinessTalk</p>
           <p style="margin:10px 0 0; color:var(--slate); font-size:11px;">Always verify eligible and non-eligible plans in CCKM before quoting.</p>
         </div>
-      </section>
+      </details>
 
 
 
@@ -2377,7 +2412,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(Array.isArray(phone.tieredPriceRows)) return currentTieredRowsFor(phone).length > 0;
     if(isS26Base(phone)) return isS26TieredActive();
     if(isS25Edge(phone)) return isSamsung814TieredActive();
-    return !!(phone.tieredOffer && !(isIphoneAir(phone) && isAirTradePromoActive()));
+    return !!phone.tieredOffer;
   }
   const S26_OFFER_END = new Date(2026, 7, 14, 0, 0, 0, 0); // old trade/Next Up promo active through 8/13
   const S26_TIERED_START = new Date(2026, 7, 14, 0, 0, 0, 0); // new tiered offer starts 8/14
@@ -2453,25 +2488,29 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   // Phone catalog: active trade-in or tiered-promo devices only. tieredMonthlyNew / Upgrade where known.
   // retail = full MSRP for that exact storage SKU. Verified against Apple/Samsung/Google + AT&T retail pages, June 2026.
   const PHONES = [
+    // iPhone 18 Pro / Pro Max — preorder 9/12
+    { id:'iphone18pro', name:'iPhone 18 Pro', storage:'256GB', retail:1199.99, tieredOffer:false, promoCategory:'iphonePro' },
+    { id:'iphone18promax', name:'iPhone 18 Pro Max', storage:'256GB', retail:1299.99, tieredOffer:false, promoCategory:'iphonePro' },
+
     // iPhone 17 Pro Max (256/512/1TB/2TB) — category iphonePro
-    { id:'ip17pm', name:'iPhone 17 Pro Max', storage:'256GB', retail:1199.99, tieredOffer:false },
-    { id:'ip17pm-512', name:'iPhone 17 Pro Max', storage:'512GB', retail:1399.99, tieredOffer:false },
-    { id:'ip17pm-1tb', name:'iPhone 17 Pro Max', storage:'1TB', retail:1599.99, tieredOffer:false },
-    { id:'ip17pm-2tb', name:'iPhone 17 Pro Max', storage:'2TB', retail:1999.99, tieredOffer:false },
+    { id:'ip17pm', name:'iPhone 17 Pro Max', storage:'256GB', retail:1199.99, tieredOffer:true, tieredMonthlyNew:14.99, tieredMonthlyUpgrade:19.99 },
+    { id:'ip17pm-512', name:'iPhone 17 Pro Max', storage:'512GB', retail:1399.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:25.99 },
+    { id:'ip17pm-1tb', name:'iPhone 17 Pro Max', storage:'1TB', retail:1599.99, tieredOffer:true, tieredMonthlyNew:26.99, tieredMonthlyUpgrade:31.99 },
+    { id:'ip17pm-2tb', name:'iPhone 17 Pro Max', storage:'2TB', retail:1999.99, tieredOffer:true, tieredMonthlyNew:32.99, tieredMonthlyUpgrade:37.99 },
 
     // iPhone 17 Pro (256/512/1TB) — category iphonePro
-    { id:'ip17p', name:'iPhone 17 Pro', storage:'256GB', retail:1099.99, tieredOffer:false },
-    { id:'ip17p-512', name:'iPhone 17 Pro', storage:'512GB', retail:1299.99, tieredOffer:false },
-    { id:'ip17p-1tb', name:'iPhone 17 Pro', storage:'1TB', retail:1499.99, tieredOffer:false },
+    { id:'ip17p', name:'iPhone 17 Pro', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:9.99, tieredMonthlyUpgrade:14.99 },
+    { id:'ip17p-512', name:'iPhone 17 Pro', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:20.99 },
+    { id:'ip17p-1tb', name:'iPhone 17 Pro', storage:'1TB', retail:1499.99, tieredOffer:true, tieredMonthlyNew:21.99, tieredMonthlyUpgrade:26.99 },
 
     // iPhone 17 (256/512) — category iphoneBase
-    { id:'ip17', name:'iPhone 17', storage:'256GB', retail:829.99, tieredOffer:false },
+    { id:'ip17', name:'iPhone 17', storage:'256GB', retail:929.99, tieredOffer:false },
     { id:'ip17-512', name:'iPhone 17', storage:'512GB', retail:1029.99, tieredOffer:false },
 
     // iPhone Air (256/512/1TB) — category iphoneBase
-    { id:'ipair', name:'iPhone Air', storage:'256GB', retail:999.99, tieredOffer:true, tieredMonthlyNew:9.99, tieredMonthlyUpgrade:9.99, promoCategory:'iphoneAir' },
-    { id:'ipair-512', name:'iPhone Air', storage:'512GB', retail:1199.99, tieredOffer:true, tieredMonthlyNew:14.99, tieredMonthlyUpgrade:14.99, promoCategory:'iphoneAir' },
-    { id:'ipair-1tb', name:'iPhone Air', storage:'1TB', retail:1399.99, tieredOffer:true, tieredMonthlyNew:19.99, tieredMonthlyUpgrade:19.99, promoCategory:'iphoneAir' },
+    { id:'ipair', name:'iPhone Air', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:9.99, promoCategory:'iphoneAir' },
+    { id:'ipair-512', name:'iPhone Air', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:15.99, promoCategory:'iphoneAir' },
+    { id:'ipair-1tb', name:'iPhone Air', storage:'1TB', retail:1499.99, tieredOffer:true, tieredMonthlyNew:17.99, tieredMonthlyUpgrade:21.99, promoCategory:'iphoneAir' },
 
     // Galaxy S26 Ultra (256/512/1TB) — category samsung
     { id:'s26u', name:'Galaxy S26 Ultra', storage:'256GB', retail:1299.99, tieredOffer:false },
@@ -2520,8 +2559,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     // Searchable tiered-offer devices confirmed against the 7/27/2026 eligible-device list.
     // iPhone 17e — Updated 7/2/2026: both new and upgrade now flat per storage tier
     // 256GB $5.99 (was $0.99 new / $5.99 upgrade), 512GB $11.99 (was $6.99 new / $11.99 upgrade)
-    { id:'i17e-256', name:'iPhone 17e', storage:'256GB', retail:599.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:5.99 },
-    { id:'i17e-512', name:'iPhone 17e', storage:'512GB', retail:799.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:11.99 },
+    { id:'i17e-256', name:'iPhone 17e', storage:'256GB', retail:699.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:5.99 },
+    { id:'i17e-512', name:'iPhone 17e', storage:'512GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:11.99 },
 
     // S25 FE: New Line only — no upgrade tiered price
     { id:'s25fe', name:'Galaxy S25 FE', storage:'128GB', retail:649.99, tieredOffer:true, tieredMonthlyNew:13.99, tieredMonthlyUpgrade:null },
@@ -2826,6 +2865,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       console.warn('Supabase What’s New unavailable; using embedded promo cards.', err);
     }
   }
+  const planReferenceJump = el('planReferenceJump'), planReference = el('planReference');
+  if(planReferenceJump && planReference){
+    planReferenceJump.addEventListener('click', e=>{e.preventDefault();planReference.open=true;planReference.scrollIntoView({behavior:'smooth',block:'start'});});
+  }
   const planSearch = el('planSearch'), planSuggestions = el('planSuggestions'), planSuggestionsList = el('planSuggestionsList');
   const phoneSearch = el('phoneSearch'), phoneSuggestions = el('phoneSuggestions'), phoneSuggestionsList = el('phoneSuggestionsList');
   const phonesQuick = el('phonesQuick');
@@ -2833,7 +2876,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   const amountEl = el('amount'), detailEl = el('detail'), summaryEl = el('summaryText');
   const pixelChk = el('pixelChk'), planHelp = el('planHelp'), pixelToggleEl = el('pixelToggle'), galaxyAnyToggleEl = el('galaxyAnyToggle'), galaxyAnySelect = el('galaxyAnySelect');
 
-  const VISIBLE_PHONE_IDS = ['ip17','ipair','ip17p','ip17pm','i17e-256','s26-256','s26p','s26u','zflip8','zfold8','zfold8u','a17','a37','p11-256','p11pro-256','p11xl-256'];
+  const VISIBLE_PHONE_IDS = ['iphone18pro','iphone18promax','ip17','ip17p','ip17pm','ipair','i17e-256','s26-256','s26p','s26u','zflip8','zfold8','zfold8u','p11-256','p11pro-256','p11xl-256'];
 
   const noTradeBtn = el('noTradeBtn');
 
