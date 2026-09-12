@@ -1505,7 +1505,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 <section id="v4Investigator" class="v4-page v4-section">
 <button class="v4-back" data-v4go="beta">← Beta Tools</button>
 <h2>Promo Investigator</h2>
-<p class="v4-sectionlead">Ask a promo question the way you would say it to another rep. GTT AI interprets the question securely; live device data and promo rules still determine the answer.</p>
+<p class="v4-sectionlead">Ask GTT anything about promos, plans, trade values, tiered phones, or a customer scenario. AI figures out what you mean, GTT checks the live rules, then AI explains the verified answer.</p>
 
 <div class="pi-box">
   <h3>Ask GTT</h3>
@@ -1545,7 +1545,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 </section>
 
 <section id="v4Beta" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Beta Tools</h2><p class="v4-sectionlead">Useful extras without crowding the main quote.</p><div class="v4-beta-list">
-<div class="v4-beta-link" data-v4go="investigator"><div><b>Promo Investigator</b><span>Ask a promo question in normal rep language. AI interprets; GTT checks the rules.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="compare"><div><b>Phone Comparison</b><span>Compare up to three phones using the current quote context.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="history"><div><b>Recent History</b><span>Reload recent completed calculations.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="faq"><div><b>FAQ / Trade Help</b><span>Trade-ins, credits, plans and Next Up reference.</span></div><i>›</i></div></div></section>
+<div class="v4-beta-link" data-v4go="investigator"><div><b>Promo Investigator</b><span>Ask almost anything in normal rep language. AI asks GTT for the live facts, then explains the verified answer.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="compare"><div><b>Phone Comparison</b><span>Compare up to three phones using the current quote context.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="history"><div><b>Recent History</b><span>Reload recent completed calculations.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="faq"><div><b>FAQ / Trade Help</b><span>Trade-ins, credits, plans and Next Up reference.</span></div><i>›</i></div></div></section>
 </div>
 <nav class="v4-bottom"><div class="v4-bottom-inner"><button class="v4-navbtn active" data-v4go="home"><span class="v4-ico">⌂</span>Home</button><button class="v4-navbtn" data-v4go="trade"><span class="v4-ico">▤</span>Trade Tool</button><button class="v4-navbtn" data-v4go="simple"><span class="v4-ico">⌕</span>Simple Tool</button><button class="v4-navbtn" data-v4more><span class="v4-ico">•••</span>More</button></div></nav>
 <div id="v4More" class="v4-more-scrim"><div class="v4-more-sheet"><div class="v4-grab"></div><div class="v4-morehead"><h3>More</h3><button id="v4MoreClose" class="v4-close">×</button></div><div class="v4-morelink" data-v4admin><div><strong>Admin</strong><small>Manage promotions, devices and app data.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="news"><div><strong>What's New</strong><small>iPhone launch, 9/12 promos and S26 FE.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="beta"><div><strong>Beta Tools</strong><small>Promo Investigator, comparison, history and trade help.</small></div><i>›</i></div></div></div>
@@ -5771,7 +5771,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  search.addEventListener('input',renderSuggestions);search.addEventListener('focus',renderSuggestions);
 
  // Promo Investigator beta: Gemini parses rep language; Supabase promo tables + GTT rules decide the answer.
- let piSellable=[], piPromos=[], piPromoDevices=[], piPromoPlans=[], piTiers=[], piSpecial=[], piPlanGroups=[], piTieredPrices=[];
+ let piSellable=[], piPromos=[], piPromoDevices=[], piPromoPlans=[], piTiers=[], piSpecial=[], piPlanGroups=[], piTieredPrices=[], piPlans=[];
  const piHeaders={apikey:KEY,Authorization:'Bearer '+KEY};
  const piGet=(path)=>fetch(SB+'/rest/v1/'+path,{headers:piHeaders,cache:'no-store'}).then(r=>r.ok?r.json():[]);
  Promise.all([
@@ -5782,8 +5782,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    piGet('promotion_tiers?select=id,promotion_id,plan_group_key,min_trade_value,credit_amount,qualifier_type,qualifier_detail,sort_order,active&active=eq.true&limit=3000'),
    piGet('special_trade_rules?select=id,rule_key,name,qualifier_type,qualifier_level,promo_category_key,device_key_prefix,plan_group_key,credit_amount,active,notes&active=eq.true&limit=1500'),
    piGet('plan_groups?select=group_key,display_name,promo_eligible,active&active=eq.true&limit=100'),
-   piGet('tiered_prices?select=device_key,activation_type,monthly_price,months,active,starts_at,ends_at,eligible_segments,updated_at&active=eq.true&limit=2000')
- ]).then(([a,b,c,d,e,f,g,h])=>{piSellable=a||[];piPromos=b||[];piPromoDevices=c||[];piPromoPlans=d||[];piTiers=e||[];piSpecial=f||[];piPlanGroups=g||[];piTieredPrices=h||[]}).catch(()=>{});
+   piGet('tiered_prices?select=device_key,activation_type,monthly_price,months,active,starts_at,ends_at,eligible_segments,updated_at&active=eq.true&limit=2000'),
+   piGet('plans?select=name,plan_group_key,segment,search_aliases,is_current,active,sort_order,notes&active=eq.true&limit=1000')
+ ]).then(([a,b,c,d,e,f,g,h,i])=>{piSellable=a||[];piPromos=b||[];piPromoDevices=c||[];piPromoPlans=d||[];piTiers=e||[];piSpecial=f||[];piPlanGroups=g||[];piTieredPrices=h||[];piPlans=i||[]}).catch(()=>{});
 
  const PI_LADDERS={
    premium:{iphonePro:[[180,1200],[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],samsung:[[95,1100],[35,900]],s26base:[[35,900]],fold8:[[290,1900],[95,1000],[35,500]],flip8:[[95,1000],[35,500]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[],pixelPro:[],razr:[[95,1320],[35,1000]]},
@@ -6238,6 +6239,65 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    if(!j?.state)throw new Error('GTT AI returned no parsed state.');
    return j.state;
  }
+
+ async function piRoute(text){
+   const r=await fetch(PI_AI_FUNCTION,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify({task:'promo_route',message:text,state:piState.d||null,history:piConversation.slice(-6)})});
+   const j=await r.json().catch(()=>({}));
+   if(!r.ok)throw new Error(j?.error||'GTT AI router is unavailable.');
+   return j.route||{intent:'general',needs_quote_parse:false};
+ }
+ async function piSmartAnswer(text,verified){
+   const r=await fetch(PI_AI_FUNCTION,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify({task:'promo_answer',message:text,verified,history:piConversation.slice(-6)})});
+   const j=await r.json().catch(()=>({}));
+   if(!r.ok)throw new Error(j?.error||'GTT AI answer service is unavailable.');
+   return j;
+ }
+ function piCurrentPromos(){
+   const now=new Date();
+   return piPromos.filter(p=>{
+     if(p.active===false)return false;
+     const st=piDate(p.starts_at),en=piDate(p.ends_at);
+     return (!st||st<=now)&&(!en||en>now);
+   });
+ }
+ function piBrandMatchText(text,brand){
+   if(!brand)return true;const h=String(text||'').toLowerCase();
+   if(brand==='apple')return /iphone|apple/.test(h);
+   if(brand==='samsung')return /samsung|galaxy|fold|flip|s\d{2}/.test(h);
+   if(brand==='google')return /pixel|google/.test(h);
+   if(brand==='motorola')return /motorola|moto|razr/.test(h);
+   return true;
+ }
+ function piVerifiedSnapshot(route,d=null,x=null){
+   const brandRaw=String(route?.brand||'').toLowerCase();
+   const brand=/iphone|apple/.test(brandRaw)?'apple':/samsung|galaxy/.test(brandRaw)?'samsung':/pixel|google/.test(brandRaw)?'google':/motorola|moto|razr/.test(brandRaw)?'motorola':'';
+   const planKey=piPlan(route?.plan||d?.plan||'');
+   const current=piCurrentPromos();
+   const promos=current.filter(p=>piBrandMatchText((p.name||'')+' '+(p.promo_key||'')+' '+(p.promo_category_key||''),brand)).slice(0,80).map(p=>({
+     id:p.id,name:p.name,promo_key:p.promo_key,promo_category_key:p.promo_category_key,notes:p.notes||'',
+     devices:piPromoDevices.filter(m=>Number(m.promotion_id)===Number(p.id)).map(m=>m.device_key).slice(0,30),
+     plans:[...new Set(piPromoPlans.filter(m=>Number(m.promotion_id)===Number(p.id)).map(m=>m.plan_group_key))],
+     tiers:piTiers.filter(t=>Number(t.promotion_id)===Number(p.id)&&(!planKey||t.plan_group_key===planKey)).map(t=>({plan:t.plan_group_key,min_trade_value:Number(t.min_trade_value||0),credit_amount:Number(t.credit_amount||0),qualifier_type:t.qualifier_type||'',qualifier_detail:t.qualifier_detail||''}))
+   }));
+   const specials=piSpecial.filter(r=>(!planKey||!r.plan_group_key||r.plan_group_key===planKey)&&piBrandMatchText((r.name||'')+' '+(r.rule_key||'')+' '+(r.promo_category_key||'')+' '+(r.device_key_prefix||''),brand)).slice(0,120).map(r=>({name:r.name,rule_key:r.rule_key,qualifier_type:r.qualifier_type,qualifier_level:r.qualifier_level,promo_category_key:r.promo_category_key,device_key_prefix:r.device_key_prefix,plan_group_key:r.plan_group_key,credit_amount:Number(r.credit_amount||0),notes:r.notes||''}));
+   const tiered=piTieredCatalog(brand).slice(0,80);
+   const sellable=piSellable.filter(d=>d.active!==false&&d.sellable!==false&&piBrandMatchText((d.name||'')+' '+(d.device_key||''),brand)).slice(0,120).map(d=>({device_key:d.device_key,name:d.name,storage:d.storage,retail_price:Number(d.retail_price||0),promo_category_key:d.promo_category_key||''}));
+   const plans=piPlans.filter(p=>!route?.plan||String(p.name||'').toLowerCase().includes(String(route.plan).toLowerCase())||String(p.search_aliases||'').toLowerCase().includes(String(route.plan).toLowerCase())||p.plan_group_key===planKey).slice(0,120).map(p=>({name:p.name,plan_group_key:p.plan_group_key,segment:p.segment,is_current:p.is_current,aliases:p.search_aliases||''}));
+   let trade=null;
+   const tq=route?.trade_device||d?.trade_device||'';
+   if(tq){const t=piTradeMatch(tq,d?.trade_storage||'');if(t)trade={brand:t.brand,model:t.model,storage:t.storage,trade_value:Number(t.trade_value||0)}}
+   let target=null;
+   const targetQ=route?.target_device||d?.target_device||'';
+   if(targetQ){const t=piDeviceMatch(targetQ);if(t)target={device_key:t.device_key,name:t.name,storage:t.storage,retail_price:Number(t.retail_price||0),promo_category_key:t.promo_category_key}}
+   const quote=x?{title:x.title,body:x.body,plan:x.plan,trade_value:x.val,credit:x.credit,tiered:!!x.tiered?.isTiered,target:target,trade:trade,next_up:x.nextUp?.label||'',needs_more:!!piNeedsQuestion(d,x)}:null;
+   return {route,quote,trade,target,plan_key:planKey,promotions:promos,special_rules:specials,tiered_offers:tiered,sellable_devices:sellable,plan_matches:plans,source:'Live GTT/Supabase data plus deterministic GTT quote logic'};
+ }
+ function piRenderSmartGeneric(answer,verified){
+   $('piFacts').innerHTML=[piFact('Question type',verified?.route?.intent||'GTT lookup'),piFact('Plan',verified?.plan_key||verified?.route?.plan||''),piFact('Device',verified?.target?.name||verified?.route?.target_device||''),piFact('Trade',verified?.trade?(verified.trade.brand+' '+verified.trade.model):verified?.route?.trade_device||'')].join('');
+   $('piAnswer').innerHTML='<small>GTT verified answer</small><div class="pi-credit" style="font-size:18px">'+piEsc(answer?.answer||'GTT checked the current data.')+'</div><div class="pi-dbnote">Source: live GTT / Supabase data · answer phrased by AI, promo facts supplied by GTT</div>';
+   $('piMissing').innerHTML=answer?.needs_followup?'<b>'+piEsc(answer.followup||'GTT needs one more detail.')+'</b>':'<b>Answered from the current GTT data.</b>';
+   $('piResult').classList.add('show');$('piBuild').style.display='none';piResetFollow();
+ }
  function piEvaluate(d){
    const plan=piPlan(d.plan), trade=piTradeMatch(d.trade_device,d.trade_storage);
    const allTargetCandidates=piTargetCandidates(d.target_device);
@@ -6481,83 +6541,40 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  $('piRun').onclick=async()=>{
    const text=$('piAsk').value.trim();
    if(!text){$('piStatus').textContent='Ask a promo question first.';return}
-   let summaryIntent=piSummaryIntent(text);
-   if(!summaryIntent && piState.d?._summary && piState.d.summary_type==='highest_trade_promo'){
-     const q=text.toLowerCase();
-     let brand=piState.d.summary_brand||'';
-     if(/\biphone|apple\b/.test(q))brand='apple';
-     else if(/\bsamsung|galaxy\b/.test(q))brand='samsung';
-     else if(/\bpixel|google\b/.test(q))brand='google';
-     else if(/\bmotorola|moto|razr\b/.test(q))brand='motorola';
-
-     if(/\b(current|right now|live|today|highest|best|max|maximum|biggest)\b/.test(q)){
-       summaryIntent={
-         type:'highest_trade_promo',
-         brand,
-         currentOnly:/\b(current|right now|live|today)\b/.test(q)
-       };
-     }
-   }
-   if(summaryIntent){
-     $('piRun').disabled=true;$('piRun').textContent='Checking…';$('piStatus').textContent='Checking GTT promo data…';
-     try{
-       piRenderHighestTrade(summaryIntent,text);
-       $('piAsk').value='';
-       $('piResult').scrollIntoView({behavior:'smooth',block:'start'});
-     } finally{$('piRun').disabled=false;$('piRun').textContent='Ask GTT →'}
-     return;
-   }
-
-   let catalogIntent=piCatalogIntent(text);
-   if(!catalogIntent && piState.d?._catalog){
-     const q=text.toLowerCase();
-     let brand='';
-     if(q.includes('iphone')||q.includes('apple'))brand='apple';
-     else if(q.includes('samsung')||q.includes('galaxy'))brand='samsung';
-     else if(q.includes('pixel')||q.includes('google'))brand='google';
-     else if(q.includes('motorola')||q.includes('moto')||q.includes('razr'))brand='motorola';
-     if(brand)catalogIntent={type:'tiered_catalog',brand};
-   }
-   if(catalogIntent){
-     $('piRun').disabled=true;$('piRun').textContent='Checking…';$('piStatus').textContent='Checking live tiered offers…';
-     try{
-       piRenderCatalog(catalogIntent);
-       piConversation.push({q:text,a:'Tiered '+(catalogIntent.brand||'device')+' list'});
-       piConversation=piConversation.slice(-12);
-       piState.d={_catalog:true,catalog_brand:catalogIntent.brand||'',catalog_type:'tiered'};
-       piSaveMemory();piRenderThread();$('piAsk').value='';
-       $('piResult').scrollIntoView({behavior:'smooth',block:'start'});
-     } finally{$('piRun').disabled=false;$('piRun').textContent='Ask GTT →'}
-     return;
-   }
-   $('piRun').disabled=true;$('piRun').textContent='Investigating…';$('piStatus').textContent='GTT AI is translating the question. GTT is loading the promo database.';
+   $('piRun').disabled=true;$('piRun').textContent='Investigating…';$('piStatus').textContent='Understanding the question…';
    try{
+     const route=await piRoute(text);
      const prior=piState.d?JSON.parse(JSON.stringify(piState.d)):null;
-     const d=await piParse(text,prior);
-     d._raw=text;
+     const shouldParse=route?.needs_quote_parse!==false || route?.intent==='quote';
+     let d=prior,x=null;
+     if(shouldParse){
+       $('piStatus').textContent='GTT is checking the customer context and promo rules…';
+       d=await piParse(text,prior);
+       d._raw=text;
+       const financingMentioned=/(next\s*up|nua|legacy\s+next|financ|installment|balance|owe|owes|owed|paid)|%/i.test(text);
+       if(!prior && !financingMentioned){d.next_up='';d.paid_percent=null;}
+       piState.d=d;
+       x=piEvaluate(d);piState.x=x;
+     }
+     const verified=piVerifiedSnapshot(route,d,x);
+     $('piStatus').textContent='GTT checked the database. Writing the answer…';
+     const smart=await piSmartAnswer(text,verified);
 
-     // Broad database questions should never invent a customer target phone.
-     // If the rep did not name a specific device model, clear any target Gemini guessed.
-     const broadPromoQuestion=/\b(promo|promotion|offers?|trade[\s-]?in)\b/i.test(text);
-     const namedSpecificModel=/\biphone\s*(?:1[1-9]|[2-9]\d)(?:\s*(?:pro|max|plus|e|air|duo))?\b|\b(?:galaxy\s*)?s\d{2}(?:\s*(?:ultra|plus|\+|fe))?\b|\bpixel\s*\d+(?:\s*(?:pro|xl|a))?\b|\b(?:z\s*)?(?:fold|flip)\s*\d+\b|\brazr\b/i.test(text);
-     if(broadPromoQuestion && !namedSpecificModel && !prior){
-       d.target_device='';d.target_storage='';
+     if(x){
+       piRender(d,x);
+       const q=piNeedsQuestion(d,x);
+       const dbLine=x.tiered?.isTiered?'<div class="pi-dbnote">Promo source: live Supabase tiered_prices</div>':(x.bestPromo?'<div class="pi-dbnote">Promo source: live GTT / Supabase promotion data</div>':'<div class="pi-dbnote">Promo source: deterministic GTT rules + live data</div>');
+       $('piAnswer').innerHTML='<small>GTT verified answer</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(smart?.answer||x.body)+'</p>'+dbLine;
+       if(smart?.needs_followup && smart?.followup)$('piMissing').innerHTML='<b>'+piEsc(smart.followup)+'</b>';
+       $('piBuild').style.display=q?'none':'block';
+     }else{
+       piRenderSmartGeneric(smart,verified);
      }
 
-     // Only clear financing on a brand-new conversation. In follow-ups, preserve prior financing context
-     // unless Gemini explicitly changed it.
-     const financingMentioned=/\b(next\s*up|nua|legacy\s+next|financ|installment|balance|owe|owes|owed|paid)\b|%/i.test(text);
-     if(!prior && !financingMentioned){d.next_up='';d.paid_percent=null;}
-
-     piState.d=d;
-     piState.x=piEvaluate(d);
-
-     const summary=piState.x?.title || 'Promo checked';
-     piConversation.push({q:text,a:summary});
-     piConversation=piConversation.slice(-12);
-
-     piRefresh();
-     $('piAsk').value='';
+     const summary=smart?.answer||x?.title||'GTT answered';
+     piConversation.push({q:text,a:summary});piConversation=piConversation.slice(-12);
+     piSaveMemory();piRenderThread();$('piAsk').value='';
+     $('piStatus').textContent='GTT checked it · answer generated from verified data';
      $('piResult').scrollIntoView({behavior:'smooth',block:'start'});
    }catch(e){console.error(e);$('piStatus').textContent=e.message||'Could not investigate this question.'}
    finally{$('piRun').disabled=false;$('piRun').textContent='Ask GTT →'}
