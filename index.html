@@ -1402,6 +1402,55 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 @media(max-width:560px){.pi-actions{grid-template-columns:1fr}}
 </style>
 
+
+<style id="launch-mobile-hotfix">
+/* Mobile trade picker hotfix: readable dropdown + always-visible No Trade */
+#tradePage #tradeCard .no-trade-row{
+  position:relative;z-index:60;display:grid;grid-template-columns:108px minmax(0,1fr);
+  gap:10px;align-items:center;margin:8px 0 10px!important;padding:0!important;
+}
+#tradePage #tradeCard .no-trade-btn{
+  width:108px;min-width:108px;min-height:44px!important;border-radius:12px!important;
+  border:1px solid #4f6678!important;background:#1b2a35!important;color:#f4f8fb!important;
+  box-shadow:none!important;font-size:13px!important;font-weight:850!important;
+}
+#tradePage #tradeCard .no-trade-btn[aria-pressed="true"]{
+  background:#0b75b9!important;border-color:#50bfe9!important;color:#fff!important;
+  box-shadow:0 0 0 3px rgba(80,191,233,.15)!important;
+}
+#tradePage #tradeCard .no-trade-copy{color:#aebfcb!important;font-size:11px!important;line-height:1.3!important}
+#tradePage #tradeCard .lookup-search{position:relative;z-index:50}
+#tradePage #tradeCard .lookup-list{
+  background:#111b24!important;border:1px solid #334452!important;border-radius:13px!important;
+  box-shadow:0 16px 34px rgba(0,0,0,.34)!important;overflow:auto!important;max-height:260px!important;
+}
+#tradePage #tradeCard .lookup-list ul{margin:0!important;padding:4px!important}
+#tradePage #tradeCard .lookup-list li{
+  background:#111b24!important;color:#eef5fa!important;border:0!important;border-bottom:1px solid #263743!important;
+  padding:10px 12px!important;min-height:54px!important;align-items:center!important;
+}
+#tradePage #tradeCard .lookup-list li:last-child{border-bottom:0!important}
+#tradePage #tradeCard .lookup-list li:hover,#tradePage #tradeCard .lookup-list li:active{background:#172a38!important}
+#tradePage #tradeCard .lookup-brand{color:#91a8ba!important;font-size:9px!important;letter-spacing:.08em!important;font-weight:800!important}
+#tradePage #tradeCard .lookup-model{color:#f5f8fb!important;font-size:14px!important;font-weight:850!important}
+#tradePage #tradeCard .lookup-value{color:#52d58c!important;font-size:14px!important;font-weight:900!important}
+#tradePage #tradeCard .lookup-value.unknown{color:#91a8ba!important}
+@media(prefers-color-scheme:light){
+ #tradePage #tradeCard .no-trade-btn{background:#fff!important;color:#153041!important;border-color:#9db1bf!important}
+ #tradePage #tradeCard .no-trade-btn[aria-pressed="true"]{background:#eaf7fd!important;color:#0568ae!important;border-color:#45a9d6!important}
+ #tradePage #tradeCard .no-trade-copy{color:#607789!important}
+ #tradePage #tradeCard .lookup-list{background:#fff!important;border-color:#d6e0e7!important;box-shadow:0 14px 30px rgba(24,50,68,.16)!important}
+ #tradePage #tradeCard .lookup-list li{background:#fff!important;color:#10202b!important;border-bottom-color:#e5ebef!important}
+ #tradePage #tradeCard .lookup-list li:hover,#tradePage #tradeCard .lookup-list li:active{background:#edf7fc!important}
+ #tradePage #tradeCard .lookup-model{color:#10202b!important}
+ #tradePage #tradeCard .lookup-brand{color:#607789!important}
+}
+@media(max-width:420px){
+ #tradePage #tradeCard .no-trade-row{grid-template-columns:100px minmax(0,1fr)}
+ #tradePage #tradeCard .no-trade-btn{width:100px;min-width:100px}
+}
+</style>
+
 </head>
 <body>
 
@@ -1626,14 +1675,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       <!-- TRADE-IN LOOKUP — 2.0 -->
       <section id="tradeCard" class="card">
         <p class="label"><span class="step">3</span>What are they trading in?</p>
+        <div class="no-trade-row">
+          <button id="noTradeBtn" class="no-trade-btn" type="button" aria-pressed="false">No Trade</button>
+          <span class="no-trade-copy">Customer is not trading in a device.</span>
+        </div>
         <div class="lookup-search">
           <input id="tradeDeviceSearch" placeholder="Search trade-in phone — or tap for alphabetical list" autocomplete="off" aria-expanded="false" />
           <button id="tradeDeviceClear" type="button">Clear</button>
           <div class="lookup-list" id="tradeDeviceSuggestions"><ul id="tradeDeviceSuggestionsList"></ul></div>
-        </div>
-        <div class="no-trade-row">
-          <button id="noTradeBtn" class="no-trade-btn" type="button" aria-pressed="false">No Trade</button>
-          <span class="no-trade-copy">Choose this if the customer is not trading in a device.</span>
         </div>
         <div class="trade-storage-row" id="tradeStorageRow">
           <select id="tradeStorageSelect" aria-label="Trade-in storage"></select>
@@ -2508,7 +2557,13 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   const PHONES = [
     // iPhone 18 Pro / Pro Max — preorder 9/12
     { id:'iphone18pro', name:'iPhone 18 Pro', storage:'256GB', retail:1199.99, tieredOffer:false, promoCategory:'iphonePro' },
+    { id:'iphone18pro-512', name:'iPhone 18 Pro', storage:'512GB', retail:1399.99, tieredOffer:false, promoCategory:'iphonePro' },
+    { id:'iphone18pro-1tb', name:'iPhone 18 Pro', storage:'1TB', retail:1799.99, tieredOffer:false, promoCategory:'iphonePro' },
+    { id:'iphone18pro-2tb', name:'iPhone 18 Pro', storage:'2TB', retail:2399.99, tieredOffer:false, promoCategory:'iphonePro' },
     { id:'iphone18promax', name:'iPhone 18 Pro Max', storage:'256GB', retail:1299.99, tieredOffer:false, promoCategory:'iphonePro' },
+    { id:'iphone18promax-512', name:'iPhone 18 Pro Max', storage:'512GB', retail:1499.99, tieredOffer:false, promoCategory:'iphonePro' },
+    { id:'iphone18promax-1tb', name:'iPhone 18 Pro Max', storage:'1TB', retail:1899.99, tieredOffer:false, promoCategory:'iphonePro' },
+    { id:'iphone18promax-2tb', name:'iPhone 18 Pro Max', storage:'2TB', retail:2499.99, tieredOffer:false, promoCategory:'iphonePro' },
 
     // iPhone 17 Pro Max (256/512/1TB/2TB) — category iphonePro
     { id:'ip17pm', name:'iPhone 17 Pro Max', storage:'256GB', retail:1199.99, tieredOffer:true, tieredMonthlyNew:14.99, tieredMonthlyUpgrade:19.99 },
