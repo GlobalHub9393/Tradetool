@@ -1738,7 +1738,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
             <option value="base">Galaxy S10 / Note10 / Z Flip3 or newer</option>
             <option value="high">Galaxy S22 / Z Flip4 / Z Fold3 or newer</option>
           </select>
-          <small>Use the qualifying Galaxy group that matches the trade-in device.</small>
+          <small><b>7/17/26:</b> Samsung Any Year / Any Condition offer active. Exact qualifying models are listed under <b>More</b>.</small>
         </div>
       </section>
 
@@ -2058,7 +2058,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         <h3>3.03 — Cleaner release history</h3>
         <ul>
           <li><b>What's New is now split:</b> Promo Updates and Build Updates.</li>
-
+          <li><b>Promo cards:</b> dated offer notes now track the current Galaxy S26 8/21 pricing instead of the old 8/14 launch note.</li>
           <li><b>Device database:</b> Sellable and Trade Eligible are independent, so retired phones can remain available as trade-ins.</li>
         </ul>
       </section>
@@ -5486,49 +5486,39 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   el('testCalculator').addEventListener('click',()=>{ const bad = PHONES.filter(p=>!p.id||!p.name||typeof p.retail!=='number'); alert(bad.length ? `Found ${bad.length} phone records needing review.` : 'Calculator data test passed.'); });
 
   // Result-card phone art (Trade Tool only)
+  // Images now come directly from the public Supabase Storage URL stored in sellable_devices.image_url.
   function renderPhoneArt(result){
-  const wrap=el('resultPhoneArt'), img=el('resultPhoneImg'), fallback=el('resultPhoneFallback'), displayEl=el('display');
-  if(!wrap||!img||!fallback||!displayEl) return;
+    const wrap=el('resultPhoneArt'), img=el('resultPhoneImg'), fallback=el('resultPhoneFallback'), displayEl=el('display');
+    if(!wrap||!img||!fallback||!displayEl) return;
+    const current = state.phone ? (PHONES.find(p=>p.id===state.phone.id) || state.phone) : null;
+    const show = !!(current && ['promo','nextup_promo','tiered_final','promo_pending','zero','full_retail','full_retail_rerate','tiered_not_offered','tiered_confirm_cckm','tier_action_needed','nextup_no_payoff','nextup_not_eligible'].includes(result.state));
+    displayEl.classList.toggle('has-phone-art',show);
+    if(!show){
+      img.onload=null; img.onerror=null; img.removeAttribute('src'); img.style.display='none'; fallback.classList.remove('show');
+      return;
+    }
 
-  const current = state.phone ? (PHONES.find(p=>p.id===state.phone.id) || state.phone) : null;
-  const show = !!(current && ['promo','nextup_promo','tiered_final','promo_pending','zero','full_retail','full_retail_rerate','tiered_not_offered','tiered_confirm_cckm','tier_action_needed','nextup_no_payoff','nextup_not_eligible'].includes(result.state));
-
-  displayEl.classList.toggle('has-phone-art',show);
-
-  img.onload=null;
-  img.onerror=null;
-
-  if(!show){
-    img.removeAttribute('src');
-    img.style.display='none';
-    fallback.classList.remove('show');
-    return;
-  }
-
-  const imageUrl = String(current.imageUrl || '').trim();
-  img.style.display='none';
-
-  if(!imageUrl){
-    fallback.classList.add('show');
-    img.removeAttribute('src');
-    return;
-  }
-
-  fallback.classList.add('show');
-
-  img.onload=()=>{
-    fallback.classList.remove('show');
-    img.style.display='block';
-  };
-
-  img.onerror=()=>{
+    const directUrl = String(current.imageUrl||'').trim();
     img.style.display='none';
     fallback.classList.add('show');
-  };
+    img.onload=()=>{
+      fallback.classList.remove('show');
+      img.style.display='block';
+    };
+    img.onerror=()=>{
+      img.style.display='none';
+      fallback.classList.add('show');
+    };
 
-  // Supabase Storage is now the single source of truth for sellable-device images.
-  img.src = imageUrl;
-}
+    if(directUrl){
+      const u = directUrl.startsWith('/') ? location.origin + directUrl : directUrl;
+      // Reset first so selecting a different phone always reloads the current DB URL.
+      img.removeAttribute('src');
+      img.src = u;
+    }else{
+      img.removeAttribute('src');
+    }
+  }
 
   // Render UI
   let lastShownCredit = null;
