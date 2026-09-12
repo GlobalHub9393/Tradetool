@@ -245,7 +245,7 @@
   .display{background:linear-gradient(160deg,var(--navy1),var(--navy2)); color:#eaf3fb; border-radius:18px;
     padding:22px 22px 20px; box-shadow:0 10px 30px rgba(7,28,52,.30); position:sticky; bottom:12px;
     max-height:74vh; overflow:auto; border-left:5px solid transparent; transition:border-color .25s ease;}
-  .result-phone-art{position:absolute;top:24px;right:24px;width:124px;height:154px;display:none;align-items:center;justify-content:center;z-index:3;pointer-events:none;}
+  .result-phone-art{position:absolute;top:24px;right:24px;width:124px;height:154px;display:none;align-items:center;justify-content:center;z-index:20;pointer-events:none;}
   .display.has-phone-art .result-phone-art{display:flex;}
   .result-phone-art img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 12px 18px rgba(0,0,0,.28));}
   .result-phone-fallback{display:none;width:94px;height:126px;border:1px solid rgba(159,208,239,.28);border-radius:16px;align-items:center;justify-content:center;flex-direction:column;gap:7px;color:#8faabd;background:rgba(255,255,255,.035);}
@@ -275,7 +275,7 @@
   }
   .display.result-max::before{display:none;}
   .display.result-max > *{position:relative;z-index:1;}
-  .display.result-max > .result-phone-art{position:absolute;z-index:3;}
+  .display.result-max > .result-phone-art{position:absolute;z-index:20;}
   .display.result-max .d-amount,.display.result-max .monthly-primary{
     color:#6ef0a3;
     text-shadow:0 0 10px rgba(74,222,128,.18);
@@ -5547,15 +5547,25 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   function renderPhoneArt(result){
     const wrap=el('resultPhoneArt'), img=el('resultPhoneImg'), fallback=el('resultPhoneFallback'), displayEl=el('display');
     if(!wrap||!img||!fallback||!displayEl) return;
-    const show = !!(state.phone && ['promo','nextup_promo','tiered_final','promo_pending','zero','full_retail','full_retail_rerate','tiered_not_offered','tiered_confirm_cckm','tier_action_needed','nextup_no_payoff','nextup_not_eligible'].includes(result.state));
+    const current = state.phone ? (PHONES.find(p=>p.id===state.phone.id) || state.phone) : null;
+    const show = !!(current && ['promo','nextup_promo','tiered_final','promo_pending','zero','full_retail','full_retail_rerate','tiered_not_offered','tiered_confirm_cckm','tier_action_needed','nextup_no_payoff','nextup_not_eligible'].includes(result.state));
     displayEl.classList.toggle('has-phone-art',show);
     if(!show){ img.removeAttribute('src'); img.style.display='none'; fallback.classList.remove('show'); return; }
-    const url=String(state.phone.imageUrl||'').trim();
-    fallback.classList.remove('show');
+
+    let url=String(current.imageUrl||'').trim();
+    if(url && url.startsWith('/')) url = location.origin + url;
+
+    // Always show a graceful placeholder until the image has definitely loaded.
     img.style.display='none';
-    img.onerror=()=>{ img.style.display='none'; fallback.classList.add('show'); };
+    fallback.classList.add('show');
     img.onload=()=>{ fallback.classList.remove('show'); img.style.display='block'; };
-    if(url){ img.src=url; } else { img.removeAttribute('src'); fallback.classList.add('show'); }
+    img.onerror=()=>{ img.style.display='none'; fallback.classList.add('show'); };
+    if(url){
+      if(img.src !== url) img.src=url;
+      else if(img.complete && img.naturalWidth>0) img.onload();
+    }else{
+      img.removeAttribute('src');
+    }
   }
 
   // Render UI
