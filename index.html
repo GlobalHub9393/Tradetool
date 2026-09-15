@@ -116,9 +116,9 @@
 
   .trade-verify-note{margin:10px 0 0;font-size:12.5px;color:var(--slate);font-weight:700;line-height:1.4;}
 
-  .pixel-toggle{display:none; align-items:center; gap:11px; margin-top:14px; padding:12px 14px; border-radius:11px;
+  .pixel-toggle{display:none!important; align-items:center; gap:11px; margin-top:14px; padding:12px 14px; border-radius:11px;
     background:#eaf6fd; border:1.5px solid #c7e8fa; cursor:pointer; user-select:none;}
-  .pixel-toggle.show{display:flex;}
+  .pixel-toggle.show{display:none!important;}
   .switch{position:relative; width:46px; height:27px; flex:0 0 auto;}
   .switch input{opacity:0; width:0; height:0;}
   .track{position:absolute; inset:0; background:#c2d2e0; border-radius:20px; transition:background .15s;}
@@ -128,8 +128,8 @@
   .switch input:checked + .track::after{transform:translateX(19px);}
   .pixel-toggle .pt-text{font-size:14px; font-weight:600;}
   .pixel-toggle .pt-sub{font-size:12px; color:var(--slate); font-weight:500;}
-  .galaxy-any-toggle{display:none; margin-top:10px; padding:10px 12px; border-radius:11px; border:1px solid rgba(0,159,219,.28); background:rgba(0,159,219,.07);}
-  .galaxy-any-toggle.show{display:block;}
+  .galaxy-any-toggle{display:none!important; margin-top:10px; padding:10px 12px; border-radius:11px; border:1px solid rgba(0,159,219,.28); background:rgba(0,159,219,.07);}
+  .galaxy-any-toggle.show{display:none!important;}
   .galaxy-any-toggle label{display:block; font-size:13px; font-weight:800; color:var(--ink); margin-bottom:6px;}
   .galaxy-any-toggle select{width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px; background:#fff; color:var(--ink); font-size:12px; font-weight:700;}
   .galaxy-any-toggle small{display:block; margin-top:6px; color:var(--slate); font-size:11px; line-height:1.35;}
@@ -1739,7 +1739,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
             <option value="base">Galaxy S10 / Note10 / Z Flip3 or newer</option>
             <option value="high">Galaxy S22 / Z Flip4 / Z Fold3 or newer</option>
           </select>
-          <small><b>7/17/26:</b> Samsung Any Year / Any Condition offer active. Exact qualifying models are listed under <b>More</b>.</small>
+          <small>GTT detects qualifying Galaxy any-condition paths from the selected trade-in model.</small>
         </div>
       </section>
 
@@ -2099,7 +2099,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     <div id="toolsMenu" class="tools-page open">
       <div class="tools-menu-grid">
         <button type="button" class="tools-tile" data-tools-page="changes"><b>🆕 Recent Changes</b><span>See date-by-date promotion updates. Tap a date, then More, for the full change details.</span></button>
-        <button type="button" class="tools-tile" data-tools-page="compare"><b>📊 Phone Comparison</b><span>Compare two phones side-by-side using the current plan, trade value, Pixel toggle, and activation type.</span></button>
+        <button type="button" class="tools-tile" data-tools-page="compare"><b>📊 Phone Comparison</b><span>Compare two phones side-by-side using the current plan, selected trade model, trade value, and activation type.</span></button>
         <button type="button" class="tools-tile" data-tools-page="history"><b>🕒 Recent History</b><span>Reload recent calculations without adding anything to the main calculator page.</span></button>
         <button type="button" class="tools-tile" data-tools-page="faq"><b>❓ FAQ / Trade Help</b><span>Quick answers for trade-ins, credits, plans, values, and Next Up Anytime.</span></button>
         <button type="button" class="tools-tile" data-tools-page="admin"><b>⚙️ Admin</b><span>Password-protected guide and reference area.</span></button>
@@ -2248,7 +2248,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       <button type="button" class="admin-btn secondary tools-back" data-tools-back>← Back to Tools</button>
           <section id="compareCard" class="tool-subcard">
             <p class="label"><span class="step">6</span>Phone comparison</p>
-            <p style="margin:0 0 10px;color:var(--slate);font-size:12.5px;line-height:1.45;">Type up to three phones. Comparison keeps the current plan, trade value, activation type, Pixel/Galaxy special selections, and Next Up context.</p>
+            <p style="margin:0 0 10px;color:var(--slate);font-size:12.5px;line-height:1.45;">Type up to three phones. Comparison keeps the current plan, selected trade model, trade value, activation type, and Next Up context.</p>
             <div class="compare-builder">
               <div class="compare-search-card" data-compare-slot="0"><div class="compare-search-head"><b>Phone 1</b></div><div class="compare-search"><input id="compareSearch0" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions0" class="compare-suggestions"></div></div></div>
               <div class="compare-search-card" data-compare-slot="1"><div class="compare-search-head"><b>Phone 2</b></div><div class="compare-search"><input id="compareSearch1" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions1" class="compare-suggestions"></div></div></div>
@@ -3356,9 +3356,26 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   function selectedTradeRow(){ if(!state.tradeDevice||!state.tradeStorage) return null; return TRADE_DB.find(r=>r.brand===state.tradeDevice.brand&&r.model===state.tradeDevice.model&&r.storage===state.tradeStorage)||null; }
   function isIphone16eTrade(){ return !!(state.tradeDevice && /iphone 16e/i.test(state.tradeDevice.model)); }
   function promoTradeValue(){ return isIphone16eTrade() ? 35 : state.value; }
-  function syncPixelTradeFlag(){
-    if(state.tradeDevice && state.tradeDevice.brand.toLowerCase()==='google'){ state.pixel=true; pixelChk.checked=true; }
-    else if(state.tradeDevice){ state.pixel=false; pixelChk.checked=false; }
+  function inferGalaxyAnyFromTradeDevice(){
+    const t=state.tradeDevice;
+    if(!t || String(t.brand||'').toLowerCase()!=='samsung') return 'none';
+    const model=String(t.model||'').toLowerCase();
+    let m=model.match(/galaxy\s*s\s*(\d+)/i);
+    if(m){ const n=Number(m[1]); if(n>=22) return 'high'; if(n>=10) return 'base'; }
+    m=model.match(/(?:galaxy\s*)?z\s*flip\s*(\d+)/i);
+    if(m){ const n=Number(m[1]); if(n>=4) return 'high'; if(n>=3) return 'base'; }
+    m=model.match(/(?:galaxy\s*)?z\s*fold\s*(\d+)/i);
+    if(m){ const n=Number(m[1]); if(n>=3) return 'high'; }
+    m=model.match(/(?:galaxy\s*)?note\s*(\d+)/i);
+    if(m && Number(m[1])>=10) return 'base';
+    return 'none';
+  }
+  function syncAutomaticAnyConditionFlags(){
+    const brand=String(state.tradeDevice?.brand||'').toLowerCase();
+    state.pixel = brand==='google';
+    if(pixelChk) pixelChk.checked=state.pixel;
+    state.galaxyAny = inferGalaxyAnyFromTradeDevice();
+    if(galaxyAnySelect) galaxyAnySelect.value=state.galaxyAny;
   }
   function applyTradeDatabaseValue(){
     const row=selectedTradeRow();
@@ -3371,7 +3388,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
           ? `Database value: ${formatTradeValue(state.tradeBaseValue)} · current condition value: ${formatTradeValue(state.value)} · finish condition check · ${TRADE_DB_SOURCE} · last updated ${TRADE_DB_UPDATED}`
           : `Assuming good condition: ${formatTradeValue(state.value)} · answer condition questions to adjust · ${TRADE_DB_SOURCE} · last updated ${TRADE_DB_UPDATED}`);
     manualOverridePill.classList.remove('show');
-    syncPixelTradeFlag(); updateControlsAfterSelection(); render();
+    syncAutomaticAnyConditionFlags(); updateControlsAfterSelection(); render();
   }
   function renderTradeStorage(){
     if(!state.tradeDevice){ tradeStorageRow.classList.remove('show'); tradeConditionPanel.classList.remove('show'); return; }
@@ -3427,7 +3444,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
   tradeDeviceSearch.addEventListener('input',()=>updateTradeDeviceSuggestions(true));
   tradeDeviceSearch.addEventListener('focus',()=>updateTradeDeviceSuggestions(true));
-  el('tradeDeviceClear').addEventListener('click',()=>{state.noTrade=false;if(noTradeBtn)noTradeBtn.setAttribute('aria-pressed','false');state.tradeDevice=null;state.tradeStorage=null;state.tradeBaseValue=null;state.tradeValueMode=null;tradeDeviceSearch.value='';tradeDeviceSuggestions.classList.remove('open');tradeStorageRow.classList.remove('show');tradeConditionPanel.classList.remove('show');resetTradeCondition();state.pixel=false;pixelChk.checked=false;clearNextUpSelection();tradeDbStatus.className='trade-db-status';tradeDbStatus.textContent='Choose a trade-in phone or enter a value manually.';render();});
+  el('tradeDeviceClear').addEventListener('click',()=>{state.noTrade=false;if(noTradeBtn)noTradeBtn.setAttribute('aria-pressed','false');state.tradeDevice=null;state.tradeStorage=null;state.tradeBaseValue=null;state.tradeValueMode=null;tradeDeviceSearch.value='';tradeDeviceSuggestions.classList.remove('open');tradeStorageRow.classList.remove('show');tradeConditionPanel.classList.remove('show');resetTradeCondition();state.pixel=false;pixelChk.checked=false;state.galaxyAny='none';galaxyAnySelect.value='none';clearNextUpSelection();tradeDbStatus.className='trade-db-status';tradeDbStatus.textContent='Choose a trade-in phone or enter a value manually.';render();});
   tradeStorageSelect.addEventListener('change',()=>{state.tradeStorage=tradeStorageSelect.value;resetTradeCondition();applyTradeDatabaseValue();});
   document.querySelectorAll('[data-cond]').forEach(b=>b.addEventListener('click',()=>{ const key=b.dataset.cond,val=b.dataset.answer==='yes'; state.tradeCondition[key]=val; document.querySelectorAll(`[data-cond="${key}"]`).forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false')); tradeConditionPanel.classList.toggle('condition-poor',conditionPoor());tradeConditionPanel.classList.toggle('condition-good',conditionComplete()&&!conditionPoor());applyTradeDatabaseValue(); if(conditionComplete()) guidedAdvance(3, 'nextUpCard', 220, 740); }));
 
@@ -3801,26 +3818,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       }
     }
 
-    // The "any Google Pixel" floor only applies to Pixel Pro / Pro XL ladders.
-    // Show the toggle only when it's relevant, and reset it whenever it isn't.
-    const cat = phoneCategory(state.phone);
-    const eligible = state.phone && !hasActiveTieredOffer(state.phone) && isPixelCat(cat);
-    if(eligible){
-      pixelToggleEl.classList.add('show');
-    } else {
-      pixelToggleEl.classList.remove('show');
-      if(state.pixel){ state.pixel = false; pixelChk.checked = false; }
-    }
-
-    const samsungAnyEligible = isSamsungAnyConditionPhone(state.phone);
-    if(samsungAnyEligible){
-      galaxyAnyToggleEl.classList.add('show');
-      galaxyAnySelect.value = state.galaxyAny || 'none';
-    } else {
-      galaxyAnyToggleEl.classList.remove('show');
-      if(state.galaxyAny !== 'none') state.galaxyAny = 'none';
-      galaxyAnySelect.value = 'none';
-    }
+    // Any-condition qualification is inferred from the selected trade-in model.
+    // No extra Pixel/Galaxy toggle is needed in the quote flow.
+    pixelToggleEl.classList.remove('show');
+    galaxyAnyToggleEl.classList.remove('show');
+    syncAutomaticAnyConditionFlags();
   }
 
   // getResult returns outcome object describing current state
@@ -5508,7 +5510,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     'galaxy z flip8':'galaxy-z-flip8.jpg',
     'galaxy z fold8':'galaxy-z-fold8.jpg',
     'galaxy z fold8 ultra':'galaxy-z-fold8-ultra.png',
-    'iphone 17':'iphone-17.webp',
+    'iphone 17':'iphone-17.png',
     'iphone 17 pro':'iphone17pro-promax.png',
     'iphone 17 pro max':'iphone17pro-promax.png',
     'iphone 17e':'iphone-17e.png',
@@ -5523,7 +5525,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     'pixel 10 pro xl':'pixel-10-pro-xl.png',
     'pixel 10a':'pixel-10a.png',
     'pixel 11':'pixel-11.jpg',
-    'pixel 11 pro':'pixel-11-pro.jpg',
+    'pixel 11 pro':'pixel-11-pro.png',
     'pixel 11 pro xl':'pixel-11-pro-xl.png',
     'razr ultra':'razr-ultra.jpg'
   };
