@@ -247,7 +247,14 @@
     max-height:74vh; overflow:auto; border-left:5px solid transparent; transition:border-color .25s ease;}
   .result-phone-art{float:right;position:relative;margin:0 0 12px 16px;width:96px;height:118px;display:none;align-items:flex-start;justify-content:flex-end;z-index:1;pointer-events:none;}
   .display.has-phone-art .result-phone-art{display:flex;}
-  .result-phone-art img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:right top;opacity:0;transition:opacity .16s ease;filter:drop-shadow(0 10px 16px rgba(0,0,0,.26));}
+  .result-phone-art img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:right top;opacity:0;transform:translate3d(7px,8px,0) scale(.96);filter:drop-shadow(0 8px 12px rgba(0,0,0,.18));will-change:opacity,transform,filter;}
+  .result-phone-art img.phone-art-enter{animation:phoneArtEnter .34s cubic-bezier(.18,.78,.22,1) both;}
+  @keyframes phoneArtEnter{
+    0%{opacity:0;transform:translate3d(7px,8px,0) scale(.96);filter:drop-shadow(0 6px 10px rgba(0,0,0,.10));}
+    68%{opacity:1;transform:translate3d(-1px,-1px,0) scale(1.012);filter:drop-shadow(0 12px 18px rgba(0,0,0,.28));}
+    100%{opacity:1;transform:translate3d(0,0,0) scale(1);filter:drop-shadow(0 10px 16px rgba(0,0,0,.26));}
+  }
+  @media (prefers-reduced-motion:reduce){.result-phone-art img.phone-art-enter{animation:none;opacity:1;transform:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.26));}}
   .result-phone-fallback{display:none;width:84px;height:108px;border:1px solid rgba(159,208,239,.28);border-radius:14px;align-items:center;justify-content:center;flex-direction:column;gap:7px;color:#8faabd;background:rgba(255,255,255,.035);}
   .result-phone-fallback.show{display:flex;}
   .phone-silhouette{width:42px;height:74px;border:2px solid currentColor;border-radius:9px;position:relative;opacity:.72;}
@@ -5542,23 +5549,26 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(!show){
       img.onload=null;
       img.onerror=null;
+      img.classList.remove('phone-art-enter');
       img.removeAttribute('src');
-      img.style.opacity='0';
       fallback.classList.remove('show');
       return;
     }
 
     const directUrl = String(current.imageUrl||bucketFallbackUrl(current)||'').trim();
-    img.style.opacity='0';
+    img.classList.remove('phone-art-enter');
     fallback.classList.add('show');
 
     const showImage=()=>{
       if(!img.naturalWidth) return;
       fallback.classList.remove('show');
-      img.style.opacity='1';
+      // Re-trigger the entrance even when Safari serves the image instantly from cache.
+      img.classList.remove('phone-art-enter');
+      void img.offsetWidth;
+      img.classList.add('phone-art-enter');
     };
     const showFallback=()=>{
-      img.style.opacity='0';
+      img.classList.remove('phone-art-enter');
       fallback.classList.add('show');
     };
 
