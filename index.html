@@ -247,16 +247,9 @@
     max-height:74vh; overflow:auto; border-left:5px solid transparent; transition:border-color .25s ease;}
   .result-phone-art{float:right;position:relative;margin:0 0 12px 16px;width:96px;height:118px;display:none;align-items:flex-start;justify-content:flex-end;z-index:1;pointer-events:none;}
   .display.has-phone-art .result-phone-art{display:flex;}
-  .result-phone-art img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:right top;opacity:0;transform:translate3d(18px,-6px,0) scale(.78) rotate(3deg);filter:blur(3px) drop-shadow(0 5px 8px rgba(0,0,0,.10));will-change:opacity,transform,filter;}
+  .result-phone-art img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:right top;opacity:0;transform:translate3d(14px,0,0) scale(.86);filter:blur(2px) drop-shadow(0 5px 8px rgba(0,0,0,.10));will-change:opacity,transform,filter;}
   .result-phone-art img.phone-art-ready{opacity:1;transform:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.26));}
-  .result-phone-art img.phone-art-enter{animation:phoneArtEnter .58s cubic-bezier(.16,.82,.24,1) both;}
-  @keyframes phoneArtEnter{
-    0%{opacity:0;transform:translate3d(18px,-6px,0) scale(.78) rotate(3deg);filter:blur(3px) drop-shadow(0 5px 8px rgba(0,0,0,.08));}
-    42%{opacity:1;transform:translate3d(-3px,2px,0) scale(1.055) rotate(-1.2deg);filter:blur(0) drop-shadow(0 14px 22px rgba(0,0,0,.32));}
-    68%{opacity:1;transform:translate3d(1px,-1px,0) scale(.985) rotate(.35deg);filter:blur(0) drop-shadow(0 9px 15px rgba(0,0,0,.24));}
-    100%{opacity:1;transform:translate3d(0,0,0) scale(1) rotate(0);filter:blur(0) drop-shadow(0 10px 16px rgba(0,0,0,.26));}
-  }
-  @media (prefers-reduced-motion:reduce){.result-phone-art img.phone-art-enter{animation:none;opacity:1;transform:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.26));}.result-phone-art img{filter:drop-shadow(0 10px 16px rgba(0,0,0,.26));}}
+  @media (prefers-reduced-motion:reduce){.result-phone-art img{filter:drop-shadow(0 10px 16px rgba(0,0,0,.26));}.result-phone-art img.phone-art-ready{opacity:1;transform:none;}}
   .result-phone-fallback{display:none;width:84px;height:108px;border:1px solid rgba(159,208,239,.28);border-radius:14px;align-items:center;justify-content:center;flex-direction:column;gap:7px;color:#8faabd;background:rgba(255,255,255,.035);}
   .result-phone-fallback.show{display:flex;}
   .phone-silhouette{width:42px;height:74px;border:2px solid currentColor;border-radius:9px;position:relative;opacity:.72;}
@@ -5543,6 +5536,54 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     return f ? PHONE_BUCKET_BASE + encodeURIComponent(f) : '';
   }
   let lastAnimatedPhoneArtUrl = '';
+  let phoneArtAnimation = null;
+  let phoneArtTimer = null;
+
+  function stopPhoneArtAnimation(img){
+    if(phoneArtTimer){ clearTimeout(phoneArtTimer); phoneArtTimer = null; }
+    if(phoneArtAnimation){ try{ phoneArtAnimation.cancel(); }catch(e){} phoneArtAnimation = null; }
+    img.classList.remove('phone-art-ready');
+  }
+
+  function animatePhoneArt(img,url){
+    stopPhoneArtAnimation(img);
+    img.dataset.animUrl = url;
+
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      img.classList.add('phone-art-ready');
+      lastAnimatedPhoneArtUrl = url;
+      return;
+    }
+
+    // Intentional short transparent hold. This makes the fade visible even when Safari
+    // serves the phone image instantly from cache instead of painting the first keyframe.
+    phoneArtTimer = setTimeout(()=>{
+      phoneArtTimer = null;
+      if(img.dataset.animUrl !== url || !img.naturalWidth) return;
+
+      phoneArtAnimation = img.animate([
+        {opacity:0, transform:'translate3d(14px,0,0) scale(.86)', filter:'blur(2px) drop-shadow(0 5px 8px rgba(0,0,0,.10))', offset:0},
+        {opacity:0, transform:'translate3d(14px,0,0) scale(.86)', filter:'blur(2px) drop-shadow(0 5px 8px rgba(0,0,0,.10))', offset:.10},
+        {opacity:.48, transform:'translate3d(6px,0,0) scale(.94)', filter:'blur(.7px) drop-shadow(0 8px 12px rgba(0,0,0,.18))', offset:.43},
+        {opacity:1, transform:'translate3d(-1px,0,0) scale(1.035)', filter:'blur(0) drop-shadow(0 13px 20px rgba(0,0,0,.30))', offset:.80},
+        {opacity:1, transform:'translate3d(0,0,0) scale(1)', filter:'blur(0) drop-shadow(0 10px 16px rgba(0,0,0,.26))', offset:1}
+      ],{
+        duration:720,
+        easing:'cubic-bezier(.18,.72,.22,1)',
+        fill:'forwards'
+      });
+
+      phoneArtAnimation.onfinish=()=>{
+        if(img.dataset.animUrl === url){
+          img.classList.add('phone-art-ready');
+          lastAnimatedPhoneArtUrl = url;
+        }
+        try{ phoneArtAnimation.cancel(); }catch(e){}
+        phoneArtAnimation = null;
+      };
+    },90);
+  }
+
   function renderPhoneArt(result){
     const wrap=el('resultPhoneArt'), img=el('resultPhoneImg'), fallback=el('resultPhoneFallback'), displayEl=el('display');
     if(!wrap||!img||!fallback||!displayEl) return;
@@ -5552,8 +5593,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(!show){
       img.onload=null;
       img.onerror=null;
-      img.classList.remove('phone-art-enter','phone-art-ready');
+      stopPhoneArtAnimation(img);
       img.removeAttribute('src');
+      delete img.dataset.animUrl;
       fallback.classList.remove('show');
       lastAnimatedPhoneArtUrl = '';
       return;
@@ -5566,17 +5608,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       if(!img.naturalWidth) return;
       fallback.classList.remove('show');
       const shouldAnimate = url && lastAnimatedPhoneArtUrl !== url;
-      img.classList.remove('phone-art-enter','phone-art-ready');
-      if(shouldAnimate){
-        void img.offsetWidth;
-        img.classList.add('phone-art-enter');
-        lastAnimatedPhoneArtUrl = url;
-      }else{
+      if(shouldAnimate) animatePhoneArt(img,url);
+      else {
+        stopPhoneArtAnimation(img);
         img.classList.add('phone-art-ready');
       }
     };
     const showFallback=()=>{
-      img.classList.remove('phone-art-enter','phone-art-ready');
+      stopPhoneArtAnimation(img);
       fallback.classList.add('show');
     };
 
@@ -5584,7 +5623,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       const u = directUrl.startsWith('/') ? location.origin + directUrl : directUrl;
       const isNewImage = img.src !== u;
       if(isNewImage){
-        img.classList.remove('phone-art-enter','phone-art-ready');
+        stopPhoneArtAnimation(img);
         img.onload=()=>showImage(u);
         img.onerror=showFallback;
         img.src = u;
