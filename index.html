@@ -245,6 +245,8 @@
   .display{background:linear-gradient(160deg,var(--navy1),var(--navy2)); color:#eaf3fb; border-radius:18px;
     padding:22px 22px 20px; box-shadow:0 10px 30px rgba(7,28,52,.30); position:sticky; bottom:12px;
     max-height:74vh; overflow:auto; border-left:5px solid transparent; transition:border-color .25s ease;}
+  .duo-preorder-banner{background:#b91c1c;color:#fff;border:1px solid #f87171;border-radius:10px;padding:12px 14px;margin:0 0 18px;font-size:17px;font-weight:900;line-height:1.4;clear:both;}
+  .duo-preorder-banner[hidden]{display:none;}
   .result-phone-art{float:right;position:relative;margin:0 0 12px 16px;width:96px;height:118px;display:none;align-items:flex-start;justify-content:flex-end;z-index:4;pointer-events:none;}
   .display.has-phone-art .result-phone-art{display:flex;}
   .result-phone-art img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:right top;opacity:1;transform:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.26));will-change:opacity,transform,filter;}
@@ -1513,7 +1515,36 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 }
 </style>
 
-</head>
+<style>.beta-context{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;background:#f4f8ff;border:1px solid #d7e3f3;border-radius:16px;padding:16px;margin:16px 0}.beta-context label{font-size:12px;font-weight:700;color:#334155}.beta-context select,.beta-help-search{display:block;width:100%;border:1px solid #cad5e4;border-radius:10px;background:white;padding:12px;font:inherit;box-sizing:border-box}.beta-context p,.beta-context div,.beta-context small{grid-column:1/-1;margin:0}.beta-help-label{font-size:13px;font-weight:700}.beta-help-filters{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.beta-help-filters [aria-pressed=true]{background:#065ea8;color:white}.beta-note{font-size:12px;color:#536479;line-height:1.5}.history-item{width:100%;text-align:left;padding:16px!important;margin:10px 0;white-space:normal}.history-item small{display:block;line-height:1.5;margin-top:6px}.compare-phone-card>.admin-btn{width:100%;margin-top:14px}#toolsFaqPage details[hidden]{display:none!important}#toolsFaqPage details p{line-height:1.65}#toolsFaqPage details button{margin-bottom:12px}.pi-manual{margin-top:14px}.pi-manual form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pi-manual input,.pi-manual select{box-sizing:border-box;width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px}.pi-manual label{font-size:12px;font-weight:700}.pi-manual .pi-btn{grid-column:1/-1}@media(max-width:600px){.beta-context,.pi-manual form{grid-template-columns:1fr}.beta-context select{font-size:16px}.compare-phone-grid{grid-template-columns:1fr!important}}</style><style>/* Beta surfaces use the same semantic colors as the GTT shell. */
+:root{--v4-card:var(--v4-surface)}
+#toolsModal{--ink:var(--v4-ink);--slate:var(--v4-muted);--line:var(--v4-line);--bg:var(--v4-bg);--card:var(--v4-surface);--blue:var(--v4-blue);color:var(--v4-ink);color-scheme:light dark;background:rgba(0,0,0,.48);font-family:inherit}
+#toolsModal .tools-modal-panel{background:var(--v4-bg);border:1px solid var(--v4-line);padding:22px;border-radius:24px;box-shadow:var(--v4-shadow)}
+#toolsModal .tools-head{background:var(--v4-bg);color:var(--v4-ink)}
+#toolsModal .tool-subcard,#toolsModal .tools-tile,#toolsModal .compare-search-card,#toolsModal .compare-phone-card,#toolsModal .history-item{background:var(--v4-surface);border-color:var(--v4-line);border-radius:16px;color:var(--v4-ink);box-shadow:none}
+#toolsModal .tool-subcard{padding:18px}
+#toolsModal .compare-search input,#toolsModal select,#toolsModal .beta-help-search{background:var(--v4-alt);border-color:var(--v4-line);color:var(--v4-ink);font-size:14px;min-height:44px}
+#toolsModal .beta-context{background:var(--v4-alt);border-color:var(--v4-line);color:var(--v4-ink)}
+#toolsModal .beta-context label,#toolsModal .beta-note,#toolsModal .compare-result-status{color:var(--v4-muted)}
+#toolsModal .compare-context p{color:var(--v4-ink)}
+#toolsModal .compare-suggestions{background:var(--v4-surface);border-color:var(--v4-line)}
+#toolsModal .compare-suggestion{background:var(--v4-surface);border-color:var(--v4-line);color:var(--v4-ink);min-height:48px}
+#toolsModal .compare-suggestion:hover,#toolsModal .history-item:hover{background:var(--v4-alt)}
+#toolsModal .compare-result-shell{background:var(--v4-alt);border-color:var(--v4-line);padding:16px}
+#toolsModal .compare-badge,#toolsModal .compare-summary-pill{background:color-mix(in srgb,var(--v4-blue) 10%,var(--v4-surface));color:var(--v4-blue);border-color:var(--v4-line)}
+#toolsModal .admin-btn.secondary{background:var(--v4-surface);border:1px solid var(--v4-line);color:var(--v4-ink);min-height:42px;border-radius:11px}
+#toolsModal .beta-help-filters [aria-pressed=true]{background:var(--v4-blue);color:var(--v4-surface)}
+#toolsModal .label{color:var(--v4-ink);font-size:16px;letter-spacing:0;text-transform:none}
+#toolsModal .step{display:none}
+#toolsModal .compare-price{font-size:24px;font-weight:850}
+#toolsModal .compare-key{row-gap:10px;line-height:1.4}
+#toolsModal .compare-result-title{display:block;font-size:12px;line-height:1.5}
+#toolsModal .compare-result-status{display:block;margin-top:4px}
+#toolsModal details summary{line-height:1.5;cursor:pointer}
+#toolsModal button:focus-visible,#toolsModal input:focus-visible,#toolsModal select:focus-visible,.pi-manual :focus-visible{outline:3px solid var(--v4-blue);outline-offset:3px}
+.pi-manual input,.pi-manual select{background:var(--v4-alt);color:var(--v4-ink);border-color:var(--v4-line);color-scheme:light dark;min-height:44px}.pi-manual summary{cursor:pointer;color:var(--v4-blue);font-weight:700;margin:14px 0}.pi-manual form{margin-top:14px}
+@media(prefers-color-scheme:dark){#toolsModal .tools-back{color:var(--v4-ink)}#toolsModal .compare-result-shell.error{background:#321e25;border-color:#78434d}.pi-btn{color:#0e151a}.pi-startover{color:var(--v4-blue)}}
+@media(max-width:700px){#toolsModal .tools-modal-panel{padding:16px;border-radius:0}#toolsModal .compare-builder{grid-template-columns:1fr}#toolsModal .compare-search input,#toolsModal select,#toolsModal .beta-help-search,.pi-manual input,.pi-manual select{font-size:16px}#toolsModal .compare-key{grid-template-columns:minmax(0,1fr) auto}#toolsModal .tools-head{padding-bottom:14px}}
+</style><style>#toolsModal .compare-builder{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#toolsModal .compare-phone-title{font-size:17px;line-height:1.35}@media(prefers-color-scheme:dark){#toolsModal .admin-btn:not(.secondary){background:var(--v4-blue);color:#0e151a}}@media(max-width:700px){#toolsModal .compare-builder{grid-template-columns:1fr}}</style></head>
 <body>
 
 <div id="v4Shell" class="v4-shell">
@@ -1584,7 +1615,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   </div>
   <div class="pi-memorybar"><span><b>Conversation memory on</b> · follow-ups keep the current customer/promo context</span><button id="piStartOverTop" class="pi-startover" type="button">Start Over</button></div>
   <button id="piRun" class="pi-btn pi-run" type="button">Ask GTT →</button>
-  <div id="piStatus" class="pi-status"></div>
+  <div id="piStatus" class="pi-status" role="status" aria-live="polite"></div><button id="piRetry" class="pi-startover" type="button">Retry question</button><details id="piManual" class="pi-manual"><summary>Use a quote form instead</summary><p>Keep your question above. Select the known details and finish in GTT.</p><form id="piManualForm"><label>Plan group<select name="plan"><option value="">Choose plan</option><option>Premium</option><option>Extra</option><option>Starter</option><option>Value</option><option>55+</option></select></label><label>New phone<select id="piManualPhone" name="phoneId"><option value="">Choose device</option></select></label><label>Customer segment<select name="planSegment"><option value="consumer">Consumer</option><option value="cru">Business / CRU</option><option value="firstnet">FirstNet</option></select></label><label>Activation<select name="tierAction"><option value="">Not confirmed</option><option value="new">New line</option><option value="upgrade">Upgrade</option></select></label><button class="pi-btn" type="submit">Continue in GTT →</button></form></details>
 </div>
 
 <div id="piFollow" class="pi-follow">
@@ -1619,7 +1650,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 </section>
 
 <section id="v4Beta" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Beta Tools</h2><p class="v4-sectionlead">Useful extras without crowding the main quote.</p><div class="v4-beta-list">
-<div class="v4-beta-link" data-v4go="investigator"><div><b>Promo Investigator</b><span>Ask almost anything in normal rep language. AI asks GTT for the live facts, then explains the verified answer.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="compare"><div><b>Phone Comparison</b><span>Compare up to three phones using the current quote context.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="history"><div><b>Recent History</b><span>Reload recent completed calculations.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="faq"><div><b>FAQ / Trade Help</b><span>Trade-ins, credits, plans and Next Up reference.</span></div><i>›</i></div></div></section>
+<div class="v4-beta-link" data-v4go="investigator"><div><b>Promo Investigator</b><span>Ask almost anything in normal rep language. AI asks GTT for the live facts, then explains the verified answer.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="compare"><div><b>Phone Comparison</b><span>Compare monthly payments, 36-month totals, and requirements for the same customer.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="history"><div><b>Recent History</b><span>Restore the entire quote and see whether today’s offer changed.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="faq"><div><b>FAQ / Trade Help</b><span>Search practical trade answers and jump into the right tool.</span></div><i>›</i></div></div></section>
 </div>
 <nav class="v4-bottom"><div class="v4-bottom-inner"><button class="v4-navbtn active" data-v4go="home"><span class="v4-ico">⌂</span>Home</button><button class="v4-navbtn" data-v4go="trade"><span class="v4-ico">▤</span>Trade Tool</button><button class="v4-navbtn" data-v4go="simple"><span class="v4-ico">⌕</span>Simple Tool</button><button class="v4-navbtn" data-v4more><span class="v4-ico">•••</span>More</button></div></nav>
 <div id="v4More" class="v4-more-scrim"><div class="v4-more-sheet"><div class="v4-grab"></div><div class="v4-morehead"><h3>More</h3><button id="v4MoreClose" class="v4-close">×</button></div><div class="v4-morelink" data-v4admin><div><strong>Admin</strong><small>Manage promotions, devices and app data.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="news"><div><strong>What's New</strong><small>iPhone launch, 9/12 promos and S26 FE.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="beta"><div><strong>Beta Tools</strong><small>Promo Investigator, comparison, history and trade help.</small></div><i>›</i></div></div></div>
@@ -1888,6 +1919,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     </main>
 
     <aside class="display" id="display" aria-live="polite">
+      <div id="duoPreorderBanner" class="duo-preorder-banner" hidden>Preorder 10/16, Max trade $1200</div>
       <div id="resultPhoneArt" class="result-phone-art" aria-hidden="true">
         <img id="resultPhoneImg" alt="" loading="eager" fetchpriority="high" decoding="async">
         <div id="resultPhoneFallback" class="result-phone-fallback"><span class="phone-silhouette"></span><small>No image</small></div>
@@ -2252,7 +2284,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
           <section id="compareCard" class="tool-subcard">
             <p class="label"><span class="step">6</span>Phone comparison</p>
             <p style="margin:0 0 10px;color:var(--slate);font-size:12.5px;line-height:1.45;">Type up to three phones. Comparison keeps the current plan, selected trade model, trade value, activation type, and Next Up context.</p>
-            <div class="compare-builder">
+            <div class="beta-context"><label>Plan group<select id="comparePlan"><option value="">Choose plan</option><option value="premium">Premium</option><option value="extra">Extra</option><option value="starter">Starter</option><option value="value">Value</option><option value="55plus">55+</option><option value="valueplus_mobile">Ineligible / Rerate</option></select></label><label>Customer segment<select id="compareSegment"><option value="consumer">Consumer</option><option value="cru">Business / CRU</option><option value="firstnet">FirstNet</option></select></label><label>Activation<select id="compareActivation"><option value="">Choose activation</option><option value="new">New line</option><option value="upgrade">Upgrade</option></select></label><p id="compareContext"></p><div><button id="compareEditTrade" type="button" class="admin-btn secondary">Edit trade / condition →</button> <button id="compareNoTrade" type="button" class="admin-btn secondary">Compare without trade</button></div><small>Changes update your current quote. Device payments only; plan charges, taxes, and fees are separate.</small></div>
+<div class="compare-builder">
               <div class="compare-search-card" data-compare-slot="0"><div class="compare-search-head"><b>Phone 1</b></div><div class="compare-search"><input id="compareSearch0" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions0" class="compare-suggestions"></div></div></div>
               <div class="compare-search-card" data-compare-slot="1"><div class="compare-search-head"><b>Phone 2</b></div><div class="compare-search"><input id="compareSearch1" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions1" class="compare-suggestions"></div></div></div>
               <div id="compareThirdWrap" class="compare-search-card" data-compare-slot="2" style="display:none;"><div class="compare-search-head"><b>Phone 3</b><button type="button" id="compareRemoveThird" class="admin-btn secondary" style="padding:6px 9px;">Remove</button></div><div class="compare-search"><input id="compareSearch2" autocomplete="off" placeholder="Type a phone…"><div id="compareSuggestions2" class="compare-suggestions"></div></div></div>
@@ -2270,14 +2303,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       <button type="button" class="admin-btn secondary tools-back" data-tools-back>← Back to Tools</button>
           <section id="historyCard" class="tool-subcard">
             <p class="label"><span class="step">7</span>Recent calculations</p>
-            <div id="historyList" class="history-list"><p style="margin:0;color:var(--slate);font-size:13px;">Completed calculations will appear here.</p></div>
+            <p class="beta-note">Saved on this device · restore the entire quote and compare the saved price with today’s offer.</p><div id="historyList" class="history-list"><p style="margin:0;color:var(--slate);font-size:13px;">Completed calculations will appear here.</p></div>
           </section>
 
     </div>
     <div id="toolsFaqPage" class="tools-page">
       <button type="button" class="admin-btn secondary tools-back" data-tools-back>← Back to Tools</button>
       <section class="tool-subcard">
-        <p class="label"><span class="step">8</span>FAQ / Trade Help</p>
+        <p class="label"><span class="step">8</span>FAQ / Trade Help</p><label class="beta-help-label" for="helpSearch">Find a practical answer</label><input id="helpSearch" class="beta-help-search" type="search" placeholder="Search credits, condition, plan, Next Up…"><div id="helpFilters" class="beta-help-filters"></div><p id="helpCount" class="beta-note" role="status"></p>
         <p style="margin:0 0 12px;color:var(--slate);font-size:13px;line-height:1.5;">Quick reference only. While in store, confirm trade values with designated AT&amp;T trade tools and verify promotion eligibility in OPUS/CCKM before quoting.</p>
 
         <details class="tool-subcard"><summary><b>1. How long until promo credits hit the account?</b></summary><p>Promo credits usually appear within <b>1–3 billing cycles</b>. If credits do not show right away, the customer should keep paying the bill normally. Credits may catch up later if the promotion and trade were completed correctly.</p></details>
@@ -2556,22 +2589,26 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(!phone || !tieredSegmentAllowed(phone)) return false;
     if(Array.isArray(phone.tieredPriceRows)) return currentTieredRowsFor(phone).length > 0;
     if(isS26Base(phone)) return isS26TieredActive();
-    if(isS25Edge(phone)) return isSamsung814TieredActive();
+    if(isS25Edge(phone)) return !!phone.tieredOffer;
     return !!phone.tieredOffer;
   }
   const S26_OFFER_END = new Date(2026, 7, 14, 0, 0, 0, 0); // old trade/Next Up promo active through 8/13
   const S26_TIERED_START = new Date(2026, 7, 14, 0, 0, 0, 0); // new tiered offer starts 8/14
   function isS26Base(phone){ return !!(phone && String(phone.id || '').startsWith('s26-')); }
   function isS26OfferActive(){ return new Date() < S26_OFFER_END; }
-  function isS26TieredActive(){ return new Date() >= S26_TIERED_START; }
+  function isS26TieredActive(){ return false; } // S26 no-trade tiered offer retired 10/2/2026.
   function isS25Edge(phone){ return !!(phone && String(phone.id || '').startsWith('s25edge-')); }
   function isSamsung814TieredActive(){ return new Date() >= S26_TIERED_START; }
+  const DUO_PREORDER_START = Date.parse('2026-10-16T04:00:00Z');
+  function isDuoPreorderPreview(phone){
+    return !!phone && phone.id === 'iphoneduo' && Date.now() < DUO_PREORDER_START;
+  }
   function isPhoneCurrentlyListed(phone){
     if(!phone || phone.active === false || phone.sellable === false) return false;
     const now = Date.now();
     if(phone.availableFrom){
       const start = new Date(phone.availableFrom).getTime();
-      if(!Number.isNaN(start) && now < start) return false;
+      if(!Number.isNaN(start) && now < start && !isDuoPreorderPreview(phone)) return false;
     }
     if(phone.availableThrough){
       const end = new Date(phone.availableThrough).getTime();
@@ -2586,6 +2623,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     iphonePro:'iPhone Pro ladder',
     iphoneBase:'iPhone/Base ladder',
     iphoneAir:'iPhone Air ladder',
+    iphoneDuo:'iPhone Duo ladder',
     samsung:'Samsung S26+ / Ultra ladder',
     s26base:'Galaxy S26 ladder',
     pixel11XL:'Pixel 11 Pro XL ladder',
@@ -2595,7 +2633,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     razr:'Razr ladder',
     none:'No ladder promo'
   };
-  const PROMO_CATEGORY_KEYS = ['iphonePro','iphoneBase','iphoneAir','samsung','s26base','fold8','flip8','pixel11XL','pixel11Pro','pixelXL','pixelPro','razr'];
+  const PROMO_CATEGORY_KEYS = ['iphonePro','iphoneBase','iphoneAir','iphoneDuo','samsung','s26base','fold8','flip8','pixel11XL','pixel11Pro','pixelXL','pixelPro','razr'];
   const PLAN_MEMBERS = {
     premium:{
       regular:['Elite 2.0','Premium 2.0','Elite w/ HBO Max','Premium PL'],
@@ -2634,117 +2672,122 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   // retail = full MSRP for that exact storage SKU. Verified against Apple/Samsung/Google + AT&T retail pages, June 2026.
   const PHONES = [
     // iPhone 18 Pro / Pro Max — preorder 9/12
-    { id:'iphone18pro', name:'iPhone 18 Pro', storage:'256GB', retail:1199.99, tieredOffer:false, promoCategory:'iphonePro' },
-    { id:'iphone18pro-512', name:'iPhone 18 Pro', storage:'512GB', retail:1399.99, tieredOffer:false, promoCategory:'iphonePro' },
-    { id:'iphone18pro-1tb', name:'iPhone 18 Pro', storage:'1TB', retail:1799.99, tieredOffer:false, promoCategory:'iphonePro' },
-    { id:'iphone18pro-2tb', name:'iPhone 18 Pro', storage:'2TB', retail:2399.99, tieredOffer:false, promoCategory:'iphonePro' },
-    { id:'iphone18promax', name:'iPhone 18 Pro Max', storage:'256GB', retail:1299.99, tieredOffer:false, promoCategory:'iphonePro' },
-    { id:'iphone18promax-512', name:'iPhone 18 Pro Max', storage:'512GB', retail:1499.99, tieredOffer:false, promoCategory:'iphonePro' },
-    { id:'iphone18promax-1tb', name:'iPhone 18 Pro Max', storage:'1TB', retail:1899.99, tieredOffer:false, promoCategory:'iphonePro' },
-    { id:'iphone18promax-2tb', name:'iPhone 18 Pro Max', storage:'2TB', retail:2499.99, tieredOffer:false, promoCategory:'iphonePro' },
+    { id:'iphone18pro', name:'iPhone 18 Pro', storage:'256GB', retail:1199.99, tieredOffer:false, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:true },
+    { id:'iphone18pro-512', name:'iPhone 18 Pro', storage:'512GB', retail:1399.99, tieredOffer:false, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:true },
+    { id:'iphone18pro-1tb', name:'iPhone 18 Pro', storage:'1TB', retail:1799.99, tieredOffer:false, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:true },
+    { id:'iphone18pro-2tb', name:'iPhone 18 Pro', storage:'2TB', retail:2399.99, tieredOffer:false, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:true },
+    { id:'iphone18promax', name:'iPhone 18 Pro Max', storage:'256GB', retail:1299.99, tieredOffer:false, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:true },
+    { id:'iphone18promax-512', name:'iPhone 18 Pro Max', storage:'512GB', retail:1499.99, tieredOffer:false, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:true },
+    { id:'iphone18promax-1tb', name:'iPhone 18 Pro Max', storage:'1TB', retail:1899.99, tieredOffer:false, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:true },
+    { id:'iphone18promax-2tb', name:'iPhone 18 Pro Max', storage:'2TB', retail:2499.99, tieredOffer:false, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:true },
 
     // iPhone 17 Pro Max (256/512/1TB/2TB) — category iphonePro
-    { id:'ip17pm', name:'iPhone 17 Pro Max', storage:'256GB', retail:1199.99, tieredOffer:true, tieredMonthlyNew:14.99, tieredMonthlyUpgrade:19.99 },
-    { id:'ip17pm-512', name:'iPhone 17 Pro Max', storage:'512GB', retail:1399.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:25.99 },
-    { id:'ip17pm-1tb', name:'iPhone 17 Pro Max', storage:'1TB', retail:1599.99, tieredOffer:true, tieredMonthlyNew:26.99, tieredMonthlyUpgrade:31.99 },
-    { id:'ip17pm-2tb', name:'iPhone 17 Pro Max', storage:'2TB', retail:1999.99, tieredOffer:true, tieredMonthlyNew:32.99, tieredMonthlyUpgrade:37.99 },
+    { id:'ip17pm', name:'iPhone 17 Pro Max', storage:'256GB', retail:1199.99, tieredOffer:true, tieredMonthlyNew:14.99, tieredMonthlyUpgrade:19.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17pm-512', name:'iPhone 17 Pro Max', storage:'512GB', retail:1399.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:25.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17pm-1tb', name:'iPhone 17 Pro Max', storage:'1TB', retail:1599.99, tieredOffer:true, tieredMonthlyNew:26.99, tieredMonthlyUpgrade:31.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17pm-2tb', name:'iPhone 17 Pro Max', storage:'2TB', retail:1999.99, tieredOffer:true, tieredMonthlyNew:32.99, tieredMonthlyUpgrade:37.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
 
     // iPhone 17 Pro (256/512/1TB) — category iphonePro
-    { id:'ip17p', name:'iPhone 17 Pro', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:9.99, tieredMonthlyUpgrade:14.99 },
-    { id:'ip17p-512', name:'iPhone 17 Pro', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:20.99 },
-    { id:'ip17p-1tb', name:'iPhone 17 Pro', storage:'1TB', retail:1499.99, tieredOffer:true, tieredMonthlyNew:21.99, tieredMonthlyUpgrade:26.99 },
+    { id:'ip17p', name:'iPhone 17 Pro', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:9.99, tieredMonthlyUpgrade:14.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17p-512', name:'iPhone 17 Pro', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:20.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17p-1tb', name:'iPhone 17 Pro', storage:'1TB', retail:1499.99, tieredOffer:true, tieredMonthlyNew:21.99, tieredMonthlyUpgrade:26.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
 
     // iPhone 17 (256/512) — category iphoneBase
-    { id:'ip17', name:'iPhone 17', storage:'256GB', retail:929.99, tieredOffer:false },
-    { id:'ip17-512', name:'iPhone 17', storage:'512GB', retail:1029.99, tieredOffer:false },
+    { id:'ip17', name:'iPhone 17', storage:'256GB', retail:929.99, tieredOffer:false, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:true },
+    { id:'ip17-512', name:'iPhone 17', storage:'512GB', retail:1029.99, tieredOffer:false, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:true },
 
     // iPhone Air (256/512/1TB) — category iphoneBase
-    { id:'ipair', name:'iPhone Air', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:9.99, promoCategory:'iphoneAir' },
-    { id:'ipair-512', name:'iPhone Air', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:15.99, promoCategory:'iphoneAir' },
-    { id:'ipair-1tb', name:'iPhone Air', storage:'1TB', retail:1699.99, tieredOffer:true, tieredMonthlyNew:17.99, tieredMonthlyUpgrade:21.99, promoCategory:'iphoneAir' },
+    { id:'ipair', name:'iPhone Air', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:9.99, promoCategory:"iphoneAir", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ipair-512', name:'iPhone Air', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:15.99, promoCategory:"iphoneAir", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ipair-1tb', name:'iPhone Air', storage:'1TB', retail:1699.99, tieredOffer:true, tieredMonthlyNew:17.99, tieredMonthlyUpgrade:21.99, promoCategory:"iphoneAir", active:true, sellable:true, tradePromoEligible:false },
+
+    // iPhone Duo — preorder/promo begins 10/16/2026; retail availability 10/23/2026.
+    { id:'iphoneduo', name:'iPhone Duo', storage:'256GB', retail:1999.99, tieredOffer:false, promoCategory:"iphoneDuo", active:true, sellable:true, availableFrom:'2026-10-16T04:00:00Z', tradePromoEligible:true },
 
     // Galaxy S26 Ultra (256/512/1TB) — category samsung
-    { id:'s26u', name:'Galaxy S26 Ultra', storage:'256GB', retail:1299.99, tieredOffer:false },
-    { id:'s26u-512', name:'Galaxy S26 Ultra', storage:'512GB', retail:1499.99, tieredOffer:false },
-    { id:'s26u-1tb', name:'Galaxy S26 Ultra', storage:'1TB', retail:1799.99, tieredOffer:false },
+    { id:'s26u', name:'Galaxy S26 Ultra', storage:'256GB', retail:1299.99, tieredOffer:false, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:true },
+    { id:'s26u-512', name:'Galaxy S26 Ultra', storage:'512GB', retail:1499.99, tieredOffer:false, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:true },
+    { id:'s26u-1tb', name:'Galaxy S26 Ultra', storage:'1TB', retail:1799.99, tieredOffer:false, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:true },
 
     // Galaxy S26+ (256/512) — category samsung
-    { id:'s26p', name:'Galaxy S26+', storage:'256GB', retail:1099.99, tieredOffer:false },
-    { id:'s26p-512', name:'Galaxy S26+', storage:'512GB', retail:1299.99, tieredOffer:false },
+    { id:'s26p', name:'Galaxy S26+', storage:'256GB', retail:1099.99, tieredOffer:false, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:true },
+    { id:'s26p-512', name:'Galaxy S26+', storage:'512GB', retail:1299.99, tieredOffer:false, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:true },
 
     // Galaxy Z Fold8 Ultra — active trade-in ladder confirmed 7/22/2026.
-    { id:'zfold8u', name:'Galaxy Z Fold8 Ultra', storage:'256GB', retail:2099.99, tieredOffer:false, promoCategory:'fold8' },
-    { id:'zfold8u-512', name:'Galaxy Z Fold8 Ultra', storage:'512GB', retail:2299.99, tieredOffer:false, promoCategory:'fold8' },
-    { id:'zfold8u-1tb', name:'Galaxy Z Fold8 Ultra', storage:'1TB', retail:2699.99, tieredOffer:false, promoCategory:'fold8' },
+    { id:'zfold8u', name:'Galaxy Z Fold8 Ultra', storage:'256GB', retail:2099.99, tieredOffer:false, promoCategory:"fold8", active:true, sellable:true, tradePromoEligible:true },
+    { id:'zfold8u-512', name:'Galaxy Z Fold8 Ultra', storage:'512GB', retail:2299.99, tieredOffer:false, promoCategory:"fold8", active:true, sellable:true, tradePromoEligible:true },
+    { id:'zfold8u-1tb', name:'Galaxy Z Fold8 Ultra', storage:'1TB', retail:2699.99, tieredOffer:false, promoCategory:"fold8", active:true, sellable:true, tradePromoEligible:true },
 
     // Galaxy Z Fold8 — active trade-in ladder confirmed 7/22/2026.
-    { id:'zfold8', name:'Galaxy Z Fold8', storage:'256GB', retail:1899.99, tieredOffer:false, promoCategory:'fold8' },
-    { id:'zfold8-512', name:'Galaxy Z Fold8', storage:'512GB', retail:2099.99, tieredOffer:false, promoCategory:'fold8' },
+    { id:'zfold8', name:'Galaxy Z Fold8', storage:'256GB', retail:1899.99, tieredOffer:false, promoCategory:"fold8", active:true, sellable:true, tradePromoEligible:true },
+    { id:'zfold8-512', name:'Galaxy Z Fold8', storage:'512GB', retail:2099.99, tieredOffer:false, promoCategory:"fold8", active:true, sellable:true, tradePromoEligible:true },
 
     // Galaxy Z Flip8 — active $1,000 / $500 trade-in ladder confirmed 7/22/2026.
-    { id:'zflip8', name:'Galaxy Z Flip8', storage:'256GB', retail:1199.99, tieredOffer:false, promoCategory:'flip8' },
-    { id:'zflip8-512', name:'Galaxy Z Flip8', storage:'512GB', retail:1399.99, tieredOffer:false, promoCategory:'flip8' },
+    { id:'zflip8', name:'Galaxy Z Flip8', storage:'256GB', retail:1199.99, tieredOffer:false, promoCategory:"flip8", active:true, sellable:true, tradePromoEligible:true },
+    { id:'zflip8-512', name:'Galaxy Z Flip8', storage:'512GB', retail:1399.99, tieredOffer:false, promoCategory:"flip8", active:true, sellable:true, tradePromoEligible:true },
 
     // Pixel 11 Pro XL — new trade-in ladder effective 8/12/2026.
-    { id:'p11xl-256', name:'Pixel 11 Pro XL', storage:'256GB', retail:1349.99, tieredOffer:false, promoCategory:'pixel11XL' },
-    { id:'p11xl-512', name:'Pixel 11 Pro XL', storage:'512GB', retail:1479.99, tieredOffer:false, promoCategory:'pixel11XL' },
+    { id:'p11xl-256', name:'Pixel 11 Pro XL', storage:'256GB', retail:1349.99, tieredOffer:false, promoCategory:"pixel11XL", active:true, sellable:true, tradePromoEligible:true },
+    { id:'p11xl-512', name:'Pixel 11 Pro XL', storage:'512GB', retail:1479.99, tieredOffer:false, promoCategory:"pixel11XL", active:true, sellable:true, tradePromoEligible:true },
 
     // Pixel 11 Pro — new trade-in ladder effective 8/12/2026.
-    { id:'p11pro-256', name:'Pixel 11 Pro', storage:'256GB', retail:1149.99, tieredOffer:false, promoCategory:'pixel11Pro' },
-    { id:'p11pro-512', name:'Pixel 11 Pro', storage:'512GB', retail:1279.99, tieredOffer:false, promoCategory:'pixel11Pro' },
+    { id:'p11pro-256', name:'Pixel 11 Pro', storage:'256GB', retail:1149.99, tieredOffer:false, promoCategory:"pixel11Pro", active:true, sellable:true, tradePromoEligible:true },
+    { id:'p11pro-512', name:'Pixel 11 Pro', storage:'512GB', retail:1279.99, tieredOffer:false, promoCategory:"pixel11Pro", active:true, sellable:true, tradePromoEligible:true },
 
     // Pixel 11 — tiered offer effective 8/12/2026.
-    { id:'p11-256', name:'Pixel 11', storage:'256GB', retail:939.99, tieredOffer:true, tieredMonthlyNew:10.99, tieredMonthlyUpgrade:10.99 },
+    { id:'p11-256', name:'Pixel 11', storage:'256GB', retail:939.99, tieredOffer:true, tieredMonthlyNew:10.99, tieredMonthlyUpgrade:10.99, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
 
     // Pixel 10 Pro XL (AT&T carries 256/512 only) — category pixelXL
-    { id:'pxl', name:'Pixel 10 Pro XL', storage:'256GB', retail:1249.99, tieredOffer:false },
-    { id:'pxl-512', name:'Pixel 10 Pro XL', storage:'512GB', retail:1379.99, tieredOffer:false },
+    { id:'pxl', name:'Pixel 10 Pro XL', storage:'256GB', retail:1249.99, tieredOffer:false, promoCategory:"pixelXL", active:true, sellable:true, tradePromoEligible:false },
+    { id:'pxl-512', name:'Pixel 10 Pro XL', storage:'512GB', retail:1379.99, tieredOffer:false, promoCategory:"pixelXL", active:true, sellable:true, tradePromoEligible:false },
 
     // Pixel 10 Pro (AT&T carries 128/256 only) — category pixelPro
-    { id:'ppro', name:'Pixel 10 Pro', storage:'128GB', retail:1049.99, tieredOffer:false },
-    { id:'ppro-256', name:'Pixel 10 Pro', storage:'256GB', retail:1149.99, tieredOffer:false },
+    { id:'ppro', name:'Pixel 10 Pro', storage:'128GB', retail:1049.99, tieredOffer:false, promoCategory:"pixelPro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ppro-256', name:'Pixel 10 Pro', storage:'256GB', retail:1149.99, tieredOffer:false, promoCategory:"pixelPro", active:true, sellable:true, tradePromoEligible:false },
 
     // Razr Ultra — see flag in chat: AT&T's prior listing doesn't match the 2026 model's actual retail/availability
-    { id:'razr', name:'Razr Ultra', storage:'', retail:1319.99, tieredOffer:false },
+    { id:'razr', name:'Razr Ultra', storage:'', retail:1319.99, tieredOffer:false, promoCategory:"razr", active:true, sellable:true, tradePromoEligible:true },
 
     // Searchable tiered-offer devices confirmed against the 7/27/2026 eligible-device list.
     // iPhone 17e — Updated 7/2/2026: both new and upgrade now flat per storage tier
     // 256GB $5.99 (was $0.99 new / $5.99 upgrade), 512GB $11.99 (was $6.99 new / $11.99 upgrade)
-    { id:'i17e-256', name:'iPhone 17e', storage:'256GB', retail:699.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:5.99 },
-    { id:'i17e-512', name:'iPhone 17e', storage:'512GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:11.99 },
+    { id:'i17e-256', name:'iPhone 17e', storage:'256GB', retail:699.99, tieredOffer:true, tieredMonthlyNew:0.99, tieredMonthlyUpgrade:5.99, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
+    { id:'i17e-512', name:'iPhone 17e', storage:'512GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:6.99, tieredMonthlyUpgrade:11.99, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
 
     // S25 FE: New Line only — no upgrade tiered price
-    { id:'s25fe', name:'Galaxy S25 FE', storage:'128GB', retail:649.99, tieredOffer:true, tieredMonthlyNew:13.99, tieredMonthlyUpgrade:null },
+    { id:'s25fe', name:'Galaxy S25 FE', storage:'128GB', retail:649.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:false },
     // Galaxy A17 5G — upgrade tiered offer ended 7/1. New line $0/mo only going forward.
-    { id:'a17', name:'Galaxy A17 5G', storage:'', retail:249.99, tieredOffer:true, tieredMonthlyNew:0.00, tieredMonthlyUpgrade:null },
-    { id:'a37', name:'Galaxy A37', storage:'', retail:449.99, tieredOffer:true, tieredMonthlyNew:2.99, tieredMonthlyUpgrade:7.99 },
+    { id:'a17', name:'Galaxy A17 5G', storage:'', retail:249.99, tieredOffer:true, tieredMonthlyNew:0, tieredMonthlyUpgrade:null, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:false },
+    { id:'a37', name:'Galaxy A37', storage:'', retail:449.99, tieredOffer:true, tieredMonthlyNew:2.99, tieredMonthlyUpgrade:9.99, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:false },
     // Galaxy A57 5G — effective 8/7/2026: $5.99 new line / $10.99 upgrade + Next Up Anytime tiered upgrade.
-    { id:'a57', name:'Galaxy A57 5G', storage:'128GB', retail:449.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:10.99 },
+    { id:'a57', name:'Galaxy A57 5G', storage:'128GB', retail:449.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:10.99, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:false },
 
-    { id:'pxl10-128', name:'Pixel 10', storage:'128GB', retail:849.99, tieredOffer:true, tieredMonthlyNew:10.99, tieredMonthlyUpgrade:10.99 },
-    { id:'pxl10a', name:'Pixel 10a', storage:'128GB', retail:519.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:5.99 },
+    { id:'pxl10-128', name:'Pixel 10', storage:'128GB', retail:849.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
+    { id:'pxl10a', name:'Pixel 10a', storage:'128GB', retail:519.99, tieredOffer:true, tieredMonthlyNew:8.99, tieredMonthlyUpgrade:8.99, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
 
-    { id:'razrplus', name:'moto razr+ (2026)', storage:'256GB', retail:1044.99, tieredOffer:true, tieredMonthlyNew:9.99, tieredMonthlyUpgrade:12.99 },
-    { id:'moto-g-2026', name:'moto g (2026)', storage:'128GB', retail:239.99, tieredOffer:true, tieredMonthlyNew:0.00, tieredMonthlyUpgrade:4.99 },
-    { id:'moto-edge-2026', name:'moto edge (2026)', storage:'128GB', retail:504.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:8.99 },
+    { id:'razrplus', name:'moto razr+ (2026)', storage:'256GB', retail:1044.99, tieredOffer:true, tieredMonthlyNew:9.99, tieredMonthlyUpgrade:12.99, promoCategory:"razr", active:true, sellable:true, tradePromoEligible:true },
+    { id:'moto-g-2026', name:'moto g (2026)', storage:'128GB', retail:239.99, tieredOffer:true, tieredMonthlyNew:0, tieredMonthlyUpgrade:4.99, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
+    { id:'moto-edge-2026', name:'moto edge (2026)', storage:'128GB', retail:504.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:10.99, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
 
     // iPhone 16 — Updated 7/2/2026: all tiers now flat new/upgrade
     // 128GB $7.99 (was $2.99 new/$7.99 upgrade), 256GB $12.99 (was $7.99/$12.99), 512GB $17.99 (was $12.99/$17.99)
-    { id:'ip16-128', name:'iPhone 16', storage:'128GB', retail:729.99, tieredOffer:true, tieredMonthlyNew:7.99, tieredMonthlyUpgrade:7.99 },
-    { id:'ip16-256', name:'iPhone 16', storage:'256GB', retail:829.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null },
-    { id:'ip16-512', name:'iPhone 16', storage:'512GB', retail:1029.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null },
+    { id:'ip16-128', name:'iPhone 16', storage:'128GB', retail:729.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null, promoCategory:"iphoneBase", active:false, sellable:false, tradePromoEligible:false },
+    { id:'ip16-256', name:'iPhone 16', storage:'256GB', retail:829.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null, promoCategory:"iphoneBase", active:false, sellable:false, tradePromoEligible:false },
+    { id:'ip16-512', name:'iPhone 16', storage:'512GB', retail:1029.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null, promoCategory:"iphoneBase", active:false, sellable:false, tradePromoEligible:false },
 
     // Galaxy S26 base model — tiered offers ended 7/30/2026. Trade-in and legacy Next Up offers remain active.
-    { id:'s26-256', name:'Galaxy S26', storage:'256GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:4.99, tieredMonthlyUpgrade:15.99, tieredSegments:['consumer','cru','firstnet'], promoCategory:'s26base' },
-    { id:'s26-512', name:'Galaxy S26', storage:'512GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:11.99, tieredMonthlyUpgrade:22.99, tieredSegments:['consumer','cru','firstnet'], promoCategory:'s26base' },
+    { id:'s26-256', name:'Galaxy S26', storage:'256GB', retail:899.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null, tieredSegments:['consumer','cru','firstnet'], promoCategory:"s26base", active:true, sellable:true, tradePromoEligible:true },
+    { id:'s26-512', name:'Galaxy S26', storage:'512GB', retail:1099.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null, tieredSegments:['consumer','cru','firstnet'], promoCategory:"s26base", active:true, sellable:true, tradePromoEligible:true },
 
     // Galaxy S25 Edge — flat price, same for New or Upgrade
-    { id:'s25edge-256', name:'Galaxy S25 Edge', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:20.99 },
-    { id:'s25edge-512', name:'Galaxy S25 Edge', storage:'512GB', retail:1219.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:25.99 },
+    { id:'s25edge-256', name:'Galaxy S25 Edge', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:10.99, tieredMonthlyUpgrade:25.99, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:false },
+    { id:'s25edge-512', name:'Galaxy S25 Edge', storage:'512GB', retail:1219.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:false },
 
     // amiGO Jr. Phone — $2.99/mo on a new line.
-    { id:'amigojr', name:'amiGO Jr. Phone', storage:'128GB', retail:259.99, tieredOffer:true, tieredMonthlyNew:2.99, tieredMonthlyUpgrade:null }
+    { id:'amigojr', name:'amiGO Jr. Phone', storage:'128GB', retail:259.99, tieredOffer:true, tieredMonthlyNew:2.99, tieredMonthlyUpgrade:null, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false }
   ];
+
+  PHONES.push({id:'s26fe',name:'Galaxy S26 FE',storage:"128GB",retail:699.99,tieredOffer:true,tieredMonthlyNew:2.99,tieredMonthlyUpgrade:12.99,promoCategory:"samsung",active:true,sellable:true});
 
   const money = n => "$" + Number(n).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
   // For whole-dollar amounts like trade-in values and bill credits — no trailing .00, but keeps
@@ -3030,7 +3073,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   const amountEl = el('amount'), detailEl = el('detail'), summaryEl = el('summaryText');
   const pixelChk = el('pixelChk'), planHelp = el('planHelp'), pixelToggleEl = el('pixelToggle'), galaxyAnyToggleEl = el('galaxyAnyToggle'), galaxyAnySelect = el('galaxyAnySelect');
 
-  const VISIBLE_PHONE_IDS = ['iphone18pro','iphone18promax','ip17','ip17p','ip17pm','ipair','i17e-256','s26-256','s26p','s26u','zflip8','zfold8','zfold8u','p11-256','p11pro-256','p11xl-256'];
+  const VISIBLE_PHONE_IDS = ['iphone18pro','iphone18promax','iphoneduo','ip17','ip17p','ip17pm','ipair','i17e-256','s26-256','s26p','s26u','zflip8','zfold8','zfold8u','p11-256','p11pro-256','p11xl-256'];
 
   const noTradeBtn = el('noTradeBtn');
 
@@ -3547,17 +3590,100 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     tradeEl.value=''; state.value=null; state.tradeValueMode=null; tradeError.style.display='none'; manualOverridePill.classList.remove('show'); tradeDbStatus.className='trade-db-status'; tradeDbStatus.textContent=state.tradeDevice?'Value cleared — choose storage/condition again or enter manually.':'Choose a trade-in phone or enter a value manually.'; tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true'); render();
   });
 
-  // Promo ladders effective 7/31/2026.
+  // Current promo ladders. Samsung/Pixel changes effective 10/2/2026.
+  // iPhone Duo preview becomes effective 10/16/2026.
   const LADDERS = {
-    // 9/12 Apple launch rules. No $700 Apple tier.
-    // iPhone 18 Pro / Pro Max: Premium 1200 @ 180+, 930 @ 130+, 350 @ 35+;
-    // Extra/Starter 930 @ 130+, 350 @ 35+; Value 500 @ 130+, 350 @ 35+.
-    // iPhone 17: Premium/Extra/Starter 930 @ 130+, 350 @ 35+; Value 500 @ 130+, 350 @ 35+.
-    premium:{ iphonePro:[{min:180,credit:1200},{min:130,credit:930},{min:35,credit:350}], iphoneBase:[{min:130,credit:930},{min:35,credit:350}], iphoneAir:[], samsung:[{min:95,credit:1100},{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:95,credit:1100},{min:35,credit:900}], flip8:[{min:95,credit:1100},{min:35,credit:900}], pixel11XL:[{min:200,credit:1350},{min:95,credit:1150},{min:35,credit:1000}], pixel11Pro:[{min:35,credit:1150}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
-    extra:{ iphonePro:[{min:130,credit:930},{min:35,credit:350}], iphoneBase:[{min:130,credit:930},{min:35,credit:350}], iphoneAir:[], samsung:[{min:95,credit:1100},{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:95,credit:1100},{min:35,credit:900}], flip8:[{min:95,credit:1100},{min:35,credit:900}], pixel11XL:[{min:200,credit:1350},{min:95,credit:1150},{min:35,credit:1000}], pixel11Pro:[{min:35,credit:1150}], pixelXL:[{min:200,credit:1250},{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:95,credit:1320},{min:35,credit:1000}] },
-    starter:{ iphonePro:[{min:130,credit:930},{min:35,credit:350}], iphoneBase:[{min:130,credit:930},{min:35,credit:350}], iphoneAir:[], samsung:[{min:35,credit:900}], s26base:[{min:35,credit:900}], fold8:[{min:35,credit:900}], flip8:[{min:35,credit:900}], pixel11XL:[{min:95,credit:1150},{min:35,credit:1000}], pixel11Pro:[{min:35,credit:1150}], pixelXL:[{min:35,credit:1050}], pixelPro:[{min:35,credit:1050}], razr:[{min:35,credit:1000}] },
-    value:{ iphonePro:[{min:130,credit:500},{min:35,credit:350}], iphoneBase:[{min:130,credit:500},{min:35,credit:350}], iphoneAir:[], samsung:[{min:35,credit:500}], s26base:[{min:35,credit:500}], fold8:[{min:35,credit:500}], flip8:[{min:35,credit:500}], pixel11XL:[{min:35,credit:500}], pixel11Pro:[{min:35,credit:500}], pixelXL:[{min:35,credit:500}], pixelPro:[{min:35,credit:500}], razr:[{min:35,credit:500}] }
+    premium:{
+      iphonePro:[{min:180,credit:1200},{min:130,credit:930},{min:35,credit:350}],
+      iphoneBase:[{min:130,credit:930},{min:35,credit:350}],
+      iphoneAir:[],
+      iphoneDuo:[{min:230,credit:1200},{min:130,credit:0},{min:35,credit:350}],
+      samsung:[{min:95,credit:1200},{min:35,credit:1000}],
+      s26base:[{min:35,credit:1000}],
+      fold8:[{min:95,credit:1200},{min:35,credit:1000}],
+      flip8:[{min:95,credit:1200},{min:35,credit:1000}],
+      pixel11XL:[{min:200,credit:1350},{min:95,credit:1150},{min:35,credit:1000}],
+      pixel11Pro:[{min:95,credit:1150},{min:35,credit:1000}],
+      pixelXL:[],
+      pixelPro:[],
+      razr:[{min:95,credit:1320},{min:35,credit:1000}]
+    },
+    extra:{
+      iphonePro:[{min:130,credit:930},{min:35,credit:350}],
+      iphoneBase:[{min:130,credit:930},{min:35,credit:350}],
+      iphoneAir:[],
+      iphoneDuo:[{min:130,credit:930},{min:35,credit:350}],
+      samsung:[{min:95,credit:1000},{min:35,credit:800}],
+      s26base:[{min:35,credit:800}],
+      fold8:[{min:95,credit:1000},{min:35,credit:800}],
+      flip8:[{min:95,credit:1000},{min:35,credit:800}],
+      pixel11XL:[{min:200,credit:1350},{min:95,credit:1150},{min:35,credit:1000}],
+      pixel11Pro:[{min:95,credit:1150},{min:35,credit:1000}],
+      pixelXL:[],
+      pixelPro:[],
+      razr:[{min:95,credit:1320},{min:35,credit:1000}]
+    },
+    starter:{
+      iphonePro:[{min:130,credit:930},{min:35,credit:350}],
+      iphoneBase:[{min:130,credit:930},{min:35,credit:350}],
+      iphoneAir:[],
+      iphoneDuo:[{min:130,credit:930},{min:35,credit:350}],
+      samsung:[{min:35,credit:800}],
+      s26base:[{min:35,credit:800}],
+      fold8:[{min:35,credit:800}],
+      flip8:[{min:35,credit:800}],
+      pixel11XL:[{min:95,credit:1150},{min:35,credit:1000}],
+      pixel11Pro:[{min:95,credit:1150},{min:35,credit:1000}],
+      pixelXL:[],
+      pixelPro:[],
+      razr:[{min:35,credit:1000}]
+    },
+    value:{
+      iphonePro:[{min:130,credit:500},{min:35,credit:350}],
+      iphoneBase:[{min:130,credit:500},{min:35,credit:350}],
+      iphoneAir:[],
+      iphoneDuo:[{min:130,credit:500},{min:35,credit:350}],
+      samsung:[{min:35,credit:500}],
+      s26base:[{min:35,credit:500}],
+      fold8:[{min:35,credit:500}],
+      flip8:[{min:35,credit:500}],
+      pixel11XL:[{min:35,credit:500}],
+      pixel11Pro:[{min:35,credit:500}],
+      pixelXL:[],
+      pixelPro:[],
+      razr:[{min:35,credit:500}]
+    }
   };
+
+
+  async function loadCurrentTradePromos(){
+    try{
+      const headers={apikey:SUPABASE_PUBLISHABLE_KEY};
+      const read=async table=>{
+        const res=await fetch(SUPABASE_URL+'/rest/v1/'+table+'?select=*&active=eq.true',{headers,cache:'no-store'});
+        if(!res.ok)throw new Error(table+' '+res.status);
+        return res.json();
+      };
+      const [promos,maps,groups,tiers]=await Promise.all(['promotions','promotion_devices','promotion_plan_groups','promotion_tiers'].map(read));
+      const now=Date.now();
+      const usable=promos.filter(p=>p.promo_type==='trade_in' && (!p.ends_at || now<Date.parse(p.ends_at)) &&
+        (!p.starts_at || now>=Date.parse(p.starts_at) || (p.promo_category_key==='iphoneDuo' && now<DUO_PREORDER_START)))
+        .sort((a,b)=>Number(b.priority||0)-Number(a.priority||0) || Date.parse(b.starts_at||0)-Date.parse(a.starts_at||0));
+      PHONES.forEach(phone=>{
+        const candidates=usable.filter(p=>maps.some(m=>m.promotion_id===p.id&&m.device_key===phone.id));
+        phone.tradePromoEligible=candidates.length>0; phone.liveTradeLadders={};
+        ['premium','extra','starter','value'].forEach(plan=>{
+          const promo=candidates.find(p=>groups.some(g=>g.promotion_id===p.id&&g.plan_group_key===plan));
+          phone.liveTradeLadders[plan]=promo?tiers.filter(t=>t.promotion_id===promo.id&&t.plan_group_key===plan)
+            .map(t=>({min:Number(t.min_trade_value),credit:Number(t.credit_amount)})).sort((a,b)=>b.min-a.min):[];
+        });
+      });
+    }catch(err){console.warn('Current trade promotions unavailable; using verified 10/2 fallback.',err);}
+  }
+  function promoLadderFor(plan,cat,phone){
+    if(phone && phone.liveTradeLadders)return phone.liveTradeLadders[plan]||[];
+    return (LADDERS[plan] && LADDERS[plan][cat]) || [];
+  }
 
   function savedAdminData(){
     try { return JSON.parse(localStorage.getItem(ADMIN_STORE_KEY) || '{}'); }
@@ -3581,7 +3707,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     // Phone catalog is live from Supabase. Never replace it with an older browser-local copy,
     // because that strips live fields such as sellable_devices.image_url.
     // Legacy local phone backups are intentionally ignored.
-    if(savedMatchesRelease && data.ladders && typeof data.ladders === 'object'){ Object.keys(LADDERS).forEach(k=>delete LADDERS[k]); Object.assign(LADDERS, data.ladders); }
+    // Browser-local promo backups do not override the current release's verified ladders.
     if(savedMatchesRelease && Array.isArray(data.tips)){ TIPS.splice(0, TIPS.length, ...data.tips); }
     const vb = el('versionBadge'), rm = el('releaseMeta');
     if(vb) vb.textContent = releaseInfo.version || VERSION;
@@ -3589,10 +3715,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
 
   const PIXEL_FLOORS = {
-    pixel11XL:{ premium:1000, starter:1000, value:500 },
-    pixel11Pro:{ premium:1150, starter:1150, value:500 },
-    pixelXL:{ premium:1050, starter:1050, value:500 },
-    pixelPro:{ premium:1050, starter:1050, value:500 }
+    pixel11XL:{ premium:1000, extra:1000, starter:1000, value:500 },
+    pixel11Pro:{ premium:1000, extra:1000, starter:1000, value:500 },
   };
   const isPixelCat = c => Object.prototype.hasOwnProperty.call(PIXEL_FLOORS, c);
   function pixelFloor(cat, plan){ return (PIXEL_FLOORS[cat] && PIXEL_FLOORS[cat][plan]) || 0; }
@@ -3645,28 +3769,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     return id.startsWith('s26u') || id.startsWith('s26p') || id.startsWith('s26-') || id.startsWith('zfold8') || id.startsWith('zflip8');
   }
   function samsungAnyConditionFloor(plan, phone, galaxyAny){
-    if(!isSamsungAnyConditionPhone(phone) || !galaxyAny || galaxyAny === 'none') return 0;
-    const id = phone.id || '';
-    // Effective 9/18: Fold8 / Fold8 Ultra / Flip8 use the current Samsung premium ladder.
-    if(id.startsWith('zfold8') || id.startsWith('zflip8')){
-      if(plan === 'premium' || plan === 'extra') return galaxyAny === 'high' ? 1100 : 900;
-      if(plan === 'starter') return 900;
-      if(plan === 'value') return 500;
-      return 0;
-    }
-    if(id.startsWith('s26-')){
-      if(plan === 'premium' || plan === 'extra' || plan === 'starter') return 900;
-      if(plan === 'value') return 500;
-      return 0;
-    }
-    if(plan === 'premium' || plan === 'extra') return galaxyAny === 'high' ? 1100 : 900;
-    if(plan === 'starter') return 900;
-    if(plan === 'value') return 500;
+    // 10/2/2026 Samsung guide is trade-value based; prior any-condition Galaxy bypass retired.
     return 0;
   }
   function samsungAnyConditionLabel(){
-    if(state.galaxyAny === 'high') return 'a qualifying any-condition Galaxy S22+ / Z Flip4 / Z Fold3 or newer';
-    if(state.galaxyAny === 'base') return 'a qualifying any-condition Galaxy S10 / Note10 / Z Flip3 or newer';
     return '';
   }
   function appleAnyConditionFloor(plan, phone){
@@ -3688,9 +3794,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     return 0;
   }
   function computeCredit(plan, cat, value, isPixelTrade, phone, galaxyAny){
+    if(phone && phone.tradePromoEligible === false) return 0;
     if(plan==='valueplus_mobile') return 0;
     if(!plan || plan==='other') return 0;
-    const ladder = LADDERS[plan] && LADDERS[plan][cat] ? LADDERS[plan][cat] : [];
+    const ladder = promoLadderFor(plan, cat, phone);
     let c = 0;
     if(value!==null && !isNaN(value)) for(const t of ladder) if(value >= t.min){ c = t.credit; break; }
     if(isPixelCat(cat) && isPixelTrade) c = Math.max(c, pixelFloor(cat, plan));
@@ -3834,13 +3941,13 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     // Next Up / Next Up Anytime always requires identifying the CURRENT phone
     // and confirming that its turn-in condition is eligible.
     if(state.nextUp && !state.tradeDevice) return { state:'nextup_need_device' };
-    if(state.nextUp && state.tradeDevice && !conditionComplete()) return { state:'nextup_need_condition' };
+    if(state.nextUp && state.tradeDevice && !conditionComplete() && !conditionPoor()) return { state:'nextup_need_condition' };
     if(state.nextUp && state.tradeDevice && conditionPoor()) return { state:'nextup_bad_condition' };
     if(!state.plan || !state.phone) return { state:'incomplete' };
 
     if(state.plan === 'valueplus_mobile') return { state:'full_retail_rerate' };
 
-    if(isS26Base(state.phone) && !isS26OfferActive() && !isS26TieredActive()) return { state:'promo_pending' };
+    // Base S26 now uses the 10/2 trade-in ladder.
 
     // Newly released phones stay searchable with verified MSRP, but no promo is guessed
     // until the exact AT&T / CCKM offer is loaded.
@@ -3897,13 +4004,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       }
     }
 
-    if(state.noTrade) return { state:'full_retail' };
+    if(state.tradeDevice && state.tradeValueMode==='auto' && !conditionComplete()) return { state:'needCondition' };
+    if(state.noTrade || state.phone.tradePromoEligible === false) return { state:'full_retail' };
 
     let cat = phoneCategory(state.phone);
     // The $1,200 Premium tier is only for iPhone 18 Pro / Pro Max.
     // Continuing iPhone 17 uses the base 9/12 ladder. 17 Pro/Pro Max are tiered.
     if(state.phone && state.phone.id === 'ip17') cat = 'iphoneBase';
-    const hasLadder = LADDERS[state.plan] && LADDERS[state.plan][cat];
+    const hasLadder = promoLadderFor(state.plan, cat, state.phone).length > 0;
     if(!hasLadder) return { state:'full_retail' };
 
     const hasValue = (state.value !== null && !isNaN(state.value));
@@ -4010,7 +4118,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(r.state !== 'promo') return '';
 
     const cat = phoneCategory(state.phone);
-    const ladder = (LADDERS[state.plan] && LADDERS[state.plan][cat]) ? LADDERS[state.plan][cat] : [];
+    const ladder = promoLadderFor(state.plan, cat, state.phone);
     // Collect all distinct credit amounts in this ladder (descending)
     let amounts = [...new Set(ladder.map(t => t.credit))].sort((a,b) => b - a);
     // Include pixel floor if it applies and would expand the set
@@ -4129,7 +4237,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(r.state !== 'promo' && r.state !== 'zero' && r.state !== 'needValue') return '';
     if(!state.plan || !state.phone) return '';
     const cat = phoneCategory(state.phone);
-    const ladder = (LADDERS[state.plan] && LADDERS[state.plan][cat]) ? LADDERS[state.plan][cat] : [];
+    const ladder = promoLadderFor(state.plan, cat, state.phone);
     if(ladder.length === 0) return '';
     const top = ladder.reduce((best, t) => t.credit > best.credit ? t : best, ladder[0]);
     if(r.state === 'promo' && r.credit === top.credit){
@@ -4397,11 +4505,88 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
 
 
-  function resultForPhone(phone){
-    const old = state.phone; state.phone = phone;
-    const r = getResult();
-    state.phone = old;
-    return r;
+  let quotePreviewDepth=0;
+  let resolveQuoteData;const quoteDataReady=new Promise(resolve=>resolveQuoteData=resolve);
+  const quoteFields=['plan','planSegment','value','tradePreset','pixel','galaxyAny','nextUp','nextUpType','nextPaid','tierAction','noTrade','tradeStorage','tradeBaseValue','tradeValueMode'];
+  function captureQuoteContext(){
+    const c={schema:2,phoneId:state.phone?.id||null,tradeDevice:state.tradeDevice?{brand:state.tradeDevice.brand,model:state.tradeDevice.model}:null,tradeCondition:{...state.tradeCondition}};
+    quoteFields.forEach(k=>c[k]=state[k]);return c;
+  }
+  function assignQuoteContext(c,revalue=false){
+    const defaults={plan:null,planSegment:'consumer',value:null,tradePreset:null,pixel:false,galaxyAny:'none',nextUp:false,nextUpType:'anytime',nextPaid:null,tierAction:null,noTrade:false,tradeStorage:null,tradeBaseValue:null,tradeValueMode:null};
+    quoteFields.forEach(k=>state[k]=c[k]===undefined?defaults[k]:c[k]);
+    state.pendingPlanSegment=null;
+    state.phone=PHONES.find(p=>p.id===c.phoneId)||null;
+    state.tradeDevice=c.tradeDevice?TRADE_MODELS.find(t=>t.brand===c.tradeDevice.brand&&t.model===c.tradeDevice.model)||null:null;
+    state.tradeCondition={power:null,lock:null,cracks:null,...c.tradeCondition};
+    if(revalue&&state.tradeDevice&&state.tradeValueMode==='auto'){
+      const rows=TRADE_DB.filter(r=>r.brand===state.tradeDevice.brand&&r.model===state.tradeDevice.model);
+      const row=rows.find(r=>r.storage===state.tradeStorage);
+      const base=row?.value??(rows.length&&rows.every(r=>r.value===rows[0].value)?rows[0].value:null);
+      state.tradeBaseValue=base;state.value=isTradeValueKnown(base)?Math.round(base*conditionMultiplier()*100)/100:null;
+    }
+  }
+  function evaluateQuoteContext(c,phoneId=c.phoneId){
+    const old=captureQuoteContext();quotePreviewDepth++;
+    try{assignQuoteContext({...c,phoneId},true);if(!isPhoneCurrentlyListed(state.phone))return {state:'incomplete'};return {...getResult()};}
+    finally{assignQuoteContext(old);quotePreviewDepth--;}
+  }
+  const completedQuoteStates=new Set(['promo','nextup_promo','tiered_final','full_retail','zero','tiered_not_offered']);
+  function quoteMetric(c,r){
+    const phone=PHONES.find(p=>p.id===c.phoneId);if(!phone||!completedQuoteStates.has(r.state))return null;
+    const credit=Number(r.credit||0),total=r.state==='tiered_final'?Number(r.total):Math.max(0,Number(phone.retail)-credit);
+    const payment=r.state==='tiered_final'?Number(r.monthly):Math.max(0,Number(monthly(phone.retail))-Number(r.monthly||0));
+    return {monthly:payment,total,credit};
+  }
+  function applyQuoteContext(c,navigate=true){
+    assignQuoteContext(c,true);
+    planSearch.value=PLAN_LABEL[state.plan]||'';
+    phoneSearch.value=state.phone?comparePhoneLabel(state.phone):'';
+    tradeDeviceSearch.value=state.tradeDevice?state.tradeDevice.brand+' '+state.tradeDevice.model:'';
+    if(state.tradeDevice){
+      const rows=state.tradeDevice.rows||[];
+      tradeStorageSelect.innerHTML='<option value="">Select storage</option>'+rows.map(r=>`<option value="${escapeHtml(r.storage)}">${escapeHtml(r.storage)}</option>`).join('');
+      tradeStorageSelect.value=state.tradeStorage||'';
+    }else{tradeStorageSelect.innerHTML='<option value="">Select storage</option>';}
+    tradeStorageRow.style.removeProperty('display');tradeConditionPanel.style.removeProperty('display');
+    tradeStorageRow.classList.toggle('show',!!state.tradeDevice);tradeConditionPanel.classList.toggle('show',!!state.tradeDevice);
+    tradeConditionPanel.classList.toggle('condition-poor',conditionPoor());tradeConditionPanel.classList.toggle('condition-good',conditionComplete()&&!conditionPoor());
+    tradeEl.value=isTradeValueKnown(state.value)?formatTradeValue(state.value):'';
+    tradeDbStatus.textContent=state.noTrade?'No trade-in selected.':state.tradeDevice?'Restored trade selection · verify current trade value.':state.tradeValueMode==='manual'?'Manual trade value.':'Choose a trade phone or No Trade.';
+    pixelChk.checked=state.pixel;galaxyAnySelect.value=state.galaxyAny;nextUpChk.checked=state.nextUp;
+    el('noTradeBtn')?.setAttribute('aria-pressed',String(state.noTrade));
+    document.querySelectorAll('#plans .chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.plan===state.plan)));
+    document.querySelectorAll('#phonesQuick .chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.phone===state.phone?.id)));
+    document.querySelectorAll('[data-cond]').forEach(b=>b.setAttribute('aria-pressed',String(state.tradeCondition[b.dataset.cond]===(b.dataset.answer==='yes'))));
+    document.querySelectorAll('#nextTypeChips [data-next-type]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.nextType===state.nextUpType)));
+    document.querySelectorAll('#nextPaidChips [data-paid]').forEach(b=>b.setAttribute('aria-pressed',String(state.nextPaid===(b.dataset.paid==='yes'))));
+    updateNextUpCopy();updateControlsAfterSelection();render();
+    if(navigate){closeTools();window.GTT4?.go('trade');}
+  }
+  function contextFromInvestigation(d,x){
+    const plan=({'55':'55plus',ineligible:'valueplus_mobile'})[x.plan]||x.plan;
+    const segment=/firstnet/i.test(d.plan||'')?'firstnet':/business|cru/i.test(d.plan||'')?'cru':'consumer';
+    const trade=x.trade?{brand:x.trade.brand,model:x.trade.model}:null;
+    const condition=String(d.condition||'').toLowerCase();
+    const good=/^(good|working|excellent|perfect|undamaged)( condition)?$/.test(condition);
+    const cracked=/crack/.test(condition),dead=/dead|doesn.t.*(turn|power)|won.t.*(turn|power)/.test(condition),locked=/activation.*lock|^locked$/.test(condition);
+    const cond={power:good||cracked?true:dead?false:null,lock:good||cracked?true:locked?false:null,cracks:good?true:cracked?false:null};
+    const storage=d.trade_storage||null;
+    const row=trade&&storage?TRADE_DB.find(r=>r.brand===trade.brand&&r.model===trade.model&&String(r.storage).toLowerCase()===String(storage).toLowerCase()):null;
+    const modelRows=trade?TRADE_DB.filter(r=>r.brand===trade.brand&&r.model===trade.model):[];
+    const sameValue=modelRows.length&&modelRows.every(r=>r.value===modelRows[0].value);
+    const base=row?.value??(sameValue?modelRows[0].value:null);
+    const multiplier=(dead||locked)?0.18:cracked?0.5:1;
+    const nextUp=['anytime','legacy','unknown'].includes(d.next_up);
+    return {schema:2,plan,planSegment:segment,phoneId:x.target?.device_key||null,tradeDevice:trade,tradeStorage:storage,tradeBaseValue:base,value:base==null?null:Math.round(Number(base)*multiplier*100)/100,tradeValueMode:trade?'auto':null,tradeCondition:cond,pixel:trade?.brand==='Google',galaxyAny:'none',nextUp,nextUpType:d.next_up==='legacy'?'legacy':'anytime',nextPaid:d.paid_percent==null?null:Number(d.paid_percent)>=(d.next_up==='legacy'?50:33),tierAction:d.activation==='new'?'new':d.activation==='upgrade'?'upgrade':null,noTrade:!!d.no_trade};
+  }
+  window.GTTQuote={ready:quoteDataReady,capture:captureQuoteContext,evaluate:evaluateQuoteContext,metric:quoteMetric,apply:applyQuoteContext,fromInvestigation:contextFromInvestigation,openTool:openTools,phones:()=>PHONES.filter(isPhoneCurrentlyListed).map(p=>({id:p.id,name:p.name,storage:p.storage}))};
+
+  function resultForPhone(phone){return evaluateQuoteContext(captureQuoteContext(),phone.id);
+  }
+  function syncCompareContext(){
+    el('comparePlan').value=state.plan||'';el('compareSegment').value=state.planSegment||'consumer';el('compareActivation').value=state.tierAction||'';
+    el('compareContext').textContent=state.noTrade?'No trade-in':state.tradeDevice?state.tradeDevice.brand+' '+state.tradeDevice.model+(state.tradeStorage?' · '+state.tradeStorage:' · storage unconfirmed')+' · '+(conditionComplete()?'condition recorded':'condition needed'):isTradeValueKnown(state.value)?formatTradeValue(state.value)+' manual trade value':'Trade details needed';
   }
   function tieredOfferLabel(phone){
     if(!phone || !hasActiveTieredOffer(phone)) return '';
@@ -4419,7 +4604,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     return 'No recurring promo';
   }
   function phoneMonthlyAfterCredit(phone, r){
-    if(r.state === 'promo'){
+    if(r.state === 'promo'||r.state === 'nextup_promo'){
       return '$' + Math.max(0, parseFloat(monthly(phone.retail)) - parseFloat(r.monthly)).toFixed(2);
     }
     if(r.state === 'tiered_final') return '$' + Number(r.monthly).toFixed(2);
@@ -4467,8 +4652,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   function comparisonSavings(phone,r){
     if(!phone)return 0;
     if(r.state==='tiered_final') return Math.max(0,Number(phone.retail)-Number(r.total||0));
-    if(r.state==='promo') return Math.max(0,Number(r.credit||0));
-    if(r.state==='nextup_promo') return Math.max(0,Number(r.credit||0));
+    if(r.state==='promo'||r.state==='nextup_promo')return Math.min(Number(phone.retail),Math.max(0,Number(r.credit||0)));
     return 0;
   }
   function comparisonTotalCost(phone,r){
@@ -4497,7 +4681,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
   function comparePhoneCard(phone){
     const r=resultForPhone(phone);
-    const monthlyAfter=phoneMonthlyAfterCredit(phone,r);
+    const ready=completedQuoteStates.has(r.state);
+    const monthlyAfter=ready?phoneMonthlyAfterCredit(phone,r):'Details needed';
     const savings=comparisonSavings(phone,r);
     const total=comparisonTotalCost(phone,r);
     const promo=comparisonPromoType(phone,r);
@@ -4508,20 +4693,23 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       <div class="compare-key">
         <span>Est. device</span><b class="compare-price">${escapeHtml(String(monthlyAfter).startsWith('$') ? monthlyAfter+'/mo' : monthlyAfter)}</b>
         <span>MSRP</span><b>${money(phone.retail)}</b>
-        <span>Total savings</span><b>${savings>0?money(savings):'—'}</b>
+        <span>36-month device total</span><b>${ready?money(total):'Details needed'}</b>
+        <span>Estimated savings</span><b>${ready?money(savings):'—'}</b>
       </div>
       <div class="compare-badges"><span class="compare-badge">${escapeHtml(activation)}</span><span class="compare-badge">${escapeHtml(PLAN_LABEL[state.plan]||'Current plan')}</span></div>
       <details class="compare-more"><summary>More details</summary><div class="compare-more-body">
-        <b>Estimated 36-mo device cost:</b> ${money(total)}<br>
+        <b>Estimated 36-mo device cost:</b> ${ready?money(total):'Complete the quote first'}<br>
         <b>Promo:</b> ${escapeHtml(promo)}<br>
+        <b>Recurring promo credits:</b> ${ready?money(r.credit||0):'Details needed'}<br>
         <b>Promo/Trade context:</b> ${escapeHtml(comparisonPromoRequirement(phone,r))}<br>
         <b>Retail before promo:</b> ${money(phone.retail)}<br>
-        <b>Device key:</b> ${escapeHtml(phone.id)}<br>
+        
         Verify final eligibility and pricing in OPUS/CCKM.
-      </div></details>
+      </div></details><button type="button" class="admin-btn secondary" data-use-compare="${phone.id}">Use this phone →</button>
     </article>`;
   }
   function renderCompare(){
+    syncCompareContext();
     const box=el('compareResult');
     const shell=el('compareResultShell');
     const status=el('compareResultStatus');
@@ -4549,7 +4737,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         try{
           const r=resultForPhone(p);
           const monthlyText=phoneMonthlyAfterCredit(p,r);
-          const monthly=parseFloat(String(monthlyText).replace(/[^0-9.]/g,''))||9999;
+          const parsed=parseFloat(String(monthlyText).replace(/[^0-9.]/g,''));
+          const monthly=completedQuoteStates.has(r.state)&&Number.isFinite(parsed)?parsed:9999;
           return {p,r,monthly,savings:comparisonSavings(p,r)};
         }catch(err){
           console.error('Comparison metric error',p,err);
@@ -4557,12 +4746,13 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         }
       });
 
-      const validMetrics=metrics.filter(m=>!m.error);
+      const validMetrics=metrics.filter(m=>!m.error&&m.monthly<9999);
+      const allReady=phones.length>=2&&validMetrics.length===phones.length;
       const cheapest=validMetrics.length?[...validMetrics].sort((a,b)=>a.monthly-b.monthly)[0]:null;
       const biggest=validMetrics.length?[...validMetrics].sort((a,b)=>b.savings-a.savings)[0]:null;
       const pills=[];
-      if(cheapest&&cheapest.monthly<9999) pills.push(`<span class="compare-summary-pill">Lowest monthly: ${escapeHtml(cheapest.p.name)}</span>`);
-      if(biggest&&biggest.savings>0) pills.push(`<span class="compare-summary-pill">Biggest savings: ${escapeHtml(biggest.p.name)}</span>`);
+      if(allReady&&cheapest&&cheapest.monthly<9999) pills.push(`<span class="compare-summary-pill">Lowest monthly: ${escapeHtml(cheapest.p.name)}</span>`);
+      if(allReady&&biggest&&biggest.savings>0) pills.push(`<span class="compare-summary-pill">Biggest savings: ${escapeHtml(biggest.p.name)}</span>`);
 
       const cards=metrics.map(m=>{
         if(m.error){
@@ -4576,8 +4766,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       }).join('');
 
       box.innerHTML=`<div class="compare-summary-strip">${pills.join('')}</div><div class="compare-phone-grid">${cards}</div><p style="margin:9px 0 0;color:var(--slate);font-size:12px;">Uses the current quote context. Verify final pricing and eligibility in OPUS/CCKM.</p>`;
+      box.querySelectorAll('[data-use-compare]').forEach(b=>b.onclick=()=>applyQuoteContext({...captureQuoteContext(),phoneId:b.dataset.useCompare}));
       if(shell) shell.classList.add('has-results');
-      if(status) status.textContent='Ready';
+      if(status) status.textContent=allReady?'Ready · same customer context':'Finish customer details before comparing prices';
     }catch(err){
       console.error('Phone comparison failed',err);
       if(shell) shell.classList.add('error');
@@ -4711,39 +4902,37 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   el('compareRemoveThird').addEventListener('click',()=>{compareState.third=false;compareState.ids[2]=null;syncCompareInputs();renderCompare();});
   el('compareClearAll').addEventListener('click',()=>{compareState.ids=[null,null,null];compareState.third=false;syncCompareInputs();renderCompare();});
 
-  function getHistory(){ try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');}catch(e){return [];} }
-  function saveHistory(items){ localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0,10))); }
+  function getHistory(){ try{const items=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');return Array.isArray(items)?items.filter(x=>x&&typeof x==='object'):[];}catch(e){return [];} }
+  let historyStorageError=false;
+  function saveHistory(items){try{localStorage.setItem(HISTORY_KEY,JSON.stringify(items.slice(0,10)));historyStorageError=false;}catch(e){historyStorageError=true;} }
   function currentHistoryEntry(r){
-    if(!state.plan || !state.phone) return null;
-    const phoneLabel = `${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}`;
-    return { t:Date.now(), plan:state.plan, phoneId:state.phone.id, value:state.value, pixel:state.pixel, galaxyAny:state.galaxyAny, nextUp:state.nextUp, nextUpType:state.nextUpType, nextPaid:state.nextPaid, tierAction:state.tierAction, label:`${phoneLabel} · ${PLAN_LABEL[state.plan]}`, detail: buildSummary(), result:r.state==='promo'?moneyWhole(r.credit):(r.state==='tiered_final'?'$'+Number(r.monthly).toFixed(2)+'/mo':r.state) };
+    if(!state.plan||!state.phone)return null;
+    const context=captureQuoteContext(),metric=quoteMetric(context,r);
+    return {schema:2,t:Date.now(),context,phoneId:context.phoneId,label:comparePhoneLabel(state.phone)+' · '+(PLAN_LABEL[state.plan]||state.plan),detail:buildSummary(),result:metric?'$'+metric.monthly.toFixed(2)+'/mo':r.state,snapshot:{state:r.state,...metric}};
   }
   let lastHistoryKey = '';
   function maybeSaveHistory(r){
-    if(!['promo','tiered_final','full_retail','full_retail_rerate','zero','tiered_not_offered'].includes(r.state)) return;
-    const entry = currentHistoryEntry(r); if(!entry) return;
-    const key = JSON.stringify([entry.plan,entry.phoneId,entry.value,entry.pixel,entry.galaxyAny,entry.nextUp,entry.nextUpType,entry.nextPaid,entry.tierAction,entry.result]);
-    if(key === lastHistoryKey) return; lastHistoryKey = key;
-    const items = getHistory().filter(x => JSON.stringify([x.plan,x.phoneId,x.value,x.pixel,x.galaxyAny,x.nextUp,x.nextUpType,x.nextPaid,x.tierAction,x.result]) !== key);
-    saveHistory([entry, ...items]); renderHistory();
+    if(quotePreviewDepth||!completedQuoteStates.has(r.state))return;
+    const entry=currentHistoryEntry(r);if(!entry)return;
+    const key=JSON.stringify([entry.context,entry.snapshot]);if(key===lastHistoryKey)return;lastHistoryKey=key;
+    saveHistory([entry,...getHistory().filter(x=>JSON.stringify([x.context,x.snapshot])!==key)]);renderHistory();
   }
   function renderHistory(){
-    const box = el('historyList'), items = getHistory();
-    if(!items.length){ box.innerHTML = '<p style="margin:0;color:var(--slate);font-size:13px;">Completed calculations will appear here.</p>'; return; }
-    box.innerHTML = items.map((x,i)=>`<button class="history-item" data-i="${i}">${x.label} <span style="float:right;color:var(--blue);">${x.result}</span><small>${x.detail}</small></button>`).join('');
-    box.querySelectorAll('.history-item').forEach(btn=>btn.addEventListener('click',()=>restoreHistory(items[btn.dataset.i])));
+    const box=el('historyList'),items=getHistory();
+    if(historyStorageError){box.innerHTML='<p>This browser could not save history. Your quote still works.</p>';return;}
+    if(!items.length){box.innerHTML='<p>Completed quotes are saved on this device. Restore a quote to recheck current offers.</p>';return;}
+    box.innerHTML=items.map((x,i)=>{
+      let current='Older quote · some details were not saved',changed=false;
+      if(x.context){const r=evaluateQuoteContext(x.context),m=quoteMetric(x.context,r);changed=JSON.stringify({state:r.state,...m})!==JSON.stringify(x.snapshot);current=m?'Current: $'+m.monthly.toFixed(2)+'/mo · $'+m.total.toFixed(2)+' over 36 months':'Current: '+(buildHistoryStatus(r.state));}
+      return `<button type="button" class="history-item" data-i="${i}"><b>${escapeHtml(x.label)}</b><small>${escapeHtml(new Date(x.t).toLocaleString())} · Saved: ${escapeHtml(x.result)}</small><small>${escapeHtml(current)}${changed?' · Offer or eligibility changed':''}</small><small>${escapeHtml(x.detail)} · Restore full quote →</small></button>`;
+    }).join('');
+    box.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>restoreHistory(items[Number(b.dataset.i)]));
+  }
+  function buildHistoryStatus(status){return ({incomplete:'device or plan unavailable',needCondition:'confirm trade condition',needValue:'trade value needed',need_trade_choice:'trade details needed'})[status]||status.replace(/_/g,' ');
   }
   function restoreHistory(x){
-    state.plan=x.plan; state.phone=PHONES.find(p=>p.id===x.phoneId)||null; state.value=x.value; state.pixel=!!x.pixel; state.galaxyAny=x.galaxyAny||'none'; state.nextUp=!!x.nextUp; state.nextUpType=x.nextUpType||'anytime'; state.nextPaid=x.nextPaid; state.tierAction=x.tierAction||null;
-    document.querySelectorAll('#plans .chip').forEach(b=>b.setAttribute('aria-pressed', b.dataset.plan===state.plan?'true':'false'));
-    document.querySelectorAll('#phonesQuick .chip').forEach(b=>b.setAttribute('aria-pressed', state.phone&&b.dataset.phone===state.phone.id?'true':'false'));
-    phoneSearch.value = state.phone ? state.phone.name + (state.phone.storage?' '+state.phone.storage:'') : '';
-    tradeEl.value = state.value==null ? '' : new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(state.value);
-    pixelChk.checked = state.pixel; galaxyAnySelect.value = state.galaxyAny; nextUpChk.checked = state.nextUp; el('nextTypeRow').style.display = state.nextUp ? 'block' : 'none'; el('nextPaidRow').style.display = state.nextUp ? 'block' : 'none';
-    document.querySelectorAll('#nextTypeChips [data-next-type]').forEach(btn=>btn.setAttribute('aria-pressed', btn.dataset.nextType === state.nextUpType ? 'true' : 'false'));
-    updateNextUpCopy();
-    document.querySelectorAll('#nextPaidChips [data-paid]').forEach(b=>b.setAttribute('aria-pressed', (state.nextPaid===true&&b.dataset.paid==='yes')||(state.nextPaid===false&&b.dataset.paid==='no')?'true':'false'));
-    updateControlsAfterSelection(); render();
+    const c=x.context||{...x,tradeDevice:null,tradeStorage:null,tradeCondition:{power:null,lock:null,cracks:null},tradeValueMode:x.value==null?null:'manual',noTrade:false,planSegment:'consumer'};
+    applyQuoteContext(c);
   }
 
 
@@ -4803,9 +4992,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(!planSel || !catSel) return;
     const currentPlan = planSel.value || 'premium';
     const currentCat = catSel.value || 'iphonePro';
-    planSel.innerHTML = ['premium','starter','value'].map(k=>`<option value="${k}">${PLAN_LABEL[k]}</option>`).join('');
+    planSel.innerHTML = ['premium','extra','starter','value'].map(k=>`<option value="${k}">${PLAN_LABEL[k]}</option>`).join('');
     catSel.innerHTML = PROMO_CATEGORY_KEYS.map(k=>`<option value="${k}">${PROMO_CATEGORY_LABEL[k]}</option>`).join('');
-    planSel.value = ['premium','starter','value'].includes(currentPlan) ? currentPlan : 'premium';
+    planSel.value = ['premium','extra','starter','value'].includes(currentPlan) ? currentPlan : 'premium';
     catSel.value = PROMO_CATEGORY_KEYS.includes(currentCat) ? currentCat : 'iphonePro';
   }
   function inferPhoneCategoryForAdmin(phone){
@@ -5256,8 +5445,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   function buildAdminCheckContent(){
     const box = el('adminCheckContent');
     if(!box) return;
-    const cats = ['iphonePro','iphoneBase','iphoneAir','samsung','s26base','pixelXL','pixelPro','razr'];
-    const planKeys = ['premium','starter','value'];
+    const cats = ['iphonePro','iphoneBase','iphoneAir','iphoneDuo','samsung','s26base','fold8','flip8','pixel11XL','pixel11Pro','pixelXL','pixelPro','razr'];
+    const planKeys = ['premium','extra','starter','value'];
     const promoHtml = planKeys.map(plan=>`<details class="tool-subcard"><summary><b>${PLAN_LABEL[plan]} Promo Ladders</b></summary>` + cats.map(cat=>{
       const tiers = (LADDERS[plan] && LADDERS[plan][cat]) ? LADDERS[plan][cat] : [];
       const rows = tiers.length ? tiers.map(t=>`<tr><td>$${t.min}+</td><td>${moneyWhole(t.credit)}</td><td>$${monthly(t.credit)}/mo credit</td></tr>`).join('') : '<tr><td colspan="3">No ladder loaded.</td></tr>';
@@ -5533,6 +5722,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     'razr ultra':'razr-ultra.jpg'
   };
   function bucketFallbackUrl(phone){
+    if(phone?.id==='iphoneduo')return 'https://globaltradetool.com/iphoneduo.png';
     const f = phone && PHONE_BUCKET_FILES[String(phone.name||'').trim().toLowerCase()];
     return f ? PHONE_BUCKET_BASE + encodeURIComponent(f) : '';
   }
@@ -5642,12 +5832,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     preloader.onerror=()=>{
       if(token!==phoneArtTransitionToken) return;
       phoneArtPendingUrl='';
-      // Keep the previous phone visible if a replacement fails to load.
-      // The fallback is only used when there was never a valid phone image.
-      if(!phoneArtCurrentUrl){
-        const fallback=el('resultPhoneFallback');
-        if(fallback) fallback.classList.add('show');
-      }
+      clearPhoneArtAnimations(wrap);img.removeAttribute('src');phoneArtCurrentUrl='';
+      const fallback=el('resultPhoneFallback');if(fallback)fallback.classList.add('show');
     };
 
     preloader.src=newUrl;
@@ -5697,6 +5883,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   // Render UI
   let lastShownCredit = null;
   function render(){
+    el('duoPreorderBanner').hidden = !isDuoPreorderPreview(state.phone);
     updateStepLocks();
     const compareLaunchWrap = el('compareLaunchWrap');
     if(compareLaunchWrap) compareLaunchWrap.classList.toggle('show', !!(state.phone && tradeStepComplete()));
@@ -5860,8 +6047,23 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     maybeSaveHistory(r);
   }
 
+  ['comparePlan','compareSegment','compareActivation'].forEach(id=>el(id).addEventListener('change',()=>{
+    const c=captureQuoteContext();c.plan=el('comparePlan').value||null;c.planSegment=el('compareSegment').value;c.tierAction=el('compareActivation').value||null;applyQuoteContext(c,false);
+  }));
+  el('compareEditTrade').onclick=()=>{closeTools();window.GTT4?.go('trade');tradeDeviceSearch.focus();};
+  el('compareNoTrade').onclick=()=>{const c=captureQuoteContext();Object.assign(c,{noTrade:true,tradeDevice:null,tradeStorage:null,tradeCondition:{power:null,lock:null,cracks:null},value:null,tradeValueMode:null,pixel:false,galaxyAny:'none',nextUp:false,nextPaid:null});applyQuoteContext(c,false);};
+  const helpCards=[...el('toolsFaqPage').querySelectorAll('details')];
+  const helpCats=['Credits','Trade-in','Plans','Next Up','Order checks'];
+  const helpCategory=[0,1,1,1,1,4,2,1,3,3,4];
+  el('helpFilters').innerHTML=['All',...helpCats].map((c,i)=>`<button type="button" class="admin-btn secondary" data-help-category="${i-1}" aria-pressed="${i===0}">${c}</button>`).join('');
+  let helpFilter=-1;
+  function renderHelp(){let count=0;const q=el('helpSearch').value.toLowerCase().trim();helpCards.forEach((card,i)=>{const show=(helpFilter<0||helpCategory[i]===helpFilter)&&(!q||card.textContent.toLowerCase().includes(q));card.hidden=!show;if(show){count++;card.open=!!q;}});el('helpCount').textContent=count?count+' answers':'No match. Try “condition”, “credits”, or “Next Up”.';}
+  helpCards.forEach((card,i)=>{const button=document.createElement('button');button.type='button';button.className='admin-btn secondary';button.textContent=helpCategory[i]===3?'Check Next Up in quote →':helpCategory[i]===0?'Ask Investigator →':'Check this in a quote →';button.onclick=()=>{closeTools();if(helpCategory[i]===0){window.GTT4?.go('investigator');el('piAsk').value=card.querySelector('summary').textContent.replace(/^\d+\.\s*/,'');el('piAsk').focus();}else{window.GTT4?.go('trade');(helpCategory[i]===2?planSearch:helpCategory[i]===3?nextUpChk:tradeDeviceSearch).focus();}};card.appendChild(button);});
+  el('helpSearch').addEventListener('input',renderHelp);el('helpFilters').querySelectorAll('button').forEach(b=>b.onclick=()=>{helpFilter=Number(b.dataset.helpCategory);el('helpFilters').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderHelp();});renderHelp();
+  const duoAsset=PHONES.find(p=>p.id==='iphoneduo');if(duoAsset&&!duoAsset.imageUrl)duoAsset.imageUrl='https://globaltradetool.com/iphoneduo.png';
   // initialize
   applyAdminData();
+  await loadCurrentTradePromos();
   await loadReleaseMetaFromSupabase();
   await loadWhatsNewContentFromSupabase();
   buildQuickChips();
@@ -5872,6 +6074,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   render();
   // GTT 4.0: What's New is opened intentionally from the launch strip / navigation.
   // Legacy automatic daily popup disabled.
+  resolveQuoteData();
   console.debug('Global Trade Tool initialized', VERSION, '| Trade DB:', TRADE_DB_SOURCE);
 })();
 
@@ -5968,14 +6171,15 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  document.querySelectorAll('[data-v4go]').forEach(x=>x.addEventListener('click',e=>{e.preventDefault();go(x.dataset.v4go)}));
  document.querySelectorAll('[data-v4more]').forEach(x=>x.addEventListener('click',()=> $('v4More').classList.add('open'))); $('v4MoreClose').onclick=closeMore; $('v4More').addEventListener('click',e=>{if(e.target===$('v4More'))closeMore()});
  document.querySelector('[data-v4admin]').onclick=()=>{closeMore(); const b=$('adminOpenBtn'); if(b)b.click()};
- document.querySelectorAll('[data-v4tool]').forEach(x=>x.addEventListener('click',()=>{ const open=$('toolsOpenBtn'); if(open)open.click(); setTimeout(()=>{const tile=document.querySelector('.tools-tile[data-tools-page="'+x.dataset.v4tool+'"]'); if(tile)tile.click()},40)}));
+ document.querySelectorAll('[data-v4tool]').forEach(x=>x.addEventListener('click',()=>window.GTTQuote?.openTool(x.dataset.v4tool)));
  // Supabase status + version. 4.0 is the build version; database takes over once current_version is switched to 4.0.
  const SB='https://uwomiirfvllcafijmkmk.supabase.co', KEY='sb_publishable_UMb8Nb5DG0w1dv9h5W5-2Q_0PinuBV4';
  fetch(SB+'/rest/v1/app_settings?select=setting_key,setting_value&setting_key=in.(current_version,source_version)',{headers:{apikey:KEY},cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(rows=>{ $('v4DbDot').classList.add('online'); $('v4DbDot').title='Supabase connected'; const v=rows.find(x=>x.setting_key==='current_version'); if(v&&String(v.setting_value).includes('4.0'))$('v4Version').textContent='4.0'; }).catch(()=>{$('v4DbDot').title='Supabase connection unavailable'});
  // Simple Tool uses live trade_devices, never embedded fallback when live fetch succeeds.
  let tradeRows=[], selected=null;
  const search=$('v4TradeSearch'), sugg=$('v4Suggestions'), storage=$('v4Storage');
- fetch(SB+'/rest/v1/trade_devices?select=brand,model,storage,trade_value&active=eq.true&order=brand.asc,model.asc,storage.asc&limit=1500',{headers:{apikey:KEY},cache:'no-store'}).then(r=>r.json()).then(r=>{tradeRows=Array.isArray(r)?r:[]}).catch(()=>{});
+ const loadTradeData=()=>fetch(SB+'/rest/v1/trade_devices?select=brand,model,storage,trade_value&active=eq.true&order=brand.asc,model.asc,storage.asc&limit=1500',{headers:{apikey:KEY},cache:'no-store',signal:AbortSignal.timeout(15000)}).then(r=>{if(!r.ok)throw new Error('Trade values unavailable');return r.json()}).then(r=>{tradeRows=Array.isArray(r)?r:[]}).catch(()=>{});
+ let tradeDataReady=loadTradeData();
  function models(){const m=new Map;tradeRows.forEach(r=>{const k=r.brand+'|'+r.model;if(!m.has(k))m.set(k,{brand:r.brand,model:r.model,rows:[]});m.get(k).rows.push(r)});return [...m.values()]}
  function renderSuggestions(){const q=search.value.trim().toLowerCase();if(!q){sugg.classList.remove('open');return}const hits=models().filter(x=>(x.brand+' '+x.model).toLowerCase().includes(q)).slice(0,60);sugg.innerHTML=hits.map((x,i)=>{const vals=x.rows.map(r=>Number(r.trade_value)).filter(Number.isFinite);const vr=vals.length?'$'+Math.min(...vals).toFixed(0)+(Math.min(...vals)!==Math.max(...vals)?'–$'+Math.max(...vals).toFixed(0):''):'verify';return '<div class="v4-suggestion" data-i="'+i+'"><b>'+x.brand+' '+x.model+'</b><span>'+vr+'</span></div>'}).join('');sugg.classList.toggle('open',!!hits.length);sugg.querySelectorAll('[data-i]').forEach(el=>el.onclick=()=>choose(hits[+el.dataset.i]))}
  function choose(x){selected=x;search.value=x.brand+' '+x.model;sugg.classList.remove('open');storage.innerHTML='';$('v4SimpleResult').classList.remove('show');x.rows.sort((a,b)=>a.storage.localeCompare(b.storage,undefined,{numeric:true})).forEach(r=>{const b=document.createElement('button');b.className='v4-chip';b.textContent=r.storage;b.onclick=()=>{storage.querySelectorAll('.v4-chip').forEach(c=>c.classList.remove('on'));b.classList.add('on');showResult(r)};storage.appendChild(b)});if(x.rows.length===1)storage.firstChild.click()}
@@ -6004,20 +6208,20 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   return null;
  }
  function simpleSamsungPlans(r){
-  const val=Number(r.trade_value)||0, level=simpleGalaxyLevel(r);
+  const val=Number(r.trade_value)||0;
   return {
-    premium:Math.max(val>=95?1100:val>=35?900:0,level==='high'?1100:level==='base'?900:0),
-    extra:Math.max(val>=95?1100:val>=35?900:0,level==='high'?1100:level==='base'?900:0),
-    starter:Math.max(val>=35?900:0,level?900:0),
-    value:Math.max(val>=35?500:0,level?500:0)
+    premium:val>=95?1200:val>=35?1000:0,
+    extra:val>=95?1000:val>=35?800:0,
+    starter:val>=35?800:0,
+    value:val>=35?500:0
   };
  }
  function simplePixelPlans(r){
   const val=Number(r.trade_value)||0, isPixel=/google/i.test(String(r.brand||''))||/pixel/i.test(String(r.model||''));
   return {
-    premium:Math.max(val>=200?1350:val>=95?1150:val>=35?1000:0,isPixel?1150:0),
-    extra:Math.max(val>=200?1350:val>=95?1150:val>=35?1000:0,isPixel?1150:0),
-    starter:Math.max(val>=95?1150:val>=35?1000:0,isPixel?1150:0),
+    premium:Math.max(val>=200?1350:val>=95?1150:val>=35?1000:0,isPixel?1000:0),
+    extra:Math.max(val>=200?1350:val>=95?1150:val>=35?1000:0,isPixel?1000:0),
+    starter:Math.max(val>=95?1150:val>=35?1000:0,isPixel?1000:0),
     value:val>=35||isPixel?500:0
   };
  }
@@ -6031,7 +6235,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(/iphone/i.test(model)&&!/16e/i.test(model)&&/iphone\s*(1[4-9]|2\d)/i.test(model)) return 'iPhone 14+ any-condition path included.';
     return 'Calculated from this phone\'s current trade value.';
   }
-  if(name==='Samsung') return simpleGalaxyLevel(r)?'Qualifying Galaxy any-condition path included.':'Calculated from this phone\'s current trade value.';
+  if(name==='Samsung') return 'Calculated from this phone\'s current trade value.';
   if(name==='Pixel') return (/google/i.test(brand)||/pixel/i.test(model))?'Any Google Pixel path included.':'Calculated from this phone\'s current trade value.';
   return 'Calculated from this phone\'s current trade value.';
  }
@@ -6058,7 +6262,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     btn.setAttribute('aria-expanded',open?'true':'false');
   }));
   $('v4SimpleResult').classList.add('show');
-  $('v4BuildQuote').onclick=()=>{go('trade');setTimeout(()=>{const inp=$('tradeDeviceSearch');if(inp){inp.value=r.brand+' '+r.model;inp.dispatchEvent(new Event('input',{bubbles:true}))}},100)}
+  $('v4BuildQuote').onclick=()=>{if(!window.GTTQuote)return;window.GTTQuote.apply({...window.GTTQuote.capture(),tradeDevice:{brand:r.brand,model:r.model},tradeStorage:r.storage,tradeBaseValue:Number(r.trade_value),value:Number(r.trade_value),tradeValueMode:'auto',tradeCondition:{power:null,lock:null,cracks:null},noTrade:false});};
  }
 
  search.addEventListener('input',renderSuggestions);search.addEventListener('focus',renderSuggestions);
@@ -6066,8 +6270,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  // Promo Investigator beta: Gemini parses rep language; Supabase promo tables + GTT rules decide the answer.
  let piSellable=[], piPromos=[], piPromoDevices=[], piPromoPlans=[], piTiers=[], piSpecial=[], piPlanGroups=[], piTieredPrices=[], piPlans=[];
  const piHeaders={apikey:KEY};
- const piGet=(path)=>fetch(SB+'/rest/v1/'+path,{headers:piHeaders,cache:'no-store'}).then(r=>r.ok?r.json():[]);
- Promise.all([
+ const piGet=async(path)=>{const r=await fetch(SB+'/rest/v1/'+path,{headers:piHeaders,cache:'no-store',signal:AbortSignal.timeout(15000)});if(!r.ok)throw new Error('Promo data could not load. Retry when your connection is ready.');return r.json();};
+ let piDataError=null;
+ const loadPiData=()=>Promise.all([
    piGet('sellable_devices?select=device_key,name,storage,retail_price,promo_category_key,active,sellable&limit=1500'),
    piGet('promotions?select=id,promo_key,name,promo_type,promo_category_key,starts_at,ends_at,active,priority,notes&active=eq.true&limit=1000'),
    piGet('promotion_devices?select=promotion_id,device_key,active&active=eq.true&limit=2500'),
@@ -6077,13 +6282,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    piGet('plan_groups?select=group_key,display_name,promo_eligible,active&active=eq.true&limit=100'),
    piGet('tiered_prices?select=device_key,activation_type,monthly_price,months,active,starts_at,ends_at,eligible_segments,updated_at&active=eq.true&limit=2000'),
    piGet('plans?select=name,plan_group_key,segment,search_aliases,is_current,active,sort_order,notes&active=eq.true&limit=1000')
- ]).then(([a,b,c,d,e,f,g,h,i])=>{piSellable=a||[];piPromos=b||[];piPromoDevices=c||[];piPromoPlans=d||[];piTiers=e||[];piSpecial=f||[];piPlanGroups=g||[];piTieredPrices=h||[];piPlans=i||[]}).catch(()=>{});
+ ]).then(([a,b,c,d,e,f,g,h,i])=>{piSellable=a||[];piPromos=b||[];piPromoDevices=c||[];piPromoPlans=d||[];piTiers=e||[];piSpecial=f||[];piPlanGroups=g||[];piTieredPrices=h||[];piPlans=i||[];piDataError=null}).catch(e=>{piDataError=e;});
+ let piDataReady=loadPiData();
 
  const PI_LADDERS={
-   premium:{iphonePro:[[180,1200],[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],samsung:[[95,1100],[35,900]],s26base:[[35,900]],fold8:[[95,1100],[35,900]],flip8:[[95,1100],[35,900]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[],pixelPro:[],razr:[[95,1320],[35,1000]]},
-   extra:{iphonePro:[[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],samsung:[[95,1100],[35,900]],s26base:[[35,900]],fold8:[[95,1100],[35,900]],flip8:[[95,1100],[35,900]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[],pixelPro:[],razr:[[95,1320],[35,1000]]},
-   starter:{iphonePro:[[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],samsung:[[35,900]],s26base:[[35,900]],fold8:[[35,900]],flip8:[[35,900]],pixel11XL:[[95,1150],[35,1000]],pixel11Pro:[[35,1150]],pixelXL:[],pixelPro:[],razr:[[35,1000]]},
-   value:{iphonePro:[[130,500],[35,350]],iphoneBase:[[130,500],[35,350]],iphoneAir:[],samsung:[[35,500]],s26base:[[35,500]],fold8:[[35,500]],flip8:[[35,500]],pixel11XL:[[35,500]],pixel11Pro:[[35,500]],pixelXL:[],pixelPro:[],razr:[[35,500]]}
+   premium:{iphonePro:[[180,1200],[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],iphoneDuo:[[230,1200],[130,0],[35,350]],samsung:[[95,1200],[35,1000]],s26base:[[35,1000]],fold8:[[95,1200],[35,1000]],flip8:[[95,1200],[35,1000]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[95,1150],[35,1000]],pixelXL:[],pixelPro:[],razr:[[95,1320],[35,1000]]},
+   extra:{iphonePro:[[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],iphoneDuo:[[130,930],[35,350]],samsung:[[95,1000],[35,800]],s26base:[[35,800]],fold8:[[95,1000],[35,800]],flip8:[[95,1000],[35,800]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[95,1150],[35,1000]],pixelXL:[],pixelPro:[],razr:[[95,1320],[35,1000]]},
+   starter:{iphonePro:[[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],iphoneDuo:[[130,930],[35,350]],samsung:[[35,800]],s26base:[[35,800]],fold8:[[35,800]],flip8:[[35,800]],pixel11XL:[[95,1150],[35,1000]],pixel11Pro:[[95,1150],[35,1000]],pixelXL:[],pixelPro:[],razr:[[35,1000]]},
+   value:{iphonePro:[[130,500],[35,350]],iphoneBase:[[130,500],[35,350]],iphoneAir:[],iphoneDuo:[[130,500],[35,350]],samsung:[[35,500]],s26base:[[35,500]],fold8:[[35,500]],flip8:[[35,500]],pixel11XL:[[35,500]],pixel11Pro:[[35,500]],pixelXL:[],pixelPro:[],razr:[[35,500]]}
  };
 
  const piNorm=x=>String(x||'').toLowerCase().replace(/apple|samsung|galaxy|google/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -6093,7 +6299,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function piBestMatch(q,rows,field){
    const n=piNorm(q); if(!n)return null; let best=null,score=-1;
    rows.forEach(r=>{const x=piNorm(r[field]);let sc=0;if(x===n)sc=100;else if(x.includes(n)||n.includes(x))sc=70+Math.min(x.length,n.length);else{const a=new Set(n.split(' ')),b=x.split(' ');sc=b.filter(t=>a.has(t)).length*12}if(sc>score){score=sc;best=r}});
-   return score>=12?best:null;
+   return score>=70?best:null;
  }
  function piTradeMatch(q,storage){
    if(!q)return null;
@@ -6113,7 +6319,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      {device_key:'iphone18promax',name:'iPhone 18 Pro Max',storage:'256GB',retail_price:1299.99,promo_category_key:'iphonePro'},
      {device_key:'iphoneduo',name:'iPhone Duo',storage:'256GB',retail_price:1999.99,promo_category_key:'iphoneDuo'}
    ].forEach(r=>map.set(r.device_key,r));
-   piSellable.forEach(r=>{const label=r.name||r.device_key;if(!label)return;const key=r.device_key||label;if(!map.has(key))map.set(key,r)});
+   piSellable.filter(r=>r.active!==false&&r.sellable!==false).forEach(r=>{const label=r.name||r.device_key;if(!label)return;const key=r.device_key||label;if(!map.has(key))map.set(key,r)});
    // Also allow promotion device keys to surface future / non-sellable launch devices.
    piPromoDevices.forEach(m=>{if(!map.has(m.device_key))map.set(m.device_key,{device_key:m.device_key,name:m.device_key.replace(/[_-]+/g,' '),storage:'',promo_category_key:''})});
    return [...map.values()].map(r=>{
@@ -6135,7 +6341,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    });
  }
  function piPlan(x){
-   x=String(x||'').toLowerCase();
+   x=String(x||'').toLowerCase().trim();
+   const exact=piPlans.find(p=>String(p.name||'').toLowerCase()===x);
+   if(exact){const group=exact.plan_group_key;return ({'55plus':'55','valueplus_mobile':'ineligible'})[group]||group;}
+   if(/value plus|mobile share|familytalk|nation|ineligible|rerate/.test(x))return 'ineligible';
    if(x.includes('premium')||x.includes('elite'))return 'premium';
    if(x.includes('extra')||x.includes('advanced'))return 'extra';
    if(x.includes('starter')||x.includes('standard'))return 'starter';
@@ -6439,12 +6648,13 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  }
  function piNextUpStatus(d){
    const raw=String(d._raw||'');
+   const nu=String(d.next_up||'').toLowerCase();
+   if(['standard','none','no','paid_off','paidoff'].includes(nu)||/\bno\s+next\s*up\b|\bstandard\s+financing\b/i.test(raw))return {mode:'paid_off',label:'Standard financing',promoOK:true,note:'Confirm any remaining installment balance before completing a standard trade-in.'};
    const financingMentioned=/\b(next\s*up|nua|legacy\s+next|financ|installment|balance|owe|owes|owed|paid)\b|%/i.test(raw);
-   if(!financingMentioned){
+   if(!financingMentioned&&!nu&&d.paid_percent==null){
      return {mode:'paid_off',label:'Verify paid off',promoOK:true,note:'Make sure the device is paid off before completing the transaction.'};
    }
    const pct=(d.paid_percent===null || d.paid_percent===undefined || d.paid_percent==='')?NaN:Number(d.paid_percent);
-   const nu=String(d.next_up||'').toLowerCase();
 
    if(nu==='anytime'){
      if(Number.isFinite(pct) && pct>=33) return {mode:'anytime',label:'Next Up Anytime · eligible threshold met',promoOK:true,note:'Next Up Anytime requires at least 33% paid for the normal promotional path; the turn-in device must meet the applicable condition requirements.'};
@@ -6521,37 +6731,21 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  $('piStartOverTop').onclick=piStartOver;
  $('piAgain').onclick=()=>{$('piAsk').value='';piResetFollow();$('piStatus').textContent='Memory kept — ask your follow-up.';$('piAsk').focus()};
 
+ let piParsedContext=null;
+ async function piApi(task,extra){
+   const r=await fetch(PI_AI_FUNCTION,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},signal:AbortSignal.timeout(35000),body:JSON.stringify({task,...extra})});
+   const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j?.error||'Investigator is busy. Retry or use the quote form below.');return j;
+ }
  async function piParse(text,existingState=null){
-   const r=await fetch(PI_AI_FUNCTION,{
-     method:'POST',
-     headers:{
-       'Content-Type':'application/json',
-       'apikey':KEY
-     },
-     body:JSON.stringify({
-       task:'promo_parse',
-       message:text,
-       state:existingState||null
-     })
-   });
-   const j=await r.json().catch(()=>({}));
-   if(!r.ok)throw new Error(j?.error||'GTT AI service is unavailable.');
-   if(!j?.state)throw new Error('GTT AI returned no parsed state.');
-   return j.state;
+   if(piParsedContext)return piParsedContext;
+   const j=await piApi('promo_parse',{message:text,state:existingState});if(!j.state)throw new Error('The question could not be understood. Try the quote form below.');return j.state;
  }
-
  async function piRoute(text){
-   const r=await fetch(PI_AI_FUNCTION,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify({task:'promo_route',message:text,state:piState.d||null,history:piConversation.slice(-6)})});
-   const j=await r.json().catch(()=>({}));
-   if(!r.ok)throw new Error(j?.error||'GTT AI router is unavailable.');
-   return j.route||{intent:'general',needs_quote_parse:false};
+   piParsedContext=null;
+   const j=await piApi('promo_context',{message:text,state:piState.d||null,history:piConversation.slice(-6)});piParsedContext=j.state||null;
+   return j.route||{intent:'quote',needs_quote_parse:true};
  }
- async function piSmartAnswer(text,verified){
-   const r=await fetch(PI_AI_FUNCTION,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify({task:'promo_answer',message:text,verified,history:piConversation.slice(-6)})});
-   const j=await r.json().catch(()=>({}));
-   if(!r.ok)throw new Error(j?.error||'GTT AI answer service is unavailable.');
-   return j;
- }
+ async function piSmartAnswer(text,verified){return piApi('promo_answer',{message:text,verified,history:piConversation.slice(-6)});}
  function piCurrentPromos(){
    const now=new Date();
    return piPromos.filter(p=>{
@@ -6589,7 +6783,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    let target=null;
    const targetQ=route?.target_device||d?.target_device||'';
    if(targetQ){const t=piDeviceMatch(targetQ);if(t)target={device_key:t.device_key,name:t.name,storage:t.storage,retail_price:Number(t.retail_price||0),promo_category_key:t.promo_category_key}}
-   const quote=x?{title:x.title,body:x.body,plan:x.plan,trade_value:x.val,credit:x.credit,tiered:!!x.tiered?.isTiered,target:target,trade:trade,next_up:x.nextUp?.label||'',needs_more:!!piNeedsQuestion(d,x)}:null;
+   const quote=x?{title:piNeedsQuestion(d,x)?.title||x.title,body:piNeedsQuestion(d,x)?.text||x.body,plan:x.plan,trade_value:x.val,credit:piNeedsQuestion(d,x)?null:x.credit,tiered:!!x.tiered?.isTiered,target:target,trade:trade,next_up:x.nextUp?.label||'',needs_more:!!piNeedsQuestion(d,x)}:null;
    const financing=x?.nextUp?{
      mode:x.nextUp.mode||'',
      label:x.nextUp.label||'',
@@ -6627,7 +6821,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      target=tiered.chosen.devices[0]||target;
    }
 
-   const val=trade?Number(trade.trade_value)||0:null;
+   const baseVal=trade?Number(trade.trade_value)||0:null;
+   const condition=String(d.condition||'').toLowerCase();
+   const val=baseVal==null?null:Math.round(baseVal*(/dead|locked|won.t.*(turn|power)/.test(condition)?0.18:/crack/.test(condition)?0.5:1)*100)/100;
    const promos=piPromoCandidates(target,plan);
    const bestPromo=promos[0]||null;
    const dbTier=piDbTier(bestPromo,plan,val);
@@ -6654,7 +6850,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
        }
      }else{
        const nr=tiered.newRow, ur=tiered.upRow;
-       if(nr && ur && Number(nr.monthly_price)===Number(ur.monthly_price)){
+       if(nr && ur && nr.monthly_price!=null && ur.monthly_price!=null && Number(nr.monthly_price)===Number(ur.monthly_price)){
          title=piMoney(nr.monthly_price)+'/mo';
          const storageNote=d.target_storage?'':' Base storage assumed.';
          const tradeNote=trade?' The old '+trade.brand+' '+trade.model+' has a current good-condition trade value of '+piMoney(val)+' that could be used as a one-time bill credit.':'';
@@ -6684,8 +6880,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    let title='Need a little more information',body='I found the question, but I need a few details before GTT should commit to a promo.';
 
    if(isDuo){
-     title='No iPhone Duo promo loaded';
-     body='GTT knows the iPhone Duo target, but no trade promotion is currently loaded for it.';
+     const preview=Date.now()<Date.parse('2026-10-16T04:00:00Z');
+     title=preview?'iPhone Duo preorder preview':(credit>0?'Up to '+piMoney(credit):'iPhone Duo trade-in offer');
+     body=(preview?'Preorder 10/16, Max trade $1200. ':'')+(plan&&trade?'This plan and trade combination shows '+piMoney(credit)+' in estimated bill credits. ':'Choose the plan and trade-in phone to estimate the credit. ');
    }else if(is18pro && !plan){
      title='iPhone 18 Pro-family promo found — which plan?';
      body='GTT has the 9/12 iPhone 18 Pro / Pro Max promo structure, but the credit changes by plan group.';
@@ -6730,11 +6927,15 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    return {plan,trade,target,targetMatches,val,cat,promos,bestPromo,dbTier,credit,title,body,nextUp,source,is18pro,isDuo,tiered:null};
  }
  function piNeedsQuestion(d,x){
+   if(!x.target && d.target_device)return {type:'text',field:'target_device',title:'Which exact phone?',text:'No listed device matches that phone. Enter its full model name.'};
+   const targetStores=[...new Set((x.targetMatches||[]).filter(r=>r.name===x.target?.name).map(r=>r.storage).filter(Boolean))];
+   if(d.target_storage&&targetStores.length&&!targetStores.some(v=>piNorm(v)===piNorm(d.target_storage)))return {type:'storage',title:'Choose a listed storage',text:'That storage is not listed for this phone.',options:targetStores};
+   if(!d.target_storage&&targetStores.length>1)return {type:'storage',title:'Which storage are they buying?',text:'Pick the exact device before quoting.',options:targetStores};
    if(!d.target_device)return {type:'text',field:'target_device',title:'Which phone are they getting?',text:'Give me the phone they want to buy.'};
 
    if(x.tiered?.isTiered){
      const nr=x.tiered.newRow, ur=x.tiered.upRow;
-     const same=nr&&ur&&Number(nr.monthly_price)===Number(ur.monthly_price);
+     const same=nr&&ur&&nr.monthly_price!=null&&ur.monthly_price!=null&&Number(nr.monthly_price)===Number(ur.monthly_price);
      if(!d.activation && !same){
        return {type:'activation',title:'New line or upgrade?',text:'The tiered monthly price can differ by transaction type.'};
      }
@@ -6761,7 +6962,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      return {type:'targets',title:'Which one?',text:'I found more than one phone that matches “'+d.target_device+'”.',options:unique};
    }
 
-   if(!d.plan)return {type:'plan',title:'What plan are they on?',text:'The promo changes by plan group, so I won’t guess.'};
+   if(!d.plan||!x.plan)return {type:'plan',title:'What plan are they on?',text:'The promo changes by plan group, so I won’t guess.'};
    if(x.plan==='ineligible')return null;
    if(!d.trade_device)return {type:'text',field:'trade_device',title:'What are they trading?',text:'Tell me the trade-in phone. Storage is optional unless it changes the trade value.'};
 
@@ -6779,11 +6980,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      const tiered=x.bestPromo && String(x.bestPromo.promo_type||'').toLowerCase()==='tiered';
      if(tiered)return {type:'activation',title:'New line or upgrade?',text:'This offer can depend on the transaction type.'};
    }
-   if(!d.condition){
+   if(x.trade&&d.trade_storage){const stores=[...new Set(tradeRows.filter(r=>r.brand===x.trade.brand&&r.model===x.trade.model).map(r=>r.storage))];if(!stores.some(v=>piNorm(v)===piNorm(d.trade_storage)))return {type:'trade-storage',title:'Choose the trade storage',text:'That trade storage is not in the database.',options:stores};}
+   if(x.trade&&!d.trade_storage){const rows=tradeRows.filter(r=>r.brand===x.trade.brand&&r.model===x.trade.model);const values=new Set(rows.map(r=>Number(r.trade_value)));if(values.size>1)return {type:'trade-storage',title:'Which storage is the trade?',text:'Trade values differ by storage.',options:[...new Set(rows.map(r=>r.storage))]};}
+   if(d.trade_device&&!x.trade)return {type:'text',field:'trade_device',title:'Which exact trade phone?',text:'Enter a model from the trade database.'};
+   if(!d.condition||d.condition==='damaged'||d.condition==='unsure'){
      // If the selected trade already qualifies through an ANY-CONDITION rule, asking condition adds no value.
      const anyConditionAlreadyQualifies=!!(x.trade&&x.target&&piSpecialCredit(x.plan,x.target,x.trade)>0);
      const special=piSpecial.some(r=>(!r.plan_group_key||r.plan_group_key===x.plan)&&(!r.promo_category_key||r.promo_category_key===x.cat));
-     if(special&&!anyConditionAlreadyQualifies)return {type:'condition',title:'What condition is the trade in?',text:'There are special/any-condition rules in the database, so condition can matter.'};
+     if(x.trade||d.next_up)return {type:'condition',title:'What condition is the trade in?',text:'There are special/any-condition rules in the database, so condition can matter.'};
    }
    return null;
  }
@@ -6799,20 +7003,20 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      body.innerHTML='<div class="pi-followopts"><button class="pi-followbtn" data-v="upgrade">Upgrade</button><button class="pi-followbtn" data-v="new">New line</button><button class="pi-followbtn" data-v="unsure">Not sure</button></div>';
      body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>choose('activation',b.dataset.v==='unsure'?'':b.dataset.v));
    }else if(q.type==='condition'){
-     body.innerHTML='<div class="pi-followopts"><button class="pi-followbtn" data-v="good">Good</button><button class="pi-followbtn" data-v="damaged">Damaged</button><button class="pi-followbtn" data-v="dead">Doesn’t turn on</button><button class="pi-followbtn" data-v="unsure">Not sure</button></div>';
+     body.innerHTML='<div class="pi-followopts"><button class="pi-followbtn" data-v="good">Good</button><button class="pi-followbtn" data-v="cracked">Cracked only</button><button class="pi-followbtn" data-v="dead">Doesn’t turn on</button><button class="pi-followbtn" data-v="locked">Activation locked</button><button class="pi-followbtn" data-v="unsure">Not sure</button></div>';
      body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>choose('condition',b.dataset.v));
    }else if(q.type==='nextup'){
      body.innerHTML='<div class="pi-followopts"><button class="pi-followbtn" data-v="anytime">Next Up Anytime · $10</button><button class="pi-followbtn" data-v="legacy">Legacy Next Up · $6</button><button class="pi-followbtn" data-v="standard">Standard financing</button></div>';
-     body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{piState.d.next_up=b.dataset.v==='standard'?'':b.dataset.v;if(b.dataset.v==='standard')piState.d.paid_percent=null;piSaveMemory();piRefresh()});
+     body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{piState.d.next_up=b.dataset.v;if(b.dataset.v==='standard')piState.d.paid_percent=null;piSaveMemory();piRefresh()});
    }else if(q.type==='percent'){
      body.innerHTML='<div class="pi-followrow"><input id="piFollowInput" type="number" inputmode="decimal" placeholder="Percent paid"><button id="piFollowGo" class="pi-btn" type="button">Continue</button></div>';
-     const inp=$('piFollowInput');$('piFollowGo').onclick=()=>{const v=Number(inp.value);if(Number.isFinite(v)){piState.d.paid_percent=v;piSaveMemory();piRefresh()}};inp.onkeydown=e=>{if(e.key==='Enter')$('piFollowGo').click()};setTimeout(()=>inp.focus(),50);
+     const inp=$('piFollowInput');$('piFollowGo').onclick=()=>{const v=Number(inp.value);if(inp.value.trim()&&Number.isFinite(v)&&v>=0&&v<=100){piState.d.paid_percent=v;piSaveMemory();piRefresh()}};inp.onkeydown=e=>{if(e.key==='Enter')$('piFollowGo').click()};setTimeout(()=>inp.focus(),50);
    }else if(q.type==='targets'){
      body.innerHTML='<div class="pi-followopts">'+q.options.map((r,i)=>'<button class="pi-followbtn" data-i="'+i+'">'+piEsc(r.name||r.device_key)+'</button>').join('')+'</div>';
      body.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>choose('target_device',q.options[+b.dataset.i].name||q.options[+b.dataset.i].device_key));
-   }else if(q.type==='storage'){
+   }else if(q.type==='storage'||q.type==='trade-storage'){
      body.innerHTML='<div class="pi-followopts">'+q.options.map(v=>'<button class="pi-followbtn" data-v="'+piEsc(v)+'">'+piEsc(v)+'</button>').join('')+'</div>';
-     body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>choose('target_storage',b.dataset.v));
+     body.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>choose(q.type==='trade-storage'?'trade_storage':'target_storage',b.dataset.v));
    }else{
      body.innerHTML='<div class="pi-followrow"><input id="piFollowInput" placeholder="Type the answer"><button id="piFollowGo" class="pi-btn" type="button">Continue</button></div>';
      const inp=$('piFollowInput');$('piFollowGo').onclick=()=>{const v=inp.value.trim();if(v)choose(q.field,v)};inp.onkeydown=e=>{if(e.key==='Enter')$('piFollowGo').click()};setTimeout(()=>inp.focus(),50);
@@ -6832,16 +7036,15 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    const dbLine=x.tiered?.isTiered?'<div class="pi-dbnote">Promo source: live Supabase tiered_prices</div>':(x.is18pro?'<div class="pi-dbnote">Promo source: 9/12 iPhone 18 Pro / Pro Max launch rules</div>':(x.bestPromo?'<div class="pi-dbnote">Supabase promo: '+piEsc(x.bestPromo.name||x.bestPromo.promo_key)+' · '+(x.bestPromo._state==='upcoming'?'upcoming':'current')+'</div>':'<div class="pi-dbnote">No matching mapped Supabase promo row yet — fallback logic only if enough inputs exist.</div>'));
    $('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(x.body)+'</p>'+dbLine;
    const q=piNeedsQuestion(d,x);
+   if(q){$('piAnswer').innerHTML='<small>GTT needs a detail</small><div class="pi-credit">'+piEsc(q.title)+'</div><p>'+piEsc(q.text||'Answer the follow-up before quoting a price.')+'</p>'+dbLine;}
+   if(!q&&window.GTTQuote&&x.target){const c=window.GTTQuote.fromInvestigation(d,x),r=window.GTTQuote.evaluate(c),m=window.GTTQuote.metric(c,r);if(m){x.credit=m.credit;x.title=r.state==='tiered_final'?'$'+m.monthly.toFixed(2)+'/mo':m.credit>0?'Up to '+piMoney(m.credit):'No recurring promo';x.body='Estimated device payment: $'+m.monthly.toFixed(2)+'/mo · $'+m.total.toFixed(2)+' over 36 months. '+(x.isDuo&&Date.now()<Date.parse('2026-10-16T04:00:00Z')?'Preorder 10/16, Max trade $1200. ':'');$('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(x.body)+'</p>'+dbLine;}else{x.title='Quote needs another check';x.body=({nextup_bad_condition:'Current phone is not eligible for Next Up turn-in.',needCondition:'Confirm the trade condition in the full quote.',needValue:'Confirm the trade value in the full quote.',nextup_no_payoff:'Next Up paid threshold is not met.'})[r.state]||'Complete the remaining quote details in GTT before quoting a price.';$('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(x.body)+'</p>';}}
    $('piMissing').innerHTML=q?'<b>GTT needs another answer before finishing this investigation.</b>':'<b>Investigation has enough information for this promo check.</b>';
    $('piResult').classList.add('show');
    piRenderFollow(q);
    $('piBuild').style.display=q?'none':'block';
    $('piBuild').onclick=()=>{
-     go('trade');
-     setTimeout(()=>{
-       if(x.target){const a=$('phoneSearch');if(a){a.value=x.target.name||x.target.device_key;a.dispatchEvent(new Event('input',{bubbles:true}))}}
-       if(x.trade){const b=$('tradeDeviceSearch');if(b){b.value=x.trade.brand+' '+x.trade.model;b.dispatchEvent(new Event('input',{bubbles:true}))}}
-     },120);
+     if(!window.GTTQuote){$('piStatus').textContent='Quote tool is still loading. Try again in a moment.';return;}
+     window.GTTQuote.apply(window.GTTQuote.fromInvestigation(d,x));
    };
  }
  function piRefresh(){
@@ -6857,7 +7060,12 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    const text=$('piAsk').value.trim();
    if(!text){$('piStatus').textContent='Ask a promo question first.';return}
    $('piRun').disabled=true;$('piRun').textContent='Investigating…';$('piStatus').textContent='Understanding the question…';
+   let explanationFailed=false;
    try{
+     await piDataReady;if(piDataError){piDataReady=loadPiData();await piDataReady;}if(piDataError)throw piDataError;
+     await tradeDataReady;if(!tradeRows.length){tradeDataReady=loadTradeData();await tradeDataReady;}if(!tradeRows.length)throw new Error('Trade values could not load. Retry or continue in the quote form.');
+     if(window.GTTQuote)await window.GTTQuote.ready;
+     $('piManual').open=false;
      const route=await piRoute(text);
      const prior=piState.d?JSON.parse(JSON.stringify(piState.d)):null;
      const shouldParse=route?.needs_quote_parse!==false || route?.intent==='quote';
@@ -6871,9 +7079,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
        piState.d=d;
        x=piEvaluate(d);piState.x=x;
      }
+     if(x)piRender(d,x);
      const verified=piVerifiedSnapshot(route,d,x);
      $('piStatus').textContent='GTT checked the database. Writing the answer…';
-     const smart=await piSmartAnswer(text,verified);
+     let smart=null;
+     try{smart=await piSmartAnswer(text,verified);}catch(e){if(!x)throw e;explanationFailed=true;smart={answer:x.body};}
 
      if(x){
        piRender(d,x);
@@ -6881,7 +7091,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
        const dbLine=x.tiered?.isTiered?'<div class="pi-dbnote">Promo source: live Supabase tiered_prices</div>':(x.bestPromo?'<div class="pi-dbnote">Promo source: live GTT / Supabase promotion data</div>':'<div class="pi-dbnote">Promo source: deterministic GTT rules + live data</div>');
        // On a follow-up, do not leave the previous deterministic quote amount as the headline.
        // The smart answer may be explaining how to reach a different offer, so a stale "Up to $930" header is misleading.
-       const answerHeadline=(prior||piConversation.length)?'Verified answer':x.title;
+       const answerHeadline=q?q.title:(prior||piConversation.length)?'Verified answer':x.title;
        $('piAnswer').innerHTML='<small>GTT verified answer</small><div class="pi-credit">'+piEsc(answerHeadline)+'</div><p>'+piEsc(smart?.answer||x.body)+'</p>'+dbLine;
        if(smart?.needs_followup && smart?.followup)$('piMissing').innerHTML='<b>'+piEsc(smart.followup)+'</b>';
        $('piBuild').style.display=q?'none':'block';
@@ -6891,13 +7101,16 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
      const summary=smart?.answer||x?.title||'GTT answered';
      piConversation.push({q:text,a:summary});piConversation=piConversation.slice(-12);
-     piSaveMemory();piRenderThread();$('piAsk').value='';
-     $('piStatus').textContent='GTT checked it · answer generated from verified data';
+     piSaveMemory();piRenderThread();if(!explanationFailed)$('piAsk').value='';
+     $('piStatus').textContent=explanationFailed?'Verified result ready · explanation unavailable. Your question is kept for Retry.':'GTT checked it · answer generated from verified data';
      $('piResult').scrollIntoView({behavior:'smooth',block:'start'});
-   }catch(e){console.error(e);$('piStatus').textContent=e.message||'Could not investigate this question.'}
+   }catch(e){console.error(e);if($('piResult').classList.contains('show'))$('piMissing').innerHTML='<b>Previous result shown. The latest question has not been verified.</b>';$('piStatus').textContent=e.name==='TimeoutError'?'Investigator timed out. Your question is kept. Retry or use the quote form.':e.message||'Could not investigate this question.';$('piManual').open=true;}
    finally{$('piRun').disabled=false;$('piRun').textContent='Ask GTT →'}
  };
 
+ $('piRetry').onclick=()=>{if($('piAsk').value.trim())$('piRun').click();else{$('piStatus').textContent='Enter the question you want to retry.';$('piAsk').focus();}};
+ $('piManual').addEventListener('toggle',()=>{if(!$('piManual').open||!window.GTTQuote)return;const selected=$('piManualPhone').value;$('piManualPhone').innerHTML='<option value="">Choose device</option>'+window.GTTQuote.phones().map(p=>'<option value="'+piEsc(p.id)+'">'+piEsc(p.name+' '+p.storage)+'</option>').join('');$('piManualPhone').value=selected;});
+ $('piManualForm').onsubmit=e=>{e.preventDefault();if(!window.GTTQuote)return;const f=new FormData(e.currentTarget);const plan=piPlan(f.get('plan'));if(!plan||!f.get('phoneId')){$('piStatus').textContent='Choose a plan and new phone first.';return;}const c={plan:plan==='55'?'55plus':plan,phoneId:f.get('phoneId'),planSegment:f.get('planSegment'),tierAction:f.get('tierAction')||null};window.GTTQuote.apply(c);};
  // Keep legacy tools/admin modals above shell nav.
  ['adminLoginModal','adminModal','toolsModal','whatsNewModal'].forEach(id=>{const e=$(id);if(e)e.style.zIndex='10000'});
  window.GTT4={go};
