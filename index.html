@@ -1578,19 +1578,20 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     <p class="v4-table-note">*AT&amp;T installment amounts shown as confirmed MSRP divided over 36 months; taxes and other charges not included.</p>
   </article>
   <article class="v4-newsitem">
-    <div class="v4-date">Effective September 12</div><h3>iPhone promo quick guide</h3>
+    <div class="v4-date">Effective October 9</div><h3>iPhone promo quick guide</h3>
     <div class="v4-promo-grid">
-      <div class="v4-promo"><b>Premium / Elite — up to $1,200</b><span>iPhone 18 Pro / Pro Max. Any-condition iPhone 14+ excluding 16e, or $180+ trade value.</span></div>
-      <div class="v4-promo"><b>Extra / Starter — up to $930</b><span>iPhone 18 Pro / Pro Max or iPhone 17. Any-condition iPhone 14+ excluding 16e, or $130+ trade value.</span></div>
-      <div class="v4-promo"><b>Eligible plan — up to $500</b><span>iPhone 18 Pro / Pro Max or iPhone 17 with qualifying $130+ / iPhone 14+ path.</span></div>
-      <div class="v4-promo"><b>Eligible unlimited — up to $350</b><span>iPhone 18 Pro / Pro Max or iPhone 17. Any-condition iPhone, or $35–$129 trade value.</span></div>
+      <div class="v4-promo"><b>Premium / Elite — up to $1,200</b><span>iPhone 18 Pro / Pro Max with $230+ condition-adjusted trade-in / turn-in value. $130–$229.99 qualifies for $930.</span></div>
+      <div class="v4-promo"><b>Extra / Starter — up to $930</b><span>iPhone 18 Pro / Pro Max or iPhone 17 with $130+ condition-adjusted trade value.</span></div>
+      <div class="v4-promo"><b>Value 2.0 — up to $500</b><span>iPhone 18 Pro / Pro Max or iPhone 17 with $130+ condition-adjusted trade value.</span></div>
+      <div class="v4-promo"><b>Eligible unlimited — up to $350</b><span>$35–$129.99 condition-adjusted trade value. The any-condition iPhone exception has ended.</span></div>
     </div>
-    <details><summary>Open full 9/12 changes</summary><ul>
-      <li>iPhone 18 Pro and Pro Max are added to the trade-in offer.</li>
-      <li>iPhone 17 remains in the $930 / $500 / $350 tiers; it is not listed in the $1,200 tier.</li>
-      <li>iPhone Air, iPhone 17 Pro and iPhone 17 Pro Max leave this trade-in offer after 9/11.</li>
-      <li>iPhone 16's tiered offer ends after 9/11 and it leaves the sellable selection. It remains a trade-in device.</li>
-      <li>55+ remains tiered-only. Verify final eligibility in OPUS / CCKM.</li>
+    <details><summary>Open 10/9 tiered prices</summary><ul>
+      <li>iPhone 17 Pro 256GB: $14.99/mo new line; $19.99/mo upgrade.</li>
+      <li>iPhone 17 Pro Max 256GB: $19.99/mo new line; $24.99/mo upgrade.</li>
+      <li>iPhone 17e 256GB: $5.99/mo new line; $7.99/mo upgrade.</li>
+      <li>Eligible Next Up Anytime tiered upgrades use the upgrade price.</li>
+      <li>Higher-storage prices require the detailed CCKM guide; old prices are no longer quoted.</li>
+      <li>iPhone Duo keeps its separate 10/16 preorder offer.</li>
     </ul></details>
   </article>
   <article class="v4-newsitem"><div class="v4-date">September 4</div><h3>Galaxy S26 FE</h3><p>Galaxy S26 FE 128GB launched at <b>$7.99/mo new line</b> and <b>$12.99/mo upgrade</b>. The S25 FE $13.99/mo new-line offer ended 9/3; S25 FE remains trade eligible.</p></article>
@@ -2567,8 +2568,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       return segs.includes(seg);
     });
   }
+  function isOct9TieredPending(phone){
+    if(!phone || !['ip17p-512','ip17p-1tb','ip17pm-512','ip17pm-1tb','ip17pm-2tb','i17e-512'].includes(phone.id)) return false;
+    // Restore exact storage pricing automatically once a replacement row is loaded.
+    return !currentTieredRowsFor(phone).some(r=>Date.parse(r.starts_at||'')>=Date.parse('2026-10-09T04:00:00Z'));
+  }
   function tieredSegmentAllowed(phone){
     if(!phone) return false;
+    if(isOct9TieredPending(phone)) return true;
     if(Array.isArray(phone.tieredPriceRows)) return currentTieredRowsFor(phone).length > 0;
     if(Array.isArray(phone.tieredSegments)){
       const seg = (typeof state !== 'undefined' && state.planSegment) ? state.planSegment : 'consumer';
@@ -2577,7 +2584,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     return true;
   }
   function tieredPriceFor(phone, action){
-    if(!phone) return undefined;
+    if(!phone || isOct9TieredPending(phone)) return undefined;
     if(Array.isArray(phone.tieredPriceRows)){
       const activation = action === 'new' ? 'new_line' : 'upgrade';
       const row = currentTieredRowsFor(phone).find(r=>r.activation_type===activation);
@@ -2587,6 +2594,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
   function hasActiveTieredOffer(phone){
     if(!phone || !tieredSegmentAllowed(phone)) return false;
+    if(isOct9TieredPending(phone)) return true;
     if(Array.isArray(phone.tieredPriceRows)) return currentTieredRowsFor(phone).length > 0;
     if(isS26Base(phone)) return isS26TieredActive();
     if(isS25Edge(phone)) return !!phone.tieredOffer;
@@ -2682,15 +2690,15 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     { id:'iphone18promax-2tb', name:'iPhone 18 Pro Max', storage:'2TB', retail:2499.99, tieredOffer:false, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:true },
 
     // iPhone 17 Pro Max (256/512/1TB/2TB) — category iphonePro
-    { id:'ip17pm', name:'iPhone 17 Pro Max', storage:'256GB', retail:1199.99, tieredOffer:true, tieredMonthlyNew:14.99, tieredMonthlyUpgrade:19.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
-    { id:'ip17pm-512', name:'iPhone 17 Pro Max', storage:'512GB', retail:1399.99, tieredOffer:true, tieredMonthlyNew:20.99, tieredMonthlyUpgrade:25.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
-    { id:'ip17pm-1tb', name:'iPhone 17 Pro Max', storage:'1TB', retail:1599.99, tieredOffer:true, tieredMonthlyNew:26.99, tieredMonthlyUpgrade:31.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
-    { id:'ip17pm-2tb', name:'iPhone 17 Pro Max', storage:'2TB', retail:1999.99, tieredOffer:true, tieredMonthlyNew:32.99, tieredMonthlyUpgrade:37.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17pm', name:'iPhone 17 Pro Max', storage:'256GB', retail:1199.99, tieredOffer:true, tieredMonthlyNew:19.99, tieredMonthlyUpgrade:24.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17pm-512', name:'iPhone 17 Pro Max', storage:'512GB', retail:1399.99, tieredOffer:true, tieredMonthlyNew:undefined, tieredMonthlyUpgrade:undefined, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17pm-1tb', name:'iPhone 17 Pro Max', storage:'1TB', retail:1599.99, tieredOffer:true, tieredMonthlyNew:undefined, tieredMonthlyUpgrade:undefined, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17pm-2tb', name:'iPhone 17 Pro Max', storage:'2TB', retail:1999.99, tieredOffer:true, tieredMonthlyNew:undefined, tieredMonthlyUpgrade:undefined, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
 
     // iPhone 17 Pro (256/512/1TB) — category iphonePro
-    { id:'ip17p', name:'iPhone 17 Pro', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:9.99, tieredMonthlyUpgrade:14.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
-    { id:'ip17p-512', name:'iPhone 17 Pro', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:15.99, tieredMonthlyUpgrade:20.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
-    { id:'ip17p-1tb', name:'iPhone 17 Pro', storage:'1TB', retail:1499.99, tieredOffer:true, tieredMonthlyNew:21.99, tieredMonthlyUpgrade:26.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17p', name:'iPhone 17 Pro', storage:'256GB', retail:1099.99, tieredOffer:true, tieredMonthlyNew:14.99, tieredMonthlyUpgrade:19.99, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17p-512', name:'iPhone 17 Pro', storage:'512GB', retail:1299.99, tieredOffer:true, tieredMonthlyNew:undefined, tieredMonthlyUpgrade:undefined, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
+    { id:'ip17p-1tb', name:'iPhone 17 Pro', storage:'1TB', retail:1499.99, tieredOffer:true, tieredMonthlyNew:undefined, tieredMonthlyUpgrade:undefined, promoCategory:"iphonePro", active:true, sellable:true, tradePromoEligible:false },
 
     // iPhone 17 (256/512) — category iphoneBase
     { id:'ip17', name:'iPhone 17', storage:'256GB', retail:929.99, tieredOffer:false, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:true },
@@ -2749,10 +2757,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     { id:'razr', name:'Razr Ultra', storage:'', retail:1319.99, tieredOffer:false, promoCategory:"razr", active:true, sellable:true, tradePromoEligible:true },
 
     // Searchable tiered-offer devices confirmed against the 7/27/2026 eligible-device list.
-    // iPhone 17e — Updated 7/2/2026: both new and upgrade now flat per storage tier
-    // 256GB $5.99 (was $0.99 new / $5.99 upgrade), 512GB $11.99 (was $6.99 new / $11.99 upgrade)
-    { id:'i17e-256', name:'iPhone 17e', storage:'256GB', retail:699.99, tieredOffer:true, tieredMonthlyNew:0.99, tieredMonthlyUpgrade:5.99, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
-    { id:'i17e-512', name:'iPhone 17e', storage:'512GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:6.99, tieredMonthlyUpgrade:11.99, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
+    // iPhone 17e — 10/9/2026: 256GB $5.99 new / $7.99 upgrade; 512GB pending detailed guide.
+    { id:'i17e-256', name:'iPhone 17e', storage:'256GB', retail:699.99, tieredOffer:true, tieredMonthlyNew:5.99, tieredMonthlyUpgrade:7.99, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
+    { id:'i17e-512', name:'iPhone 17e', storage:'512GB', retail:899.99, tieredOffer:true, tieredMonthlyNew:undefined, tieredMonthlyUpgrade:undefined, promoCategory:"iphoneBase", active:true, sellable:true, tradePromoEligible:false },
 
     // S25 FE: New Line only — no upgrade tiered price
     { id:'s25fe', name:'Galaxy S25 FE', storage:'128GB', retail:649.99, tieredOffer:false, tieredMonthlyNew:null, tieredMonthlyUpgrade:null, promoCategory:"samsung", active:true, sellable:true, tradePromoEligible:false },
@@ -3597,11 +3604,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     tradeEl.value=''; state.value=null; state.tradeValueMode=null; tradeError.style.display='none'; manualOverridePill.classList.remove('show'); tradeDbStatus.className='trade-db-status'; tradeDbStatus.textContent=state.tradeDevice?'Value cleared — choose storage/condition again or enter manually.':'Choose a trade-in phone or enter a value manually.'; tradeAppliedNote.style.display='none'; tradeAppliedNote.setAttribute('aria-hidden','true'); render();
   });
 
-  // Current promo ladders. Samsung/Pixel changes effective 10/2/2026.
+  // Current promo ladders. iPhone changes effective 10/9/2026; Samsung/Pixel 10/2.
   // iPhone Duo preview becomes effective 10/16/2026.
   const LADDERS = {
     premium:{
-      iphonePro:[{min:180,credit:1200},{min:130,credit:930},{min:35,credit:350}],
+      iphonePro:[{min:230,credit:1200},{min:130,credit:930},{min:35,credit:350}],
       iphoneBase:[{min:130,credit:930},{min:35,credit:350}],
       iphoneAir:[],
       iphoneDuo:[{min:230,credit:1200},{min:130,credit:930},{min:35,credit:350}],
@@ -3783,21 +3790,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     return '';
   }
   function appleAnyConditionFloor(plan, phone){
-    const t=state.tradeDevice;
-    if(!t || String(t.brand||'').toLowerCase()!=='apple' || !/iphone/i.test(String(t.model||''))) return 0;
-    const model=String(t.model||'');
-    const hit=model.match(/iPhone\s*(\d+)/i);
-    const any14=!!hit && Number(hit[1])>=14 && !/16e/i.test(model);
-    const id=String(phone?.id||'').toLowerCase();
-    const is18=id.startsWith('iphone18pro');
-    const is17=id==='ip17' || id.startsWith('ip17-');
-    if(!is18 && !is17) return 0;
-    if(any14){
-      if(is18 && plan==='premium') return 1200;
-      if(plan==='premium' || plan==='extra' || plan==='starter') return 930;
-      if(plan==='value') return 500;
-    }
-    if(plan==='premium' || plan==='extra' || plan==='starter' || plan==='value') return 350;
+    // Effective 10/9/2026: iPhone any-condition alternate qualifiers ended.
     return 0;
   }
   function computeCredit(plan, cat, value, isPixelTrade, phone, galaxyAny){
@@ -3953,6 +3946,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     if(!state.plan || !state.phone) return { state:'incomplete' };
 
     if(state.plan === 'valueplus_mobile') return { state:'full_retail_rerate' };
+    if(isOct9TieredPending(state.phone)) return { state:'tiered_confirm_cckm' };
 
     // Base S26 now uses the 10/2 trade-in ladder.
 
@@ -4607,6 +4601,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
   function tieredOfferLabel(phone){
     if(!phone || !hasActiveTieredOffer(phone)) return '';
+    if(isOct9TieredPending(phone)) return '10/9 storage pricing — confirm in CCKM';
     const fmt = v => (v === null || v === undefined) ? 'N/A' : '$' + Number(v).toFixed(2) + '/mo';
     return `New: ${fmt(tieredPriceFor(phone,'new'))} · Upgrade: ${fmt(tieredPriceFor(phone,'upgrade'))}`;
   }
@@ -5993,7 +5988,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       }
     } else if(r.state === 'tiered_confirm_cckm'){
       amountEl.innerHTML = '$&mdash;';
-      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; retail ${money(state.phone.retail)}<br>This device is part of tiered offers — confirm exact promo in <a href="${CCKM}" target="_blank" rel="noopener noreferrer" style="color:#eaf3fb;">CCKM</a>. No trade-in required for the tiered promo.</div>`;
+      detailEl.innerHTML = `<div class="d-rule" style="border-top:none;"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; retail ${money(state.phone.retail)}<br>The 10/9 starting prices are confirmed; this storage needs the detailed guide. Confirm exact promo in <a href="${CCKM}" target="_blank" rel="noopener noreferrer" style="color:#eaf3fb;">CCKM</a>. No trade-in required for the tiered promo.</div>`;
       renderTierActionRow();
       if(canShowOneTimeTradeCredit()){
         tradeAppliedNote.innerHTML = `Trade-in bill credit: <strong>${moneyWhole(state.value)}</strong> — one-time, applied to the customer's bill or accessories.`;
@@ -6205,13 +6200,12 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function renderSuggestions(){const q=search.value.trim().toLowerCase();if(!q){sugg.classList.remove('open');return}const hits=models().filter(x=>(x.brand+' '+x.model).toLowerCase().includes(q)).slice(0,60);sugg.innerHTML=hits.map((x,i)=>{const vals=x.rows.map(r=>Number(r.trade_value)).filter(Number.isFinite);const vr=vals.length?'$'+Math.min(...vals).toFixed(0)+(Math.min(...vals)!==Math.max(...vals)?'–$'+Math.max(...vals).toFixed(0):''):'verify';return '<div class="v4-suggestion" data-i="'+i+'"><b>'+x.brand+' '+x.model+'</b><span>'+vr+'</span></div>'}).join('');sugg.classList.toggle('open',!!hits.length);sugg.querySelectorAll('[data-i]').forEach(el=>el.onclick=()=>choose(hits[+el.dataset.i]))}
  function choose(x){selected=x;search.value=x.brand+' '+x.model;sugg.classList.remove('open');storage.innerHTML='';$('v4SimpleResult').classList.remove('show');x.rows.sort((a,b)=>a.storage.localeCompare(b.storage,undefined,{numeric:true})).forEach(r=>{const b=document.createElement('button');b.className='v4-chip';b.textContent=r.storage;b.onclick=()=>{storage.querySelectorAll('.v4-chip').forEach(c=>c.classList.remove('on'));b.classList.add('on');showResult(r)};storage.appendChild(b)});if(x.rows.length===1)storage.firstChild.click()}
  function simpleApplePlans(r){
-  const val=Number(r.trade_value)||0, model=String(r.model||'');
-  const iphone=/iphone/i.test(model), any14=iphone&&!/16e/i.test(model)&&(/iphone\s*(1[4-9]|2\d)/i.test(model));
+  const val=/16e/i.test(String(r.model||''))?35:Number(r.trade_value)||0;
   return {
-    premium:any14||val>=180?1200:val>=130?930:(iphone||val>=35?350:0),
-    extra:any14||val>=130?930:(iphone||val>=35?350:0),
-    starter:any14||val>=130?930:(iphone||val>=35?350:0),
-    value:any14||val>=130?500:(iphone||val>=35?350:0)
+    premium:val>=230?1200:val>=130?930:val>=35?350:0,
+    extra:val>=130?930:val>=35?350:0,
+    starter:val>=130?930:val>=35?350:0,
+    value:val>=130?500:val>=35?350:0
   };
  }
  function simpleGalaxyLevel(r){
@@ -6253,7 +6247,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function simpleOppNote(name,r){
   const model=String(r.model||''), brand=String(r.brand||'');
   if(name==='Apple'){
-    if(/iphone/i.test(model)&&!/16e/i.test(model)&&/iphone\s*(1[4-9]|2\d)/i.test(model)) return 'iPhone 14+ any-condition path included.';
+    // Apple offers now use condition-adjusted trade value, with no any-condition bypass.
     return 'Calculated from this phone\'s current trade value.';
   }
   if(name==='Samsung') return 'Calculated from this phone\'s current trade value.';
@@ -6307,7 +6301,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  let piDataReady=loadPiData();
 
  const PI_LADDERS={
-   premium:{iphonePro:[[180,1200],[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],iphoneDuo:[[230,1200],[130,930],[35,350]],samsung:[[95,1200],[35,1000]],s26base:[[35,1000]],fold8:[[95,1200],[35,1000]],flip8:[[95,1200],[35,1000]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[95,1150],[35,1000]],pixelXL:[],pixelPro:[],razr:[[95,1320],[35,1000]]},
+   premium:{iphonePro:[[230,1200],[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],iphoneDuo:[[230,1200],[130,930],[35,350]],samsung:[[95,1200],[35,1000]],s26base:[[35,1000]],fold8:[[95,1200],[35,1000]],flip8:[[95,1200],[35,1000]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[95,1150],[35,1000]],pixelXL:[],pixelPro:[],razr:[[95,1320],[35,1000]]},
    extra:{iphonePro:[[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],iphoneDuo:[[130,930],[35,350]],samsung:[[95,1000],[35,800]],s26base:[[35,800]],fold8:[[95,1000],[35,800]],flip8:[[95,1000],[35,800]],pixel11XL:[[200,1350],[95,1150],[35,1000]],pixel11Pro:[[95,1150],[35,1000]],pixelXL:[],pixelPro:[],razr:[[95,1320],[35,1000]]},
    starter:{iphonePro:[[130,930],[35,350]],iphoneBase:[[130,930],[35,350]],iphoneAir:[],iphoneDuo:[[130,930],[35,350]],samsung:[[35,800]],s26base:[[35,800]],fold8:[[35,800]],flip8:[[35,800]],pixel11XL:[[95,1150],[35,1000]],pixel11Pro:[[95,1150],[35,1000]],pixelXL:[],pixelPro:[],razr:[[35,1000]]},
    value:{iphonePro:[[130,500],[35,350]],iphoneBase:[[130,500],[35,350]],iphoneAir:[],iphoneDuo:[[130,500],[35,350]],samsung:[[35,500]],s26base:[[35,500]],fold8:[[35,500]],flip8:[[35,500]],pixel11XL:[[35,500]],pixel11Pro:[[35,500]],pixelXL:[],pixelPro:[],razr:[[35,500]]}
@@ -6396,21 +6390,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  }
  function piApple18LaunchCredit(plan,trade,val){
    if(!plan || !trade) return 0;
-   const any14=piIsAnyConditionIphone14Plus(trade);
-   if(plan==='premium'){
-     if(any14 || val>=180) return 1200;
-     if(val>=130) return 930;
-     if(val>=35) return 350;
-   }
-   if(plan==='extra' || plan==='starter'){
-     if(any14 || val>=130) return 930;
-     if(val>=35) return 350;
-   }
-   if(plan==='value'){
-     if(any14 || val>=130) return 500;
-     if(val>=35) return 350;
-   }
-   return 0;
+   if(/16e/i.test(String(trade.model||''))) val=35;
+   return piFallbackCredit(plan,'iphonePro',val);
  }
  function piGalaxyLevel(trade){
    if(!trade || String(trade.brand||'').toLowerCase()!=='samsung') return null;
@@ -6432,6 +6413,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    let best=0;
    piSpecial.forEach(r=>{
      if(r.active===false)return;
+     if(r.qualifier_type==='any_iphone' && ['iphone18pro','iphone18promax','ip17'].includes(r.device_key_prefix))return;
      if(r.plan_group_key && r.plan_group_key!==plan)return;
      if(r.promo_category_key && r.promo_category_key!==cat)return;
      if(r.device_key_prefix && !key.startsWith(String(r.device_key_prefix)))return;
@@ -6850,6 +6832,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    const dbTier=piDbTier(bestPromo,plan,val);
    const cat=target?.promo_category_key||null;
    const nextUp=piNextUpStatus(d);
+   const storagePending=['ip17p-512','ip17p-1tb','ip17pm-512','ip17pm-1tb','ip17pm-2tb','i17e-512'].includes(target?.device_key) && !piActiveTieredRowsForKey(target.device_key).some(r=>Date.parse(r.starts_at||'')>=Date.parse('2026-10-09T04:00:00Z'));
+   if(storagePending)return {plan,trade,target,targetMatches,val,cat,promos,bestPromo,dbTier:null,credit:0,title:'Confirm storage price in CCKM',body:'The 10/9 notice confirms starting prices only. This storage needs the detailed tiered offer guide before quoting a monthly price.',nextUp,source:'10/9 tiered storage pending',is18pro:false,isDuo:false,tiered:{isTiered:true,pending:true}};
 
    // Tiered offers are a monthly device-price offer. Trade value is not the thing that determines
    // the standard tiered price, so do NOT run the trade-in ladder against them.
@@ -6889,7 +6873,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
    if(is18pro && !isDuo && plan && trade){
      credit=piApple18LaunchCredit(plan,trade,val);
-     source='9/12 iPhone 18 launch rules';
+     source='10/9 iPhone 18 trade-value rules';
    }else{
      const fallback=(plan&&cat&&val!=null)?piFallbackCredit(plan,cat,val):0;
      credit=dbTier?Number(dbTier.credit_amount||0):fallback;
@@ -6906,20 +6890,20 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      body=(preview?'Preorder 10/16, Max trade $1200. ':'')+(plan&&trade?'This plan and trade combination shows '+piMoney(credit)+' in estimated bill credits. ':'Choose the plan and trade-in phone to estimate the credit. ');
    }else if(is18pro && !plan){
      title='iPhone 18 Pro-family promo found — which plan?';
-     body='GTT has the 9/12 iPhone 18 Pro / Pro Max promo structure, but the credit changes by plan group.';
+     body='GTT has the 10/9 iPhone 18 Pro / Pro Max promo structure, but the credit changes by plan group.';
    }else if(is18pro && plan && !trade){
      title='Which phone are they trading?';
-     body='The 9/12 iPhone 18 Pro / Pro Max offer is loaded. I need the trade device to test the any-condition/TIV tier.';
+     body='The 10/9 iPhone 18 Pro / Pro Max offer is loaded. I need the trade device to test the condition-adjusted trade-value tier.';
    }else if(is18pro && plan && trade){
      if(nextUp.promoOK===false){
        title='Next Up threshold not met';
        body=nextUp.note;
      }else if(credit>0){
        title='Up to '+piMoney(credit);
-       body='9/12 iPhone 18 Pro / Pro Max promo. '+trade.brand+' '+trade.model+' is currently '+piMoney(val)+' good-condition TIV. '+nextUp.note;
+       body='10/9 iPhone 18 Pro / Pro Max promo. '+trade.brand+' '+trade.model+' is currently '+piMoney(val)+' good-condition TIV. '+nextUp.note;
      }else{
        title='No qualifying iPhone 18 trade tier found';
-       body='The 9/12 iPhone 18 promo rules did not produce a credit from the current plan/trade combination. '+nextUp.note;
+       body='The 10/9 iPhone 18 trade-value rules did not produce a credit from the current plan/trade combination. '+nextUp.note;
      }
    }else if(bestPromo && plan){
      const when=bestPromo._state==='upcoming'&&bestPromo.starts_at?' Starts '+piFormatDate(bestPromo.starts_at)+'.':'';
@@ -7008,7 +6992,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      // If the selected trade already qualifies through an ANY-CONDITION rule, asking condition adds no value.
      const anyConditionAlreadyQualifies=!!(x.trade&&x.target&&piSpecialCredit(x.plan,x.target,x.trade)>0);
      const special=piSpecial.some(r=>(!r.plan_group_key||r.plan_group_key===x.plan)&&(!r.promo_category_key||r.promo_category_key===x.cat));
-     if(x.trade||d.next_up)return {type:'condition',title:'What condition is the trade in?',text:'There are special/any-condition rules in the database, so condition can matter.'};
+     if(x.trade||d.next_up)return {type:'condition',title:'What condition is the trade in?',text:'The condition-adjusted trade value determines the tier; Next Up also requires eligible turn-in condition.'};
    }
    return null;
  }
@@ -7054,11 +7038,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
      piFact('Trade value',x.tiered?.isTiered?(x.val==null?'Not needed for tiered price':piMoney(x.val)+' possible bill credit'):(x.val==null?'Not found':piMoney(x.val))),
      piFact('Financing',x.nextUp?.label||'Verify paid off')
    ].join('');
-   const dbLine=x.tiered?.isTiered?'<div class="pi-dbnote">Promo source: live Supabase tiered_prices</div>':(x.is18pro?'<div class="pi-dbnote">Promo source: 9/12 iPhone 18 Pro / Pro Max launch rules</div>':(x.bestPromo?'<div class="pi-dbnote">Supabase promo: '+piEsc(x.bestPromo.name||x.bestPromo.promo_key)+' · '+(x.bestPromo._state==='upcoming'?'upcoming':'current')+'</div>':'<div class="pi-dbnote">No matching mapped Supabase promo row yet — fallback logic only if enough inputs exist.</div>'));
+   const dbLine=x.tiered?.isTiered?'<div class="pi-dbnote">Promo source: live Supabase tiered_prices</div>':(x.is18pro?'<div class="pi-dbnote">Promo source: 10/9 iPhone 18 Pro / Pro Max launch rules</div>':(x.bestPromo?'<div class="pi-dbnote">Supabase promo: '+piEsc(x.bestPromo.name||x.bestPromo.promo_key)+' · '+(x.bestPromo._state==='upcoming'?'upcoming':'current')+'</div>':'<div class="pi-dbnote">No matching mapped Supabase promo row yet — fallback logic only if enough inputs exist.</div>'));
    $('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(x.body)+'</p>'+dbLine;
    const q=piNeedsQuestion(d,x);
    if(q){$('piAnswer').innerHTML='<small>GTT needs a detail</small><div class="pi-credit">'+piEsc(q.title)+'</div><p>'+piEsc(q.text||'Answer the follow-up before quoting a price.')+'</p>'+dbLine;}
-   if(!q&&window.GTTQuote&&x.target){const c=window.GTTQuote.fromInvestigation(d,x),r=window.GTTQuote.evaluate(c),m=window.GTTQuote.metric(c,r);if(m){x.credit=m.credit;x.title=r.state==='tiered_final'?'$'+m.monthly.toFixed(2)+'/mo':m.credit>0?'Up to '+piMoney(m.credit):'No recurring promo';x.body='Estimated device payment: $'+m.monthly.toFixed(2)+'/mo · $'+m.total.toFixed(2)+' over 36 months. '+(x.isDuo&&Date.now()<Date.parse('2026-10-16T04:00:00Z')?'Preorder 10/16, Max trade $1200. ':'');$('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(x.body)+'</p>'+dbLine;}else{x.title='Quote needs another check';x.body=({nextup_bad_condition:'Current phone is not eligible for Next Up turn-in.',needCondition:'Confirm the trade condition in the full quote.',needValue:'Confirm the trade value in the full quote.',nextup_no_payoff:'Next Up paid threshold is not met.'})[r.state]||'Complete the remaining quote details in GTT before quoting a price.';$('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(x.body)+'</p>';}}
+   if(!q&&window.GTTQuote&&x.target){const c=window.GTTQuote.fromInvestigation(d,x),r=window.GTTQuote.evaluate(c),m=window.GTTQuote.metric(c,r);if(m){x.credit=m.credit;x.title=r.state==='tiered_final'?'$'+m.monthly.toFixed(2)+'/mo':m.credit>0?'Up to '+piMoney(m.credit):'No recurring promo';x.body='Estimated device payment: $'+m.monthly.toFixed(2)+'/mo · $'+m.total.toFixed(2)+' over 36 months. '+(x.isDuo&&Date.now()<Date.parse('2026-10-16T04:00:00Z')?'Preorder 10/16, Max trade $1200. ':'');$('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(x.body)+'</p>'+dbLine;}else{x.title='Quote needs another check';x.body=({nextup_bad_condition:'Current phone is not eligible for Next Up turn-in.',needCondition:'Confirm the trade condition in the full quote.',needValue:'Confirm the trade value in the full quote.',nextup_no_payoff:'Next Up paid threshold is not met.',tiered_confirm_cckm:'The 10/9 notice does not confirm this storage price. Verify the detailed tiered offer in CCKM.'})[r.state]||'Complete the remaining quote details in GTT before quoting a price.';$('piAnswer').innerHTML='<small>GTT promo result</small><div class="pi-credit">'+piEsc(x.title)+'</div><p>'+piEsc(x.body)+'</p>';}}
    $('piMissing').innerHTML=q?'<b>GTT needs another answer before finishing this investigation.</b>':'<b>Investigation has enough information for this promo check.</b>';
    $('piResult').classList.add('show');
    piRenderFollow(q);
