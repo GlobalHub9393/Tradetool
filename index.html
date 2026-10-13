@@ -1390,6 +1390,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     .result-phone-fallback{width:62px;height:82px;border-radius:12px;}
     .phone-silhouette{width:31px;height:55px;border-radius:7px;}
   }
+
+  #v4NewsPromoFallback[hidden]{display:none!important;}
+  #v4NewsLive .v4-newsitem:first-child{border-left:4px solid #c22a2a;}
+  #v4NewsLive .v4-newsitem p{line-height:1.55;white-space:normal;}
 </style>
 
 <style id="promo-investigator-css">
@@ -1556,7 +1560,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   <section id="v4News" class="v4-page v4-section">
   <button class="v4-back" data-v4go="home">← Home</button>
   <h2>What's New</h2>
-  <p class="v4-sectionlead">iPhone launch information, the 9/12 promo guide, and the S26 FE update.</p>
+  <p class="v4-sectionlead">iPhone Duo preorder preview, current Apple offers, and verified GTT promo updates. Live changes load from Supabase.</p>
+  <div id="v4NewsLive" aria-live="polite"></div>
   <article class="v4-newsitem">
     <div class="v4-date">September 9</div><h3>Apple announces the iPhone 18 lineup</h3>
     <div class="v4-phone-visuals">
@@ -1572,10 +1577,21 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         <tr><th>AT&amp;T / 36 mo.</th><td>$33.33/mo</td><td>$36.11/mo</td><td>$55.56/mo</td></tr>
         <tr><th>Preorder</th><td>9/12</td><td>9/12</td><td>10/16</td></tr>
         <tr><th>Release</th><td>9/18</td><td>9/18</td><td>10/23</td></tr>
-        <tr><th>AT&amp;T max trade</th><td>Up to $1,200</td><td>Up to $1,200</td><td>No promo loaded</td></tr>
+        <tr><th>AT&amp;T max trade</th><td>Up to $1,200</td><td>Up to $1,200</td><td>Up to $1,200 — preorder 10/16</td></tr>
       </tbody>
     </table></div>
     <p class="v4-table-note">*AT&amp;T installment amounts shown as confirmed MSRP divided over 36 months; taxes and other charges not included.</p>
+  </article>
+  <div id="v4NewsPromoFallback">
+  <article class="v4-newsitem">
+    <div class="v4-date">Preorder October 16 · Release October 23</div><h3>iPhone Duo — up to $1,200 trade credit</h3>
+    <div class="v4-promo-grid">
+      <div class="v4-promo"><b>Premium 2.0 — $1,200</b><span>$230+ condition-adjusted trade value. $130–$229.99 gets $930.</span></div>
+      <div class="v4-promo"><b>Extra / Starter — $930</b><span>$130+ condition-adjusted trade value.</span></div>
+      <div class="v4-promo"><b>Value 2.0 — $500</b><span>$130+ condition-adjusted trade value.</span></div>
+      <div class="v4-promo"><b>Eligible unlimited — $350</b><span>$35–$129.99 condition-adjusted trade value; plan eligibility applies.</span></div>
+    </div>
+    <p class="v4-table-note">Preview only: Duo preorders begin 10/16. Verify offer and inventory in CCKM/OPUS before quoting; trade credits apply over installments.</p>
   </article>
   <article class="v4-newsitem">
     <div class="v4-date">Effective October 9</div><h3>iPhone promo quick guide</h3>
@@ -1594,6 +1610,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       <li>iPhone Duo keeps its separate 10/16 preorder offer.</li>
     </ul></details>
   </article>
+  </div>
   <article class="v4-newsitem"><div class="v4-date">September 4</div><h3>Galaxy S26 FE</h3><p>Galaxy S26 FE 128GB launched at <b>$7.99/mo new line</b> and <b>$12.99/mo upgrade</b>. The S25 FE $13.99/mo new-line offer ended 9/3; S25 FE remains trade eligible.</p></article>
 </section>
 <section id="v4Investigator" class="v4-page v4-section">
@@ -3050,6 +3067,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
       if(!liveRows.length){
         host.innerHTML = '';
+        const v4Fallback = el('v4NewsPromoFallback');
+        if(v4Fallback) v4Fallback.hidden = false;
         return;
       }
 
@@ -3063,9 +3082,37 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         </section>`;
       }).join('');
 
+      // 4.0 What's New uses this same live source instead of stale hard-coded promo text.
+      const v4Host = el('v4NewsLive');
+      const v4Fallback = el('v4NewsPromoFallback');
+      const v4Rows = liveRows.filter(r=>{
+        const m = (r.metadata && typeof r.metadata === 'object') ? r.metadata : {};
+        return m.category === 'promo_update' && String(r.effective_date||'') >= '2026-10-09';
+      }).slice(0,6);
+      if(v4Host){
+        v4Host.innerHTML = v4Rows.map(r=>{
+          const date = whatsNewShortDate(r.effective_date);
+          const meta = (r.metadata && typeof r.metadata === 'object') ? r.metadata : {};
+          const highlights = Array.isArray(meta.highlights) ? meta.highlights : [];
+          const cards = highlights.map(item=>`<div class="v4-promo">
+              <b>${escapeHtml(item.heading||'Offer')}</b><span>${escapeHtml(item.detail||'')}</span>
+            </div>`).join('');
+          const summary = meta.short_note ? `<p class="v4-table-note">${escapeHtml(meta.short_note)}</p>` : '';
+          const details = escapeHtml(r.body||'').split(/\n+/).filter(Boolean).map(p=>`<p>${p}</p>`).join('');
+          const body = cards ? `<div class="v4-promo-grid">${cards}</div>${summary}<details><summary>Full offer details</summary>${details}</details>` : details;
+          const status = meta.status === 'preorder_preview' ? ' · PREORDER PREVIEW' : ' · LIVE PROMO UPDATE';
+          return `<article class="v4-newsitem" data-live-content-key="${escapeHtml(r.content_key||'')}">
+            <div class="v4-date">${escapeHtml(date)}${status}</div>
+            <h3>${escapeHtml(r.title||'Update')}</h3>${body}
+          </article>`;
+        }).join('');
+      }
+      if(v4Fallback) v4Fallback.hidden = v4Rows.length > 0;
       console.info('What’s New content loaded from Supabase:', liveRows.length);
     }catch(err){
       host.innerHTML = '';
+      const v4Fallback = el('v4NewsPromoFallback');
+      if(v4Fallback) v4Fallback.hidden = false;
       console.warn('Supabase What’s New unavailable; using embedded promo cards.', err);
     }
   }
