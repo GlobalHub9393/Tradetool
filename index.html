@@ -1580,6 +1580,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 #v4Tax{max-width:1100px;color:var(--v4-ink)}#v4Tax *{box-sizing:border-box}.tax-heading>.tax-quiet{white-space:nowrap}.tax-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}.tax-quiet{background:transparent;color:var(--v4-blue);border:0;cursor:pointer;padding:9px;font:inherit;font-size:12px;font-weight:750}.tax-layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:20px;align-items:start}.tax-card{background:var(--v4-alt);border:1px solid var(--v4-line);border-radius:16px;padding:20px;margin-bottom:14px;min-width:0}.tax-card h3{font-size:16px;margin:0}.tax-options{margin-bottom:20px}.tax-rate-choices{display:flex;gap:10px;margin:14px 0 18px}.tax-rate{flex:1;border:1px solid var(--v4-line);border-radius:11px;background:var(--v4-surface);color:var(--v4-ink);padding:13px 10px;text-align:left;font:inherit;cursor:pointer}.tax-rate strong,.tax-rate small{display:block}.tax-rate strong{font-size:13px}.tax-rate small{margin-top:4px;color:var(--v4-muted);font-size:12px}.tax-rate[aria-pressed=true]{border-color:var(--v4-blue);box-shadow:inset 0 0 0 1px var(--v4-blue)}.tax-rate:disabled{opacity:.45;cursor:not-allowed}.tax-shipping{display:flex;gap:9px;align-items:center;font-size:13px;cursor:pointer}.tax-shipping input{width:18px;height:18px;accent-color:var(--v4-blue)}.tax-note{color:var(--v4-muted);font-size:12px;line-height:1.5;margin:9px 0 0}.tax-device-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.tax-fields{display:grid;grid-template-columns:1fr 2fr;gap:12px}.tax-field{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:11px;font-weight:750;color:var(--v4-muted)}.tax-field-wide{grid-column:1/-1}.tax-field select,.tax-field input{width:100%;min-width:0;min-height:46px;border:1px solid var(--v4-line);border-radius:9px;background:var(--v4-surface);color:var(--v4-ink);padding:10px;font:inherit;font-size:16px;font-weight:500;color-scheme:light dark}.tax-field input[aria-invalid=true]{border-color:#db5555}.tax-error{min-height:18px;font-size:11px;color:var(--v4-muted);font-weight:500}.tax-price-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;margin-top:14px}.tax-line-total{padding-top:2px}.tax-line-total small{display:block;font-size:11px;color:var(--v4-muted);font-weight:750}.tax-line-total output{display:block;font-size:25px;font-weight:800;margin-top:10px;font-variant-numeric:tabular-nums}.tax-add{width:100%;min-height:48px;border:1px dashed var(--v4-blue);border-radius:12px;background:transparent;color:var(--v4-blue);font:inherit;font-size:13px;font-weight:800;cursor:pointer}.tax-summary{position:sticky;top:20px;background:var(--v4-surface)}.tax-summary h3{font-size:13px}.tax-grand{display:block;font-size:36px;font-weight:850;letter-spacing:-.04em;margin:12px 0 4px;font-variant-numeric:tabular-nums}.tax-summary hr{border:0;border-top:1px solid var(--v4-line);margin:18px 0}.tax-summary-details{display:flex;justify-content:space-between;font-size:12px;color:var(--v4-muted);gap:8px}.tax-summary-details strong{color:var(--v4-ink)}#v4Tax button:focus-visible,#v4Tax input:focus-visible,#v4Tax select:focus-visible,#v4Home button.v4-lane:focus-visible{outline:2px solid var(--v4-blue);outline-offset:3px}#taxShippingNote[hidden]{display:none}
 @media(max-width:720px){.tax-layout{grid-template-columns:minmax(0,1fr)}.tax-summary{position:static}.tax-card{padding:16px}.tax-fields{grid-template-columns:minmax(0,1fr)}.tax-field-wide{grid-column:auto}.tax-heading h2{font-size:22px}.tax-rate-choices{gap:8px}.tax-rate{padding:12px 9px}}
 </style>
+<style>
+.tax-model-field{position:relative}.tax-model-results{position:absolute;left:0;right:0;top:100%;max-height:260px;overflow-y:auto;z-index:50;background:var(--v4-surface);border:1px solid var(--v4-line);border-radius:10px;box-shadow:var(--v4-shadow);padding:5px}.tax-model-results[hidden]{display:none}.tax-model-results button{display:block;width:100%;text-align:left;background:transparent;border:0;border-radius:6px;color:var(--v4-ink);padding:13px 10px;font:inherit;font-size:14px;cursor:pointer}.tax-model-results button:hover,.tax-model-results button[aria-selected=true]{background:var(--v4-alt);color:var(--v4-blue)}.tax-model-results .tax-note{padding:5px 10px}
+</style>
 </head>
 <body>
 
@@ -6303,16 +6306,46 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function taxCents(value){const s=String(value).trim();if(!/^\d{1,5}(?:\.\d{1,2})?$/.test(s))return null;const [whole,decimal='']=s.split('.');const cents=Number(whole)*100+Number(decimal.padEnd(2,'0'));return cents>0&&cents<=9999999?cents:null;}
  function taxLine(cents){return Math.floor((cents*(taxUEZ&&!$('taxShipping').checked?33125:66250)+500000)/1000000);}
  function taxOptions(type){return type==='phone'?taxPhones:taxCatalog.filter(r=>r.device_type===type);}
+ function taxStorageSize(text){const m=String(text).match(/(\d+(?:\.\d+)?)\s*(TB|GB|MB)\b/i);return m?Number(m[1])*({TB:1024,GB:1,MB:1/1024})[m[2].toUpperCase()]:Infinity;}
+ function taxVariantLabel(entry){
+  const parts=entry.variant.split(' · '),capacity=parts.find(p=>/^(\d+(?:\.\d+)?)\s*(TB|GB|MB)$/i.test(p));
+  if(entry.device_type==='tablet')return [capacity,...parts.filter(p=>/glass/i.test(p))].filter(Boolean).join(' · ')||'Enter confirmed MSRP';
+  if(entry.device_type==='watch'){
+   const material=entry.variant.match(/\b(Aluminum|Titanium|Stainless Steel)\b/i)?.[0];
+   const band=entry.variant.match(/\b(Sport Band|Sport Loop|Milanese Loop|Alpine Loop|Trail Loop|Ocean Band)\b/i)?.[0];
+   const size=entry.variant.match(/\b(S-M|M-L|Small|Medium|Large)\b/i)?.[0];
+   return [material,band,size].filter(Boolean).join(' · ')||(entry.price_verified?'Standard configuration':'Enter confirmed MSRP');
+  }
+  return entry.variant;
+ }
+ function taxVariants(row){
+  const grouped=new Map();
+  taxOptions(row.type).filter(r=>r.model===row.model).forEach(r=>{const label=taxVariantLabel(r),k=label+'|'+(r.price_verified?r.msrp_cents:'unverified');if(!grouped.has(k))grouped.set(k,{...r,label});});
+  const result=[...grouped.values()];
+  // Keep different retail prices distinct even when the only source difference is color.
+  const counts=new Map();result.forEach(r=>counts.set(r.label,(counts.get(r.label)||0)+1));
+  result.forEach(r=>{if(counts.get(r.label)>1)r.label+=' · '+(r.price_verified?taxMoney(r.msrp_cents):'Confirm MSRP');});
+  return result.sort((a,b)=>{const x=taxStorageSize(a.label),y=taxStorageSize(b.label);return (x===y?0:x-y)||a.label.localeCompare(b.label,undefined,{numeric:true})||(a.msrp_cents||0)-(b.msrp_cents||0);});
+ }
+ function taxSearchResults(row,all=false){
+  const card=$('taxDevice'+row.id),input=card.querySelector('[data-tax="model"]'),list=card.querySelector('.tax-model-results');
+  const query=(all?'':input.value).toLowerCase().replace(/[^a-z0-9]/g,'');
+  const names=[...new Set(taxOptions(row.type).map(r=>r.model))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+  const hits=names.filter(n=>n.toLowerCase().replace(/[^a-z0-9]/g,'').includes(query));
+  row.searchHits=[...hits,'__manual'];row.searchIndex=-1;input.removeAttribute('aria-activedescendant');
+  list.innerHTML=(!hits.length?'<p class="tax-note">No matching device. Enter MSRP manually below.</p>':'')+row.searchHits.map((n,i)=>'<button type="button" role="option" aria-selected="false" id="taxOption'+row.id+'_'+i+'" data-model="'+taxEscape(n)+'">'+taxEscape(n==='__manual'?'Other / enter MSRP':n)+'</button>').join('');
+  list.hidden=false;input.setAttribute('aria-expanded','true');
+  list.querySelectorAll('button').forEach(b=>{b.onpointerdown=e=>e.preventDefault();b.onclick=()=>row.chooseModel(b.dataset.model);});
+ }
+ function taxCloseSearch(row){const c=$('taxDevice'+row.id);c.querySelector('.tax-model-results').hidden=true;c.querySelector('[data-tax="model"]').setAttribute('aria-expanded','false');c.querySelector('[data-tax="model"]').removeAttribute('aria-activedescendant');}
  function taxPopulate(row){
-  const card=$('taxDevice'+row.id), model=card.querySelector('[data-tax="model"]'), variant=card.querySelector('[data-tax="variant"]'), options=taxOptions(row.type);
-  const names=[...new Set(options.map(r=>r.model))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
-  // Keep an in-progress selection if the live catalog changes while the page is open.
-  if(row.model&&row.model!=='__manual'&&!names.includes(row.model))names.push(row.model);
-  model.innerHTML='<option value="">'+(row.type==='phone'&&!taxPhones.length?'Phones loading…':'Choose model')+'</option>'+names.map(n=>'<option value="'+taxEscape(n)+'">'+taxEscape(n)+'</option>').join('')+'<option value="__manual">Other / enter MSRP</option>';
-  if(row.model==='__manual')model.value='__manual';else model.value=row.model||'';
-  const variants=options.filter(r=>r.model===row.model).sort((a,b)=>a.variant.localeCompare(b.variant,undefined,{numeric:true}));
-  variant.innerHTML='<option value="">Choose exact configuration</option>'+variants.map(r=>'<option value="'+taxEscape(r.device_key)+'">'+taxEscape(r.variant)+(r.price_verified||r.variant==='Enter confirmed MSRP'?'':' · Confirm MSRP')+'</option>').join('');
+  const card=$('taxDevice'+row.id),input=card.querySelector('[data-tax="model"]'),variant=card.querySelector('[data-tax="variant"]');
+  if(document.activeElement!==input)input.value=row.model==='__manual'?'Other / enter MSRP':row.model||'';
+  input.placeholder=row.type==='phone'&&!taxPhones.length?'Search phones or enter MSRP…':'Search '+({phone:'phones',tablet:'tablets',watch:'watches'})[row.type]+'…';
+  const variants=taxVariants(row);
+  variant.innerHTML='<option value="">Choose configuration</option>'+variants.map(r=>'<option value="'+taxEscape(r.device_key)+'">'+taxEscape(r.label)+'</option>').join('');
   variant.disabled=!variants.length;variant.value=row.key||'';
+  if(document.activeElement===input&&!card.querySelector('.tax-model-results').hidden)taxSearchResults(row);
  }
  function taxRefreshTotals(){
   let total=0,complete=true;
@@ -6324,11 +6357,16 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  function taxAddDevice(focus=false){
   const row={id:++taxNextId,type:'phone',model:'',key:'',value:'',manualRequired:false};taxRows.push(row);
   const card=document.createElement('article');card.id='taxDevice'+row.id;card.className='tax-card tax-device';
-  card.innerHTML='<div class="tax-device-head"><h3></h3><button class="tax-quiet" type="button" data-tax="remove">Remove</button></div><div class="tax-fields"><label class="tax-field">Device type<select data-tax="type"><option value="phone">Phone</option><option value="tablet">Tablet</option><option value="watch">Watch</option></select></label><label class="tax-field">Model<select data-tax="model"></select></label><label class="tax-field tax-field-wide">Configuration<select data-tax="variant"></select></label></div><div class="tax-price-row"><label class="tax-field">Full retail MSRP ($)<input data-tax="msrp" type="text" inputmode="decimal" placeholder="0.00" maxlength="9" aria-describedby="taxError'+row.id+'"><span id="taxError'+row.id+'" class="tax-error"></span></label><div class="tax-line-total"><small>Sales tax</small><output>—</output></div></div>';
+  card.innerHTML='<div class="tax-device-head"><h3></h3><button class="tax-quiet" type="button" data-tax="remove">Remove</button></div><div class="tax-fields"><label class="tax-field">Device type<select data-tax="type"><option value="phone">Phone</option><option value="tablet">Tablet</option><option value="watch">Watch</option></select></label><div class="tax-field tax-model-field"><label for="taxModel'+row.id+'">Model</label><input id="taxModel'+row.id+'" data-tax="model" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="taxModels'+row.id+'" autocomplete="off"><div id="taxModels'+row.id+'" class="tax-model-results" role="listbox" aria-label="Matching devices" hidden></div></div><label class="tax-field tax-field-wide">Configuration<select data-tax="variant"></select></label></div><div class="tax-price-row"><label class="tax-field">Full retail MSRP ($)<input data-tax="msrp" type="text" inputmode="decimal" placeholder="0.00" maxlength="9" aria-describedby="taxError'+row.id+'"><span id="taxError'+row.id+'" class="tax-error"></span></label><div class="tax-line-total"><small>Sales tax</small><output>—</output></div></div>';
   $('taxDevices').appendChild(card);
   function resetPrice(){row.key='';row.value='';row.manualRequired=false;card.querySelector('[data-tax="msrp"]').value='';}
-  card.querySelector('[data-tax="type"]').onchange=e=>{row.type=e.target.value;row.model='';resetPrice();taxPopulate(row);taxRenumber();taxRefreshTotals();};
-  card.querySelector('[data-tax="model"]').onchange=e=>{row.model=e.target.value;resetPrice();row.manualRequired=row.model==='__manual';taxPopulate(row);const variants=taxOptions(row.type).filter(r=>r.model===row.model);if(variants.length===1){row.key=variants[0].device_key;card.querySelector('[data-tax="variant"]').value=row.key;pickVariant();}else taxRefreshTotals();};
+  card.querySelector('[data-tax="type"]').onchange=e=>{row.type=e.target.value;row.model='';card.querySelector('[data-tax="model"]').value='';taxCloseSearch(row);resetPrice();taxPopulate(row);taxRenumber();taxRefreshTotals();};
+  const modelInput=card.querySelector('[data-tax="model"]');
+  row.chooseModel=name=>{row.model=name;modelInput.value=name==='__manual'?'Other / enter MSRP':name;resetPrice();row.manualRequired=name==='__manual';taxCloseSearch(row);taxPopulate(row);const variants=taxVariants(row);if(variants.length===1){row.key=variants[0].device_key;card.querySelector('[data-tax="variant"]').value=row.key;pickVariant();}else taxRefreshTotals();};
+  modelInput.onfocus=()=>taxSearchResults(row,!!row.model);
+  modelInput.oninput=()=>{row.model='';resetPrice();taxPopulate(row);taxSearchResults(row);taxRefreshTotals();};
+  modelInput.onblur=()=>taxCloseSearch(row);
+  modelInput.onkeydown=e=>{const list=card.querySelector('.tax-model-results');if(e.key==='Escape'){e.preventDefault();taxCloseSearch(row);return;}if(['ArrowDown','ArrowUp'].includes(e.key)){e.preventDefault();if(list.hidden)taxSearchResults(row,!!row.model);const n=row.searchHits.length;row.searchIndex=(row.searchIndex+(e.key==='ArrowDown'?1:-1)+n)%n;list.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-selected',String(i===row.searchIndex)));const b=list.querySelectorAll('button')[row.searchIndex];modelInput.setAttribute('aria-activedescendant',b.id);b.scrollIntoView({block:'nearest'});}else if(e.key==='Enter'&&!list.hidden){e.preventDefault();const i=row.searchIndex>=0?row.searchIndex:0;row.chooseModel(row.searchHits[i]);}};
   function pickVariant(){row.key=card.querySelector('[data-tax="variant"]').value;const entry=taxOptions(row.type).find(r=>r.device_key===row.key);row.value=entry?.price_verified&&Number.isInteger(entry.msrp_cents)?(entry.msrp_cents/100).toFixed(2):'';row.manualRequired=!!entry&&!entry.price_verified;card.querySelector('[data-tax="msrp"]').value=row.value;taxRefreshTotals();}
   card.querySelector('[data-tax="variant"]').onchange=pickVariant;
   card.querySelector('[data-tax="msrp"]').oninput=e=>{row.value=e.target.value;row.manualRequired=false;taxRefreshTotals();};
