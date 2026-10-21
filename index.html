@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — 4.0</title>
+<title>Global Trade Tool — 4.1</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -1583,13 +1583,31 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 <style>
 .tax-model-field{position:relative}.tax-model-results{position:absolute;left:0;right:0;top:100%;max-height:260px;overflow-y:auto;z-index:50;background:var(--v4-surface);border:1px solid var(--v4-line);border-radius:10px;box-shadow:var(--v4-shadow);padding:5px}.tax-model-results[hidden]{display:none}.tax-model-results button{display:block;width:100%;text-align:left;background:transparent;border:0;border-radius:6px;color:var(--v4-ink);padding:13px 10px;font:inherit;font-size:14px;cursor:pointer}.tax-model-results button:hover,.tax-model-results button[aria-selected=true]{background:var(--v4-alt);color:var(--v4-blue)}.tax-model-results .tax-note{padding:5px 10px}
 </style>
+<style>
+/* GTT 4.1: phone workflow polish; preserve the existing result card. */
+#tradePage .legacy-app{padding-top:0!important}#tradePage .v4-trade-intro{margin-top:0!important;padding-top:18px!important}#tradePage .legacy-app>header{margin:0!important;padding:0!important}#tradePage .apple-event-wrap{margin:0!important}
+#tradePage input[type=text],#tradePage input[type=search],#tradePage input[type=number],#tradePage select{min-height:46px;font-size:16px}#tradePage .clearbtn,#tradePage .plan-clear,#tradePage .plan-search button,#tradePage #tradeDeviceClear,#tradePage #phoneClear,#tradePage #planClear{min-height:44px;min-width:48px}
+#tradePage #tradeDeviceSearch{background:var(--v4-surface)!important;color:var(--v4-ink)!important;border-color:var(--v4-line)!important}#tradePage input::placeholder{color:var(--v4-muted)!important;opacity:1}
+#tradePage #compareLaunchBtn,#tradePage .clearbtn,#tradePage .plan-search button,#tradePage #tradeDeviceClear,#tradePage #clearAll{background:var(--v4-alt)!important;color:var(--v4-blue)!important;border:1px solid var(--v4-line)!important;border-radius:9px;min-height:44px}#tradePage #clearAll{color:var(--v4-ink)!important}
+#tradePage .card.step-locked{opacity:1!important;filter:none!important}#tradePage .card.step-locked::before{background:transparent!important}#tradePage .card.step-locked .label{color:var(--v4-muted)!important}
+#tradePage #showAllPhones{margin-top:10px;min-height:44px;padding:10px 14px;background:var(--v4-surface);color:var(--v4-blue);border:1px solid var(--v4-line);border-radius:9px;font-weight:750}#tradePage .suggestions li,#v4Suggestions .v4-suggestion{min-height:44px;align-items:center}
+#tradePage #viewQuote,#tradePage .quote-dock button{border:0;background:var(--v4-blue);color:var(--v4-surface);border-radius:10px;min-height:46px;padding:11px 17px;font-weight:800}#tradePage #viewQuote[hidden],#tradePage .quote-dock[hidden]{display:none}#tradePage .quote-dock{align-self:start;background:var(--v4-alt);color:var(--v4-muted);border:1px solid var(--v4-line);border-radius:12px;padding:18px;font-size:13px}
+#tradePage #quoteDialog{width:calc(100% - 24px);max-width:520px;max-height:calc(100dvh - 24px);padding:0 14px 14px;border:1px solid var(--v4-line);border-radius:18px;background:var(--v4-surface);color:var(--v4-ink);overflow-y:auto;overscroll-behavior:contain;box-shadow:0 24px 80px #0007}#tradePage #quoteDialog::backdrop{background:rgba(4,15,25,.7)}#tradePage .quote-popup-head{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:10px 0;background:var(--v4-surface);font-weight:800}#tradePage #quoteClose{width:44px;height:44px;background:var(--v4-alt);border:1px solid var(--v4-line);border-radius:50%;color:var(--v4-ink);font-size:25px}#tradePage #quoteMount #display{position:relative;top:auto;width:100%;max-width:none;margin:0;max-height:none;overflow:visible;transform:none!important}
+.quote-popup-open{overflow:hidden!important}#tradePage .quote-switch{display:flex;gap:4px;border:1px solid #54728d;border-radius:10px;padding:4px;margin:0 0 16px;background:#0b233c;position:relative;z-index:3}#tradePage .quote-switch button{flex:1;min-height:42px;background:transparent;border:0;border-radius:7px;color:#bdd5e8;font:inherit;font-size:12px;font-weight:750;padding:9px 7px}#tradePage .quote-switch button[aria-pressed=true]{background:#254c6d;color:#fff}#tradePage .quote-switch[hidden]{display:none}#tradePage .quote-view-note{font-size:11px;color:#bdd5e8;line-height:1.5;margin-top:12px}#tradePage #display .bump{display:block!important;font-size:12px;line-height:1.5}#tradePage #display .bump b{display:inline!important}#tradePage #display .d-rule{color:#cfe2f3!important}
+#v4QuoteHelp .quote-help-card{padding:18px 0;border-top:1px solid var(--v4-line);font-size:14px;line-height:1.6;color:var(--v4-ink)}#v4QuoteHelp h3{font-size:16px;margin:0 0 6px}#v4QuoteHelp p{margin:5px 0;color:var(--v4-muted)}#v4QuoteHelp strong{color:var(--v4-ink)}
+@media(max-width:767px){#tradePage .layout{margin-top:0!important}#tradePage .card{padding:14px}#tradePage .v4-trade-intro{padding-bottom:14px!important;margin-bottom:14px!important}#tradePage #quoteDialog{max-height:calc(100dvh - 16px);width:calc(100% - 16px);padding-left:10px;padding-right:10px}#tradePage .quote-switch button{font-size:12px}#tradePage #display.has-phone-art .d-amount{padding-right:0}#tradePage #display .monthly-primary{font-size:clamp(26px,6vw,34px);white-space:nowrap}}
+@media(prefers-color-scheme:dark){#tradePage .plan-search button,#tradePage .clearbtn,#tradePage #tradeDeviceClear,#tradePage #compareLaunchBtn,#tradePage #clearAll{background:#1b2c38!important;color:#73c9ef!important}#tradePage #tradeDeviceSearch{background:#111a20!important;color:#edf3f6!important}#tradePage #planSuggestionsList li span,#tradePage #phoneSuggestionsList .right{color:var(--v4-muted)!important}}
+</style>
+<style>body.gtt-trade-active .v4-shell{padding-bottom:0}#tradePage #phonesQuick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}#tradePage #phonesQuick .chip{min-width:0;white-space:normal;min-height:46px}</style>
+<style>#tradePage #planSearch,#tradePage #phoneSearch,#tradePage #tradeDeviceSearch{min-height:46px!important;font-size:16px!important}</style>
+<style>#tradePage .plan-search input,#tradePage .lookup-search input{min-width:0;flex:1 1 0}#tradePage .plan-search button,#tradePage .lookup-search button{flex-shrink:0}#tradePage .plan-search .suggestions,#tradePage .lookup-list{top:calc(100% + 4px)}</style>
 </head>
 <body>
 
 <div id="v4Shell" class="v4-shell">
-  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.0</strong></div></div></header>
+  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.1</strong></div></div></header>
   <nav class="v4-topnav"><div class="v4-topnav-inner"><button class="v4-navbtn active" data-v4go="home">Home</button><button class="v4-navbtn" data-v4go="trade">Trade Tool</button><button class="v4-navbtn" data-v4go="simple">Simple Tool</button><button class="v4-navbtn" data-v4more>More</button></div></nav>
-  <div class="v4-launch" data-v4go="news"><div><b>Apple Promo Updates</b><span>Duo preorders open · Releases 10/23</span></div><em>View →</em></div>
+  <div class="v4-launch" data-v4go="news"><div><b>Apple Promo Updates</b><span>Duo is now available</span></div><em>View →</em></div>
   <section id="v4Home" class="v4-page active v4-home"><div class="v4-homeintro"><h2>What do you need?</h2><p>Build a full quote, check a trade opportunity, or calculate the sales tax due at checkout.</p></div><div class="v4-lane" data-v4go="trade"><div class="v4-num">01</div><div class="v4-copy"><h3>Trade Tool</h3><p>The original GTT workflow with plans, activation type, device, trade value and current promotional result.</p><div class="v4-hint"><span>Full Quote</span><span>Current Promos</span><span>Exact Eligibility</span></div></div><div class="v4-arrow">›</div></div><div class="v4-lane" data-v4go="simple"><div class="v4-num">02</div><div class="v4-copy"><h3>Simple Tool</h3><p>Start with the customer's phone. See its current trade value and the strongest Apple, Samsung, Pixel, and Motorola opportunities.</p><div class="v4-hint"><span>Quick Lookup</span><span>Best Opportunity</span></div></div><div class="v4-arrow">›</div></div><button type="button" class="v4-lane" data-v4go="tax"><div class="v4-num">03</div><div class="v4-copy"><h3>Sales Tax Calculator</h3><p>Add phones, tablets, and watches to calculate the New Jersey sales tax due at checkout.</p><div class="v4-hint"><span>Multiple Devices</span><span>Browns Mills UEZ</span></div></div><div class="v4-arrow">›</div></button></section>
   <section id="v4Simple" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Simple Tool</h2><p class="v4-sectionlead">Search a phone, pick storage, and compare estimated maximum offers on select Apple, Samsung, Pixel, and Motorola devices. Expand a brand to compare plans.</p><input id="v4TradeSearch" class="v4-search" placeholder="Search trade-in phone…" autocomplete="off"><div id="v4Suggestions" class="v4-suggestions"></div><div id="v4Storage" class="v4-storage"></div>
   <div id="v4SimpleResult" class="v4-simple-result"><div class="v4-value"><small>Current trade value</small><strong id="v4RawValue">$—</strong><div id="v4SelectedTrade" style="font-size:10px;color:var(--v4-muted);margin-top:4px"></div></div><div id="v4Opps" class="v4-opps"></div>
@@ -1609,10 +1627,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     </div>
   </section>
 
+<section id="v4QuoteHelp" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>How quotes work</h2><p class="v4-sectionlead">Understand the two views of the same device quote.</p><div class="quote-help-card"><h3>Eligible Credit</h3><p>The default view shows the total promotional bill credit for the selected device, plan, trade, and condition. A <strong>$930 credit</strong> is spread over 36 months; it is not an upfront cash payment.</p></div><div class="quote-help-card"><h3>Monthly Payment</h3><p>Shows the estimated monthly device installment after applicable promotional credits. It excludes service, sales tax, fees, insurance, Next Up, and other charges.</p><p>Switching views changes the displayed amount. It does not change your selections or eligibility.</p></div><div class="quote-help-card"><h3>Tiered monthly-price offers</h3><p>Some offers discount the monthly device price without a separate trade-credit award. Eligible Credit shows <strong>$0 separate trade promo credit</strong>; Monthly Payment shows the tiered offer price. Any one-time trade value is shown separately.</p></div><div class="quote-help-card"><h3>Your quote card</h3><p>The completed quote opens once in a popup. Close it with × to return the same card to the page. View quote opens it again. Offer Details shows the price breakdown and requirements.</p></div><div class="quote-help-card"><h3>Before completing the sale</h3><p>Confirm eligibility and final amounts in OPUS/CCKM. Credits may take 1–3 bill cycles to begin. The sales tax calculator estimates tax only; down payments and other checkout charges are separate.</p></div></section>
   <section id="v4News" class="v4-page v4-section">
   <button class="v4-back" data-v4go="home">← Home</button>
   <h2>What's New</h2>
-  <p class="v4-sectionlead">iPhone Duo preorders are open. Release 10/23. Current Apple offers and verified GTT promo updates. Live changes load from Supabase.</p>
+  <p class="v4-sectionlead">iPhone Duo is now available. Current Apple offers and verified GTT promo updates. Live changes load from Supabase.</p>
   <div id="v4NewsLive" aria-live="polite"></div>
   <article class="v4-newsitem">
     <div class="v4-date">September 9</div><h3>Apple announces the iPhone 18 lineup</h3>
@@ -1629,21 +1648,21 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         <tr><th>AT&amp;T / 36 mo.</th><td>$33.33/mo</td><td>$36.11/mo</td><td>$55.56/mo</td></tr>
         <tr><th>Preorder</th><td>9/12</td><td>9/12</td><td>10/16</td></tr>
         <tr><th>Release</th><td>9/18</td><td>9/18</td><td>10/23</td></tr>
-        <tr><th>AT&amp;T max trade</th><td>Up to $1,200</td><td>Up to $1,200</td><td>Up to $1,200 — preorder 10/16</td></tr>
+        <tr><th>AT&amp;T max trade</th><td>Up to $1,200</td><td>Up to $1,200</td><td>Up to $1,200</td></tr>
       </tbody>
     </table></div>
     <p class="v4-table-note">*AT&amp;T installment amounts shown as confirmed MSRP divided over 36 months; taxes and other charges not included.</p>
   </article>
   <div id="v4NewsPromoFallback">
   <article class="v4-newsitem">
-    <div class="v4-date">Preorder October 16 · Release October 23</div><h3>iPhone Duo — up to $1,200 trade credit</h3>
+    <div class="v4-date">Available now · Released October 23</div><h3>iPhone Duo — up to $1,200 trade credit</h3>
     <div class="v4-promo-grid">
       <div class="v4-promo"><b>Premium 2.0 — $1,200</b><span>$230+ condition-adjusted trade value. $130–$229.99 gets $930.</span></div>
       <div class="v4-promo"><b>Extra / Starter — $930</b><span>$130+ condition-adjusted trade value.</span></div>
       <div class="v4-promo"><b>Value 2.0 — $500</b><span>$130+ condition-adjusted trade value.</span></div>
       <div class="v4-promo"><b>Eligible unlimited — $350</b><span>$35–$129.99 condition-adjusted trade value; plan eligibility applies.</span></div>
     </div>
-    <p class="v4-table-note">Duo preorders are open. Release 10/23. Verify offer and inventory in CCKM/OPUS before quoting; trade credits apply over installments.</p>
+    <p class="v4-table-note">Duo is now available. Verify offer and inventory in CCKM/OPUS before quoting; trade credits apply over installments.</p>
   </article>
   <article class="v4-newsitem">
     <div class="v4-date">Effective October 9</div><h3>iPhone promo quick guide</h3>
@@ -1659,7 +1678,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       <li>iPhone 17e 256GB: $5.99/mo new line; $7.99/mo upgrade.</li>
       <li>Eligible Next Up Anytime tiered upgrades use the upgrade price.</li>
       <li>Higher-storage prices require the detailed CCKM guide; old prices are no longer quoted.</li>
-      <li>iPhone Duo keeps its separate 10/16 preorder offer.</li>
+      <li>iPhone Duo keeps its separate trade-in offer.</li>
     </ul></details>
   </article>
   </div>
@@ -1723,7 +1742,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 <div class="v4-beta-link" data-v4go="investigator"><div><b>Promo Investigator</b><span>Ask almost anything in normal rep language. AI asks GTT for the live facts, then explains the verified answer.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="compare"><div><b>Phone Comparison</b><span>Compare monthly payments, 36-month totals, and requirements for the same customer.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="history"><div><b>Recent History</b><span>Restore the entire quote and see whether today’s offer changed.</span></div><i>›</i></div><div class="v4-beta-link" data-v4tool="faq"><div><b>FAQ / Trade Help</b><span>Search practical trade answers and jump into the right tool.</span></div><i>›</i></div></div></section>
 </div>
 <nav class="v4-bottom"><div class="v4-bottom-inner"><button class="v4-navbtn active" data-v4go="home"><span class="v4-ico">⌂</span>Home</button><button class="v4-navbtn" data-v4go="trade"><span class="v4-ico">▤</span>Trade Tool</button><button class="v4-navbtn" data-v4go="simple"><span class="v4-ico">⌕</span>Simple Tool</button><button class="v4-navbtn" data-v4more><span class="v4-ico">•••</span>More</button></div></nav>
-<div id="v4More" class="v4-more-scrim"><div class="v4-more-sheet"><div class="v4-grab"></div><div class="v4-morehead"><h3>More</h3><button id="v4MoreClose" class="v4-close">×</button></div><div class="v4-morelink" data-v4admin><div><strong>Admin</strong><small>Manage promotions, devices and app data.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="news"><div><strong>What's New</strong><small>Duo preview, current iPhone promos and recent launches.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="beta"><div><strong>Beta Tools</strong><small>Promo Investigator, comparison, history and trade help.</small></div><i>›</i></div></div></div>
+<div id="v4More" class="v4-more-scrim"><div class="v4-more-sheet"><div class="v4-grab"></div><div class="v4-morehead"><h3>More</h3><button id="v4MoreClose" class="v4-close">×</button></div><div class="v4-morelink" data-v4admin><div><strong>Admin</strong><small>Manage promotions, devices and app data.</small></div><i>›</i></div><button type="button" class="v4-morelink" data-v4go="quoteHelp" style="width:100%;background:transparent;border-left:0;border-right:0;border-bottom:0;text-align:left;font:inherit"><span><strong>How quotes work</strong><small>Eligible Credit, Monthly Payment, and offer details.</small></span><i>›</i></button><div class="v4-morelink" data-v4go="news"><div><strong>What's New</strong><small>Duo launch, current iPhone promos and recent launches.</small></div><i>›</i></div><div class="v4-morelink" data-v4go="beta"><div><strong>Beta Tools</strong><small>Promo Investigator, comparison, history and trade help.</small></div><i>›</i></div></div></div>
 
 <section id="tradePage" class="v4-page">
 <div class="legacy-app">
@@ -1766,7 +1785,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
           <span class="apple-launch-dates">Preorder 10/16 · Available 10/23</span>
         </div>
       </div>
-      <div class="apple-launch-note">Duo preorders are open. Release 10/23. See What's New.</div>
+      <div class="apple-launch-note">Duo is now available. See What's New.</div>
       <div hidden aria-hidden="true">
         <span id="appleDays">0</span><span id="appleHours">0</span><span id="appleMinutes">0</span><span id="appleSeconds">0</span>
       </div>
@@ -1987,18 +2006,23 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       <div style="display:flex; gap:10px; align-items:center;">
         <button id="clearAll" class="clear-all" title="Start a fresh quote">Start New Quote</button>
       </div>
+      <button id="viewQuote" type="button" hidden>View quote</button>
     </main>
 
+    <div id="quoteDock" class="quote-dock" hidden>Your quote is open above. Close it to return the card here.</div>
     <aside class="display" id="display" aria-live="polite">
-      <div id="duoPreorderBanner" class="duo-preorder-banner" hidden>Preorder 10/16, Max trade $1200</div>
+      <div id="duoPreorderBanner" class="duo-preorder-banner" hidden></div>
+      <div id="quoteViewSwitch" class="quote-switch" role="group" aria-label="Quote display" hidden><button type="button" data-quote-view="credit" aria-pressed="true">Eligible Credit</button><button type="button" data-quote-view="monthly" aria-pressed="false">Monthly Payment</button></div>
       <div id="resultPhoneArt" class="result-phone-art" aria-hidden="true">
         <img id="resultPhoneImg" alt="" loading="eager" fetchpriority="high" decoding="async">
         <div id="resultPhoneFallback" class="result-phone-fallback"><span class="phone-silhouette"></span><small>No image</small></div>
       </div>
+
       <div id="priceCardLabel" class="d-label">Eligible credit</div>
       <div class="d-amount" id="amount">$&mdash;</div>
       <div id="detail"><div class="d-prompt">Pick a plan, a phone, and a trade-in value.</div></div>
       <div id="bestCase" class="bestcase" style="display:none;"></div>
+      <p id="quoteViewNote" class="quote-view-note" hidden></p>
       <div class="d-foot">Bill credits spread over 36 months.</div>
 
       <div class="compact-disclaimer">Estimate only — verify in OPUS/CCKM before quoting or completing the sale.</div>
@@ -2045,6 +2069,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     </aside>
   </div>
 </div>
+<dialog id="quoteDialog" aria-labelledby="quoteDialogTitle"><div class="quote-popup-head"><span id="quoteDialogTitle">Your quote</span><button id="quoteClose" type="button" aria-label="Close quote">×</button></div><div id="quoteMount"></div></dialog>
 </section>
 
 <div id="adminLoginModal" class="modal-backdrop" aria-hidden="true">
@@ -2678,15 +2703,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   function isS25Edge(phone){ return !!(phone && String(phone.id || '').startsWith('s25edge-')); }
   function isSamsung814TieredActive(){ return new Date() >= S26_TIERED_START; }
   const DUO_PREORDER_START = Date.parse('2026-10-16T04:00:00Z');
-  function isDuoPreorderPreview(phone){
-    return !!phone && phone.id === 'iphoneduo' && Date.now() < DUO_PREORDER_START;
-  }
-  function duoPreorderBannerText(phone){
-    if(!phone || phone.id!=='iphoneduo') return '';
-    if(Date.now()<DUO_PREORDER_START) return 'Preorder 10/16, Max trade $1200';
-    if(Date.now()<Date.parse('2026-10-23T04:00:00Z')) return 'Preorders open · Releases 10/23 · Max trade $1,200';
-    return '';
-  }
+  const DUO_IS_LIVE=true; // Release presentation enabled immediately as requested.
+  function isDuoPreorderPreview(phone){return !DUO_IS_LIVE&&!!phone&&phone.id==='iphoneduo'&&Date.now()<DUO_PREORDER_START;}
+  function duoPreorderBannerText(phone){return '';}
   function isPhoneCurrentlyListed(phone){
     if(!phone || phone.active === false || phone.sellable === false) return false;
     const now = Date.now();
@@ -3064,7 +3083,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   function guidedAdvance(stage, target, delay=170, duration=680){
     if(guidedFlowStage > stage) return;
     guidedFlowStage = stage + 1;
-    setTimeout(()=>guidedScrollTo(target,duration),delay);
+    setTimeout(()=>{if(!el('quoteDialog')?.open)guidedScrollTo(target,duration);},delay);
   }
 
   let whatsNewContentRevision = 'embedded';
@@ -3105,7 +3124,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       // Newer announcements/recent changes come from Supabase, so future content edits
       // no longer require another index.html deployment.
       const cutoff = '2026-08-21';
-      const liveRows = rows.filter(r=>{
+      const liveRows = rows.map(r=>{if(r.content_key!=='iphone_duo_preorder_20261016')return r;return {...r,title:'iPhone Duo — now available',body:String(r.body||'').replace(/^iPhone Duo preorders[^\n]*?The 256GB/,'iPhone Duo is now available. The 256GB'),metadata:{...r.metadata,status:'live',short_note:'Available now · Confirm final eligibility and fulfillment timing in CCKM/OPUS.'}};}).filter(r=>{
         if(!['announcement','recent_change'].includes(String(r.content_type||''))) return false;
         let meta = r.metadata || {};
         if(typeof meta === 'string'){
@@ -3264,17 +3283,21 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     buildRecentChips();
   }
 
+  const PRIMARY_PHONE_IDS=['iphone18pro','iphone18promax','iphoneduo','s26u','s26p','s26-256'];
+  let showAllPhones=false;
+  const showAllPhonesButton=document.createElement('button');showAllPhonesButton.id='showAllPhones';showAllPhonesButton.type='button';showAllPhonesButton.textContent='Show all';showAllPhonesButton.setAttribute('aria-expanded','false');showAllPhonesButton.setAttribute('aria-controls','phonesQuick');phonesQuick.after(showAllPhonesButton);showAllPhonesButton.onclick=()=>{showAllPhones=!showAllPhones;buildQuickChips();};
   // Build visible quick chips
   function buildQuickChips(){
     phonesQuick.innerHTML = '';
-    VISIBLE_PHONE_IDS.forEach(id=>{
+    showAllPhonesButton.textContent=showAllPhones?'Show fewer':'Show all';showAllPhonesButton.setAttribute('aria-expanded',String(showAllPhones));
+    (showAllPhones?VISIBLE_PHONE_IDS:PRIMARY_PHONE_IDS).forEach(id=>{
       const p = PHONES.find(x=>x.id===id);
       if(!p || !isPhoneCurrentlyListed(p)) return;
       const b = document.createElement('button');
       b.className = 'chip';
       b.dataset.phone = p.id;
       b.textContent = p.name;
-      b.setAttribute('aria-pressed','false');
+      b.setAttribute('aria-pressed',String(state.phone?.id===p.id));
       b.addEventListener('click', ()=> choosePhone(p.id, true));
       phonesQuick.appendChild(b);
     });
@@ -3320,6 +3343,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       clearPhoneSelection();
       return;
     }
+    document.activeElement?.blur();
     state.phone = p;
     state.tierAction = null;
     document.querySelectorAll('#phonesQuick .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.phone === id ? 'true' : 'false'));
@@ -3469,7 +3493,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       const left=document.createElement('span'); left.style.fontWeight='700'; left.textContent=item.name;
       if(item.cru){ const tag=document.createElement('span'); tag.textContent=' (CRU)'; tag.style.cssText='color:#0568AE;font-weight:800;font-size:12px;'; left.appendChild(tag); }
       const right=document.createElement('span'); right.style.cssText='font-size:12px;color:#425b6f;font-weight:600;white-space:nowrap;'; right.textContent=item.isGroupLabel?'':'→ '+PLAN_LABEL[item.group];
-      li.appendChild(left);li.appendChild(right);li.addEventListener('click',()=>{ state.pendingPlanSegment = item.cru ? 'cru' : (String(item.name||'').toLowerCase().startsWith('firstnet') || String(item.name||'').toLowerCase().includes('firstnet') ? 'firstnet' : 'consumer'); const btn=document.querySelector('#plans .chip[data-plan="'+item.group+'"]'); if(btn) btn.click(); planSearch.value=item.name; planSuggestions.classList.remove('open'); planSearch.setAttribute('aria-expanded','false'); });
+      li.appendChild(left);li.appendChild(right);li.addEventListener('click',()=>{ state.pendingPlanSegment = item.cru ? 'cru' : (String(item.name||'').toLowerCase().startsWith('firstnet') || String(item.name||'').toLowerCase().includes('firstnet') ? 'firstnet' : 'consumer'); const btn=document.querySelector('#plans .chip[data-plan="'+item.group+'"]'); if(btn) btn.click(); planSearch.value=item.name; planSuggestions.classList.remove('open'); planSearch.setAttribute('aria-expanded','false');planSearch.blur(); });
       planSuggestionsList.appendChild(li);
     });
     if(results.length){planSuggestions.classList.add('open');planSearch.setAttribute('aria-expanded','true');}else{planSuggestions.classList.remove('open');planSearch.setAttribute('aria-expanded','false');}
@@ -3565,6 +3589,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
   function chooseTradeDevice(brand,model){
     const found=TRADE_MODELS.find(x=>x.brand===brand&&x.model===model); if(!found)return;
+    tradeDeviceSearch.blur();
     state.noTrade=false;
     if(noTradeBtn) noTradeBtn.setAttribute('aria-pressed','false');
     if(!state.tradeDevice||state.tradeDevice.brand!==brand||state.tradeDevice.model!==model){state.nextPaid=null;document.querySelectorAll('#nextPaidChips [data-paid]').forEach(b=>b.setAttribute('aria-pressed','false'));}
@@ -3662,6 +3687,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
   // clear all & clear trade
   function resetAllFields(){
+    resetQuotePresentation();showAllPhones=false;buildQuickChips();
     guidedFlowStage = 0;
     cancelAnimationFrame(guidedScrollRaf);
     state.plan=null; state.planSegment='consumer'; state.pendingPlanSegment=null; state.phone=null; state.value=null; state.tradePreset=null; state.pixel=false; state.noTrade=false; state.galaxyAny='none'; state.nextUp=false; state.nextUpType='anytime'; state.nextPaid=null; state.tierAction=null; state.tradeDevice=null; state.tradeStorage=null; state.tradeBaseValue=null; state.tradeValueMode=null; state.tradeCondition={power:null,lock:null,cracks:null};
@@ -3929,7 +3955,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   function betterPlanHintHtml(cat, value, isPixelTrade, phone, galaxyAny, currentPlan, currentCredit){
     const hint = betterPlanHint(cat, value, isPixelTrade, phone, galaxyAny, currentPlan, currentCredit);
     if(!hint) return '';
-    return `<div class="bump">You'll get <b>${money(hint.credit)}</b> if the plan was one of the ${PLAN_LABEL[hint.plan]} eligible plans.</div>`;
+    return `<div class="bump">Up to <b>${money(hint.credit)}</b> with an eligible ${PLAN_LABEL[hint.plan]} plan and this trade.</div>`;
   }
 
   function phoneCategory(phone){
@@ -6000,6 +6026,67 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     transitionPhoneArt(wrap,img,u);
   }
 
+  // The same result card is moved into the dialog; never clone prices, IDs, or controls.
+  const quoteDialog=el('quoteDialog'),quoteDock=el('quoteDock'),quoteMount=el('quoteMount'),viewQuote=el('viewQuote'),quoteDisplay=el('display');
+  let quoteView='credit',quoteAutoOpened=false,quoteAutoTimer=null,quoteUiReady=false;
+  function quoteCanPresent(r){
+    if(!state.plan||!state.phone||!['promo','nextup_promo','tiered_final','zero','full_retail','full_retail_rerate','tiered_not_offered'].includes(r.state))return false;
+    if(state.tradeDevice&&state.tradeValueMode!=='manual'&&!conditionComplete())return false;
+    return !state.nextUp||(!!state.tradeDevice&&conditionComplete()&&state.nextPaid!==null);
+  }
+  function openQuotePopup(){
+    if(quoteDialog.open||!quoteCanPresent(getResult()))return;
+    quoteAutoOpened=true;document.activeElement?.blur();cancelAnimationFrame(guidedScrollRaf);
+    quoteMount.appendChild(quoteDisplay);quoteDock.hidden=false;
+    quoteDialog.showModal();document.documentElement.classList.add('quote-popup-open');el('quoteClose').focus({preventScroll:true});
+  }
+  function restoreQuoteCard(){
+    quoteDock.after(quoteDisplay);quoteDock.hidden=true;document.documentElement.classList.remove('quote-popup-open');
+  }
+  function closeQuotePopup(){clearTimeout(quoteAutoTimer);if(quoteDialog.open)quoteDialog.close();restoreQuoteCard();}
+  quoteDialog.addEventListener('close',()=>{if(!quoteDialog.open)restoreQuoteCard();});
+  quoteDialog.addEventListener('cancel',e=>{e.preventDefault();closeQuotePopup();});
+  quoteDialog.addEventListener('click',e=>{if(e.target===quoteDialog){const r=quoteDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeQuotePopup();}});
+  el('quoteClose').onclick=closeQuotePopup;viewQuote.onclick=openQuotePopup;
+  document.querySelectorAll('[data-quote-view]').forEach(b=>b.onclick=()=>{quoteView=b.dataset.quoteView;render();});
+  function syncQuotePresentation(r){
+    const ready=quoteCanPresent(r),metric=quoteMetric(captureQuoteContext(),r);
+    const supported=ready&&(!!metric||r.state==='full_retail_rerate');
+    const monthlyValue=r.state==='tiered_final'?Number(r.monthly):metric?metric.monthly:state.phone?Number(monthly(state.phone.retail)):NaN;
+    el('quoteViewSwitch').hidden=!supported;
+    document.querySelectorAll('[data-quote-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.quoteView===quoteView)));
+    if(supported){
+      if(countUpRAF){cancelAnimationFrame(countUpRAF);countUpRAF=null;}
+      if(quoteView==='monthly'){
+        el('priceCardLabel').textContent='Monthly device payment';amountEl.innerHTML='<span class="monthly-primary">'+money(monthlyValue)+'/mo</span><span class="off">for 36 months</span>';
+      }else{
+        el('priceCardLabel').textContent='Eligible credit';
+        // Tiered offers do not have a separate trade-credit award. Do not invent one from MSRP minus payments.
+        amountEl.innerHTML=moneyWhole(Number(r.credit||0))+'<span class="off">'+(r.state==='tiered_final'?'separate trade promo credit':'off')+'</span>';
+      }
+      el('quoteViewNote').textContent=quoteView==='monthly'?'Device payment only. Service, taxes, fees, and Next Up charges are additional.':r.state==='tiered_final'?'This is a discounted monthly-price offer. Switch to Monthly Payment to see the tiered price.':'Promotional credit is spread over 36 months; it is not an upfront cash payment.';
+    }
+    el('quoteViewNote').hidden=!supported||(quoteView==='credit'&&r.state!=='tiered_final');viewQuote.hidden=!ready;
+    if(!ready){clearTimeout(quoteAutoTimer);if(quoteDialog.open)closeQuotePopup();return;}
+    if(!quoteUiReady||quoteAutoOpened||quoteDialog.open)return;
+    clearTimeout(quoteAutoTimer);
+    // Wait for the last selection to settle; manual numeric entry is never interrupted mid-typing.
+    quoteAutoTimer=setTimeout(()=>{
+      const typing=document.activeElement?.matches('input,select,textarea');
+      if(!typing&&el('tradePage').classList.contains('active')&&quoteCanPresent(getResult()))openQuotePopup();
+    },320);
+  }
+  document.addEventListener('focusout',e=>{if(e.target.matches('#tradePage input,#tradePage select'))setTimeout(()=>{if(quoteUiReady&&!quoteAutoOpened)syncQuotePresentation(getResult());},0);});
+  document.addEventListener('click',e=>{if(e.target.closest('[data-v4go],[data-v4more]'))closeQuotePopup();});
+  function resetQuotePresentation(){clearTimeout(quoteAutoTimer);closeQuotePopup();quoteAutoOpened=false;quoteView='credit';el('resultMore').open=false;}
+  // Keep suggestion lists within the space above the on-screen keyboard and Safari toolbar.
+  function fitQuoteSuggestions(){
+    const viewport=window.visualViewport,bottom=(viewport?.offsetTop||0)+(viewport?.height||innerHeight);
+    document.querySelectorAll('#tradePage .suggestions,#tradeDeviceSuggestions,.tax-model-results,#v4Suggestions').forEach(box=>{if(!box.getClientRects().length)return;const top=box.getBoundingClientRect().top+(viewport?.offsetTop||0);box.style.setProperty('max-height',Math.max(70,Math.min(280,bottom-top-20))+'px','important');});
+  }
+  window.visualViewport?.addEventListener('resize',fitQuoteSuggestions);window.visualViewport?.addEventListener('scroll',fitQuoteSuggestions);window.addEventListener('resize',fitQuoteSuggestions);document.addEventListener('focusin',()=>setTimeout(fitQuoteSuggestions,0));
+  document.addEventListener('input',()=>requestAnimationFrame(fitQuoteSuggestions));
+
   // Render UI
   let lastShownCredit = null;
   function render(){
@@ -6058,7 +6145,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         amountEl.innerHTML = moneyWhole(r.credit) + '<span class="off">off</span>';
       }
       lastShownCredit = r.credit;
-      detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo in bill credits for 36 months</div><div class="d-rule"><div class="offer-headline">${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</div><div class="offer-subline">Customer pays <b style="color:#fff;">$${netMo}/mo</b> for the device after promotional credits</div></div>${betterPlanHintHtml(cat, promoTradeValue(), state.pixel, state.phone, state.galaxyAny, state.plan, r.credit)}`;
+      detailEl.innerHTML = `<div class="d-monthly">$${r.monthly}/mo in bill credits for 36 months</div><div class="d-rule"><div class="offer-headline">${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</div><div class="offer-subline">Customer pays <b style="color:#fff;">$${netMo}/mo</b> for the device after promotional credits</div></div>${betterPlanHintHtml(cat, promoTradeValue(), state.pixel, state.phone, state.galaxyAny, state.plan, r.credit)}`;
     } else if(r.state === 'nextup_promo'){
       const deviceMo = monthly(state.phone.retail);
       const netMo = Math.max(0, parseFloat(deviceMo) - parseFloat(r.monthly)).toFixed(2);
@@ -6069,7 +6156,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         amountEl.innerHTML = moneyWhole(r.credit) + '<span class="off">off</span>';
       }
       lastShownCredit = r.credit;
-      detailEl.innerHTML = `<div class="d-monthly">${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>${nextUpFeatureLabel()} upgrade offer. Device must be at least <b>${nextUpThresholdPct()}% paid</b> and in eligible turn-in condition.<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>Estimated after credit: <b style="color:#fff;">$${netMo}/mo</b></div><div class="d-rule">Verify the feature name, payoff percentage, device condition, and offer eligibility in OPUS/CCKM before quoting.</div>`;
+      detailEl.innerHTML = `<div class="d-monthly">$${r.monthly}/mo for 36 months</div><div class="d-rule"><b>${state.phone.name}${state.phone.storage ? ' '+state.phone.storage : ''}</b> &middot; ${PLAN_LABEL[state.plan]}<br>${nextUpFeatureLabel()} upgrade offer. Device must be at least <b>${nextUpThresholdPct()}% paid</b> and in eligible turn-in condition.<br>Device retail: ${money(state.phone.retail)} ($${deviceMo}/mo before credit)<br>Estimated after credit: <b style="color:#fff;">$${netMo}/mo</b></div><div class="d-rule">Verify the feature name, payoff percentage, device condition, and offer eligibility in OPUS/CCKM before quoting.</div>`;
     } else if(r.state === 'tiered_final'){
       amountEl.innerHTML = `<span class="monthly-primary">$${r.monthly}/mo</span><span class="off">for 36 months</span>`;
       const tierActionLabel = (r.viaNextUp || state.nextUp || state.tierAction === 'upgrade') ? 'UPGRADE' : (state.tierAction === 'new' ? 'NEW LINE' : 'NEW LINE / UPGRADE');
@@ -6169,6 +6256,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     playResultAnimations(r, colorClass);
     renderCompare();
     maybeSaveHistory(r);
+    syncQuotePresentation(r);
   }
 
   ['comparePlan','compareSegment','compareActivation'].forEach(id=>el(id).addEventListener('change',()=>{
@@ -6198,6 +6286,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   render();
   // GTT 4.0: What's New is opened intentionally from the launch strip / navigation.
   // Legacy automatic daily popup disabled.
+  quoteUiReady=true;
   resolveQuoteData();
   console.debug('Global Trade Tool initialized', VERSION, '| Trade DB:', TRADE_DB_SOURCE);
 })();
@@ -6289,9 +6378,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
 <script>
 (function(){
- const $=id=>document.getElementById(id), pages={home:$('v4Home'),tax:$('v4Tax'),simple:$('v4Simple'),news:$('v4News'),beta:$('v4Beta'),investigator:$('v4Investigator'),trade:$('tradePage')};
+ const $=id=>document.getElementById(id), pages={home:$('v4Home'),quoteHelp:$('v4QuoteHelp'),tax:$('v4Tax'),simple:$('v4Simple'),news:$('v4News'),beta:$('v4Beta'),investigator:$('v4Investigator'),trade:$('tradePage')};
  function closeMore(){$('v4More').classList.remove('open')}
- function go(name){Object.values(pages).forEach(p=>p&&p.classList.remove('active')); if(pages[name])pages[name].classList.add('active'); document.querySelectorAll('.v4-navbtn[data-v4go]').forEach(b=>b.classList.toggle('active',b.dataset.v4go===name)); closeMore(); window.scrollTo({top:0,behavior:'instant'});}
+ function go(name){document.body.classList.toggle('gtt-trade-active',name==='trade');Object.values(pages).forEach(p=>p&&p.classList.remove('active')); if(pages[name])pages[name].classList.add('active'); document.querySelectorAll('.v4-navbtn[data-v4go]').forEach(b=>b.classList.toggle('active',b.dataset.v4go===name)); closeMore(); window.scrollTo({top:0,behavior:'instant'});}
  document.querySelectorAll('[data-v4go]').forEach(x=>x.addEventListener('click',e=>{e.preventDefault();go(x.dataset.v4go)}));
  document.querySelectorAll('[data-v4more]').forEach(x=>x.addEventListener('click',()=> $('v4More').classList.add('open'))); $('v4MoreClose').onclick=closeMore; $('v4More').addEventListener('click',e=>{if(e.target===$('v4More'))closeMore()});
  document.querySelector('[data-v4admin]').onclick=()=>{closeMore(); const b=$('adminOpenBtn'); if(b)b.click()};
@@ -6362,7 +6451,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   function resetPrice(){row.key='';row.value='';row.manualRequired=false;card.querySelector('[data-tax="msrp"]').value='';}
   card.querySelector('[data-tax="type"]').onchange=e=>{row.type=e.target.value;row.model='';card.querySelector('[data-tax="model"]').value='';taxCloseSearch(row);resetPrice();taxPopulate(row);taxRenumber();taxRefreshTotals();};
   const modelInput=card.querySelector('[data-tax="model"]');
-  row.chooseModel=name=>{row.model=name;modelInput.value=name==='__manual'?'Other / enter MSRP':name;resetPrice();row.manualRequired=name==='__manual';taxCloseSearch(row);taxPopulate(row);const variants=taxVariants(row);if(variants.length===1){row.key=variants[0].device_key;card.querySelector('[data-tax="variant"]').value=row.key;pickVariant();}else taxRefreshTotals();};
+  row.chooseModel=name=>{modelInput.blur();row.model=name;modelInput.value=name==='__manual'?'Other / enter MSRP':name;resetPrice();row.manualRequired=name==='__manual';taxCloseSearch(row);taxPopulate(row);const variants=taxVariants(row);if(variants.length===1){row.key=variants[0].device_key;card.querySelector('[data-tax="variant"]').value=row.key;pickVariant();}else taxRefreshTotals();};
   modelInput.onfocus=()=>taxSearchResults(row,!!row.model);
   modelInput.oninput=()=>{row.model='';resetPrice();taxPopulate(row);taxSearchResults(row);taxRefreshTotals();};
   modelInput.onblur=()=>taxCloseSearch(row);
@@ -6392,7 +6481,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   .then(rows=>{const url=rows?.[0]?.image_url;const image=document.getElementById('v4DuoNewsImg');if(image&&typeof url==='string'&&/^https:\/\//.test(url))image.src=url})
   .catch(()=>{});
 
- fetch(SB+'/rest/v1/app_settings?select=setting_key,setting_value&setting_key=in.(current_version,source_version)',{headers:{apikey:KEY},cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(rows=>{ $('v4DbDot').classList.add('online'); $('v4DbDot').title='Supabase connected'; const v=rows.find(x=>x.setting_key==='current_version'); if(v&&String(v.setting_value).includes('4.0'))$('v4Version').textContent='4.0'; }).catch(()=>{$('v4DbDot').title='Supabase connection unavailable'});
+ fetch(SB+'/rest/v1/app_settings?select=setting_key,setting_value&setting_key=in.(current_version,source_version)',{headers:{apikey:KEY},cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(rows=>{ $('v4DbDot').classList.add('online'); $('v4DbDot').title='Supabase connected'; const v=rows.find(x=>x.setting_key==='current_version'); /* The visible version identifies this index build, independently of promo-data versions. */ }).catch(()=>{$('v4DbDot').title='Supabase connection unavailable'});
  // Simple Tool uses live trade_devices, never embedded fallback when live fetch succeeds.
  let tradeRows=[], selected=null, selectedVariant=null;
  function simpleKnown(r){return !!r&&r.trade_value!==null&&r.trade_value!==undefined&&Number.isFinite(Number(r.trade_value))&&Number(r.trade_value)>0;}
@@ -6405,7 +6494,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  let tradeDataReady=loadTradeData();
  function models(){const m=new Map;tradeRows.forEach(r=>{const k=r.brand+'|'+r.model;if(!m.has(k))m.set(k,{brand:r.brand,model:r.model,rows:[]});m.get(k).rows.push(r)});return [...m.values()]}
  function renderSuggestions(){const q=search.value.trim().toLowerCase();if(!q){sugg.classList.remove('open');return}const hits=models().filter(x=>(x.brand+' '+x.model).toLowerCase().includes(q)).slice(0,60);sugg.innerHTML=hits.map((x,i)=>{const vals=x.rows.filter(simpleKnown).map(r=>Number(r.trade_value));const vr=vals.length?'$'+Math.min(...vals).toFixed(0)+(Math.min(...vals)!==Math.max(...vals)?'–$'+Math.max(...vals).toFixed(0):''):'verify';return '<div class="v4-suggestion" data-i="'+i+'"><b>'+x.brand+' '+x.model+'</b><span>'+vr+'</span></div>'}).join('');sugg.classList.toggle('open',!!hits.length);sugg.querySelectorAll('[data-i]').forEach(el=>el.onclick=()=>choose(hits[+el.dataset.i]))}
- function choose(x){selected=x;selectedVariant=null;search.value=x.brand+' '+x.model;sugg.classList.remove('open');storage.innerHTML='';$('v4SimpleResult').classList.remove('show');x.rows.sort((a,b)=>a.storage.localeCompare(b.storage,undefined,{numeric:true})).forEach(r=>{const b=document.createElement('button');b.className='v4-chip';b.textContent=r.storage;b.onclick=()=>{storage.querySelectorAll('.v4-chip').forEach(c=>c.classList.remove('on'));b.classList.add('on');showResult(r)};storage.appendChild(b)});if(x.rows.length===1)storage.firstChild.click()}
+ function choose(x){search.blur();selected=x;selectedVariant=null;search.value=x.brand+' '+x.model;sugg.classList.remove('open');storage.innerHTML='';$('v4SimpleResult').classList.remove('show');x.rows.sort((a,b)=>a.storage.localeCompare(b.storage,undefined,{numeric:true})).forEach(r=>{const b=document.createElement('button');b.className='v4-chip';b.textContent=r.storage;b.onclick=()=>{storage.querySelectorAll('.v4-chip').forEach(c=>c.classList.remove('on'));b.classList.add('on');showResult(r)};storage.appendChild(b)});if(x.rows.length===1)storage.firstChild.click()}
  function simpleApplePlans(r){
   const val=/16e/i.test(String(r.model||''))?35:Number(r.trade_value)||0;
   return {
@@ -7097,10 +7186,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    let title='Need a little more information',body='I found the question, but I need a few details before GTT should commit to a promo.';
 
    if(isDuo){
-     const preview=Date.now()<Date.parse('2026-10-16T04:00:00Z');
-     const preorderOpen=!preview && Date.now()<Date.parse('2026-10-23T04:00:00Z');
+     const preview=false;
+     const preorderOpen=false;
      title=preview?'iPhone Duo preorder preview':preorderOpen?'iPhone Duo — preorders open':(credit>0?'Up to '+piMoney(credit):'iPhone Duo trade-in offer');
-     body=(preview?'Preorder 10/16, Max trade $1200. ':preorderOpen?'Preorders open · Releases 10/23. Max trade $1,200. ':'')+(plan&&trade?'This plan and trade combination shows '+piMoney(credit)+' in estimated bill credits. ':'Choose the plan and trade-in phone to estimate the credit. ');
+     body=(preview?'Preorder 10/16, Max trade $1200. ':preorderOpen?'Preorders open · Releases 10/23. Max trade $1,200. ':'iPhone Duo is now available. ')+(plan&&trade?'This plan and trade combination shows '+piMoney(credit)+' in estimated bill credits. ':'Choose the plan and trade-in phone to estimate the credit. ');
    }else if(is18pro && !plan){
      title='iPhone 18 Pro-family promo found — which plan?';
      body='GTT has the 10/9 iPhone 18 Pro / Pro Max promo structure, but the credit changes by plan group.';
