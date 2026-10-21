@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — 4.2</title>
+<title>Global Trade Tool — 4.3</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -1604,12 +1604,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 <style>
 /* Answer-first Investigator. Scoped so Trade Tool and the tax calculator keep their layouts. */
 #v4Investigator{max-width:880px;color:var(--v4-ink)}#v4Investigator *{box-sizing:border-box}#v4Investigator [hidden]{display:none!important}#v4Investigator .pi3-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}#v4Investigator button,#v4Investigator select,#v4Investigator input,#v4Investigator textarea{font:inherit}#v4Investigator button{cursor:pointer}#v4Investigator .pi3-text-button{border:0;background:transparent;color:var(--v4-blue);font-size:12px;font-weight:750;min-height:44px;padding:8px}#v4Investigator .pi3-question{background:var(--v4-alt);border:1px solid var(--v4-line);border-radius:14px;padding:16px}#v4Investigator .pi3-question>label{display:block;font-size:13px;font-weight:800;margin-bottom:9px}#v4Investigator textarea,#v4Investigator input,#v4Investigator select{background:var(--v4-surface);color:var(--v4-ink);border:1px solid var(--v4-line);border-radius:9px;min-height:46px;padding:10px;width:100%;min-width:0;font-size:16px;color-scheme:light dark}#v4Investigator textarea{resize:vertical;line-height:1.5}#v4Investigator input::placeholder,#v4Investigator textarea::placeholder{color:var(--v4-muted);opacity:1}#v4Investigator .pi3-question-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}#v4Investigator .pi3-muted{color:var(--v4-muted);font-size:12px;line-height:1.5}#v4Investigator .pi3-primary,#v4Investigator .pi3-secondary{min-height:46px;padding:11px 16px;border-radius:9px;font-weight:800;font-size:13px}#v4Investigator .pi3-primary{background:var(--v4-blue);color:var(--v4-surface);border:0}#v4Investigator .pi3-secondary{background:var(--v4-surface);color:var(--v4-blue);border:1px solid var(--v4-line)}#v4Investigator button:disabled{opacity:.5;cursor:default}#v4Investigator .pi3-chips{display:flex;flex-wrap:wrap;gap:7px;margin:13px 0}#v4Investigator .pi3-chips button,#v4Investigator .pi3-options button{min-height:44px;padding:9px 12px;background:var(--v4-alt);border:1px solid var(--v4-line);color:var(--v4-blue);border-radius:9px;font-size:12px;font-weight:700}#v4Investigator .pi3-options{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}#v4Investigator button[aria-pressed=true]{background:color-mix(in srgb,var(--v4-blue) 15%,var(--v4-surface));border-color:var(--v4-blue);color:var(--v4-blue)}#v4Investigator .pi3-status{font-size:12px;color:var(--v4-muted);line-height:1.5;min-height:18px;margin:12px 0}#v4Investigator .pi3-recovery{background:var(--v4-alt);border:1px solid var(--v4-line);border-radius:12px;padding:14px;font-size:13px}#v4Investigator .pi3-recovery p{margin:0 0 10px}#v4Investigator .pi3-recovery button{margin:0 7px 7px 0}#v4Investigator .pi3-results{margin-top:18px}#v4Investigator .pi3-answer{background:linear-gradient(135deg,#102f50,#0b223b);color:#e7f2fa;border-left:4px solid #4cd388;border-radius:13px;padding:21px}#v4Investigator .pi3-answer small{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:750;color:#a2c6de}#v4Investigator #piAnswerTitle{margin:9px 0 7px;font-size:22px;line-height:1.35;letter-spacing:-.025em;color:#edf6fc}#v4Investigator .pi3-answer p{font-size:13px;line-height:1.6;margin:7px 0;color:#c1d8e9}#v4Investigator .pi3-answer .pi3-credit{font-size:34px;font-weight:850;color:#63e89e;letter-spacing:-.03em;line-height:1.2}#v4Investigator .pi3-assumptions{margin:12px 0 0;font-size:12px;color:var(--v4-muted);line-height:1.6}#v4Investigator .pi3-ranking{list-style:none;margin:14px 0;padding:0;border-top:1px solid var(--v4-line)}#v4Investigator .pi3-ranking>li{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;padding:15px 0;border-bottom:1px solid var(--v4-line);align-items:start}#v4Investigator .pi3-rank-number{color:var(--v4-muted);font-size:12px;padding-top:3px}#v4Investigator .pi3-ranking strong{font-size:14px}#v4Investigator .pi3-ranking small{display:block;margin-top:4px;font-size:11px;line-height:1.5;color:var(--v4-muted)}#v4Investigator .pi3-ranking .pi3-rank-price{font-size:18px;color:var(--v4-ink);white-space:nowrap;font-variant-numeric:tabular-nums}#v4Investigator .pi3-ranking button{margin-top:7px;padding:7px 0;min-height:40px;border:0;background:transparent;color:var(--v4-blue);font-size:12px;font-weight:750}#v4Investigator .pi3-verify,#v4Investigator .pi3-alternatives{border:1px solid var(--v4-line);border-radius:12px;background:var(--v4-alt);margin:16px 0}#v4Investigator summary{cursor:pointer;font-size:13px;font-weight:800;padding:15px;min-height:46px}#v4Investigator #piVerifyCount{font-size:11px;font-weight:600;color:var(--v4-muted);margin-left:6px}#v4Investigator #piChecks{padding:0 15px 5px}#v4Investigator .pi3-check{padding:14px 0;border-top:1px solid var(--v4-line)}#v4Investigator .pi3-check h3{margin:0;font-size:13px}#v4Investigator .pi3-check p{font-size:12px;line-height:1.5;color:var(--v4-muted);margin:5px 0}#v4Investigator .pi3-check label{display:block;font-size:12px;color:var(--v4-muted);margin-top:10px}#v4Investigator .pi3-check input,#v4Investigator .pi3-check select{margin-top:5px}#v4Investigator .pi3-finance-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}#v4Investigator .pi3-finance-grid button{margin-top:8px}#v4Investigator .pi3-alternatives #piAlternativeRows{padding:0 15px}#v4Investigator .pi3-explanation{font-size:13px;line-height:1.7;color:var(--v4-muted)}#v4Investigator .pi3-explanation strong{color:var(--v4-ink)}#v4Investigator .pi3-source{margin:12px 0}#v4Investigator .pi3-history{margin-top:20px;border-top:1px solid var(--v4-line)}#v4Investigator .pi3-history summary{padding-left:0;color:var(--v4-muted);font-size:12px}#v4Investigator #piThread p{font-size:12px;color:var(--v4-muted);margin:7px 0}#v4Investigator #piBuildHint{margin:7px 0}#v4Investigator button:focus-visible,#v4Investigator textarea:focus-visible,#v4Investigator input:focus-visible,#v4Investigator select:focus-visible{outline:2px solid var(--v4-blue);outline-offset:3px}@media(max-width:480px){#v4Investigator .pi3-question-actions{align-items:stretch;flex-direction:column}#v4Investigator .pi3-question{padding:14px}#v4Investigator .pi3-answer{padding:17px}#v4Investigator #piAnswerTitle{font-size:20px}#v4Investigator .pi3-ranking>li{gap:7px;grid-template-columns:20px minmax(0,1fr) auto}#v4Investigator .pi3-rank-price{font-size:16px!important}#v4Investigator .pi3-finance-grid{grid-template-columns:1fr}}
+/* Compact comparisons and a single useful follow-up. */
+#v4Investigator .pi3-prompt{margin:14px 0;padding:14px;border:1px solid var(--v4-line);border-radius:12px;background:var(--v4-alt);font-size:13px}#v4Investigator .pi3-prompt>label{display:block;font-weight:800;margin-bottom:9px}#v4Investigator .pi3-paid-row{display:flex;gap:8px}#v4Investigator .pi3-paid-row input{flex:1;width:0}#v4Investigator .pi3-details-copy{padding:0 15px 12px}#v4Investigator .pi3-plan-comparison{margin-top:12px;border:1px solid var(--v4-line);border-radius:10px;overflow:hidden}#v4Investigator .pi3-plan-comparison table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}#v4Investigator .pi3-plan-comparison caption{text-align:left;padding:12px;font-weight:800;background:var(--v4-alt)}#v4Investigator .pi3-plan-comparison th,#v4Investigator .pi3-plan-comparison td{padding:11px 10px;text-align:right;border-top:1px solid var(--v4-line)}#v4Investigator .pi3-plan-comparison th:first-child{text-align:left;max-width:150px}#v4Investigator .pi3-plan-comparison thead{color:var(--v4-muted);font-size:11px}#v4Investigator .pi3-ranking>li{padding:10px 0}#v4Investigator .pi3-ranking button{margin-top:1px}#v4Investigator .pi3-answer .pi3-credit{font-size:28px}#v4Investigator #piAnswerTitle{font-size:21px}#v4Investigator .pi3-results .pi3-assumptions{font-size:11px;line-height:1.5}@media(max-width:480px){#v4Investigator .pi3-plan-comparison table{font-size:12px}#v4Investigator .pi3-plan-comparison th,#v4Investigator .pi3-plan-comparison td{padding:10px 7px}#v4Investigator .pi3-answer .pi3-credit{font-size:25px}}
 </style>
 </head>
 <body>
 
 <div id="v4Shell" class="v4-shell">
-  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.2</strong></div></div></header>
+  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.3</strong></div></div></header>
   <nav class="v4-topnav"><div class="v4-topnav-inner"><button class="v4-navbtn active" data-v4go="home">Home</button><button class="v4-navbtn" data-v4go="trade">Trade Tool</button><button class="v4-navbtn" data-v4go="simple">Simple Tool</button><button class="v4-navbtn" data-v4more>More</button></div></nav>
   <div class="v4-launch" data-v4go="news"><div><b>Apple Promo Updates</b><span>Duo is now available</span></div><em>View →</em></div>
   <section id="v4Home" class="v4-page active v4-home"><div class="v4-homeintro"><h2>What do you need?</h2><p>Build a full quote, check a trade opportunity, or calculate the sales tax due at checkout.</p></div><div class="v4-lane" data-v4go="trade"><div class="v4-num">01</div><div class="v4-copy"><h3>Trade Tool</h3><p>The original GTT workflow with plans, activation type, device, trade value and current promotional result.</p><div class="v4-hint"><span>Full Quote</span><span>Current Promos</span><span>Exact Eligibility</span></div></div><div class="v4-arrow">›</div></div><div class="v4-lane" data-v4go="simple"><div class="v4-num">02</div><div class="v4-copy"><h3>Simple Tool</h3><p>Start with the customer's phone. See its current trade value and the strongest Apple, Samsung, Pixel, and Motorola opportunities.</p><div class="v4-hint"><span>Quick Lookup</span><span>Best Opportunity</span></div></div><div class="v4-arrow">›</div></div><button type="button" class="v4-lane" data-v4go="tax"><div class="v4-num">03</div><div class="v4-copy"><h3>Sales Tax Calculator</h3><p>Add phones, tablets, and watches to calculate the New Jersey sales tax due at checkout.</p><div class="v4-hint"><span>Multiple Devices</span><span>Browns Mills UEZ</span></div></div><div class="v4-arrow">›</div></button></section>
@@ -1702,12 +1704,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   <div id="piRecovery" class="pi3-recovery" hidden><p id="piRecoveryText"></p><button id="piRetry" class="pi3-secondary" type="button">Retry question</button><button class="pi3-secondary" type="button" data-v4go="trade">Use Trade Tool</button></div>
   <section id="piResult" class="pi3-results" hidden aria-labelledby="piAnswerTitle">
     <div id="piAnswer" aria-live="polite"></div>
+    <div id="piPrompt" class="pi3-prompt" hidden></div>
     <div id="piRanking"></div>
     <div id="piSuggestions" class="pi3-chips" aria-label="Refine this answer"></div>
-    <details id="piVerify" class="pi3-verify"><summary>Confirm before quoting <span id="piVerifyCount"></span></summary><div id="piChecks"></div></details>
+    <details id="piVerify" class="pi3-verify"><summary>Details &amp; checks <span id="piVerifyCount"></span></summary><div id="piChecks"></div><div class="pi3-details-copy"><div id="piExplanation" class="pi3-explanation"></div><p id="piSource" class="pi3-muted pi3-source"></p></div></details>
     <details id="piAlternatives" class="pi3-alternatives" hidden><summary>Cheaper options that keep the old phone</summary><div id="piAlternativeRows"></div></details>
-    <div id="piExplanation" class="pi3-explanation"></div>
-    <p id="piSource" class="pi3-muted pi3-source"></p>
     <button id="piBuild" class="pi3-primary" type="button" hidden>Open Full Quote →</button><p id="piBuildHint" class="pi3-muted"></p>
     <details class="pi3-history"><summary>Recent questions</summary><div id="piThread"></div></details>
   </section>
@@ -2616,7 +2617,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
 <script>
 (async function(){
-  const VERSION = 'Version 4.2';
+  const VERSION = 'Version 4.3';
   const quoteDataSources={trades:false,catalog:false,promos:false};
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
@@ -6566,7 +6567,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  const PI3_KEY='gtt_investigator_v3',PI3_API=SB+'/functions/v1/gtt-ai';
  const pi3Money=n=>Number(n).toLocaleString('en-US',{style:'currency',currency:'USD'});
  const pi3Esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const pi3Norm=s=>String(s||'').toLowerCase().replace(/apple|samsung|galaxy|google|iphone/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+ const pi3Norm=s=>String(s||'').toLowerCase().replace(/apple|samsung|galaxy|google|iphone/g,'').replace(/\+/g,' plus ').replace(/[^a-z0-9]+/g,' ').trim();
  const pi3Rank=s=>{const m=String(s||'').match(/^\s*(\d+(?:\.\d+)?)\s*(TB|GB)?\s*$/i);return m?Number(m[1])*((m[2]||'GB').toUpperCase()==='TB'?1024:1):0;};
  const PI3_PLANS=[['premium','Premium'],['extra','Extra'],['starter','Starter'],['value','Value 2.0'],['55plus','55+'],['valueplus_mobile','Ineligible / rerate']];
  const pi3PlanLabel=p=>PI3_PLANS.find(x=>x[0]===p)?.[1]||p;
@@ -6628,7 +6629,6 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
  }
  function pi3Candidate(q,phone,plan,action,trade,noTrade=false,condition){
   const ctx=pi3Context(q,phone,plan,action,trade,noTrade,condition);
-  if(q.intent==='best_offer'&&!trade&&q.no_trade!==true){ctx.noTrade=false;ctx.tradeValueMode='manual';ctx.value=1000000;}
   const result=window.GTTQuote.evaluate(ctx),metric=window.GTTQuote.metric(ctx,result);
   if(!metric||!Number.isFinite(metric.monthly)||!Number.isFinite(metric.credit))return null;
   return {phone,plan,action,ctx,result,metric,noTrade:ctx.noTrade};
@@ -6645,13 +6645,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   return items;
  }
  function pi3ByCost(a,b){return a.metric.monthly-b.metric.monthly||a.metric.total-b.metric.total||Number(b.noTrade)-Number(a.noTrade)||a.phone.retail-b.phone.retail||a.phone.name.localeCompare(b.phone.name);}
- function pi3Unique(items){const map=new Map();items.sort(pi3ByCost).forEach(x=>{if(!map.has(x.phone.name))map.set(x.phone.name,x);});return [...map.values()];}
+ function pi3Unique(items,sorter=pi3ByCost){const map=new Map();items.sort(sorter).forEach(x=>{if(!map.has(x.phone.name))map.set(x.phone.name,x);});return [...map.values()];}
  function pi3ConditionImpact(q,c,trade){
   if(!trade||c.noTrade)return false;
   return ['good','cracked','dead','locked'].some(cond=>{const r=pi3Candidate(q,c.phone,c.plan,c.action,trade,false,cond);return !r||r.metric.credit!==c.metric.credit||Math.abs(r.metric.monthly-c.metric.monthly)>.005;});
  }
  function pi3BuildAnswer(q){
   const trade=pi3Trade(q),target=q.target_device?pi3Target(q):{rows:[],row:null,ambiguous:[]};
+  if(!q.trade_device&&q.no_trade!==true&&(q.intent==='best_offer'||q.intent==='trade_value'))return {kind:'question',heading:'What phone are they trading in?',body:q.brand?'I’ll use that phone to find the best '+(q.brand==='apple'?'iPhone':q.brand==='samsung'?'Samsung':q.brand)+' offers.':'Choose the old phone to see the offers it can qualify for.',field:'trade_device',trade,target};
   if(q.trade_device&&q.no_trade!==true&&!trade.row)return {kind:'missing',heading:trade.ambiguous.length?'Which trade phone?':'Confirm the trade phone',body:trade.ambiguous.length?'More than one model matches. Choose the exact phone below.':'That model or storage is not in the trade lookup. I won’t substitute a different phone.',trade,target};
   if(q.target_device&&target.row?.tradePromoEligible&&trade.row&&trade.row.value===null&&q.no_trade!==true&&!target.row.tiered)return {kind:'missing',heading:'Trade value needs confirmation',body:'This phone has no stored trade value. Confirm it before calculating the trade promotion; I won’t treat it as $0.',trade,target};
   if(['anytime','legacy'].includes(q.next_up)&&q.activation==='new')return {kind:'missing',heading:'Confirm the transaction',body:'A Next Up turn-in is an upgrade path. Choose Upgrade below, or select a standard trade for a new line.',trade,target};
@@ -6663,11 +6664,12 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   const phones=(target.row?[target.row]:pi3Data.phones).filter(p=>(!q.brand||pi3Brand(p)===q.brand)&&(!q._otherBrands||!['apple','samsung'].includes(pi3Brand(p)))&&(!q._compareNames?.length||q._compareNames.includes(p.name))); 
   let options=pi3Options(q,phones,trade.row);
   if(!options.length){
+   if(['anytime','legacy'].includes(q.next_up)&&pi3Paid(q)!==null&&pi3Paid(q)<(q.next_up==='legacy'?50:33))return {kind:'missing',heading:'The current phone is below the promotional paid threshold',body:'No promotional turn-in quote is shown below '+(q.next_up==='legacy'?50:33)+'% paid. Confirm the financing details in Details & checks.',trade,target};
    const failed=target.row?window.GTTQuote.evaluate(pi3Context(q,target.row,pi3Plan(q.plan)||'premium',q.activation||'upgrade',trade.row,q.no_trade===true||!trade.row)):null;
    const reasons={nextup_no_payoff:'The paid percentage is below the promotional Next Up threshold. No promotional quote is being shown for this turn-in path.',nextup_bad_condition:'The current phone does not meet the Next Up turn-in condition checks.',nextup_not_eligible:'No Next Up promotion is loaded for this new device.',tiered_confirm_cckm:'The exact storage price is not confirmed in GTT. Check the detailed offer before quoting it.',needValue:'This trade value is not stored. Confirm it in the trade lookup before quoting.'};
    return {kind:'missing',heading:'This combination needs another check',body:reasons[failed?.state]||'No confirmed price is available for this combination. Check the device, storage, plan, and financing details below.',trade,target,failed};
   }
-  let results=pi3Unique(options);
+  let results=pi3Unique(options,q.intent==='best_offer'?((a,b)=>b.metric.credit-a.metric.credit||pi3ByCost(a,b)):pi3ByCost);
   if(q.intent==='free'){
    const zero=results.filter(c=>c.metric.monthly<.005);
    if(zero.length){results=zero.sort((a,b)=>Number(pi3Brand(b.phone)==='apple')-Number(pi3Brand(a.phone)==='apple')||b.phone.retail-a.phone.retail);}
@@ -6679,7 +6681,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   const storageMatters=trade.row&&!chosen.noTrade&&!q.trade_storage&&trade.rows.some(t=>{const x=pi3Candidate(q,chosen.phone,chosen.plan,chosen.action,t,false);return !x||x.metric.credit!==chosen.metric.credit||Math.abs(x.metric.monthly-chosen.metric.monthly)>.005;});
   const otherAction=pi3Candidate(q,chosen.phone,chosen.plan,chosen.action==='new'?'upgrade':'new',trade.row,chosen.noTrade);
   const actionMatters=!otherAction||Math.abs(otherAction.metric.monthly-chosen.metric.monthly)>.005;
-  const nextCheck=!!trade.row&&(!!q.next_up||!pi3OldPhone(trade.row))&&q.no_trade!==true;
+  const nextCheck=!!trade.row&&(!!q.next_up||!pi3OldPhone(trade.row))&&q.no_trade!==true&&(!chosen.noTrade||['anytime','legacy'].includes(q.next_up));
   const conditionMatters=pi3ConditionImpact(q,chosen,trade.row);
   const unknowns=[];
   if(!plan)unknowns.push('plan');if(conditionMatters&&(!q.condition||q.condition==='damaged'))unknowns.push('condition');
@@ -6706,11 +6708,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   const terms=['an eligible '+pi3PlanLabel(c.plan)+' plan'];
   if(!q.activation&&a.actionMatters)terms.push(c.action==='new'?'a qualifying new line':'a qualifying upgrade');
   if(a.trade.row&&!c.noTrade&&a.conditionMatters&&(!q.condition||q.condition==='damaged'))terms.push('the trade in good condition');
-  if(a.nextCheck&&!q.next_up)terms.push('a standard trade or a separately confirmed Next Up path');
+  if(a.nextCheck&&!q.next_up)terms.push('standard trade assumed; confirm Next Up separately');
   if(['anytime','legacy'].includes(q.next_up)&&pi3Paid(q)===null)terms.push((q.next_up==='legacy'?'legacy Next Up':'Next Up Anytime')+' at least '+(q.next_up==='legacy'?50:33)+'% paid');
   return terms.join(', ');
  }
- function pi3RankingHtml(items){return '<ol class="pi3-ranking">'+items.map((c,i)=>'<li><span class="pi3-rank-number">'+(i+1)+'</span><div><strong>'+pi3Esc(c.phone.name)+'</strong><small>'+pi3Esc([c.phone.storage,c.action==='new'?'New line':'Upgrade','Eligible '+pi3PlanLabel(c.plan)+' plan',c.noTrade?'No trade required':'With qualifying trade'].filter(Boolean).join(' · '))+'</small><button type="button" data-pi-select="'+pi3Esc(c.phone.id)+'">Check this option →</button></div><strong class="pi3-rank-price">'+pi3Money(c.metric.monthly)+'/mo</strong></li>').join('')+'</ol>';}
+ function pi3RankingHtml(items){return '<ol class="pi3-ranking">'+items.map((c,i)=>'<li><span class="pi3-rank-number">'+(i+1)+'</span><div><strong>'+pi3Esc(c.phone.name)+'</strong><small>'+pi3Esc([c.phone.storage,c.action==='new'?'New line':'Upgrade','Eligible '+pi3PlanLabel(c.plan)+' plan',c.noTrade?'No trade required':(c.metric.credit>0?pi3Money(c.metric.credit)+' off with trade':'With qualifying trade')].filter(Boolean).join(' · '))+'</small><button type="button" data-pi-select="'+pi3Esc(c.phone.id)+'">Check this option →</button></div><strong class="pi3-rank-price">'+pi3Money(c.metric.monthly)+'/mo</strong></li>').join('')+'</ol>';}
  function pi3VerifyHtml(q,a){
   let html='';const trade=a.trade.row;
   if(!pi3Plan(q.plan)||a.planMatters)html+=pi3Check(!pi3Plan(q.plan)?'Confirm plan':'Plan · '+pi3PlanLabel(pi3Plan(q.plan)),!pi3Plan(q.plan)?'The answer is conditional until the customer’s plan group is selected.':a.planMatters?'Changing the plan can change the credit or payment.':'Eligible plans have the same price for this option.',pi3OptionsHtml('plan',PI3_PLANS,pi3Plan(q.plan))+'<label>Customer segment<select data-pi-input="segment"><option value="consumer"'+(q.segment==='consumer'?' selected':'')+'>Consumer</option><option value="cru"'+(q.segment==='cru'?' selected':'')+'>Business / CRU</option><option value="firstnet"'+(q.segment==='firstnet'?' selected':'')+'>FirstNet</option></select></label>');
@@ -6718,10 +6720,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    const value=typeof trade.value==='number'&&Number.isFinite(trade.value)?pi3Money(trade.value):'Not stored';
    html+=pi3Check('Trade value · '+value,trade.brand+' '+trade.model+' '+trade.storage+(q.trade_storage?'':' · base storage assumed')+(a.storageMatters?'. Storage changes this result.':'. Storage is not needed to distinguish this offer.'),a.storageMatters?pi3OptionsHtml('trade_storage',a.trade.rows.map(r=>[r.storage,r.storage]),q.trade_storage):'');
    if(a.conditionMatters||q.condition&&q.condition!=='good'){
-    html+=pi3Check('Condition · '+(q.condition==='good'?'Good confirmed':!q.condition?'Good assumed':q.condition),'Condition can change this trade’s value or turn-in eligibility.',pi3OptionsHtml('condition',[['good','Good condition · Yes'],['damaged','Good condition · No']],q.condition==='good'?'good':q.condition?'damaged':'')+(q.condition&&q.condition!=='good'?pi3OptionsHtml('condition',[['cracked','Cracked screen only'],['dead','Doesn’t power on'],['locked','Activation locked']],q.condition):''));
+    html+=pi3Check('Condition · '+pi3ConditionLabel(q.condition),'Condition can change this trade’s value or turn-in eligibility.',pi3OptionsHtml('condition',[['good','Good condition · Yes'],['damaged','Good condition · No']],q.condition==='good'?'good':q.condition?'damaged':'')+(q.condition&&q.condition!=='good'?pi3OptionsHtml('condition',[['cracked','Cracked screen only'],['dead','Doesn’t power on'],['locked','Activation locked']],q.condition):''));
    }
    if(a.nextCheck||q.next_up){
-    html+=pi3Check('Next Up · '+(q.next_up==='standard'?'No — standard trade':q.next_up||'Confirm'),q.next_up==='standard'?'The answer uses a standard trade. Confirm the installment situation in OPUS.':'Is the customer using a Next Up turn-in rather than a standard trade?',pi3OptionsHtml('next_up',[['standard','No'],['unknown','Yes / unsure']],q.next_up));
+    html+=pi3Check('Next Up · '+(q.next_up==='standard'?'No — standard trade':q.next_up==='anytime'?'Next Up Anytime':q.next_up==='legacy'?'Legacy Next Up':q.next_up==='unknown'?'Confirm feature':'Confirm'),q.next_up==='standard'?'The answer uses a standard trade. Confirm the installment situation in OPUS.':'Is the customer using a Next Up turn-in rather than a standard trade?',pi3OptionsHtml('next_up',[['standard','No'],['unknown','Yes / unsure']],q.next_up));
     if(q.next_up&&q.next_up!=='standard')html+=pi3Check('Which Next Up?', 'Choose the feature shown on the customer’s bill.',pi3OptionsHtml('next_up',[['anytime','Next Up Anytime · $10'],['legacy','Legacy Next Up · $6']],q.next_up));
     if(['anytime','legacy'].includes(q.next_up)){
      const percent=pi3Paid(q),threshold=q.next_up==='legacy'?50:33;
@@ -6734,51 +6736,104 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   if(a.kind==='missing'){
    if(a.trade.ambiguous.length)html+=pi3Check('Confirm trade model','Choose the exact old phone.',pi3OptionsHtml('trade_device',a.trade.ambiguous.map(n=>[n,n]),q.trade_device));
    if(a.target.ambiguous.length)html+=pi3Check('Confirm new model','Choose the phone the customer wants.',pi3OptionsHtml('target_device',a.target.ambiguous.map(n=>[n,n]),q.target_device));
-   html+=pi3Check('Clarify the question','Use the question box above to add the exact model, storage, plan, or goal.');
+   if(!a.trade.ambiguous.length&&!a.target.ambiguous.length&&!a.failed)html+=pi3Check('Add a detail','Use the question box to clarify the device or goal.');
   }
-  return html||pi3Check('No extra details needed','The listed no-trade price still requires an eligible plan and the stated transaction type.');
+  return html;
+ }
+ function pi3ConditionLabel(cond){return ({good:'Good confirmed',cracked:'Cracked screen',dead:'Doesn’t power on',locked:'Activation locked',damaged:'Damage needs clarification'})[cond]||'Good assumed';}
+ function pi3PlanComparison(q,a){
+  if(!a.chosen||q.plan||a.kind!=='quote')return '';
+  const groups=new Map(),c=a.chosen;
+  for(const [plan,label]of PI3_PLANS.slice(0,5)){
+   const x=pi3Candidate(q,c.phone,plan,c.action,a.trade.row,c.noTrade);if(!x)continue;
+   const key=[x.metric.credit.toFixed(2),x.metric.monthly.toFixed(2),x.result.state].join('|');
+   if(!groups.has(key))groups.set(key,{labels:[],c:x});groups.get(key).labels.push(label);
+  }
+  if(!groups.size)return '';
+  return '<div class="pi3-plan-comparison"><table><caption>Options by plan · '+pi3Esc(c.phone.storage||'base storage')+'</caption><thead><tr><th>Plan</th><th>Credit</th><th>Device / mo</th></tr></thead><tbody>'+[...groups.values()].map(g=>'<tr><th>'+pi3Esc(g.labels.join(' / '))+'</th><td>'+pi3Money(g.c.metric.credit)+'</td><td>'+pi3Money(g.c.metric.monthly)+'</td></tr>').join('')+'</tbody></table></div>';
+ }
+ function pi3Prompt(q,a){
+  if(a.kind==='question')return '<label for="piTradeSearch">Search the trade-in phone</label><input id="piTradeSearch" type="search" placeholder="For example, iPhone 15 Pro Max" autocomplete="off" aria-controls="piTradeMatches"><div id="piTradeMatches" class="pi3-options"></div>';
+  if(!a.chosen)return '';
+  if(['anytime','legacy'].includes(q.next_up)&&pi3Paid(q)===null)return '<label for="piPaidQuick">How much of the current phone is paid off?</label><div class="pi3-paid-row"><input id="piPaidQuick" type="number" min="0" max="100" step="0.01" placeholder="Percent paid"><button id="piPaidApply" type="button" class="pi3-secondary">Apply</button></div><button id="piFinanceMore" type="button" class="pi3-text-button">Use months or balance instead</button><p id="piPaidError" role="alert"></p>';
+  if(!pi3Plan(q.plan))return '<strong>Which plan are they on?</strong>'+pi3OptionsHtml('plan',PI3_PLANS,'');
+  if(a.conditionMatters&&(!q.condition||q.condition==='damaged'))return '<strong>Is the trade in good condition?</strong>'+pi3OptionsHtml('condition',[['good','Yes'],['damaged','No — clarify damage']],'');
+  if(a.nextCheck&&(!q.next_up||q.next_up==='unknown'))return '<strong>Are they using Next Up?</strong>'+pi3OptionsHtml('next_up',[['standard','No — standard trade'],['unknown','Yes / unsure']],'');
+  if(a.actionMatters&&!q.activation)return '<strong>Upgrading an existing line?</strong>'+pi3OptionsHtml('activation',[['upgrade','Yes — upgrade'],['new','Adding a line']],'');
+  return '';
+ }
+ function pi3WirePrompt(q,a){
+  const search=$('piTradeSearch');if(search){search.oninput=()=>{
+   const query=pi3Norm(search.value),names=[...new Set(pi3Data.trades.map(r=>r.model))];
+   const hits=query?names.filter(n=>query.split(' ').every(w=>pi3Norm(n).split(' ').some(v=>v.startsWith(w)))).sort((x,y)=>Number(pi3Norm(y)===query)-Number(pi3Norm(x)===query)||x.localeCompare(y)).slice(0,8):[];
+   $('piTradeMatches').replaceChildren();for(const name of hits){const b=document.createElement('button');b.type='button';b.textContent=name;b.onclick=()=>pi3Patch({trade_device:name});$('piTradeMatches').appendChild(b);}
+   if(query&&!hits.length)$('piTradeMatches').textContent='No matching trade phone. Try its model name.';
+  };}
+  if($('piPaidApply'))$('piPaidApply').onclick=()=>{const el=$('piPaidQuick'),n=Number(el.value);if(el.value.trim()===''||!Number.isFinite(n)||n<0||n>100){$('piPaidError').textContent='Enter a percent from 0 to 100.';return;}pi3Patch({paid_percent:n});};
+  if($('piFinanceMore'))$('piFinanceMore').onclick=()=>{$('piVerify').open=true;$('piApplyFinance')?.scrollIntoView({block:'center',behavior:'smooth'});};
  }
  function pi3Render(){
   if(!pi3Data)return;const q=pi3State,a=pi3BuildAnswer(q);pi3Current=a;
-  $('piResult').hidden=false;$('piRecovery').hidden=true;$('piRanking').innerHTML='';$('piAlternatives').hidden=true;$('piSuggestions').innerHTML='';$('piBuild').hidden=true;$('piBuildHint').textContent='';
-  const lead=(title,body,credit='')=>'<div class="pi3-answer"><small>'+(a.unknowns?.length?'Conditional answer':'GTT answer')+'</small><h3 id="piAnswerTitle">'+pi3Esc(title)+'</h3>'+(credit?'<div class="pi3-credit">'+pi3Esc(credit)+'</div>':'')+'<p>'+pi3Esc(body)+'</p></div>';
-  if(a.kind==='missing'){$('piAnswer').innerHTML=lead(a.heading,a.body);$('piVerify').open=true;$('piExplanation').textContent='Add the missing detail without re-entering the customer’s other information.';}
+  $('piResult').hidden=false;$('piRecovery').hidden=true;$('piRanking').innerHTML='';$('piAlternatives').hidden=true;$('piSuggestions').innerHTML='';$('piBuild').hidden=true;$('piBuildHint').textContent='';$('piExplanation').textContent='';
+  const lead=(title,body,credit='')=>'<div class="pi3-answer"><small>'+(a.kind==='question'?'One quick question':a.unknowns?.length?'Conditional answer':'GTT answer')+'</small><h3 id="piAnswerTitle">'+pi3Esc(title)+'</h3>'+(credit?'<div class="pi3-credit">'+pi3Esc(credit)+'</div>':'')+(body?'<p>'+pi3Esc(body)+'</p>':'')+'</div>';
+  if(a.kind==='question'){$('piAnswer').innerHTML=lead(a.heading,a.body);}
+  else if(a.kind==='missing'){$('piAnswer').innerHTML=lead(a.heading,a.body);$('piVerify').open=true;}
   else if(a.kind==='trade'){
-   const rows=a.trade.rows,known=rows.filter(r=>typeof r.value==='number'&&Number.isFinite(r.value));
-   if(!known.length)$('piAnswer').innerHTML=lead('Trade value needs confirmation','Choose an exact trade phone or confirm its value in the designated trade tool. No unknown value is treated as $0.');
-   else {const values=known.map(r=>r.value),min=Math.min(...values),max=Math.max(...values);$('piAnswer').innerHTML=lead(a.trade.row.model+' trade value','Good-condition database value. Promotional credit is a separate amount.',min===max?pi3Money(min):pi3Money(min)+'–'+pi3Money(max));$('piRanking').innerHTML='<p class="pi3-assumptions">'+known.map(r=>pi3Esc(r.storage)+': '+pi3Money(r.value)).join(' · ')+'</p>';}
-   $('piExplanation').textContent='Condition can adjust the value. Tell me the new phone to find the promotional offer.';
+   const known=a.trade.rows.filter(r=>typeof r.value==='number'&&Number.isFinite(r.value));
+   if(!known.length)$('piAnswer').innerHTML=lead('Trade value needs confirmation','This model has no stored value. Confirm its value before quoting.');
+   else{const values=known.map(r=>r.value),min=Math.min(...values),max=Math.max(...values);$('piAnswer').innerHTML=lead(a.trade.row.model+' trade value','Good-condition value; promotional credit depends on the new phone.',min===max?pi3Money(min):pi3Money(min)+'–'+pi3Money(max));$('piRanking').innerHTML='<p class="pi3-assumptions">'+known.map(r=>pi3Esc(r.storage)+': '+pi3Money(r.value)).join(' · ')+'</p>';}
   }else if(a.kind==='plan'){
    const group=pi3Plan(q.plan),matches=pi3Data.plans.filter(p=>q.plan&&(p.name.toLowerCase().includes(q.plan.toLowerCase())||String(p.alt||'').toLowerCase().includes(q.plan.toLowerCase()))).slice(0,6);
-   $('piAnswer').innerHTML=lead(group?'Plan group: '+pi3PlanLabel(group):'Confirm the exact plan',matches.length?matches.map(p=>p.name+' → '+pi3PlanLabel(p.group)).join('; '):'Select a plan category below or add the exact plan name.');$('piExplanation').textContent='Business and FirstNet eligibility can differ. Keep the customer segment selected in the checks below.';
+   $('piAnswer').innerHTML=lead(group?'Plan group: '+pi3PlanLabel(group):'Confirm the exact plan',matches.length?matches.map(p=>p.name+' → '+pi3PlanLabel(p.group)).join('; '):'Select a plan category in Details & checks, or add its name.');
   }else{
    const c=a.chosen,device=c.phone.name+(c.phone.storage?' '+c.phone.storage:''),terms=pi3Conditions(c,a,q),isPromo=c.metric.credit>0;
-   let heading,body;
+   const brand=q.brand==='apple'?'iPhones':q.brand==='samsung'?'Samsung phones':q.brand==='google'?'Google phones':q.brand==='motorola'?'Motorola phones':'phones';
+   let heading,body,credit='';
    if(a.kind==='ranking'){
-    heading=q.intent==='free'?(a.freeFound?'The customer can get '+(/^iPhone/i.test(c.phone.name)?'an ':'a ')+c.phone.name+' for $0/mo':'No $0/mo match found — here are the cheapest options'):q.intent==='best_offer'?'The strongest matching offers':q.intent==='compare'?'Compare these phones':'The '+a.results.length+' cheapest '+(q.brand==='apple'?'iPhones':q.brand==='samsung'?'Samsung phones':'phones')+(q.no_trade===true?' without a trade':'');
-    body=q.intent==='free'&&a.freeFound?'This requires '+terms+'. Other matching options are below.':'Ranked by estimated monthly device payment. Each row shows its plan, transaction, and trade requirements.';
+    heading=q.intent==='free'?(a.freeFound?'The customer can get '+(/^iPhone/i.test(c.phone.name)?'an ':'a ')+c.phone.name+' for $0/mo':'No '+(q.brand?brand+' at ':'')+'$0/mo match found — here are the cheapest options'):q.intent==='best_offer'?(a.trade.row?'Best offers for trading '+a.trade.row.model:'Best matching offers'):q.intent==='compare'?'Compare these phones':'The '+a.results.length+' cheapest '+brand;
+    body=q.intent==='free'&&a.freeFound?'Requires '+terms+'.':q.intent==='best_offer'?'Ranked by promotional credit, then device payment. '+(q.condition?'Condition: '+pi3ConditionLabel(q.condition)+'.':'Good condition assumed.'):q.intent==='compare'?'Monthly device payments for the same customer details.':c.phone.name+' is cheapest at '+pi3Money(c.metric.monthly)+'/mo'+(c.noTrade&&q.trade_device?'; they can keep their '+q.trade_device+'.':'.');
     $('piRanking').innerHTML=pi3RankingHtml(a.results);
    }else{
-    heading=isPromo?device+(a.unknowns.length?' can qualify for promotional credit':' qualifies for promotional credit'):device+' is '+pi3Money(c.metric.monthly)+'/mo';
-    body='This requires '+terms+'. '+(isPromo?'Estimated device payment: '+pi3Money(c.metric.monthly)+'/mo after promotional credits.':c.noTrade?'No trade is required for this price.':'This monthly-price offer does not award a separate recurring trade credit.');
+    heading=q.trade_device&&q.no_trade!==true?q.trade_device+' → '+device:device;
+    credit=isPromo?pi3Money(c.metric.credit)+' off · '+pi3Money(c.metric.monthly)+'/mo':pi3Money(c.metric.monthly)+'/mo';
+    body=!q.plan&&a.planMatters?'Best case shown above; compare the plan options below.':c.noTrade?'No trade required · '+pi3PlanLabel(c.plan)+' plan.':pi3PlanLabel(c.plan)+' plan · '+pi3ConditionLabel(q.condition)+'.';
    }
-   $('piAnswer').innerHTML=lead(heading,body,isPromo&&a.kind==='quote'?pi3Money(c.metric.credit)+' off':'')+(a.assumptions.length?'<p class="pi3-assumptions"><strong>Assumed for this answer:</strong> '+pi3Esc(a.assumptions.join(' · '))+'.</p>':'');
-   if(a.alternatives.length){$('piAlternatives').hidden=false;$('piAlternativeRows').innerHTML=pi3RankingHtml(a.alternatives);}
-   const creditText=isPromo?'The '+pi3Money(c.metric.credit)+' promotional credit is delivered as approximately '+pi3Money(Number(c.result.monthly||0))+' in monthly bill credits over 36 months. It is not an upfront cash payment. ':'';
-   const keepText=c.noTrade&&q.trade_device?'This route does not require the old phone; the customer can keep it unless it is being turned in for a separately confirmed upgrade path. ':'';
-   $('piExplanation').innerHTML='<strong>How this works</strong><p>'+pi3Esc(creditText+keepText+'The estimated device payment is '+pi3Money(c.metric.monthly)+'/mo for 36 months. Service, sales tax, fees, insurance, Next Up, and other charges are additional.')+'</p>';
+   const facts=[];
+   if(a.kind==='ranking')facts.push(q.plan?pi3PlanLabel(c.plan)+' plan':pi3PlanLabel(c.plan)+' assumed');
+   if(!q.target_storage)facts.push((a.kind==='ranking'?'Base storage per model':c.phone.storage+' new phone assumed'));
+   if(!q.activation)facts.push(c.action==='new'?'New line assumed':'Upgrade assumed');
+   if(a.trade.row&&!c.noTrade&&!q.condition)facts.push('Good condition assumed');
+   if(q.condition==='cracked'&&!c.noTrade)facts.push('Cracked screen · powers on and no activation lock assumed');
+   if(q.condition==='dead'&&!c.noTrade)facts.push('Doesn’t power on · other condition checks assumed');
+   if(q.condition==='locked'&&!c.noTrade)facts.push('Activation locked · other condition checks assumed');
+   if(['anytime','legacy'].includes(q.next_up))facts.push((q.next_up==='anytime'?'Next Up Anytime':'Legacy Next Up')+(pi3Paid(q)===null?' · paid threshold unconfirmed':' · '+pi3Paid(q).toFixed(1)+'% paid'));
+   else if(a.nextCheck&&!q.next_up)facts.push('Standard trade assumed · Next Up unconfirmed');
+   $('piAnswer').innerHTML=lead(heading,body,credit)+pi3PlanComparison(q,a)+(facts.length?'<p class="pi3-assumptions">'+pi3Esc([...new Set(facts)].join(' · '))+'.</p>':'');
+   if(a.alternatives.length&&a.kind==='quote'){$('piAlternatives').hidden=false;$('piAlternativeRows').innerHTML=pi3RankingHtml(a.alternatives);}
+   const creditText=isPromo?'The '+pi3Money(c.metric.credit)+' promotional credit is approximately '+pi3Money(Number(c.result.monthly||0))+' per month over 36 months. ':'';
+   const keepText=c.noTrade&&q.trade_device?'The customer can keep their '+q.trade_device+' with this no-trade offer. ':'';
+   $('piExplanation').innerHTML='<strong>How the '+pi3Esc(c.phone.name)+' offer works</strong><p>'+pi3Esc(creditText+keepText+'Estimated device payment: '+pi3Money(c.metric.monthly)+'/mo for 36 months. Service, sales tax, fees, insurance, and Next Up are additional.')+'</p>';
+   if(q.condition==='cracked'&&!c.noTrade&&!['anytime','legacy'].includes(q.next_up)){
+    const good=pi3Candidate(q,c.phone,c.plan,c.action,a.trade.row,false,'good');
+    if(good&&(good.metric.credit>c.metric.credit||good.metric.monthly+0.005<c.metric.monthly))$('piExplanation').innerHTML+='<p>'+pi3Esc('If restored to good condition: '+pi3Money(good.metric.credit)+' off, '+pi3Money(good.metric.monthly)+'/mo. That is '+pi3Money(good.metric.credit-c.metric.credit)+' more credit before repair costs. Confirm all condition checks after repair.')+'</p>';
+   }
    const suggestions=[];
-   if(a.kind==='ranking'){suggestions.push(['iPhone only',{brand:'apple'}],['Samsung only',{brand:'samsung'}],['Other brands',{brand:'other'}]);}
-   suggestions.push(['New line',{activation:'new'}],['Upgrade',{activation:'upgrade'}]);
-   if(q.plan)suggestions.push(['What about Starter?',{plan:'starter'}]);
+   if(a.kind==='ranking'){
+    if(q.brand||q._otherBrands)suggestions.push(['Compare other brands',{brand:'',_otherBrands:false}]);
+    else suggestions.push(['iPhone only',{brand:'apple'}],['Samsung only',{brand:'samsung'}],['Other brands',{brand:'other'}]);
+   }
+   if(q.activation!=='new')suggestions.push(['New line',{activation:'new'}]);
+   if(q.activation!=='upgrade')suggestions.push(['Upgrade',{activation:'upgrade'}]);
+   if(q.plan&&a.planMatters)suggestions.push(['Compare plans',{plan:''}]);
    if(q.trade_device&&q.no_trade!==true)suggestions.push(['Without a trade instead',{no_trade:true}]);
-   $('piSuggestions').replaceChildren();suggestions.forEach(([label,patch])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=()=>pi3Patch(patch);$('piSuggestions').appendChild(b);});
+   for(const [label,patch]of suggestions){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=()=>pi3Patch(patch);$('piSuggestions').appendChild(b);}
    $('piBuild').hidden=false;$('piBuild').disabled=a.unknowns.length>0;
-   $('piBuildHint').textContent=a.unknowns.length?'Confirm '+a.unknowns.join(', ')+' to open a completed quote.':'Ready to open in Trade Tool with these details.';
-   $('piBuild').onclick=()=>{if(a.unknowns.length)return;window.GTTQuote.apply(c.ctx);};
+   $('piBuildHint').textContent=a.unknowns.length?'Confirm remaining details to open the full quote.':'Ready to open in Trade Tool.';
+   $('piBuild').onclick=()=>{if(!a.unknowns.length)window.GTTQuote.apply(c.ctx);};
   }
-  $('piChecks').innerHTML=pi3VerifyHtml(q,a);$('piVerifyCount').textContent=a.unknowns?.length?'· '+a.unknowns.length+' to confirm':'';
-  $('piChecks').querySelectorAll('[data-pi-field]').forEach(b=>b.onclick=()=>pi3Patch({[b.dataset.piField]:b.dataset.piValue}));
+  const prompt=pi3Prompt(q,a);$('piPrompt').innerHTML=prompt;$('piPrompt').hidden=!prompt;
+  $('piChecks').innerHTML=a.kind==='question'?'':pi3VerifyHtml(q,a);$('piVerify').hidden=a.kind==='question';$('piVerifyCount').textContent=a.unknowns?.length?'· '+a.unknowns.length+' to confirm':'';
+  document.querySelectorAll('#v4Investigator [data-pi-field]').forEach(b=>b.onclick=()=>pi3Patch({[b.dataset.piField]:b.dataset.piValue}));
   $('piChecks').querySelectorAll('[data-pi-input]').forEach(el=>el.onchange=()=>pi3Patch({[el.dataset.piInput]:el.value}));
   document.querySelectorAll('#v4Investigator [data-pi-select]').forEach(b=>b.onclick=()=>{const p=pi3Data.phones.find(p=>p.id===b.dataset.piSelect);if(p)pi3Patch({intent:'quote',target_device:p.name,target_storage:p.storage});});
   if($('piApplyFinance'))$('piApplyFinance').onclick=()=>{
@@ -6788,22 +6843,23 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    if(invalid){$('piFinanceError').textContent='Check the percentages, term, and amounts. Remaining values cannot exceed the original total.';return;}
    pi3Patch(values);
   };
-  $('piSource').textContent=pi3Data.sources.trades&&pi3Data.sources.catalog&&pi3Data.sources.promos?'Amounts calculated by the current GTT quote engine using live data.':'Amounts calculated by GTT using saved fallback data where the live source is unavailable. Confirm current prices before quoting.';
+  $('piSource').textContent=pi3Data.sources.trades&&pi3Data.sources.catalog&&pi3Data.sources.promos?'Prices use current GTT offer data.':'Amounts calculated by GTT using saved fallback data where the live source is unavailable. Confirm current prices before quoting.';
   $('piQuestionLabel').textContent='Add more details';$('piAsk').placeholder='Only iPhones, upgrading on Starter…';$('piExamples').hidden=true;
-  $('piMemory').textContent=[q.trade_device,q.target_device||q.intent,q.plan?pi3PlanLabel(pi3Plan(q.plan)):'plan unconfirmed'].filter(Boolean).join(' · ');
+  $('piMemory').textContent=[q.trade_device,q.target_device||({cheapest:'Cheapest options',best_offer:'Best offers',free:'Free-phone options',trade_value:'Trade value',compare:'Comparison'}[q.intent]||''),q.plan?pi3PlanLabel(pi3Plan(q.plan)):'Plan unconfirmed'].filter(Boolean).join(' · ');
   $('piThread').innerHTML=pi3History.slice(-5).map(t=>'<p>'+pi3Esc(t)+'</p>').join('');
-  $('piStatus').textContent='Answer updated · customer details remembered';pi3Save();
+  pi3WirePrompt(q,a);$('piStatus').textContent='Answer updated · customer details remembered';pi3Save();
  }
  function pi3Patch(patch){
   ++pi3Epoch;pi3Abort?.abort();pi3Busy=false;$('piRun').disabled=false;$('piRun').textContent='Update answer →';
   if(patch.trade_device&&patch.trade_device!==pi3State.trade_device)patch={trade_storage:'',condition:'',next_up:'',paid_percent:null,months_left:null,total_months:null,balance:null,financed_amount:null,...patch};
   if(patch.target_device&&patch.target_device!==pi3State.target_device)patch={target_storage:'',...patch};
   if(patch.brand==='other'){patch={...patch,brand:'',target_device:'',target_storage:''};pi3State._otherBrands=true;}else if(patch.brand!==undefined)pi3State._otherBrands=false;
+  if(patch.trade_device){patch.no_trade=false;if(pi3Current?.kind==='question'&&!pi3State.target_device)patch.intent='best_offer';}
   pi3State={...pi3State,...patch};pi3Render();
  }
  function pi3Mentions(text){
   const names=[...new Set([...pi3Data.phones.map(p=>p.name),...pi3Data.trades.map(p=>p.model)])],hits=[];
-  for(const name of names){const words=pi3Norm(name).split(' ').filter(Boolean);if(!words.length)continue;const escaped=words.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('[\\s-]*');const m=new RegExp('\\b'+escaped+'\\b','i').exec(text);if(m)hits.push({name,start:m.index,end:m.index+m[0].length});}
+  for(const name of names){const words=pi3Norm(name).split(' ').filter(Boolean);if(!words.length)continue;const escaped=words.map(w=>w==='plus'?'(?:\\+|plus)':w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('[\\s-]*');const prefix=/iphone/i.test(name)?'(?:\\b(?:apple\\s+)?iphone\\s*)?':/galaxy/i.test(name)?'(?:(?:samsung\\s+)?galaxy\\s*|samsung\\s*)?':/pixel/i.test(name)?'(?:google\\s*)?':'';const m=new RegExp('\\b'+prefix+escaped+'(?=$|[^a-z0-9])','i').exec(text);if(m)hits.push({name,start:m.index,end:m.index+m[0].length});}
   hits.sort((a,b)=>a.start-b.start||(b.end-b.start)-(a.end-a.start));const chosen=[];
   for(const h of hits)if(!chosen.some(c=>h.start<c.end&&h.end>c.start))chosen.push(h);return chosen.sort((a,b)=>a.start-b.start);
  }
@@ -6813,8 +6869,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   const resetSearch=()=>{q.target_device='';q.target_storage='';q._tieredOnly=false;q._compareNames=[];};
   if(/\bcheapest|least expensive|lowest.*price|most affordable/.test(lower)){q.intent='cheapest';resetSearch();recognized=true;}
   if(/\b(?:free|zero.?dollar)\s*(?:phone|iphone|device)|\b(?:phone|iphone|device).*\bfree\b|\$0\s*(?:\/\s*mo|per month)/.test(lower)){q.intent='free';resetSearch();recognized=true;}
-  if(/\btiered\b.*(?:phone|iphone|device)|(?:phone|iphone|device).*\btiered\b/.test(lower)){q.intent='cheapest';q.no_trade=true;resetSearch();q._tieredOnly=true;recognized=true;}
-  if(/highest|biggest|largest|maximum|strongest/.test(lower)&&/promo|credit|offer/.test(lower)){q.intent='best_offer';resetSearch();recognized=true;}
+  if(/\btiered\b/.test(lower)){q.intent='cheapest';q.no_trade=true;resetSearch();q._tieredOnly=true;recognized=true;}
+  if(!/\btiered\b/.test(lower)&&/best|highest|biggest|largest|maximum|strongest/.test(lower)&&/promo|credit|offer/.test(lower)){q.intent='best_offer';resetSearch();recognized=true;}
   if(/\bwithout (?:a )?trade|\bno[ -]?trade/.test(lower)){q.no_trade=true;if(!q.target_device&&!['cheapest','free','best_offer'].includes(q.intent))q.intent='cheapest';recognized=true;}
   if(/\bwith (?:a |the |their )?trade|\btrading\b|\btrade[ -]?in\b/.test(lower)){q.no_trade=false;}
   if(/\b(?:iphone|apple)s?\s+only\b|\bonly\s+(?:iphone|apple)s?\b|\b(?:cheapest|free|tiered|affordable)\s+(?:iphone|apple)s?\b|\bhighest.*(?:for|on)\s+(?:iphone|apple)s?\b/.test(lower))q.brand='apple';
@@ -6823,8 +6879,15 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   const planMatch=lower.match(/\b(premium|elite|extra|starter|value\s*2\.0|value\s*plus|value|55\s*\+|mobile\s*share)(?=\W|$)/);
   if(planMatch){q.plan=pi3Plan(planMatch[0]);recognized=true;}
   if(/firstnet/.test(lower))q.segment='firstnet';else if(/\bcru\b|business plan/.test(lower))q.segment='cru';else if(/consumer/.test(lower))q.segment='consumer';
-  if(/\bnew line|add.a.line|new activation/.test(lower)){q.activation='new';recognized=true;}else if(/\bupgrad(?:e|ing)\b/.test(lower)){q.activation='upgrade';recognized=true;}
+  if(/\bnew line|add.a.line|new activation/.test(lower)){q.activation='new';recognized=true;}else if(/\bupgrad(?:e|ing)\b|existing (?:customer|line)|current customer/.test(lower)){q.activation='upgrade';recognized=true;}
   const mentions=pi3Mentions(text);
+  let brandText=lower;for(const m of [...mentions].reverse())brandText=brandText.slice(0,m.start)+' '.repeat(m.end-m.start)+brandText.slice(m.end);
+  if(/\b(?:iphone|apple)s?\b/.test(brandText)){q.brand='apple';q._otherBrands=false;recognized=true;}
+  else if(/\b(?:samsung|galaxy)\b/.test(brandText)){q.brand='samsung';q._otherBrands=false;recognized=true;}
+  else if(/\b(?:google|pixel)s?\b/.test(brandText)){q.brand='google';q._otherBrands=false;recognized=true;}
+  else if(/\b(?:motorola|moto)\b/.test(brandText)){q.brand='motorola';q._otherBrands=false;recognized=true;}
+  if(/\btrade[ -]?in (?:offer|promo)|\btrade offer/.test(lower)&&!mentions.length){q.intent='best_offer';q.no_trade=false;resetSearch();recognized=true;}
+
   if(mentions.length>=2&&/compare|versus|\bvs\b|\bor\b/.test(lower)){q.intent='compare';q.target_device='';q.target_storage='';q._compareNames=mentions.map(x=>x.name);recognized=true;}
   else if(mentions.length>=2&&(/getting|gets|upgrading to|moving to|going to/.test(lower)||(/\bhas\b/.test(lower.slice(0,mentions[0].start))&&/wants/.test(lower)))){
    const old=mentions[0],target=mentions[mentions.length-1];
@@ -6832,7 +6895,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
    q.trade_device=old.name;q.no_trade=false;q.target_device=target.name;q.target_storage='';q.intent='quote';recognized=true;
   }else if(mentions.length===1){
    const m=mentions[0],prefix=lower.slice(0,m.start);
-   if(/has|have|trading|trade(?: in)?|worth|value of/.test(prefix)||['free','cheapest','best_offer'].includes(q.intent)&&!q.target_device){if(q.trade_device!==m.name){q.trade_storage='';q.condition='';q.next_up='';q.paid_percent=null;q.months_left=null;q.total_months=null;q.balance=null;q.financed_amount=null;}q.trade_device=m.name;q.no_trade=false;recognized=true;}
+   if((pi3Current?.kind==='question'&&pi3Current.field==='trade_device')||/has|have|trading|trade(?: in)?|worth|value of/.test(prefix)||['free','cheapest','best_offer'].includes(q.intent)&&!q.target_device){if(q.trade_device!==m.name){q.trade_storage='';q.condition='';q.next_up='';q.paid_percent=null;q.months_left=null;q.total_months=null;q.balance=null;q.financed_amount=null;}q.trade_device=m.name;q.no_trade=false;recognized=true;}
    else if(/getting|gets|wants|price of|how much|what about|instead/.test(prefix)){q.target_device=m.name;q.target_storage='';q.intent='quote';recognized=true;}
   }
   if(/\b(?:trade|phone).*\bworth\b|trade value|value of/.test(lower)){q.intent='trade_value';recognized=!!q.trade_device;}
@@ -6855,8 +6918,8 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   // Unsupported comparative questions still go through language interpretation rather than being guessed locally.
   const clearIntent=/what about|instead|only|actually|good condition|cracked|paid off|next\s*up|months? left|%/.test(lower);
   const completeKnown=!!q.target_device&&!!q.trade_device&&mentions.length>=2;
-  const catalog=['cheapest','free','best_offer'].includes(q.intent)&&/cheapest|free|tiered|highest|strongest|affordable|lowest/.test(lower);
-  return {state:q,confident:recognized&&(q.intent==='compare'||completeKnown||catalog||clearIntent||q.intent==='trade_value'||q.intent==='plan_lookup'),fresh};
+  const catalog=['cheapest','free','best_offer'].includes(q.intent)&&/cheapest|free|tiered|best|offer|highest|strongest|affordable|lowest/.test(lower);
+  return {state:q,confident:recognized&&(q.intent==='compare'||completeKnown||catalog||clearIntent||q.intent==='trade_value'||q.intent==='plan_lookup'||pi3Current?.kind==='question'&&mentions.length===1),fresh};
  }
  function pi3Sanitize(raw){
   const q=pi3Blank();for(const k of Object.keys(q)){if(typeof q[k]==='string')q[k]=typeof raw?.[k]==='string'?raw[k].slice(0,160):q[k];else if(k==='no_trade')q[k]=typeof raw?.[k]==='boolean'?raw[k]:null;else q[k]=typeof raw?.[k]==='number'&&Number.isFinite(raw[k])?raw[k]:null;}
@@ -6873,7 +6936,11 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   const local=pi3Local(text,previous);if(local.confident)return {state:{...local.state,...pi3Sanitize(local.state)},fresh:local.fresh,local:true};
   const response=await fetch(PI3_API,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},signal,body:JSON.stringify({task:'promo_context_v2',message:text,state:previous,device_names:[...new Set(pi3Data.phones.map(p=>p.name))]})});
   const data=await response.json().catch(()=>({}));if(!response.ok||!data.state)throw Error(data.error||'The question could not be interpreted. Try the model names and plan, or use the quick suggestions.');
-  return {state:{...pi3Sanitize(data.state),_otherBrands:!data.state.brand&&!!previous._otherBrands,_compareNames:data.state.intent==='compare'?(previous._compareNames||[]):[]},fresh:data.new_customer===true,local:false};
+  const parsed=pi3Sanitize(data.state),basis=data.new_customer===true?pi3Blank():previous;
+  if(local.state.brand!==basis.brand||basis.brand&&!parsed.brand)parsed.brand=local.state.brand||basis.brand;
+  if(local.state.activation!==basis.activation)parsed.activation=local.state.activation;
+  const state={...parsed,_otherBrands:!parsed.brand&&!!basis._otherBrands,_tieredOnly:local.state._tieredOnly||false,_compareNames:parsed.intent==='compare'?(local.state._compareNames||basis._compareNames||[]):[]};
+  return {state,fresh:data.new_customer===true,local:false};
  }
  async function pi3Run(text){
   if(!text.trim()){ $('piStatus').textContent='Ask a question first.';return;}
