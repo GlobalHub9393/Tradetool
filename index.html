@@ -1611,7 +1611,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 <body>
 
 <div id="v4Shell" class="v4-shell">
-  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.3</strong></div></div></header>
+  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.4</strong></div></div></header>
   <nav class="v4-topnav"><div class="v4-topnav-inner"><button class="v4-navbtn active" data-v4go="home">Home</button><button class="v4-navbtn" data-v4go="trade">Trade Tool</button><button class="v4-navbtn" data-v4go="simple">Simple Tool</button><button class="v4-navbtn" data-v4more>More</button></div></nav>
   <div class="v4-launch" data-v4go="news"><div><b>Apple Promo Updates</b><span>Duo is now available</span></div><em>View →</em></div>
   <section id="v4Home" class="v4-page active v4-home"><div class="v4-homeintro"><h2>What do you need?</h2><p>Build a full quote, check a trade opportunity, or calculate the sales tax due at checkout.</p></div><div class="v4-lane" data-v4go="trade"><div class="v4-num">01</div><div class="v4-copy"><h3>Trade Tool</h3><p>The original GTT workflow with plans, activation type, device, trade value and current promotional result.</p><div class="v4-hint"><span>Full Quote</span><span>Current Promos</span><span>Exact Eligibility</span></div></div><div class="v4-arrow">›</div></div><div class="v4-lane" data-v4go="simple"><div class="v4-num">02</div><div class="v4-copy"><h3>Simple Tool</h3><p>Start with the customer's phone. See its current trade value and the strongest Apple, Samsung, Pixel, and Motorola opportunities.</p><div class="v4-hint"><span>Quick Lookup</span><span>Best Opportunity</span></div></div><div class="v4-arrow">›</div></div><button type="button" class="v4-lane" data-v4go="tax"><div class="v4-num">03</div><div class="v4-copy"><h3>Sales Tax Calculator</h3><p>Add phones, tablets, and watches to calculate the New Jersey sales tax due at checkout.</p><div class="v4-hint"><span>Multiple Devices</span><span>Browns Mills UEZ</span></div></div><div class="v4-arrow">›</div></button></section>
@@ -1678,6 +1678,15 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       <div class="v4-promo"><b>Value 2.0 — up to $500</b><span>iPhone 18 Pro / Pro Max or iPhone 17 with $130+ condition-adjusted trade value.</span></div>
       <div class="v4-promo"><b>Eligible unlimited — up to $350</b><span>$35–$129.99 condition-adjusted trade value. The any-condition iPhone exception has ended.</span></div>
     </div>
+    <details><summary>10/23 confirmed price updates</summary><ul>
+      <li><b>iPhone Air:</b> 256GB $0.99 new / $5.99 upgrade; 512GB $6.99 / $11.99; 1TB $12.99 / $17.99.</li>
+      <li><b>Galaxy A17 5G:</b> $0 new / $4.99 upgrade.</li>
+      <li><b>iPhone 17e 512GB:</b> $11.99 new / $13.99 upgrade. CRU/FirstNet 17e 256GB new lines: $1.99.</li>
+      <li><b>iPhone 17 Pro:</b> 512GB $20.99 new / $25.99 upgrade; 1TB $26.99 / $31.99.</li>
+      <li><b>iPhone 17 Pro Max:</b> 1TB $31.99 new / $36.99 upgrade; 2TB $37.99 / $42.99.</li>
+      <li><b>Galaxy S26 512GB:</b> $22.99 upgrade without trade. A qualifying trade may give a lower payment.</li>
+      <li>36-month device prices require eligible service and installments. Eligible Next Up Anytime uses upgrade pricing. Legacy Next Up uses its separate credit offer.</li>
+    </ul></details>
     <details><summary>Open 10/9 tiered prices</summary><ul>
       <li>iPhone 17 Pro 256GB: $14.99/mo new line; $19.99/mo upgrade.</li>
       <li>iPhone 17 Pro Max 256GB: $19.99/mo new line; $24.99/mo upgrade.</li>
@@ -2617,7 +2626,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
 <script>
 (async function(){
-  const VERSION = 'Version 4.3';
+  const VERSION = 'Version 4.4';
   const quoteDataSources={trades:false,catalog:false,promos:false};
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
@@ -2868,6 +2877,31 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
   PHONES.push({id:'s26fe',name:'Galaxy S26 FE',storage:"128GB",retail:699.99,tieredOffer:true,tieredMonthlyNew:2.99,tieredMonthlyUpgrade:12.99,promoCategory:"samsung",active:true,sellable:true});
 
+  // Confirmed ARC 10/22 guide: preserve current prices until midnight Eastern on 10/23.
+  const OCT23_PROMO_START=Date.parse('2026-10-23T04:00:00Z');
+  const OCT23_SAVED_TIERS=[{"id":16,"promotion_id":17,"device_key":"a17","activation_type":"new_line","monthly_price":"0.00","starts_at":null,"ends_at":"2026-10-23T04:00:00Z","eligible_segments":["consumer","cru","firstnet"]},{"id":15,"promotion_id":17,"device_key":"a17","activation_type":"upgrade","monthly_price":null,"starts_at":null,"ends_at":"2026-10-23T04:00:00Z","eligible_segments":["consumer","cru","firstnet"]},{"id":12,"promotion_id":15,"device_key":"i17e-256","activation_type":"new_line","monthly_price":"5.99","starts_at":"2026-10-09T04:00:00.000Z","ends_at":"2026-10-23T04:00:00Z","eligible_segments":["consumer","cru","firstnet"]},{"id":11,"promotion_id":15,"device_key":"i17e-256","activation_type":"upgrade","monthly_price":"7.99","starts_at":"2026-10-09T04:00:00.000Z","ends_at":"2026-10-23T04:00:00Z","eligible_segments":["consumer","cru","firstnet"]},{"id":77,"promotion_id":13,"device_key":"ipair","activation_type":"new_line","monthly_price":"5.99","starts_at":"2026-09-12T01:54:19.077Z","ends_at":"2026-10-23T04:00:00Z","eligible_segments":["consumer","cru","firstnet"]},{"id":78,"promotion_id":13,"device_key":"ipair","activation_type":"upgrade","monthly_price":"9.99","starts_at":"2026-09-12T01:54:19.077Z","ends_at":"2026-10-23T04:00:00Z","eligible_segments":["consumer","cru","firstnet"]},{"id":81,"promotion_id":13,"device_key":"ipair-1tb","activation_type":"new_line","monthly_price":"17.99","starts_at":"2026-09-12T01:54:19.077Z","ends_at":"2026-10-23T04:00:00Z","eligible_segments":["consumer","cru","firstnet"]},{"id":82,"promotion_id":13,"device_key":"ipair-1tb","activation_type":"upgrade","monthly_price":"21.99","starts_at":"2026-09-12T01:54:19.077Z","ends_at":"2026-10-23T04:00:00Z","eligible_segments":["consumer","cru","firstnet"]},{"id":79,"promotion_id":13,"device_key":"ipair-512","activation_type":"new_line","monthly_price":"11.99","starts_at":"2026-09-12T01:54:19.077Z","ends_at":"2026-10-23T04:00:00Z","eligible_segments":["consumer","cru","firstnet"]},{"id":80,"promotion_id":13,"device_key":"ipair-512","activation_type":"upgrade","monthly_price":"15.99","starts_at":"2026-09-12T01:54:19.077Z","ends_at":"2026-10-23T04:00:00Z","eligible_segments":["consumer","cru","firstnet"]},{"device_key":"ipair","promotion_id":13,"activation_type":"new_line","monthly_price":0.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ipair","promotion_id":13,"activation_type":"upgrade","monthly_price":5.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ipair-512","promotion_id":13,"activation_type":"new_line","monthly_price":6.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ipair-512","promotion_id":13,"activation_type":"upgrade","monthly_price":11.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ipair-1tb","promotion_id":13,"activation_type":"new_line","monthly_price":12.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ipair-1tb","promotion_id":13,"activation_type":"upgrade","monthly_price":17.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"i17e-512","promotion_id":15,"activation_type":"new_line","monthly_price":11.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"i17e-512","promotion_id":15,"activation_type":"upgrade","monthly_price":13.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ip17p-512","promotion_id":13,"activation_type":"new_line","monthly_price":20.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ip17p-512","promotion_id":13,"activation_type":"upgrade","monthly_price":25.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ip17p-1tb","promotion_id":13,"activation_type":"new_line","monthly_price":26.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ip17p-1tb","promotion_id":13,"activation_type":"upgrade","monthly_price":31.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ip17pm-1tb","promotion_id":13,"activation_type":"new_line","monthly_price":31.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ip17pm-1tb","promotion_id":13,"activation_type":"upgrade","monthly_price":36.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ip17pm-2tb","promotion_id":13,"activation_type":"new_line","monthly_price":37.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"ip17pm-2tb","promotion_id":13,"activation_type":"upgrade","monthly_price":42.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"a17","promotion_id":17,"activation_type":"upgrade","monthly_price":4.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"s26-512","promotion_id":26,"activation_type":"upgrade","monthly_price":22.99,"eligible_segments":["consumer","cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"i17e-256","promotion_id":15,"activation_type":"new_line","monthly_price":5.99,"eligible_segments":["consumer"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null},{"device_key":"i17e-256","promotion_id":15,"activation_type":"new_line","monthly_price":1.99,"eligible_segments":["cru","firstnet"],"active":true,"starts_at":"2026-10-23T04:00:00Z","ends_at":null}];
+  for(const phone of PHONES){
+    const rows=OCT23_SAVED_TIERS.filter(r=>r.device_key===phone.id);
+    if(rows.length){phone.tieredPriceRows=rows;phone.tieredOffer=true;}
+  }
+  function oct23LegacyCredit(phone){
+    if(Date.now()<OCT23_PROMO_START||!phone)return null;
+    const name=String(phone.name||'').toLowerCase();
+    if(/^(?:iphone duo|iphone 18 pro(?: max)?|pixel 11 pro(?: xl)?)$/.test(name))return 500;
+    if(/^(?:iphone 17|galaxy (?:s26(?:\+| ultra)?|z (?:fold8(?: ultra)?|flip8))|razr ultra)$/.test(name))return 350;
+    return null;
+  }
+  function useOct23S26Tier(phone,action){
+    if(phone?.id!=='s26-512'||Date.now()<OCT23_PROMO_START||state.noTrade||state.value===null)return true;
+    if(!state.plan)return true;
+    const credit=computeCredit(state.plan,phone.promoCategory,promoTradeValue(),state.pixel,phone,state.galaxyAny);
+    if(action==='new')return credit<=0;
+    const price=tieredPriceFor(phone,'upgrade');
+    if(price===null||price===undefined)return false;
+    const tradeMonthly=Math.max(0,Number(monthly(phone.retail))-Number(monthly(credit)));
+    return credit<=0||Number(price)<=tradeMonthly;
+  }
+
   const money = n => "$" + Number(n).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
   // For whole-dollar amounts like trade-in values and bill credits — no trailing .00, but keeps
   // cents if a non-whole number ever appears (defensive).
@@ -2995,7 +3029,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
         p.tradeValue=r.trade_value===null||r.trade_value===''?null:Number(r.trade_value);
         p.imageUrl=r.image_url||''; p.updatedAt=r.updated_at||'';
         p.availableFrom=r.available_from||null; p.availableThrough=r.available_through||null;
-        p.sortOrder=Number(r.sort_order||0); p.tieredPriceRows=[];
+        p.sortOrder=Number(r.sort_order||0); p.tieredPriceRows=tierRes.ok?[]:(p.tieredPriceRows||[]);
 
         // Current sellable-device trade flags override the legacy duplicate entry for this exact SKU.
         const keyMatch = d => String(d.model||'').toLowerCase()===String(r.name||'').toLowerCase() && String(d.storage||'').toLowerCase()===String(r.storage||'').toLowerCase();
@@ -4070,9 +4104,15 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       if(state.nextPaid === null) return { state:'needNextPaid' };
       if(state.nextPaid === false) return { state:'nextup_no_payoff' };
 
+      // The confirmed legacy offer is a fixed bill credit, distinct from Anytime tiered pricing.
+      if(state.nextUpType==='legacy'){
+        const credit=oct23LegacyCredit(state.phone);
+        if(credit!==null)return {state:'nextup_promo',credit,monthly:monthly(credit)};
+      }
+
       // A Next Up turn-in is an upgrade, not an extra trade-in bill credit.
       // If the NEW phone has an active tiered UPGRADE price, use that tiered price.
-      if(hasActiveTieredOffer(state.phone)){
+      if(hasActiveTieredOffer(state.phone)&&useOct23S26Tier(state.phone,'upgrade')){
         const val = tieredPriceFor(state.phone,'upgrade');
         if(val !== undefined && val !== null){
           const total = Math.round(Number(val) * 36 * 100)/100;
@@ -4094,7 +4134,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
     const tierPlans = ['premium','extra','starter','value','55plus'];
 
-    if(hasActiveTieredOffer(state.phone) && tierPlans.includes(state.plan)){
+    if(hasActiveTieredOffer(state.phone) && tierPlans.includes(state.plan)&&useOct23S26Tier(state.phone,state.tierAction)){
       const newVal = tieredPriceFor(state.phone,'new');
       const upVal = tieredPriceFor(state.phone,'upgrade');
       const sameKnownPrice = newVal !== undefined && newVal !== null && upVal !== undefined && upVal !== null && Number(newVal) === Number(upVal);
