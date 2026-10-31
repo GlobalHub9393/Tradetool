@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — 4.6</title>
+<title>Global Trade Tool — 4.7</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -1610,11 +1610,20 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 /* Compact comparisons and a single useful follow-up. */
 #v4Investigator .pi3-prompt{margin:14px 0;padding:14px;border:1px solid var(--v4-line);border-radius:12px;background:var(--v4-alt);font-size:13px}#v4Investigator .pi3-prompt>label{display:block;font-weight:800;margin-bottom:9px}#v4Investigator .pi3-paid-row{display:flex;gap:8px}#v4Investigator .pi3-paid-row input{flex:1;width:0}#v4Investigator .pi3-details-copy{padding:0 15px 12px}#v4Investigator .pi3-plan-comparison{margin-top:12px;border:1px solid var(--v4-line);border-radius:10px;overflow:hidden}#v4Investigator .pi3-plan-comparison table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}#v4Investigator .pi3-plan-comparison caption{text-align:left;padding:12px;font-weight:800;background:var(--v4-alt)}#v4Investigator .pi3-plan-comparison th,#v4Investigator .pi3-plan-comparison td{padding:11px 10px;text-align:right;border-top:1px solid var(--v4-line)}#v4Investigator .pi3-plan-comparison th:first-child{text-align:left;max-width:150px}#v4Investigator .pi3-plan-comparison thead{color:var(--v4-muted);font-size:11px}#v4Investigator .pi3-ranking>li{padding:10px 0}#v4Investigator .pi3-ranking button{margin-top:1px}#v4Investigator .pi3-answer .pi3-credit{font-size:28px}#v4Investigator #piAnswerTitle{font-size:21px}#v4Investigator .pi3-results .pi3-assumptions{font-size:11px;line-height:1.5}@media(max-width:480px){#v4Investigator .pi3-plan-comparison table{font-size:12px}#v4Investigator .pi3-plan-comparison th,#v4Investigator .pi3-plan-comparison td{padding:10px 7px}#v4Investigator .pi3-answer .pi3-credit{font-size:25px}}
 </style>
+
+<style>
+body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.active{color:#b65b22}body.gtt-fall .v4-lane:hover{border-color:#c98543}
+.gtt-leaf-layer{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}.gtt-leaf{position:absolute;top:-45px;animation:gtt-leaf-fall 2.8s ease-in forwards;font-size:22px}
+@keyframes gtt-leaf-fall{to{transform:translate(var(--drift),110vh) rotate(400deg);opacity:0}}
+#tradePage #priceCardLabel,#tradePage #amount{transition:opacity .24s ease}#tradePage .quote-fading #priceCardLabel,#tradePage .quote-fading #amount{opacity:.1}
+#quoteMotionToggle{color:#bdd5e8;background:transparent;border:0;padding:8px;font-weight:700;min-height:40px;cursor:pointer}
+@media(prefers-reduced-motion:reduce){.gtt-leaf-layer{display:none}#tradePage #priceCardLabel,#tradePage #amount{transition:none}}
+</style>
 </head>
 <body>
 
 <div id="v4Shell" class="v4-shell">
-  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.6</strong></div></div></header>
+  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.7</strong></div></div></header>
   <nav class="v4-topnav"><div class="v4-topnav-inner"><button class="v4-navbtn active" data-v4go="home">Home</button><button class="v4-navbtn" data-v4go="trade">Trade Tool</button><button class="v4-navbtn" data-v4go="simple">Simple Tool</button><button class="v4-navbtn" data-v4more>More</button></div></nav>
   <div class="v4-launch" data-v4go="news"><div><b>Apple Promo Updates</b><span>Duo is now available</span></div><em>View →</em></div>
   <section id="v4Home" class="v4-page active v4-home"><div class="v4-homeintro"><h2>What do you need?</h2><p>Build a full quote, check a trade opportunity, or calculate the sales tax due at checkout.</p></div><div class="v4-lane" data-v4go="trade"><div class="v4-num">01</div><div class="v4-copy"><h3>Trade Tool</h3><p>The original GTT workflow with plans, activation type, device, trade value and current promotional result.</p><div class="v4-hint"><span>Full Quote</span><span>Current Promos</span><span>Exact Eligibility</span></div></div><div class="v4-arrow">›</div></div><div class="v4-lane" data-v4go="simple"><div class="v4-num">02</div><div class="v4-copy"><h3>Simple Tool</h3><p>Start with the customer's phone. See its current trade value and the strongest Apple, Samsung, Pixel, and Motorola opportunities.</p><div class="v4-hint"><span>Quick Lookup</span><span>Best Opportunity</span></div></div><div class="v4-arrow">›</div></div><button type="button" class="v4-lane" data-v4go="tax"><div class="v4-num">03</div><div class="v4-copy"><h3>Sales Tax Calculator</h3><p>Add phones, tablets, and watches to calculate the New Jersey sales tax due at checkout.</p><div class="v4-hint"><span>Multiple Devices</span><span>Browns Mills UEZ</span></div></div><div class="v4-arrow">›</div></button></section>
@@ -2000,7 +2009,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
     <div id="quoteDock" class="quote-dock" hidden>Your quote is open above. Close it to return the card here.</div>
     <aside class="display" id="display" aria-live="polite">
       <div id="duoPreorderBanner" class="duo-preorder-banner" hidden></div>
-      <div id="quoteViewSwitch" class="quote-switch" role="group" aria-label="Quote display" hidden><button type="button" data-quote-view="credit" aria-pressed="true">Eligible Credit</button><button type="button" data-quote-view="monthly" aria-pressed="false">Monthly Payment</button></div>
+      <div id="quoteViewSwitch" class="quote-switch" role="group" aria-label="Quote display" hidden><button type="button" data-quote-view="credit" aria-pressed="true">Eligible Credit</button><button type="button" data-quote-view="monthly" aria-pressed="false">Monthly Payment</button><button type="button" id="quoteMotionToggle" aria-pressed="false" aria-label="Pause price rotation">Pause</button></div>
       <div id="resultPhoneArt" class="result-phone-art" aria-hidden="true">
         <img id="resultPhoneImg" alt="" loading="eager" fetchpriority="high" decoding="async">
         <div id="resultPhoneFallback" class="result-phone-fallback"><span class="phone-silhouette"></span><small>No image</small></div>
@@ -2629,7 +2638,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 
 <script>
 (async function(){
-  const VERSION = 'Version 4.6';
+  const VERSION = 'Version 4.7';
   const quoteDataSources={trades:false,catalog:false,promos:false};
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
@@ -6061,6 +6070,14 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   // The same result card is moved into the dialog; never clone prices, IDs, or controls.
   const quoteDialog=el('quoteDialog'),quoteDock=el('quoteDock'),quoteMount=el('quoteMount'),viewQuote=el('viewQuote'),quoteDisplay=el('display');
   let quoteView='credit',quoteAutoOpened=false,quoteAutoTimer=null,quoteUiReady=false;
+  let quoteRotationPaused=matchMedia('(prefers-reduced-motion: reduce)').matches, quoteRotationTimer=null,quoteRotateReady=false,quoteResultSignature='';
+  function switchQuoteView(next){quoteDisplay.classList.add('quote-fading');setTimeout(()=>{quoteView=next;render();quoteDisplay.classList.remove('quote-fading');},180);}
+  function updateRotation(){const b=el('quoteMotionToggle');b.textContent=quoteRotationPaused?'Play':'Pause';b.setAttribute('aria-pressed',String(quoteRotationPaused));b.setAttribute('aria-label',quoteRotationPaused?'Play price rotation':'Pause price rotation');}
+  el('quoteMotionToggle').onclick=()=>{quoteRotationPaused=!quoteRotationPaused;updateRotation();};
+  quoteDisplay.addEventListener('click',e=>{if(e.target.closest('#priceCardLabel,#amount')&&quoteRotateReady)switchQuoteView(quoteView==='credit'?'monthly':'credit');});
+  updateRotation();
+  quoteRotationTimer=setInterval(()=>{if(quoteRotateReady&&!quoteRotationPaused&&!document.hidden&&el('tradePage').classList.contains('active'))switchQuoteView(quoteView==='credit'?'monthly':'credit');},4000);
+
   function quoteCanPresent(r){
     if(!state.plan||!state.phone||!['promo','nextup_promo','tiered_final','zero','full_retail','full_retail_rerate','tiered_not_offered'].includes(r.state))return false;
     if(state.tradeDevice&&state.tradeValueMode!=='manual'&&!conditionComplete())return false;
@@ -6068,7 +6085,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
   function openQuotePopup(){
     if(quoteDialog.open||!quoteCanPresent(getResult()))return;
-    quoteAutoOpened=true;document.activeElement?.blur();cancelAnimationFrame(guidedScrollRaf);
+    quoteAutoOpened=true;window.gttFallLeaves?.(true);document.activeElement?.blur();cancelAnimationFrame(guidedScrollRaf);
     quoteMount.appendChild(quoteDisplay);quoteDock.hidden=false;
     quoteDialog.showModal();document.documentElement.classList.add('quote-popup-open');el('quoteClose').focus({preventScroll:true});
   }
@@ -6084,6 +6101,10 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   function syncQuotePresentation(r){
     const ready=quoteCanPresent(r),metric=quoteMetric(captureQuoteContext(),r);
     const supported=ready&&(!!metric||r.state==='full_retail_rerate');
+    const sig=ready?[state.phone?.id,state.plan,r.state,r.credit,r.monthly].join('|'):'';
+    if(sig&&sig!==quoteResultSignature){quoteView='credit';quoteResultSignature=sig;}else if(!ready)quoteResultSignature='';
+    quoteRotateReady=supported;
+
     const monthlyValue=r.state==='tiered_final'?Number(r.monthly):metric?metric.monthly:state.phone?Number(monthly(state.phone.retail)):NaN;
     el('quoteViewSwitch').hidden=!supported;
     document.querySelectorAll('[data-quote-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.quoteView===quoteView)));
@@ -6092,9 +6113,9 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
       if(quoteView==='monthly'){
         el('priceCardLabel').textContent='Monthly device payment';amountEl.innerHTML='<span class="monthly-primary">'+money(monthlyValue)+'/mo</span><span class="off">for 36 months</span>';
       }else{
-        el('priceCardLabel').textContent='Eligible credit';
+        el('priceCardLabel').textContent=r.state==='tiered_final'?'Tiered offer':'Eligible credit';
         // Tiered offers do not have a separate trade-credit award. Do not invent one from MSRP minus payments.
-        amountEl.innerHTML=moneyWhole(Number(r.credit||0))+'<span class="off">'+(r.state==='tiered_final'?'separate trade promo credit':'off')+'</span>';
+        amountEl.innerHTML=r.state==='tiered_final'?'Available<span class="off">No trade required</span>':moneyWhole(Number(r.credit||0))+'<span class="off">off</span>';
       }
       el('quoteViewNote').textContent=quoteView==='monthly'?'Device payment only. Service, taxes, fees, and Next Up charges are additional.':r.state==='tiered_final'?'This is a discounted monthly-price offer. Switch to Monthly Payment to see the tiered price.':'Promotional credit is spread over 36 months; it is not an upfront cash payment.';
     }
@@ -6110,7 +6131,7 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
   }
   document.addEventListener('focusout',e=>{if(e.target.matches('#tradePage input,#tradePage select'))setTimeout(()=>{if(quoteUiReady&&!quoteAutoOpened)syncQuotePresentation(getResult());},0);});
   document.addEventListener('click',e=>{if(e.target.closest('[data-v4go],[data-v4more]'))closeQuotePopup();});
-  function resetQuotePresentation(){clearTimeout(quoteAutoTimer);closeQuotePopup();quoteAutoOpened=false;quoteView='credit';el('resultMore').open=false;}
+  function resetQuotePresentation(){clearTimeout(quoteAutoTimer);closeQuotePopup();quoteAutoOpened=false;quoteView='credit';quoteResultSignature='';el('resultMore').open=false;}
   // Keep suggestion lists within the space above the on-screen keyboard and Safari toolbar.
   function fitQuoteSuggestions(){
     const viewport=window.visualViewport,bottom=(viewport?.offsetTop||0)+(viewport?.height||innerHeight);
@@ -7030,6 +7051,17 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 })();
 </script>
 
+
+<script>
+(()=>{const key='gtt_fall_effects',reduce=matchMedia('(prefers-reduced-motion: reduce)');
+function isNovember(){return new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'numeric'}).format(new Date())==='11'}
+function enabled(){return isNovember()&&localStorage.getItem(key)!=='off'}
+function apply(){document.body.classList.toggle('gtt-fall',enabled());const b=document.getElementById('fallToggle');if(b){b.textContent='Fall effects: '+(localStorage.getItem(key)==='off'?'Off':'On');b.setAttribute('aria-pressed',String(localStorage.getItem(key)!=='off'));}}
+const more=document.querySelector('#v4More .v4-more-sheet');if(more){const b=document.createElement('button');b.id='fallToggle';b.type='button';b.className='v4-morelink';b.style.cssText='width:100%;background:transparent;text-align:left;font:inherit';b.onclick=()=>{localStorage.setItem(key,localStorage.getItem(key)==='off'?'on':'off');apply()};more.appendChild(b)}
+window.gttFallLeaves=(celebrate=false)=>{if(!enabled()||reduce.matches)return;const layer=document.createElement('div');layer.className='gtt-leaf-layer';layer.setAttribute('aria-hidden','true');for(let i=0;i<(celebrate?10:5);i++){const leaf=document.createElement('span');leaf.className='gtt-leaf';leaf.textContent=i%2?'🍁':'🍂';leaf.style.left=(8+Math.random()*84)+'%';leaf.style.animationDelay=(i*.09)+'s';leaf.style.setProperty('--drift',(Math.random()*140-70)+'px');layer.appendChild(leaf)}document.body.appendChild(layer);setTimeout(()=>layer.remove(),4000)};
+document.addEventListener('click',e=>{if(e.target.closest('[data-v4go]'))window.gttFallLeaves(false)});apply();setInterval(apply,60000);
+})();
+</script>
 </body>
 </html>
 
