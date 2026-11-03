@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Global Trade Tool — 4.8</title>
+<title>Global Trade Tool — 4.9</title>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -1612,18 +1612,21 @@ body{padding:0!important;background:var(--v4-bg)!important;color:var(--v4-ink)}
 </style>
 
 <style>
+#holidayModeToggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;background:transparent;text-align:left;font:inherit;cursor:pointer}
+.holiday-track{width:36px;height:20px;flex:none;border-radius:999px;background:#64748b;padding:3px;box-sizing:border-box}
+.holiday-track::before{content:'';display:block;width:14px;height:14px;border-radius:50%;background:white}
+#holidayModeToggle[aria-checked="true"] .holiday-track{background:#ad561e}
+#holidayModeToggle[aria-checked="true"] .holiday-track::before{transform:translateX(16px)}
 body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.active{color:#b65b22}body.gtt-fall .v4-lane:hover{border-color:#c98543}
 .gtt-leaf-layer{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}.gtt-leaf{position:absolute;top:-45px;animation:gtt-leaf-fall 2.8s ease-in forwards;font-size:22px}
 @keyframes gtt-leaf-fall{to{transform:translate(var(--drift),110vh) rotate(400deg);opacity:0}}
-#tradePage #priceCardLabel,#tradePage #amount{transition:opacity .24s ease}#tradePage .quote-fading #priceCardLabel,#tradePage .quote-fading #amount{opacity:.1}
-#quoteMotionToggle{color:#bdd5e8;background:transparent;border:0;padding:8px;font-weight:700;min-height:40px;cursor:pointer}
 @media(prefers-reduced-motion:reduce){.gtt-leaf-layer{display:none}#tradePage #priceCardLabel,#tradePage #amount{transition:none}}
 </style>
 </head>
 <body>
 
 <div id="v4Shell" class="v4-shell">
-  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.8</strong></div></div></header>
+  <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.9</strong></div></div></header>
   <nav class="v4-topnav"><div class="v4-topnav-inner"><button class="v4-navbtn active" data-v4go="home">Home</button><button class="v4-navbtn" data-v4go="trade">Trade Tool</button><button class="v4-navbtn" data-v4go="simple">Simple Tool</button><button class="v4-navbtn" data-v4more>More</button></div></nav>
   <div class="v4-launch" data-v4go="news"><div><b>Apple Promo Updates</b><span>Duo is now available</span></div><em>View →</em></div>
   <section id="v4Home" class="v4-page active v4-home"><div class="v4-homeintro"><h2>What do you need?</h2><p>Build a full quote, check a trade opportunity, or calculate the sales tax due at checkout.</p></div><div class="v4-lane" data-v4go="trade"><div class="v4-num">01</div><div class="v4-copy"><h3>Trade Tool</h3><p>The original GTT workflow with plans, activation type, device, trade value and current promotional result.</p><div class="v4-hint"><span>Full Quote</span><span>Current Promos</span><span>Exact Eligibility</span></div></div><div class="v4-arrow">›</div></div><div class="v4-lane" data-v4go="simple"><div class="v4-num">02</div><div class="v4-copy"><h3>Simple Tool</h3><p>Start with the customer's phone. See its current trade value and the strongest Apple, Samsung, Pixel, and Motorola opportunities.</p><div class="v4-hint"><span>Quick Lookup</span><span>Best Opportunity</span></div></div><div class="v4-arrow">›</div></div><button type="button" class="v4-lane" data-v4go="tax"><div class="v4-num">03</div><div class="v4-copy"><h3>Sales Tax Calculator</h3><p>Add phones, tablets, and watches to calculate the New Jersey sales tax due at checkout.</p><div class="v4-hint"><span>Multiple Devices</span><span>Browns Mills UEZ</span></div></div><div class="v4-arrow">›</div></button></section>
@@ -2009,7 +2012,7 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
     <div id="quoteDock" class="quote-dock" hidden>Your quote is open above. Close it to return the card here.</div>
     <aside class="display" id="display" aria-live="polite">
       <div id="duoPreorderBanner" class="duo-preorder-banner" hidden></div>
-      <div id="quoteViewSwitch" class="quote-switch" role="group" aria-label="Quote display" hidden><button type="button" data-quote-view="credit" aria-pressed="true">Eligible Credit</button><button type="button" data-quote-view="monthly" aria-pressed="false">Monthly Payment</button><button type="button" id="quoteMotionToggle" aria-pressed="false" aria-label="Pause price rotation">Pause</button></div>
+      <div id="quoteViewSwitch" class="quote-switch" role="group" aria-label="Quote display" hidden><button type="button" data-quote-view="credit" aria-pressed="true">Eligible Credit</button><button type="button" data-quote-view="monthly" aria-pressed="false">Monthly Payment</button></div>
       <div id="resultPhoneArt" class="result-phone-art" aria-hidden="true">
         <img id="resultPhoneImg" alt="" loading="eager" fetchpriority="high" decoding="async">
         <div id="resultPhoneFallback" class="result-phone-fallback"><span class="phone-silhouette"></span><small>No image</small></div>
@@ -2638,7 +2641,7 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
 
 <script>
 (async function(){
-  const VERSION = 'Version 4.8';
+  const VERSION = 'Version 4.9';
   const quoteDataSources={trades:false,catalog:false,promos:false};
   const GTT_ADMIN_FUNCTION = 'https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-admin';
   let adminSessionPassword = '';
@@ -6070,13 +6073,7 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
   // The same result card is moved into the dialog; never clone prices, IDs, or controls.
   const quoteDialog=el('quoteDialog'),quoteDock=el('quoteDock'),quoteMount=el('quoteMount'),viewQuote=el('viewQuote'),quoteDisplay=el('display');
   let quoteView='credit',quoteAutoOpened=false,quoteAutoTimer=null,quoteUiReady=false;
-  let quoteRotationPaused=matchMedia('(prefers-reduced-motion: reduce)').matches, quoteRotationTimer=null,quoteRotateReady=false,quoteResultSignature='';
-  function switchQuoteView(next){quoteDisplay.classList.add('quote-fading');setTimeout(()=>{quoteView=next;render();quoteDisplay.classList.remove('quote-fading');},180);}
-  function updateRotation(){const b=el('quoteMotionToggle');b.textContent=quoteRotationPaused?'Play':'Pause';b.setAttribute('aria-pressed',String(quoteRotationPaused));b.setAttribute('aria-label',quoteRotationPaused?'Play price rotation':'Pause price rotation');}
-  el('quoteMotionToggle').onclick=()=>{quoteRotationPaused=!quoteRotationPaused;updateRotation();};
-  quoteDisplay.addEventListener('click',e=>{if(e.target.closest('#priceCardLabel,#amount')&&quoteRotateReady)switchQuoteView(quoteView==='credit'?'monthly':'credit');});
-  updateRotation();
-  quoteRotationTimer=setInterval(()=>{if(quoteRotateReady&&!quoteRotationPaused&&!document.hidden&&el('tradePage').classList.contains('active'))switchQuoteView(quoteView==='credit'?'monthly':'credit');},4000);
+  let quoteResultSignature='';
 
   function quoteCanPresent(r){
     if(!state.plan||!state.phone||!['promo','nextup_promo','tiered_final','zero','full_retail','full_retail_rerate','tiered_not_offered'].includes(r.state))return false;
@@ -6103,7 +6100,6 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
     const supported=ready&&(!!metric||r.state==='full_retail_rerate');
     const sig=ready?[state.phone?.id,state.plan,r.state,r.credit,r.monthly].join('|'):'';
     if(sig&&sig!==quoteResultSignature){quoteView='credit';quoteResultSignature=sig;}else if(!ready)quoteResultSignature='';
-    quoteRotateReady=supported;
 
     const monthlyValue=r.state==='tiered_final'?Number(r.monthly):metric?metric.monthly:state.phone?Number(monthly(state.phone.retail)):NaN;
     el('quoteViewSwitch').hidden=!supported;
@@ -7055,9 +7051,29 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
 <script>
 (()=>{const key='gtt_fall_effects',reduce=matchMedia('(prefers-reduced-motion: reduce)');
 function isNovember(){const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'numeric',day:'numeric'}).formatToParts(new Date());const month=Number(parts.find(p=>p.type==='month').value),day=Number(parts.find(p=>p.type==='day').value);return month===11||(month===10&&day===31)}
-function enabled(){return isNovember()&&localStorage.getItem(key)!=='off'}
-function apply(){document.body.classList.toggle('gtt-fall',enabled());const b=document.getElementById('fallToggle');if(b){b.textContent='Fall effects: '+(localStorage.getItem(key)==='off'?'Off':'On');b.setAttribute('aria-pressed',String(localStorage.getItem(key)!=='off'));}}
-const more=document.querySelector('#v4More .v4-more-sheet');if(more){const b=document.createElement('button');b.id='fallToggle';b.type='button';b.className='v4-morelink';b.style.cssText='width:100%;background:transparent;text-align:left;font:inherit';b.onclick=()=>{localStorage.setItem(key,localStorage.getItem(key)==='off'?'on':'off');apply()};more.appendChild(b)}
+let preference=null;
+try{preference=localStorage.getItem(key)}catch{}
+function enabled(){return isNovember()&&preference!=='off'}
+const more=document.querySelector('#v4More .v4-more-sheet');
+const holidaySwitch=document.createElement('button');
+holidaySwitch.type='button';
+holidaySwitch.id='holidayModeToggle';
+holidaySwitch.className='v4-morelink';
+holidaySwitch.setAttribute('role','switch');
+holidaySwitch.innerHTML='<span>Holiday mode</span><span class="holiday-track" aria-hidden="true"></span>';
+if(more)more.appendChild(holidaySwitch);
+function apply(){
+  const active=enabled();
+  document.body.classList.toggle('gtt-fall',active);
+  holidaySwitch.setAttribute('aria-checked',String(preference!=='off'));
+  if(!active)document.querySelectorAll('.gtt-leaf-layer').forEach(layer=>layer.remove());
+}
+holidaySwitch.onclick=()=>{
+  preference=preference==='off'?'on':'off';
+  try{localStorage.setItem(key,preference)}catch{}
+  apply();
+};
+window.addEventListener('storage',e=>{if(e.key===key||e.key===null){preference=e.newValue;apply()}});
 window.gttFallLeaves=(celebrate=false)=>{if(!enabled()||reduce.matches)return;const layer=document.createElement('div');layer.className='gtt-leaf-layer';layer.setAttribute('aria-hidden','true');for(let i=0;i<(celebrate?10:5);i++){const leaf=document.createElement('span');leaf.className='gtt-leaf';leaf.textContent=i%2?'🍁':'🍂';leaf.style.left=(8+Math.random()*84)+'%';leaf.style.animationDelay=(i*.09)+'s';leaf.style.setProperty('--drift',(Math.random()*140-70)+'px');layer.appendChild(leaf)}document.body.appendChild(layer);setTimeout(()=>layer.remove(),4000)};
 document.addEventListener('click',e=>{if(e.target.closest('[data-v4go]'))window.gttFallLeaves(false)});apply();setInterval(apply,60000);
 })();
