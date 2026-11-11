@@ -822,8 +822,8 @@
 
 
   /* 3.0 Admin cleanup: legacy/local tools remain in DOM for compatibility but are hidden. */
-  #adminModal .admin-tab:not([data-tab="livedb"]){display:none!important;}
-  #adminModal .admin-section:not([data-section="livedb"]){display:none!important;}
+  #adminModal .admin-tab:not([data-tab="livedb"]):not([data-tab="usage"]){display:none!important;}
+  #adminModal .admin-section:not([data-section="livedb"]):not([data-section="usage"]){display:none!important;}
 
 
   /* === GTT 3.0 MANAGEMENT ADMIN === */
