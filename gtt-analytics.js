@@ -1,4 +1,4 @@
-/* GTT Analytics v1 — independent, lightweight and privacy-conscious.
+/* GTT Analytics v2 — independent, lightweight and privacy-conscious.
    Installation: load this file with <script defer src="/gtt-analytics.js"></script>.
    It sends NO customer details, search text, quote amounts, IPs or user agents. */
 (function () {
@@ -82,43 +82,71 @@
       c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
   }
   const fmt = n => Number(n || 0).toLocaleString('en-US');
-  function metric(title, count) { return '<div class="gtt-an-metric"><small>' + esc(title) + '</small><strong>' + fmt(count) + '</strong></div>'; }
+  function metric(title, count, note = '') {
+    return '<div class="gtt-an-metric"><span class="gtt-an-metric-label">' + esc(title) + '</span>' +
+      '<strong>' + fmt(count) + '</strong>' + (note ? '<span class="gtt-an-metric-note">' + esc(note) + '</span>' : '') + '</div>';
+  }
   function topList(title, rows) {
     rows = Array.isArray(rows) ? rows : [];
     const max = Math.max(1, ...rows.map(x => Number(x.count) || 0));
-    const content = rows.length ? rows.slice(0, 8).map(x =>
-      '<div class="gtt-an-item"><span>' + esc(x.name) + '</span><b>' + fmt(x.count) + '</b></div>' +
+    const content = rows.length ? rows.slice(0, 8).map((x, i) =>
+      '<div class="gtt-an-item"><span class="gtt-an-rank">' + (i + 1) + '</span>' +
+      '<span class="gtt-an-item-label">' + esc(x.name) + '</span><b>' + fmt(x.count) + '</b></div>' +
       '<div class="gtt-an-track"><i style="width:' + Math.round((Number(x.count) || 0) / max * 100) + '%"></i></div>').join('')
-      : '<p class="gtt-an-muted">No tracked selections yet</p>';
+      : '<div class="gtt-an-empty"><span aria-hidden="true">◌</span><p>No selections recorded yet</p></div>';
     return '<section class="gtt-an-panel"><h4>' + esc(title) + '</h4>' + content + '</section>';
   }
-  function trend(rows) {
-    rows = Array.isArray(rows) ? rows : [];
-    const max = Math.max(1, ...rows.map(x => Number(x.unique_browsers) || 0));
-    return '<div class="gtt-an-chart" role="img" aria-label="Daily unique browsers">' +
-      rows.map(x => '<div title="' + esc(x.date + ': ' + x.unique_browsers + ' browsers, ' + x.quotes + ' quotes') + '">' +
-        '<i style="height:' + Math.max(2, Math.round(Number(x.unique_browsers) / max * 100)) + '%"></i></div>').join('') +
-      '</div><p class="gtt-an-muted">Daily active browsers on days with tracked activity (Eastern time)</p>';
+  function dateKey(d) {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).formatToParts(d);
+    const part = type => parts.find(p => p.type === type)?.value || '';
+    return part('year') + '-' + part('month') + '-' + part('day');
+  }
+  function trend(rows, days) {
+    const byDay = new Map((Array.isArray(rows) ? rows : []).map(x => [x.date, x]));
+    const daily = [];
+    // Include days with zero activity; otherwise one tracked day becomes one giant full-width bar.
+    for (let offset = days - 1; offset >= 0; offset--) {
+      const date = dateKey(new Date(Date.now() - offset * 86400000));
+      const entry = byDay.get(date) || {};
+      daily.push({date, visitors: Number(entry.unique_browsers) || 0, quotes: Number(entry.quotes) || 0});
+    }
+    const peak = Math.max(1, ...daily.map(x => x.visitors));
+    const totalActiveDays = daily.filter(x => x.visitors > 0).length;
+    const columns = daily.map(x => {
+      const height = x.visitors ? Math.max(8, Math.round(x.visitors / peak * 100)) : 2;
+      const title = x.date + ': ' + x.visitors + ' unique browsers, ' + x.quotes + ' quotes';
+      return '<div class="gtt-an-day" title="' + esc(title) + '">' +
+        '<i class="' + (x.visitors ? 'active' : '') + '" style="height:' + height + '%"></i></div>';
+    }).join('');
+    return '<div class="gtt-an-chart-top"><span>Unique browsers</span><strong>' + fmt(peak) + ' max/day</strong></div>' +
+      '<div class="gtt-an-chart" style="--gtt-an-days:' + days + '" role="img" aria-label="Unique browsers per day for ' + days + ' days. ' + totalActiveDays + ' active days">' + columns + '</div>' +
+      '<div class="gtt-an-chart-axis"><span>' + esc(daily[0].date.slice(5)) + '</span><span>' + esc(daily[daily.length - 1].date.slice(5)) + '</span></div>' +
+      '<p class="gtt-an-muted">' + fmt(totalActiveDays) + ' day' + (totalActiveDays === 1 ? '' : 's') +
+      ' with recorded activity · Eastern Time</p>';
   }
   function fillDashboard(data, days) {
     const root = $('gttAnalyticsDashboard'); if (!root) return;
-    root.innerHTML = '<div class="gtt-an-heading"><div><h3>GTT Usage Analytics</h3>' +
-      '<p class="gtt-an-muted">Pseudonymous browser-level activity. 1 browser does not always equal 1 person.</p></div>' +
-      '<div><select id="gttAnDays" aria-label="Reporting period"><option value="7">7 days</option><option value="30">30 days</option><option value="90">90 days</option></select> ' +
-      '<button class="admin-btn secondary" type="button" id="gttAnRefresh">Refresh</button></div></div>' +
+    root.innerHTML = '<div class="gtt-an-heading"><div class="gtt-an-heading-copy"><div class="gtt-an-eyebrow">PRIVATE REPORTING</div><h3>Usage analytics</h3>' +
+      '<p>See how reps are using Global Trade Tool. Browser counts are estimates of people, not employee identities.</p></div>' +
+      '<div class="gtt-an-toolbar"><label for="gttAnDays">Period</label><select id="gttAnDays" aria-label="Reporting period"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option></select>' +
+      '<button class="gtt-an-refresh" type="button" id="gttAnRefresh" aria-label="Refresh usage analytics">↻ Refresh</button></div></div>' +
       '<div class="gtt-an-grid">' + metric('Unique browsers', data.unique_browsers) + metric('Visits / sessions', data.visits) +
       metric('Pageviews', data.pageviews) + metric('Full quotes', data.quotes) + metric('Simple results', data.simple_results) +
       metric('Tax calculations', data.tax_calculations) + metric('Comparisons', data.comparison_runs) + metric('Investigations', data.investigator_runs) + '</div>' +
-      '<div class="gtt-an-cols"><section class="gtt-an-panel"><h4>New vs. returning visits</h4>' +
-      '<div class="gtt-an-split"><span><b>' + fmt(data.new_visits) + '</b> New</span><span><b>' + fmt(data.returning_visits) + '</b> Returning</span></div>' +
-      '<p class="gtt-an-muted">A browser that clears its stored identifier may appear new again.</p></section>' +
-      '<section class="gtt-an-panel"><h4>Activity by day</h4>' + trend(data.daily) + '</section></div>' +
-      '<div class="gtt-an-cols">' + topList('Most selected new phones', data.quoted_devices) +
-      topList('Most selected trade-in phones', data.trade_models) + topList('Most selected plans', data.plans) +
-      topList('Most used sections', data.tools) + '</div>' +
-      '<p class="gtt-an-muted">Updated ' + esc(new Date(data.as_of).toLocaleString()) +
-      '. Tracking begins after you add this file to the site. No names, account numbers, typed questions, IP addresses, or quote dollar amounts are stored.' +
-      (data.truncated ? ' This report reached its event limit and may be incomplete.' : '') + '</p>';
+      '<div class="gtt-an-section-title"><h4>Audience &amp; activity</h4><span>Last ' + days + ' days</span></div>' +
+      '<div class="gtt-an-cols gtt-an-insights"><section class="gtt-an-panel"><h4>New vs. returning visits</h4>' +
+      '<div class="gtt-an-split"><div><b>' + fmt(data.new_visits) + '</b><span>New</span></div><div><b>' + fmt(data.returning_visits) + '</b><span>Returning</span></div></div>' +
+      '<p class="gtt-an-muted">If someone clears browser storage, their next visit may be counted as new.</p></section>' +
+      '<section class="gtt-an-panel"><h4>Daily activity</h4>' + trend(data.daily, days) + '</section></div>' +
+      '<div class="gtt-an-section-title"><h4>What people are using</h4><span>Ranked by recorded selections</span></div>' +
+      '<div class="gtt-an-cols gtt-an-lists">' + topList('New phones selected', data.quoted_devices) +
+      topList('Trade-in phones selected', data.trade_models) + topList('Plans selected', data.plans) +
+      topList('Popular sections', data.tools) + '</div>' +
+      '<p class="gtt-an-disclaimer">Updated ' + esc(new Date(data.as_of).toLocaleString()) +
+      '. Tracking started when the analytics file was installed. No customer names, account numbers, typed questions, IP addresses, or quoted dollar amounts are stored by this analytics feature.' +
+      (data.truncated ? ' The reporting limit was reached; some results may be incomplete.' : '') + '</p>';
     $('gttAnDays').value = String(days);
     $('gttAnDays').onchange = e => loadStats(Number(e.target.value));
     $('gttAnRefresh').onclick = () => loadStats(days);
@@ -238,7 +266,8 @@
     }));
   }
   const style = document.createElement('style');
-  style.textContent = '.gtt-an-privacy{border-top:1px solid #d8e2ec;margin:12px 16px 0;padding:14px 0;font-size:12px;color:#516478}.gtt-an-privacy p{margin:4px 0 9px}.gtt-an-privacy button{background:transparent;border:0;color:#0568ae;text-decoration:underline;cursor:pointer;padding:4px 0;font:inherit}.gtt-an-privacy button:disabled{color:#8193a2;cursor:default}.gtt-an-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.gtt-an-heading h3{margin:0}.gtt-an-heading select{padding:8px;border-radius:8px}.gtt-an-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:9px;margin:18px 0}.gtt-an-metric{border:1px solid #cee4f4;background:#eef7ff;border-radius:12px;padding:12px}.gtt-an-metric small{display:block;color:#536e80}.gtt-an-metric strong{display:block;color:#0b2a4a;font-size:24px;margin-top:4px}.gtt-an-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}.gtt-an-panel{background:#fff;border:1px solid #d8e2ec;border-radius:12px;padding:15px;min-width:0}.gtt-an-panel h4{margin:0 0 11px}.gtt-an-item{display:flex;justify-content:space-between;gap:12px;font-size:12px}.gtt-an-item span{overflow-wrap:anywhere}.gtt-an-track{height:7px;border-radius:6px;background:#edf3fa;margin:5px 0 11px}.gtt-an-track i{height:100%;border-radius:6px;background:#0568ae;display:block}.gtt-an-muted{font-size:12px;color:#6c7e8c}.gtt-an-split{display:flex;gap:28px}.gtt-an-split b{font-size:27px;display:block;color:#0b2a4a}.gtt-an-chart{display:flex;gap:3px;align-items:end;height:120px;overflow:hidden}.gtt-an-chart>div{flex:1;height:100%;display:flex;align-items:end}.gtt-an-chart i{display:block;background:#0568ae;width:100%;min-height:2px}.gtt-an-error{color:#aa3030}.gtt-an-gate{margin:12px 0;padding:16px;border:1px solid #d8e2ec;border-radius:12px;background:#fff}.gtt-an-gate input{padding:10px;margin-right:5px;border:1px solid #abbcca;border-radius:8px}';
+  style.id = 'gtt-analytics-ui-v2';
+  style.textContent = "\n/* Analytics styles scoped to the admin modal to avoid changing the rest of GTT. */\n#adminModal .admin-head h2 {color:#18334c !important;opacity:1 !important}\n#adminModal .admin-head .eyebrow {color:#0568ae !important}\n#adminModal #gttAnalyticsDashboard {--an-ink:#152c41;--an-muted:#576b7e;--an-blue:#0568ae;--an-border:#d8e5f0;color:var(--an-ink) !important;font-size:14px;line-height:1.45;min-width:0;padding:2px 0 20px}\n#adminModal #gttAnalyticsDashboard *,#adminModal #gttAnalyticsDashboard *::before,#adminModal #gttAnalyticsDashboard *::after{box-sizing:border-box}\n#adminModal #gttAnalyticsDashboard h3,#adminModal #gttAnalyticsDashboard h4{color:var(--an-ink) !important;opacity:1 !important;text-shadow:none !important;letter-spacing:-.02em}\n#adminModal #gttAnalyticsDashboard p,#adminModal #gttAnalyticsDashboard span,#adminModal #gttAnalyticsDashboard b{opacity:1}\n#adminModal .gtt-an-heading {display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;padding:14px 0 8px;border-bottom:1px solid var(--an-border)}\n#adminModal .gtt-an-heading-copy{flex:1 1 250px;min-width:0}\n#adminModal .gtt-an-eyebrow{font-size:10px;letter-spacing:.13em;font-weight:850;color:#22689f !important;margin-bottom:4px}\n#adminModal .gtt-an-heading h3{font-size:22px !important;line-height:1.2;margin:0 0 6px !important;font-weight:850}\n#adminModal .gtt-an-heading p{font-size:12px;line-height:1.5;color:var(--an-muted) !important;max-width:620px;margin:0 0 10px}\n#adminModal .gtt-an-toolbar{display:flex;align-items:center;gap:8px;flex:0 0 auto;flex-wrap:wrap}\n#adminModal .gtt-an-toolbar label{font-size:11px;font-weight:800;color:var(--an-muted)}\n#adminModal .gtt-an-toolbar select{width:auto !important;min-width:130px;max-width:160px;min-height:38px;padding:8px 28px 8px 10px;background:#fff !important;border:1px solid #b7cbde !important;border-radius:9px !important;color:#193a54 !important;font:700 12px/1.3 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important}\n#adminModal .gtt-an-refresh{appearance:none;min-height:38px;border:1px solid #b7d4eb;border-radius:9px;padding:8px 12px;background:#eaf6ff;color:#075b94;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}\n#adminModal .gtt-an-refresh:focus-visible{outline:3px solid #68b7eb;outline-offset:2px}\n#adminModal .gtt-an-grid {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0 20px}\n#adminModal .gtt-an-metric {min-width:0;min-height:95px;background:#fff;border:1px solid var(--an-border);border-radius:13px;padding:13px 14px;box-shadow:0 1px 2px rgba(11,42,74,.025)}\n#adminModal .gtt-an-metric-label{display:block;color:#4f6477 !important;font-size:12px;font-weight:700;line-height:1.3;min-height:30px}\n#adminModal .gtt-an-metric strong{display:block;margin-top:3px;font-size:29px;font-weight:850;line-height:1.1;letter-spacing:-.035em;color:#0b5286 !important;font-variant-numeric:tabular-nums}\n#adminModal .gtt-an-section-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:20px 0 10px;flex-wrap:wrap}\n#adminModal .gtt-an-section-title h4{font-size:15px !important;font-weight:850;margin:0 !important}\n#adminModal .gtt-an-section-title span{font-size:11px;font-weight:650;color:var(--an-muted) !important}\n#adminModal .gtt-an-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 12px}\n#adminModal .gtt-an-panel{background:#fff;color:var(--an-ink) !important;border:1px solid var(--an-border);border-radius:13px;padding:16px;min-width:0;box-shadow:0 1px 2px rgba(11,42,74,.025)}\n#adminModal .gtt-an-panel h4{margin:0 0 14px !important;font-weight:800;font-size:14px !important;line-height:1.2}\n#adminModal .gtt-an-split{display:flex;gap:12px;align-items:stretch}\n#adminModal .gtt-an-split>div{flex:1;min-width:0;background:#f2f7fc;border-radius:9px;padding:12px 14px}\n#adminModal .gtt-an-split b{display:block;font-size:30px;line-height:1.1;font-weight:850;color:#0d4f82 !important;font-variant-numeric:tabular-nums}\n#adminModal .gtt-an-split span{display:block;margin-top:4px;color:#53687c !important;font-size:12px;font-weight:700}\n#adminModal .gtt-an-muted{font-size:11px;color:#627487 !important;line-height:1.45;margin:12px 0 0}\n#adminModal .gtt-an-chart-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;color:#5a6b7b !important;margin-bottom:5px}\n#adminModal .gtt-an-chart-top span{color:#5a6b7b !important}\n#adminModal .gtt-an-chart-top strong{color:#1f5a86;font-size:11px;font-variant-numeric:tabular-nums}\n#adminModal .gtt-an-chart{height:112px;display:grid;grid-template-columns:repeat(var(--gtt-an-days),minmax(0,1fr));align-items:end;gap:2px;padding:7px 0 0;border-bottom:1px solid #ccdbe9;background:repeating-linear-gradient(to top,#eaf2f9 0 1px,transparent 1px 33%)}\n#adminModal .gtt-an-day{height:100%;display:flex;align-items:flex-end;justify-content:center;min-width:0}\n#adminModal .gtt-an-day i{display:block;width:100%;max-width:15px;border-radius:3px 3px 0 0;background:#d8e5f0;min-height:2px}\n#adminModal .gtt-an-day i.active{background:linear-gradient(180deg,#2389cd,#075b95)}\n#adminModal .gtt-an-chart-axis{display:flex;justify-content:space-between;color:#697d8d;font-size:10px;padding-top:6px;font-variant-numeric:tabular-nums}\n#adminModal .gtt-an-item{display:flex;align-items:center;gap:10px;line-height:1.35;margin-top:10px;font-size:12px}\n#adminModal .gtt-an-rank{display:flex;align-items:center;justify-content:center;width:21px;height:21px;flex:0 0 21px;border-radius:6px;background:#edf5fb;color:#31678f !important;font-size:10px;font-weight:850}\n#adminModal .gtt-an-item-label{color:#213f55 !important;flex:1;min-width:0;overflow-wrap:anywhere;font-weight:650}\n#adminModal .gtt-an-item b{color:#193954 !important;font-size:12px;flex:0 0 auto;font-variant-numeric:tabular-nums}\n#adminModal .gtt-an-track{background:#ebf2f8;height:5px;border-radius:20px;overflow:hidden;margin:7px 0 12px 31px}\n#adminModal .gtt-an-track i{display:block;height:100%;background:#338ece;border-radius:20px}\n#adminModal .gtt-an-empty{text-align:center;padding:18px 7px;color:#687b8a}\n#adminModal .gtt-an-empty>span{font-size:24px;color:#7c9fba !important}\n#adminModal .gtt-an-empty p{font-size:11px;color:#6a7f8d !important;margin:5px 0 0}\n#adminModal .gtt-an-disclaimer{border-top:1px solid var(--an-border);margin:18px 0 0;padding:12px 2px;color:#576b7b !important;font-size:11px;line-height:1.65}\n#adminModal .gtt-an-error{background:#fff0ef;color:#9e3333;padding:11px;border-radius:9px}\n#adminModal .gtt-an-gate{padding:18px;border:1px solid #d6e4ef;border-radius:12px;background:#fff}\n#adminModal .gtt-an-gate h3{font-size:18px !important;margin:0 0 8px !important}\n#adminModal .gtt-an-gate p{font-size:12px;color:#576b7b !important}\n#adminModal .gtt-an-gate form{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;margin-top:12px}\n#adminModal .gtt-an-gate input{width:min(290px,100%) !important;flex:1 1 180px;min-height:42px;margin:0;padding:10px;font-size:14px !important;border:1px solid #b8cddd !important;border-radius:9px}\n#adminModal .gtt-an-gate button{min-height:42px}\n.gtt-an-privacy{border-top:1px solid #d8e2ec;margin:12px 16px 0;padding:14px 0;font-size:12px;color:#516478}\n.gtt-an-privacy p{margin:4px 0 9px}\n.gtt-an-privacy button{background:transparent;border:0;color:#0568ae;text-decoration:underline;cursor:pointer;padding:4px 0;font:inherit}\n.gtt-an-privacy button:disabled{color:#8193a2;cursor:default}\n@media(max-width:720px){\n #adminModal .gtt-an-grid{grid-template-columns:repeat(2,minmax(0,1fr))}\n #adminModal .gtt-an-cols{grid-template-columns:minmax(0,1fr)}\n #adminModal .gtt-an-heading{align-items:stretch;gap:10px}\n #adminModal .gtt-an-toolbar{width:100%}\n #adminModal .gtt-an-toolbar select{flex:1 1 auto;max-width:none}\n}\n@media(max-width:420px){\n #adminModal .gtt-an-metric{padding:11px;min-height:86px}\n #adminModal .gtt-an-metric strong{font-size:26px}\n #adminModal .gtt-an-metric-label{font-size:11px}\n #adminModal .gtt-an-panel{padding:13px}\n}\n";
   document.head.appendChild(style);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
