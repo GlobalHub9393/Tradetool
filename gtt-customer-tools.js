@@ -1,5 +1,5 @@
 /* Global Trade Tool customer presentation & print-only trade worksheet.
-   No external translation API, no network calls, no storage of customer name or IMEI.
+   No external translation API, no network calls, no storage of account holder name, trade-in phone number or IMEI.
    Uses the existing GTTQuote engine so promotional arithmetic stays consistent. */
 (() => {
   'use strict';
@@ -119,6 +119,23 @@
     }));
   }
 
+  // The quote stores a pricing group. Only label a plan as exact when its
+  // searchable plan name matches the selected quote group and segment.
+  function tradeRecordPlan(s) {
+    const raw=String($('planSearch')?.value || '').trim();
+    let exact=null;
+    try {
+      const plans=window.GTTQuote?.catalog?.().plans || [];
+      exact=plans.find(p=>String(p.name||'').toLowerCase()===raw.toLowerCase()
+        && p.group===s.c.plan && (!p.cru || s.c.planSegment==='cru'));
+    } catch (_) { /* A group label is safer than an invented exact plan. */ }
+    if (exact) return exact.name;
+    const labels={premium:'Premium / Elite',extra:'Extra',starter:'Starter',value:'Value 2.0',
+      '55plus':'55+',valueplus_mobile:'Ineligible / Rerate'};
+    const segment=s.c.planSegment==='cru'?'Business':s.c.planSegment==='firstnet'?'FirstNet':'Consumer';
+    return (labels[s.c.plan] || String(s.c.plan || 'Unknown')) + ' (' + segment + ' plan group — confirm exact plan)';
+  }
+
   function conditionText(value) {
     if (value === true || value === 'yes') return 'Yes';
     if (value === false || value === 'no') return 'No';
@@ -128,6 +145,7 @@
     const s = quoteSnapshot();
     if (!s || !s.c.tradeDevice || s.c.noTrade) return;
     activeContext = s;
+    const selectedPlan = tradeRecordPlan(s);
     const f = $('gttTradeRecordDialog');
     const hasCredit = ['promo','nextup_promo'].includes(s.r.state);
     f.innerHTML = `
@@ -135,15 +153,18 @@
       <form class="gtt-record-form" id="gttRecordForm" autocomplete="off">
         <p class="gtt-cust-intro">Print an internal worksheet for the designated store Trade-In Records area. Information is not saved in GTT.</p>
         <div class="gtt-record-grid">
-          <label class="gtt-record-wide">Customer name <input name="customer" maxlength="100" required placeholder="Name matching the sale" autocomplete="off"></label>
+          <label class="gtt-record-wide">Account holder name <input name="accountHolder" maxlength="100" required placeholder="Account holder name on the AT&amp;T account" autocomplete="off"></label>
+          <label>Trade-in phone number <input name="tradePhone" type="tel" inputmode="tel" maxlength="22" required placeholder="(555) 555-0123" autocomplete="off"></label>
           <label>Trade-in IMEI <input name="imei" inputmode="numeric" pattern="[0-9]{15}" maxlength="15" minlength="15" required placeholder="15 digits" autocomplete="off"></label>
-          <label>Rep name / initials <input name="rep" maxlength="60" required placeholder="Rep" autocomplete="off"></label>
+          <label class="gtt-record-wide">AT&amp;T plan <input name="plan" maxlength="150" required value="${safe(selectedPlan)}" placeholder="Exact plan on the account" autocomplete="off"><small class="gtt-plan-help">Pre-filled from the quote. Confirm the exact plan if only a plan group was selected.</small></label>
+          <label class="gtt-record-wide">Rep name / initials <input name="rep" maxlength="60" required placeholder="Rep" autocomplete="off"></label>
         </div>
         <div class="gtt-record-preview"><b>Auto-filled from completed quote</b>
           <span><strong>Trade-in:</strong> ${safe(s.tradeLabel)}</span>
           <span><strong>Estimated trade value:</strong> ${(s.c.value !== null && s.c.value !== undefined && Number.isFinite(Number(s.c.value))) ? money(s.c.value) : 'Not verified'}</span>
           <span><strong>Condition:</strong> Powers on ${conditionText(s.c.tradeCondition?.power)} · Find My/Activation Lock off ${conditionText(s.c.tradeCondition?.lock)} · No chips/cracks ${conditionText(s.c.tradeCondition?.cracks)}</span>
           <span><strong>New phone:</strong> ${safe(s.deviceLabel)}</span>
+          <span><strong>Selected plan:</strong> ${safe(selectedPlan)}</span>
           <span><strong>Promotional credit:</strong> ${hasCredit ? money(s.r.credit) : 'Not applicable / confirm offer'}</span>
         </div>
         <label class="gtt-record-notes">Additional inspection notes (optional)<textarea name="notes" maxlength="350" rows="2" placeholder="Visible damage or other observations"></textarea></label>
@@ -152,28 +173,41 @@
     f.querySelector('[data-cust-close]').onclick = () => {f.close();f.replaceChildren();activeContext=null;};
     f.querySelector('[data-cust-cancel]').onclick = () => {f.close();f.replaceChildren();activeContext=null;};
     f.querySelector('form').onsubmit = e => {e.preventDefault();printTradeRecord(s, new FormData(e.currentTarget));};
+    f.querySelector('[name=tradePhone]').addEventListener('input', e => e.target.setCustomValidity(''));
+    // Closing via Escape or the backdrop must clear personal data, too.
+    f.addEventListener('close', () => { f.replaceChildren(); activeContext=null; }, {once:true});
     f.showModal();
-    f.querySelector('[name=customer]').focus();
+    f.querySelector('[name=accountHolder]').focus();
   }
 
   function printTradeRecord(s, data) {
-    const customer=String(data.get('customer')||'').trim();
+    const accountHolder=String(data.get('accountHolder')||'').trim();
+    const enteredPhone=String(data.get('tradePhone')||'').trim();
+    let digits=enteredPhone.replace(/\D/g,'');
+    if (digits.length===11 && digits.startsWith('1')) digits=digits.slice(1);
+    const tradePhone=digits.length===10 ? '('+digits.slice(0,3)+') '+digits.slice(3,6)+'-'+digits.slice(6) : '';
+    const plan=String(data.get('plan')||'').trim();
     const imei=String(data.get('imei')||'').replace(/\s/g,'');
     const rep=String(data.get('rep')||'').trim();
     const notes=String(data.get('notes')||'').trim();
-    if (!customer || !rep || !/^\d{15}$/.test(imei)) return;
+    if (!tradePhone) {
+      const field=$('gttRecordForm')?.elements?.namedItem('tradePhone');
+      if (field) { field.setCustomValidity('Enter a valid 10-digit U.S. phone number.'); field.reportValidity(); }
+      return;
+    }
+    if (!accountHolder || !plan || !rep || !/^\d{15}$/.test(imei)) return;
     const page=window.open('','_blank');
     if (!page) { alert('Your browser blocked the print window. Allow pop-ups for GTT and tap Print again.'); return; }
     const printableDate=new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short',timeZone:'America/New_York'});
     const hasCredit=['promo','nextup_promo'].includes(s.r.state);
     const rows=[
-      ['Customer name',customer], ['Rep / initials',rep], ['Inspection date (Eastern)',printableDate],
-      ['Trade-in phone',s.tradeLabel],['IMEI',imei],
+      ['Account holder name',accountHolder], ['Rep / initials',rep], ['Inspection date (Eastern)',printableDate],
+      ['Trade-in phone',s.tradeLabel],['Trade-in phone number',tradePhone],['IMEI',imei],
       ['Powers on and off',conditionText(s.c.tradeCondition?.power)],
       ['Activation Lock / Find My off',conditionText(s.c.tradeCondition?.lock)],
       ['Free of chips / cracks',conditionText(s.c.tradeCondition?.cracks)],
       ['Estimated trade value',(s.c.value !== null && s.c.value !== undefined && Number.isFinite(Number(s.c.value))) ? money(s.c.value) : 'Not verified'],
-      ['New phone',s.deviceLabel],
+      ['New phone',s.deviceLabel], ['AT&T plan',plan],
       ['Estimated promo bill credits',hasCredit ? money(s.r.credit)+' over 36 months (subject to eligibility)' : 'Not applicable / confirm offer'],
       ['Notes',notes||'—']
     ];
@@ -247,6 +281,7 @@
     .gtt-record-grid label,.gtt-record-notes{display:flex;flex-direction:column;gap:5px;color:#334e61;font-size:12px;font-weight:750}
     .gtt-record-wide{grid-column:1/-1}
     .gtt-record-grid input,.gtt-record-notes textarea{width:100%;min-width:0;border:1px solid #becfdc;border-radius:8px;padding:11px;background:#fff;color:#132d3f;font:500 14px -apple-system,BlinkMacSystemFont,Arial,sans-serif}
+    .gtt-record-grid .gtt-plan-help{font-size:11px;line-height:1.4;color:#5d7688;font-weight:500}
     .gtt-record-preview{display:flex;flex-direction:column;gap:7px;background:#f5f9fd;border:1px solid #dce9f3;padding:13px;border-radius:10px;margin:17px 0;font-size:12px;color:#344e60}
     .gtt-record-preview b{font-size:13px;color:#173b55;margin-bottom:2px}
     .gtt-record-notes textarea{resize:vertical}
