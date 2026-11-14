@@ -87,7 +87,7 @@
     const s = quoteSnapshot();
     if (!s) return;
     activeContext = s;
-    selectedLanguage = 'en';
+    selectedLanguage = window.GTTLanguage?.get?.() || 'en';
     updateCustomerCard();
     $('gttLanguageDialog').showModal();
   }
@@ -115,6 +115,7 @@
     d.querySelector('[data-cust-close]').onclick = () => d.close();
     d.querySelectorAll('[data-gtt-lang]').forEach(btn => btn.addEventListener('click', () => {
       selectedLanguage = btn.dataset.gttLang;
+      window.GTTLanguage?.set?.(selectedLanguage);
       updateCustomerCard();
     }));
   }
@@ -222,6 +223,11 @@
     $('gttTradeRecordDialog').replaceChildren();
     activeContext=null;
   }
+
+  document.addEventListener('gtt-language-change', ev=>{
+    const lang=ev.detail?.language;
+    if(lang && strings[lang]){selectedLanguage=lang;if($('gttLanguageDialog')?.open)updateCustomerCard();}
+  });
 
   function syncActions() {
     const actions = $('gttCustomerActions');

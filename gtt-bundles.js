@@ -18,6 +18,8 @@
   let tab = 'watch';
   let chosenWatch = null;
   let chosenTablet = null;
+  let phoneCreditOverride = null; // what-if only, never written to GTTQuote, Supabase or storage
+  let creditPanelOpen = false;
 
   // Only matching *qualified product families* can show a bundle link.
   // The selected phone alone does not prove customer/service eligibility.
@@ -74,7 +76,7 @@
     const items=(type==='watch'?active.offer.watches:active.offer.tablets);
     const selected=type==='watch'?chosenWatch:chosenTablet;
     if(!items.length)return '<p class="gttb-empty">No current bundle options in this category.</p>';
-    return `<p class="gttb-list-intro">Select a device to add it to this <b>optional</b> bundle estimate. Tap again to remove it.</p>
+    return `<p class="gttb-list-intro">Select a device to add it to this optional bundle estimate. Tap again to remove it.</p>
       <div class="gttb-list">${items.map(item=>{
         const on=selected===item.id;
         const retail=Number.isFinite(Number(item.retail))?currency(item.retail):'';
@@ -102,19 +104,46 @@
       <p class="gttb-hint">Both a new watch line and a new tablet line must qualify. The triple offer combines separate credits, not an extra discount on the phone.</p>`;
   }
 
+  function phoneScenario() {
+    const original=Number(active.metric.monthly);
+    if(phoneCreditOverride===null)return original;
+    const retail=Number(active.phone.retail);
+    if(!Number.isFinite(retail)||retail<=0)return original;
+    const credit=Math.max(0,Math.min(retail,Number(phoneCreditOverride)));
+    return Math.max(0,Math.round((retail-credit)/36*100)/100);
+  }
+
+  function phoneCreditPanel() {
+    const original=Number(active.metric.monthly);
+    const currentCredit=Number(active.metric.credit||0);
+    const retail=Number(active.phone.retail);
+    const max=Number.isFinite(retail)&&retail>0?retail:0;
+    const current=phoneCreditOverride===null?currentCredit:phoneCreditOverride;
+    return `<section class="gttb-credit-tools" aria-label="Phone credit scenario">
+      <button type="button" class="gttb-credit-toggle" data-bundle-credit-toggle aria-expanded="${creditPanelOpen}">🧮 What-if phone credit <span>${phoneCreditOverride===null?'Optional':'Custom scenario active'} ${creditPanelOpen?'−':'+'}</span></button>
+      ${creditPanelOpen?`<div class="gttb-credit-body"><p>Try a <b>different total phone promotional bill credit</b> for this bundle estimate only. This does not change the GTT phone quote or eligibility.</p>
+        <form id="gttbCreditForm" class="gttb-credit-form" autocomplete="off"><label for="gttbPhoneCreditInput">Total phone promo credit ($)</label>
+          <div class="gttb-credit-row"><input id="gttbPhoneCreditInput" type="number" min="0" max="${max.toFixed(2)}" step="0.01" inputmode="decimal" required value="${Number.isFinite(current)?current.toFixed(2):'0.00'}"><button type="submit">Preview credit</button></div>
+        </form><button type="button" class="gttb-credit-reset" data-bundle-credit-reset ${phoneCreditOverride===null?'disabled':''}>↺ Use original GTT phone quote</button>
+        ${phoneCreditOverride!==null?`<p class="gttb-credit-scenario">Original phone: <b>${currency(original)}/mo</b> · What-if phone: <b>${currency(phoneScenario())}/mo</b></p>`:''}
+        <p class="gttb-credit-warning">What-if illustration only. Recalculates the phone installment from retail price less the entered credit over 36 months. Some tiered offers use a special monthly device price rather than a separate credit; custom credit replaces that pricing assumption, it does not stack with it.</p>
+      </div>`:''}</section>`;
+  }
+
   function summary() {
     const w=selectedItem('watch'),t=selectedItem('tablet');
     const selected=[w,t].filter(Boolean);
     if(!selected.length)return '<div class="gttb-summary-placeholder">Select a watch or tablet above to see the additional device cost.</div>';
     const extras=selected.reduce((sum,item)=>sum+Number(item.monthly),0);
-    const phone=Number(active.metric.monthly);
+    const phone=phoneScenario();
     return `<div class="gttb-summary">
       <p class="gttb-summary-caption">Optional bundle estimate · Device installments only</p>
-      <div class="gttb-summary-row"><span>${escapeHTML(active.phone.name)}</span><strong>${currency(phone)}/mo</strong></div>
+      <div class="gttb-summary-row"><span>${escapeHTML(active.phone.name)}${phoneCreditOverride!==null?' · What-if credit':''}</span><strong>${currency(phone)}/mo</strong></div>
       ${selected.map(item=>`<div class="gttb-summary-row"><span>${escapeHTML(item.name)}</span><strong>${currency(item.monthly)}/mo</strong></div>`).join('')}
       <div class="gttb-summary-divider"></div>
       <div class="gttb-summary-row gttb-added"><span>Additional watch / tablet payments</span><strong>${currency(extras)}/mo</strong></div>
       <div class="gttb-summary-row gttb-total"><span>All selected device installments</span><strong>${currency(phone+extras)}/mo</strong></div>
+      ${phoneCreditOverride!==null?'<p class="gttb-disclaimer gttb-whatif-warning">WHAT-IF PHONE CREDIT — hypothetical, not validated or applied to GTT.</p>':''}
       <p class="gttb-disclaimer">Separate estimate, NOT added to GTT's phone price card. Requires all qualifying offers and new device lines. Phone plan, watch/tablet service, taxes, activation fees and other charges are not included. Confirm in OPUS/CCKM.</p>
     </div>`;
   }
@@ -130,7 +159,8 @@
     const d=$('gttBundleDialog');
     d.innerHTML=`<div class="gttb-head"><div><p class="gttb-kicker">POTENTIAL ADD-ON SAVINGS</p><h2>${escapeHTML(brand)} Bundle Offers</h2></div><button class="gttb-close" type="button" data-bundle-close aria-label="Close bundle explorer">×</button></div>
       <div class="gttb-inner">
-        <div class="gttb-phone"><div><span>Current phone quote (unchanged)</span><strong>${escapeHTML(active.phone.name)} ${escapeHTML(active.phone.storage||'')}</strong></div><div class="gttb-phone-price">${currency(active.metric.monthly)}<span>/mo</span></div></div>
+        <div class="gttb-phone"><div><span>Current GTT phone quote (unchanged)</span><strong>${escapeHTML(active.phone.name)} ${escapeHTML(active.phone.storage||'')}</strong></div><div class="gttb-phone-price">${currency(active.metric.monthly)}<span>/mo</span></div></div>
+        ${phoneCreditPanel()}
         <p class="gttb-subhead">${escapeHTML(terms.headline||'Watch and tablet offers')} · Offers dated ${escapeHTML(o.effective_on||'November 2026')}</p>
         <div class="gttb-tabs" role="group" aria-label="Bundle category">${tabs.map(([key,label])=>`<button type="button" data-bundle-tab="${key}" aria-pressed="${key===tab}" >${label}</button>`).join('')}</div>
         <div class="gttb-tabcontent">${content}</div>
@@ -147,6 +177,18 @@
         <p class="gttb-foot">Estimates based on the AT&T offers supplied November 13, 2026. Monthly prices apply after eligible bill credits over 36 months. Additional line charges and taxes are excluded.</p>
       </div>`;
     d.querySelector('[data-bundle-close]').onclick=()=>d.close();
+    d.querySelector('[data-bundle-credit-toggle]').onclick=()=>{creditPanelOpen=!creditPanelOpen;draw();};
+    const creditForm=$('gttbCreditForm');
+    if(creditForm)creditForm.onsubmit=e=>{
+      e.preventDefault();
+      const input=$('gttbPhoneCreditInput');
+      const value=Number(input.value),retail=Number(active.phone.retail);
+      if(!Number.isFinite(value)||!Number.isFinite(retail)||value<0||value>retail)return input.reportValidity();
+      phoneCreditOverride=Math.round(value*100)/100;
+      draw();
+    };
+    const reset=d.querySelector('[data-bundle-credit-reset]');
+    if(reset)reset.onclick=()=>{phoneCreditOverride=null;draw();};
     d.querySelectorAll('[data-bundle-tab]').forEach(btn=>btn.onclick=()=>{tab=btn.dataset.bundleTab;draw();});
     d.querySelectorAll('[data-bundle-device]').forEach(btn=>btn.onclick=()=>{
       const type=btn.dataset.bundleType, id=btn.dataset.bundleDevice;
@@ -160,7 +202,7 @@
     if(loading)return;
     const quote=getQuote();
     if(!quote||!$('quoteDialog')?.open)return;
-    active=quote;chosenWatch=null;chosenTablet=null;tab='watch';
+    active=quote;chosenWatch=null;chosenTablet=null;phoneCreditOverride=null;creditPanelOpen=false;tab='watch';
     draw();$('gttBundleDialog').showModal();
   }
 
@@ -177,7 +219,7 @@
     dialog.id='gttBundleDialog';dialog.className='gttb-dialog';dialog.setAttribute('aria-label','Optional bundle explorer');
     document.body.appendChild(dialog);
     dialog.addEventListener('click',ev=>{if(ev.target===dialog)dialog.close();});
-    dialog.addEventListener('close',()=>{active=null;chosenWatch=null;chosenTablet=null;syncButton();});
+    dialog.addEventListener('close',()=>{active=null;chosenWatch=null;chosenTablet=null;phoneCreditOverride=null;creditPanelOpen=false;syncButton();});
     link.onclick=openExplorer;
     new MutationObserver(syncButton).observe(quote,{attributes:true,attributeFilter:['open']});
     quote.addEventListener('close',()=>{if(dialog.open)dialog.close();syncButton();});
@@ -214,6 +256,19 @@
     .gttb-choice.selected{border-color:#0077b8;background:#edf8ff}.gttb-check{width:24px;height:24px;flex:0 0 24px;display:grid;place-items:center;border-radius:50%;background:#e8eff5;color:#2d668d;font-weight:800}
     .gttb-choice.selected .gttb-check{background:#0774ac;color:#fff}.gttb-choice-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}.gttb-choice-body strong{font-size:12px}.gttb-choice-body small{font-size:10px;color:#647e8f}
     .gttb-choice-price{min-width:90px;text-align:right;display:flex;align-items:flex-end;flex-direction:column;gap:2px}.gttb-choice-price strong{font-size:18px;color:#0770a3;white-space:nowrap}.gttb-choice-price strong span{font-size:11px}.gttb-choice-price small{font-size:10px;color:#6b8290}
+    .gttb-credit-tools{margin-top:8px;border:1px solid #dceaf2;border-radius:10px;overflow:hidden;background:#fff}
+    .gttb-credit-toggle{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;min-height:37px;border:0;background:#f9fcff;color:#296384;font-size:11px;font-weight:750;text-align:left;cursor:pointer;padding:9px 12px}
+    .gttb-credit-toggle span{font-size:10px;font-weight:600;color:#638598}
+    .gttb-credit-body{border-top:1px solid #e4ecf2;padding:10px 12px 12px}
+    .gttb-credit-body p{font-size:11px;color:#4e6b80;line-height:1.45;margin:0 0 9px}
+    .gttb-credit-form label{display:block;font-weight:700;color:#37576a;font-size:11px;margin-bottom:5px}
+    .gttb-credit-row{display:flex;gap:7px}
+    .gttb-credit-row input{min-width:0;flex:1;border:1px solid #bacfdb;border-radius:8px;padding:9px;color:#18394d;background:#fff;font-size:14px}
+    .gttb-credit-row button{flex:0 0 auto;padding:9px 10px;border:0;border-radius:8px;background:#0878ad;color:white;font-weight:750;cursor:pointer;font-size:11px}
+    .gttb-credit-reset{background:transparent;border:0;padding:9px 0;color:#166d9b;font-size:11px;text-decoration:underline;cursor:pointer}
+    .gttb-credit-reset:disabled{color:#9bb0be;cursor:default}
+    .gttb-credit-body .gttb-credit-scenario{color:#146387;margin:4px 0 8px}
+    .gttb-credit-body .gttb-credit-warning{color:#7b644b;font-size:10px;margin-bottom:0}
     .gttb-summary-placeholder{border:1px dashed #c6dce9;border-radius:10px;padding:13px;color:#617e92;text-align:center;font-size:12px;margin-top:17px}
     .gttb-summary{background:#f5f9fc;border:1px solid #d5e6f0;border-radius:12px;padding:13px 14px;margin-top:17px}
     .gttb-summary-caption{font-size:11px;font-weight:800;color:#3d718f;margin:0 0 9px}.gttb-summary-row{display:flex;justify-content:space-between;align-items:baseline;gap:9px;font-size:12px;margin:6px 0}.gttb-summary-row strong{white-space:nowrap}
