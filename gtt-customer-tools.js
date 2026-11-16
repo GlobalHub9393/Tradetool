@@ -221,8 +221,13 @@
           <div class="gtt-record-field gtt-record-wide"><label for="gttRecNotes">Additional notes</label><textarea id="gttRecNotes" name="notes" maxlength="350" rows="2" placeholder="Prior quote details, visible damage or other observations"></textarea></div>
         </div>
       </details>
-      <div class="gtt-record-actions"><button type="submit" class="gtt-cust-primary" data-record-print>🖨️ Print Record</button><a class="gtt-cust-secondary gtt-record-email" data-record-email href="mailto:ts8686@cmcnj.com" aria-label="Open email app with trade-in record">✉️ Email Record</a><button type="button" class="gtt-cust-secondary" data-record-blank>Print Blank Copy</button><button type="button" class="gtt-record-clear" data-record-reset>${standalone?'Clear form':'Cancel'}</button></div>
-      <p class="gtt-record-privacy">Email opens a prepared draft addressed to ts8686@cmcnj.com. Review it and tap Send in your email app. GTT does not store or send customer records; your mail provider retains sent messages.</p>
+      <div class="gtt-record-actions"><button type="submit" class="gtt-cust-primary" data-record-print>🖨️ Print Record</button><a class="gtt-cust-secondary gtt-record-email" data-record-email href="mailto:ts8686@cmcnj.com" aria-label="Open email app with trade-in record">✉️ Email Record</a><button type="button" class="gtt-cust-secondary gtt-record-slack" data-record-slack aria-label="Share trade-in record to a Slack DM or group">↗ Share to Slack</button><button type="button" class="gtt-cust-secondary" data-record-blank>Print Blank Copy</button><button type="button" class="gtt-record-clear" data-record-reset>${standalone?'Clear form':'Cancel'}</button></div>
+      <div class="gtt-record-share-help" data-record-share-help hidden aria-live="polite">
+        <p data-record-share-instruction>Choose Slack in the device share menu, then pick the DM or group and tap Send. If Slack isn't available, copy the record and paste it into a Slack conversation.</p>
+        <div class="gtt-record-share-help-actions"><button type="button" class="gtt-cust-secondary" data-record-copy>Copy Record</button><button type="button" class="gtt-cust-secondary" data-record-open-slack>Open Slack</button></div>
+      </div>
+      <small class="gtt-record-share-status" data-record-share-status role="status" aria-live="polite"></small>
+      <p class="gtt-record-privacy">Email creates a draft for ts8686@cmcnj.com. Share to Slack opens the device share menu (or lets you copy the record). Choose the recipients and review before sending. GTT does not store these records; your mail or Slack workspace may retain sent messages.</p>
     </form>`;
   }
   function populateRecordCatalog(form){
@@ -291,6 +296,12 @@
     form.querySelector('[data-record-email]').addEventListener('click',event=>{
       event.currentTarget.href=tradeRecordMailto(form,s);
     });
+    form.querySelector('[data-record-slack]').addEventListener('click',()=>shareTradeRecord(form,s));
+    form.querySelector('[data-record-copy]').addEventListener('click',()=>copyTradeRecord(form,s));
+    form.querySelector('[data-record-open-slack]').addEventListener('click',()=>{
+      // No customer data is included in the URL.
+      window.open('https://app.slack.com/client/','_blank','noopener,noreferrer');
+    });
     form.querySelector('[data-record-reset]').addEventListener('click',()=>{
       if(standalone)mountRecordForm(target,null,true);
       else {const dlg=$('gttTradeRecordDialog');dlg?.close();dlg?.replaceChildren();activeContext=null;}
@@ -347,7 +358,7 @@
     while(words.length>1 && /^(?:jr\.?|sr\.?|ii|iii|iv|v)$/i.test(words[words.length-1]))words.pop();
     return (words[words.length-1]||'').replace(/\.$/,'');
   }
-  function tradeRecordMailto(form,s){
+  function tradeRecordMessage(form,s){
     const {account,report}=readTradeRecord(form,s);
     const item=i=>String(report[i]?.[1]||'');
     const subject=tradeRecordLastName(account)||'Trade-In Record';
@@ -373,7 +384,71 @@
       'Notes: '+item(13),'',
       'INTERNAL STORE RECORD — This is not an AT&T trade-in receipt or a guarantee of promotional eligibility. Verify all quoted offers in AT&T-approved systems.'
     ].join('\r\n');
+    return {subject,body};
+  }
+  function tradeRecordMailto(form,s){
+    const {subject,body}=tradeRecordMessage(form,s);
     return 'mailto:ts8686@cmcnj.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  }
+  function slackShareText(form,s){
+    const {subject,body}=tradeRecordMessage(form,s);
+    return body.replace('TRADE-IN INSPECTION RECORD','TRADE-IN INSPECTION RECORD — '+subject);
+  }
+  function shareStatus(form,message){
+    const output=form.querySelector('[data-record-share-status]');
+    if(output)output.textContent=message;
+  }
+  function shareFallback(form,message){
+    const area=form.querySelector('[data-record-share-help]');
+    if(area)area.hidden=false;
+    shareStatus(form,message||'Copy the record, open Slack, and paste it into the DM or group of your choice.');
+  }
+  async function shareTradeRecord(form,s){
+    // Call Web Share directly inside the click callback: iOS requires a user gesture.
+    // Sharing happens on the device; no customer information goes to a GTT endpoint.
+    const {subject,body}=tradeRecordMessage(form,s);
+    const text=body.replace('TRADE-IN INSPECTION RECORD','TRADE-IN INSPECTION RECORD — '+subject);
+    const area=form.querySelector('[data-record-share-help]');
+    if(area)area.hidden=true;
+    shareStatus(form,'');
+    if(typeof navigator.share!=='function'){
+      shareFallback(form,'Native sharing is not available here. Copy the record, then paste it into a Slack DM or group.');
+      return;
+    }
+    try {
+      await navigator.share({title:'Trade-In Record — '+subject,text});
+      // The OS reports handoff, not confirmation that a Slack message was sent.
+      shareStatus(form,'Share menu closed. Confirm the record appears in the intended Slack DM or group.');
+    } catch(error) {
+      if(error?.name==='AbortError'){
+        // Cancelling the share sheet is not a send failure. Keep the form intact.
+        shareFallback(form,'Sharing was cancelled. You can try again or copy the record for Slack.');
+      } else {
+        shareFallback(form,'Sharing was unavailable. Copy the record, open Slack, and paste it into the DM or group.');
+      }
+    }
+  }
+  async function copyTradeRecord(form,s){
+    const text=slackShareText(form,s);
+    if(navigator.clipboard?.writeText){
+      try {
+        await navigator.clipboard.writeText(text);
+        shareStatus(form,'Record copied. Open Slack, choose a DM or group, paste, and tap Send.');
+        return;
+      } catch(_){ /* Some devices deny clipboard writes. Offer a manual select/copy fallback. */ }
+    }
+    const area=form.querySelector('[data-record-share-help]');
+    if(area && !area.querySelector('[data-record-copy-text]')){
+      const fallback=document.createElement('textarea');
+      fallback.setAttribute('data-record-copy-text','');
+      fallback.setAttribute('aria-label','Select and copy trade-in record');
+      fallback.readOnly=true;
+      fallback.className='gtt-record-copy-text';
+      area.appendChild(fallback);
+    }
+    const fallback=area?.querySelector('[data-record-copy-text]');
+    if(fallback){fallback.value=text;fallback.focus();fallback.select();}
+    shareStatus(form,'Select and copy the highlighted text, then paste it into your Slack DM or group.');
   }
   function printTradeRecord(form,s,standalone,blankCopy=false){
     const {report}=readTradeRecord(form,s,blankCopy);
@@ -548,6 +623,15 @@
     .gtt-record-actions .gtt-record-email{border-color:var(--r-accent);color:var(--r-accent);background:color-mix(in srgb,var(--r-accent) 9%,var(--r-surface))}
     .gtt-record-actions .gtt-record-clear{margin-left:auto;border:0;background:transparent;color:var(--r-muted)}
     .gtt-record-privacy{color:var(--r-muted);font-size:10px;line-height:1.4;margin:13px 0 0}
+    .gtt-record-actions .gtt-record-slack{border:1px solid #668b9c;background:color-mix(in srgb,var(--r-accent) 10%,var(--r-alt));color:var(--r-text)}
+    .gtt-record-share-help{border:1px solid var(--r-line);background:var(--r-alt);color:var(--r-text);padding:12px 14px;border-radius:10px;margin-top:12px;font-size:12px}
+    .gtt-record-share-help[hidden]{display:none!important}
+    .gtt-record-share-help p{font-size:12px;line-height:1.45;color:var(--r-muted);margin:0 0 10px}
+    .gtt-record-share-help-actions{display:flex;flex-wrap:wrap;gap:9px}
+    .gtt-record-share-help-actions button{font:700 12px/1.3 -apple-system,BlinkMacSystemFont,Arial,sans-serif;min-height:40px;cursor:pointer;border:1px solid var(--r-line);border-radius:8px;padding:8px 12px;background:var(--r-surface);color:var(--r-text)}
+    .gtt-record-share-status{display:block;margin-top:10px;font-size:11px;color:var(--r-muted)}
+    .gtt-record-share-status:empty{display:none}
+    .gtt-record-copy-text{display:block;margin-top:10px;width:100%;min-height:110px;padding:9px;border:1px solid var(--r-line);border-radius:7px;background:var(--r-surface);color:var(--r-text)}
     @media(max-width:650px){.gtt-record-form{padding:17px!important}.gtt-record-grid{gap:11px}.gtt-record-conditions{padding:13px}.gtt-record-condition{grid-template-columns:1fr}.gtt-record-condition legend{float:none;width:100%;margin:0}.gtt-record-choices{justify-content:flex-start}.gtt-record-topline{flex-direction:column;gap:7px}}
     @media(max-width:470px){.gtt-record-grid{grid-template-columns:1fr}.gtt-record-wide{grid-column:auto}.gtt-record-actions .gtt-cust-primary{width:100%}.gtt-record-actions .gtt-cust-secondary{flex:1}.gtt-record-actions .gtt-record-clear{margin-left:0}.gtt-record-more>summary{align-items:flex-start}}
   `;
