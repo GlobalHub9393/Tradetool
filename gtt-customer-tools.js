@@ -140,7 +140,7 @@
   function conditionText(value) {
     if (value === true || value === 'yes') return 'Yes';
     if (value === false || value === 'no') return 'No';
-    return 'Not confirmed';
+    return '';
   }
   // The same record form is used from the Full Quote and independently from #3.
   // Customer data exists only in the form and the explicitly opened print window.
@@ -163,59 +163,116 @@
   };
   function recordFields(s){
     const ctx=s?.c||{},cond=ctx.tradeCondition||{};
-    return {date:recordDate(),accountHolder:'',tradePhone:'',device:s?.tradeLabel||'',storage:ctx.tradeStorage||'',imei:'',
+    return {date:recordDate(),accountHolder:'',tradePhone:'',device:ctx.tradeDevice?[ctx.tradeDevice.brand,ctx.tradeDevice.model].filter(Boolean).join(' '):'',storage:ctx.tradeStorage||'',imei:'',
       plan:s?tradeRecordPlan(s):'',power:cond.power,lock:cond.lock,cracks:cond.cracks,
       promo:s&&['promo','nextup_promo'].includes(s.r.state)&&Number.isFinite(Number(s.r.credit))?String(s.r.credit):'',
       rep:'',notes:'',newPhone:s?.deviceLabel||''};
   }
   function conditionRadios(name,value,question){
-    return `<fieldset class="gtt-record-condition"><legend>${safe(question)}</legend><label><input type="radio" name="${name}" value="yes" ${value===true?'checked':''} required> Yes</label><label><input type="radio" name="${name}" value="no" ${value===false?'checked':''} required> No</label></fieldset>`;
+    const selected=value===true?'yes':value===false?'no':'';
+    return `<fieldset class="gtt-record-condition"><legend>${safe(question)}</legend><div class="gtt-record-choices">
+      <label><input type="radio" name="${name}" value="yes" ${selected==='yes'?'checked':''}><span>Yes</span></label>
+      <label><input type="radio" name="${name}" value="no" ${selected==='no'?'checked':''}><span>No</span></label>
+      <label class="gtt-record-skip"><input type="radio" name="${name}" value="" ${selected===''?'checked':''}><span>Blank</span></label>
+    </div></fieldset>`;
+  }
+  function recordSearchField(name,label,value,hint,standalone,wide=false){
+    const suffix=standalone?'Standalone':'Quote';
+    const id='gttRec'+name+suffix;
+    return `<div class="gtt-record-field${wide?' gtt-record-wide':''}">
+      <label for="${id}">${safe(label)}</label>
+      <div class="gtt-record-combobox" data-record-combo="${name}">
+        <input id="${id}" name="${name}" maxlength="150" value="${safe(value)}" autocomplete="off" spellcheck="false"
+          placeholder="${name==='device'?'Search or type any phone':name==='plan'?'Search or enter plan':'e.g. 128 GB'}"
+          role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="${id}Menu">
+        <div id="${id}Menu" class="gtt-record-suggestions" role="listbox" hidden></div>
+      </div>
+      ${hint?`<small class="gtt-plan-help">${safe(hint)}</small>`:''}
+    </div>`;
   }
   function recordFormHTML(s,standalone){
     const f=recordFields(s);
     return `<form class="gtt-record-form ${standalone?'gtt-record-standalone':''}" id="${standalone?'gttRecordStandaloneForm':'gttRecordForm'}" autocomplete="off">
-      <p class="gtt-cust-intro">${standalone?'Create a print-only trade-in inspection record. Search a phone or enter one manually.':'Details from the completed quote are pre-filled. Confirm all information before printing.'} No customer details are stored in GTT.</p>
+      <div class="gtt-record-topline"><p>${standalone?'Fill out what you know now, or print an empty worksheet for later.':'Details from the completed quote are prefilled. Edit or leave any field blank.'}</p><span>All fields optional</span></div>
+      <div class="gtt-record-section-heading"><h3>Customer &amp; trade</h3></div>
       <div class="gtt-record-grid">
-        <label>Purchase / quote date<input name="date" type="date" required value="${safe(f.date)}"></label>
-        <label>Account holder name<input name="accountHolder" maxlength="100" required placeholder="Name on AT&amp;T account" autocomplete="off"></label>
-        <label>Trade-in phone number<input name="tradePhone" type="tel" inputmode="tel" maxlength="22" required placeholder="(555) 555-0123" autocomplete="off"></label>
-        <label>Trade-in IMEI<input name="imei" inputmode="numeric" pattern="[0-9]{15}" maxlength="15" required placeholder="15 digits" autocomplete="off"></label>
-        <label class="gtt-record-wide">Phone being traded in<input name="device" list="${standalone?'gttRecordDevicesStandalone':'gttRecordDevicesQuote'}" maxlength="120" required value="${safe(f.device)}" placeholder="Search phones or enter any model" autocomplete="off"><datalist id="${standalone?'gttRecordDevicesStandalone':'gttRecordDevicesQuote'}"></datalist><small class="gtt-plan-help">Choose from active trade-in devices or type an unlisted model.</small></label>
-        <label>Storage / capacity<input name="storage" list="${standalone?'gttRecordStorageStandalone':'gttRecordStorageQuote'}" maxlength="50" value="${safe(f.storage)}" placeholder="e.g. 128 GB" autocomplete="off"><datalist id="${standalone?'gttRecordStorageStandalone':'gttRecordStorageQuote'}"></datalist></label>
-        <label>AT&amp;T plan<input name="plan" list="${standalone?'gttRecordPlansStandalone':'gttRecordPlansQuote'}" maxlength="150" required value="${safe(f.plan)}" placeholder="Search or enter exact plan" autocomplete="off"><datalist id="${standalone?'gttRecordPlansStandalone':'gttRecordPlansQuote'}"></datalist></label>
+        <div class="gtt-record-field"><label for="gttRecDate">Purchase / quote date</label><input id="gttRecDate" name="date" type="date" value="${safe(f.date)}"></div>
+        <div class="gtt-record-field"><label for="gttRecAccount">Account holder name</label><input id="gttRecAccount" name="accountHolder" maxlength="100" placeholder="Customer name" autocomplete="off"></div>
+        <div class="gtt-record-field"><label for="gttRecTradePhone">Trade-in phone number</label><input id="gttRecTradePhone" name="tradePhone" type="tel" inputmode="tel" maxlength="22" placeholder="(555) 555-0123" autocomplete="off"></div>
+        ${recordSearchField('plan','AT&T plan',f.plan,'',standalone)}
+        ${recordSearchField('device','Phone being traded in',f.device,'Search the device list or type one manually.',standalone,true)}
+        ${recordSearchField('storage','Storage / capacity',f.storage,'',standalone)}
       </div>
-      <div class="gtt-record-conditions"><strong>Device condition — select Yes or No for each</strong>
+      <section class="gtt-record-conditions" aria-label="Device inspection"><div class="gtt-record-section-heading"><h3>Device condition</h3><span>Leave unanswered items blank</span></div>
         ${conditionRadios('power',f.power,'Powers on and functions?')}
         ${conditionRadios('lock',f.lock,'Activation Lock / Find My turned off?')}
         ${conditionRadios('cracks',f.cracks,'Free of cracks, chips and damage?')}
-      </div>
+      </section>
+      <div class="gtt-record-section-heading"><h3>Promotional quote</h3></div>
       <div class="gtt-record-grid">
-        <label>Promotional credit quoted ($)<input name="promo" type="text" inputmode="decimal" maxlength="11" required value="${safe(f.promo)}" placeholder="e.g. 930.00" autocomplete="off"><small class="gtt-plan-help">Amount actually quoted to the customer; may differ from today's offer.</small></label>
-        <label>Rep / initials (optional)<input name="rep" maxlength="60" placeholder="Rep" autocomplete="off"></label>
+        <div class="gtt-record-field"><label for="gttRecPromo">Promotional credit quoted ($)</label><input id="gttRecPromo" name="promo" inputmode="decimal" maxlength="32" value="${safe(f.promo)}" placeholder="e.g. 930.00"><small class="gtt-plan-help">Enter the amount you actually quoted.</small></div>
+        <div class="gtt-record-value-note" data-record-value><span>Reference trade value</span><strong>${s&&recordCurrencyValue(s.c.value)!==null?money(s.c.value):'Not selected'}</strong><small>From GTT when a matching device is selected</small></div>
       </div>
-      <p class="gtt-record-value-note" data-record-value>Estimated device trade value: <strong>${s&&recordCurrencyValue(s.c.value)!==null?money(s.c.value):'Select a trade phone to check'}</strong></p>
-      ${s?`<p class="gtt-record-original">New phone on original quote: <strong>${safe(f.newPhone)}</strong></p>`:''}
-      <label class="gtt-record-notes">Additional notes (optional)<textarea name="notes" maxlength="350" rows="2" placeholder="Prior quote details, visible damage or other observations"></textarea></label>
-      <div class="gtt-record-actions"><button type="button" class="gtt-cust-secondary" data-record-reset>${standalone?'Clear form':'Cancel'}</button><button type="submit" class="gtt-cust-primary">🖨️ Print Trade-In Record</button></div>
+      ${s?`<p class="gtt-record-original">New phone in the original quote: <strong>${safe(f.newPhone)}</strong></p>`:''}
+      <details class="gtt-record-more"><summary>Optional details <span>IMEI, rep &amp; notes</span></summary>
+        <div class="gtt-record-grid">
+          <div class="gtt-record-field"><label for="gttRecIMEI">Trade-in IMEI</label><input id="gttRecIMEI" name="imei" inputmode="numeric" maxlength="25" placeholder="Only if available" autocomplete="off"></div>
+          <div class="gtt-record-field"><label for="gttRecRep">Rep / initials</label><input id="gttRecRep" name="rep" maxlength="60" placeholder="Rep" autocomplete="off"></div>
+          <div class="gtt-record-field gtt-record-wide"><label for="gttRecNotes">Additional notes</label><textarea id="gttRecNotes" name="notes" maxlength="350" rows="2" placeholder="Prior quote details, visible damage or other observations"></textarea></div>
+        </div>
+      </details>
+      <div class="gtt-record-actions"><button type="submit" class="gtt-cust-primary" data-record-print>🖨️ Print Record</button><button type="button" class="gtt-cust-secondary" data-record-blank>Print Blank Copy</button><button type="button" class="gtt-record-clear" data-record-reset>${standalone?'Clear form':'Cancel'}</button></div>
+      <p class="gtt-record-privacy">Print only. GTT does not store this record or its customer information.</p>
     </form>`;
   }
   function populateRecordCatalog(form){
     if(!form?.isConnected)return;
     const device=form.elements.namedItem('device'),storage=form.elements.namedItem('storage');
-    const choices=new Map();tradeRows().forEach(r=>{const k=[r.brand,r.model].join(' ').trim();choices.set(k,true);});
-    const dl=form.querySelector('datalist[id*=RecordDevices]');
-    if(dl)dl.innerHTML=[...choices.keys()].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})).map(k=>`<option value="${safe(k)}"></option>`).join('');
-    const pdl=form.querySelector('datalist[id*=RecordPlans]');
-    if(pdl)pdl.innerHTML=[...new Set(planRows().map(r=>r.name))].map(k=>`<option value="${safe(k)}"></option>`).join('');
-    const applyStorage=()=>{
+    const deviceChoices=()=>[...new Set(tradeRows().map(r=>[r.brand,r.model].join(' ').trim()))].filter(Boolean).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+    const plans=()=>[...new Set(planRows().map(r=>r.name))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+    function storageChoices(){return [...new Set(tradeRows().filter(r=>normRecord(r.brand+' '+r.model)===normRecord(device.value)).map(r=>r.storage).filter(Boolean))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));}
+    function applyStorage(){
       const rows=tradeRows().filter(r=>normRecord(r.brand+' '+r.model)===normRecord(device.value));
-      const dl=form.querySelector('datalist[id*=RecordStorage]');
-      if(dl)dl.innerHTML=[...new Set(rows.map(r=>r.storage).filter(Boolean))].map(k=>`<option value="${safe(k)}"></option>`).join('');
       const row=rows.find(r=>normRecord(r.storage)===normRecord(storage.value));
       const estimated=row?recordCurrencyValue(row.value):rows.length===1?recordCurrencyValue(rows[0].value):null;
       const val=form.querySelector('[data-record-value] strong');
-      if(val)val.textContent=estimated===null?'Not verified — check official trade-in tool':money(estimated);
-    };
+      if(val)val.textContent=estimated===null?'Not verified':money(estimated);
+    }
+    // Native <datalist> menus are rendered by the browser and can be detached
+    // from the input on iPads. Use in-form anchored, scrollable menus instead.
+    for(const [name,getChoices] of [['device',deviceChoices],['storage',storageChoices],['plan',plans]]){
+      const input=form.elements.namedItem(name);
+      const wrap=input.closest('.gtt-record-combobox'),menu=wrap?.querySelector('.gtt-record-suggestions');
+      if(!menu||wrap.dataset.bound==='yes')continue;
+      wrap.dataset.bound='yes';
+      function hide(){menu.hidden=true;menu.replaceChildren();input.setAttribute('aria-expanded','false');}
+      function show(){
+        const search=normRecord(input.value);
+        const choices=getChoices().filter(x=>!search||normRecord(x).includes(search)).slice(0,8);
+        menu.replaceChildren();
+        if(!choices.length){hide();return;}
+        for(const choice of choices){
+          const b=document.createElement('button');b.type='button';b.setAttribute('role','option');b.className='gtt-record-option';b.textContent=choice;
+          b.addEventListener('pointerdown',e=>e.preventDefault());
+          b.addEventListener('click',()=>{const changed=input.value!==choice;input.value=choice;hide();if(changed)input.dispatchEvent(new Event('input',{bubbles:true}));input.focus();hide();});
+          menu.appendChild(b);
+        }
+        menu.hidden=false;input.setAttribute('aria-expanded','true');
+      }
+      input.addEventListener('focus',show);
+      input.addEventListener('input',show);
+      input.addEventListener('blur',()=>setTimeout(()=>{if(document.activeElement!==input)hide();},120));
+      input.addEventListener('keydown',e=>{
+        if(e.key==='Escape'){hide();return;}
+        if(e.key==='ArrowDown'&&!menu.hidden){e.preventDefault();menu.querySelector('button')?.focus();}
+      });
+      menu.addEventListener('keydown',e=>{
+        if(e.key==='Escape'){hide();input.focus();}
+        if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+          e.preventDefault();const all=[...menu.querySelectorAll('button')];const i=all.indexOf(document.activeElement);all[(i+(e.key==='ArrowDown'?1:-1)+all.length)%all.length]?.focus();
+        }
+      });
+    }
     if(!form.dataset.recordCatalogBound){
       device.addEventListener('input',()=>{storage.value='';applyStorage();});
       storage.addEventListener('input',applyStorage);
@@ -227,11 +284,10 @@
     if(!target)return;
     target.innerHTML=recordFormHTML(s,standalone);
     const form=target.querySelector('form');
-    form.addEventListener('submit',event=>{event.preventDefault();if(form.reportValidity())printTradeRecord(form,s,standalone);});
-    form.elements.namedItem('tradePhone').addEventListener('input',e=>e.target.setCustomValidity(''));
-    form.elements.namedItem('promo').addEventListener('input',e=>e.target.setCustomValidity(''));
+    form.addEventListener('submit',event=>{event.preventDefault();printTradeRecord(form,s,standalone,false);});
+    form.querySelector('[data-record-blank]').addEventListener('click',()=>printTradeRecord(form,s,standalone,true));
     form.querySelector('[data-record-reset]').addEventListener('click',()=>{
-      if(standalone) mountRecordForm(target,null,true);
+      if(standalone)mountRecordForm(target,null,true);
       else {const dlg=$('gttTradeRecordDialog');dlg?.close();dlg?.replaceChildren();activeContext=null;}
     });
     populateRecordCatalog(form);
@@ -248,48 +304,47 @@
     d.showModal();
     d.querySelector('[name=accountHolder]')?.focus();
   }
-  function printTradeRecord(form,s,standalone){
+  function printTradeRecord(form,s,standalone,blankCopy=false){
     const values=new FormData(form);
-    const tradePhone=usPhone(values.get('tradePhone'));
-    if(!tradePhone){const field=form.elements.namedItem('tradePhone');field.setCustomValidity('Enter a valid 10-digit U.S. phone number.');field.reportValidity();return;}
-    const promoRaw=String(values.get('promo')||'').trim().replace(/[$,]/g,'');
-    if(!/^(?:\d{1,5})(?:\.\d{1,2})?$/.test(promoRaw) || Number(promoRaw)>99999.99){
-      const field=form.elements.namedItem('promo');field.setCustomValidity('Enter a valid quoted dollar amount, such as 930 or 930.00.');field.reportValidity();return;
-    }
-    const device=String(values.get('device')||'').trim(),storage=String(values.get('storage')||'').trim();
-    const plan=String(values.get('plan')||'').trim(),date=String(values.get('date')||'');
-    const dateObj=new Date(date+'T12:00:00Z');
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number.isNaN(dateObj.valueOf())){form.elements.namedItem('date').reportValidity();return;}
-    const dateLabel=dateObj.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',timeZone:'UTC'});
-    const account=String(values.get('accountHolder')||'').trim(),imei=String(values.get('imei')||'').trim();
-    if(!account||!plan||!device||!/^[0-9]{15}$/.test(imei))return;
+    const input=(name)=>blankCopy?'':String(values.get(name)||'').trim();
+    const phoneRaw=input('tradePhone');
+    const tradePhone=phoneRaw?(usPhone(phoneRaw)||phoneRaw):'';
+    const promoRaw=input('promo').replace(/[$,]/g,'');
+    const promoNum=Number(promoRaw);
+    const promo=promoRaw&&Number.isFinite(promoNum)&&promoNum>=0?money(promoNum):input('promo');
+    const device=input('device'),storage=input('storage'),plan=input('plan'),date=input('date');
+    const dateObj=date?new Date(date+'T12:00:00Z'):null;
+    const dateLabel=dateObj&&!Number.isNaN(dateObj.valueOf())?dateObj.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',timeZone:'UTC'}):date;
+    const account=input('accountHolder'),imei=input('imei');
     const row=tradeRows().find(r=>normRecord(r.brand+' '+r.model)===normRecord(device)&&normRecord(r.storage)===normRecord(storage));
-    const sameTrade=!!s?.c?.tradeDevice && normRecord(s.c.tradeDevice.brand+' '+s.c.tradeDevice.model)===normRecord(device) && normRecord(s.c.tradeStorage)===normRecord(storage);
-    const val=sameTrade?recordCurrencyValue(s.c.value):(row?recordCurrencyValue(row.value):null);
+    const sameTrade=!blankCopy&&!!s?.c?.tradeDevice&&normRecord(s.c.tradeDevice.brand+' '+s.c.tradeDevice.model)===normRecord(device)&&normRecord(s.c.tradeStorage)===normRecord(storage);
+    const val=blankCopy?null:sameTrade?recordCurrencyValue(s.c.value):(row?recordCurrencyValue(row.value):null);
     const report=[
-      ['Date',dateLabel],['Account holder name',account],['Trade-in phone number',tradePhone],
-      ['Trade-in phone',[device,storage].filter(Boolean).join(' · ')],['IMEI',imei],['AT&T plan',plan],
-      ['Powers on and functions',conditionText(values.get('power'))],
-      ['Activation Lock / Find My off',conditionText(values.get('lock'))],
-      ['Free of cracks, chips and damage',conditionText(values.get('cracks'))],
-      ['Promotional credit quoted',money(Number(promoRaw))+' (customer quote; eligibility not guaranteed)'],
-      ['Estimated trade-in value',val===null?'Not verified':money(val)],
-      ['Rep / initials',String(values.get('rep')||'').trim()||'—']
+      ['Purchase / quote date',dateLabel],['Account holder name',account],['Trade-in phone number',tradePhone],
+      ['Phone being traded in',[device,storage].filter(Boolean).join(' · ')],['IMEI',imei],['AT&T plan',plan],
+      ['Powers on and functions',conditionText(input('power')),'condition'],
+      ['Activation Lock / Find My off',conditionText(input('lock')),'condition'],
+      ['Free of cracks, chips and damage',conditionText(input('cracks')),'condition'],
+      ['Promotional credit quoted',promo?(promo+' (amount quoted; eligibility not guaranteed)'):''],
+      ['Estimated trade-in value',val===null?'':money(val)],
+      ['Rep / initials',input('rep')],
+      ['New phone on original quote',blankCopy?'':(s?.deviceLabel||'')],
+      ['Notes',input('notes')]
     ];
-    if(s?.deviceLabel) report.push(['New phone on original quote',s.deviceLabel]);
-    report.push(['Notes',String(values.get('notes')||'').trim()||'—']);
-    const table=report.map(([key,value])=>`<tr><th>${safe(key)}</th><td>${safe(value)}</td></tr>`).join('');
-    // Open in direct response to submit so mobile browsers do not block printing.
+    const table=report.map(([key,value,type])=>`<tr><th>${safe(key)}</th><td>${blankCopy&&type==='condition'?'<span class="print-checkbox"></span> Yes&nbsp;&nbsp;&nbsp;<span class="print-checkbox"></span> No':(value?safe(value):'<span class="print-line"></span>')}</td></tr>`).join('');
+    // Open synchronously from the user click so iOS/Safari allows printing.
     const page=window.open('','_blank');
     if(!page){alert('Your browser blocked the print window. Allow pop-ups for GTT and tap Print again.');return;}
     page.document.open();
     page.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GTT Trade-In Record</title><style>
-      @page{size:letter;margin:.55in}body{font:13px/1.35 -apple-system,BlinkMacSystemFont,Arial,sans-serif;color:#14253a;margin:24px auto;max-width:760px}h1{font-size:23px;color:#075d9b;margin:0 0 3px}.sub{margin:0 0 16px;color:#58718b}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #dbe3eb;padding:8px 10px;text-align:left;vertical-align:top}th{background:#f2f7fc;width:38%;font-weight:700}td{overflow-wrap:anywhere}.stamp{margin-top:20px;border:2px solid #075d9b;border-radius:9px;padding:13px;text-align:center;font-weight:800;letter-spacing:.01em}.disclaimer{font-size:10.5px;color:#50667d;margin-top:11px}.controls{display:flex;gap:8px;margin:0 0 22px}.controls button{padding:11px 17px;border:0;border-radius:8px;background:#075d9b;color:#fff;font-weight:bold;cursor:pointer}.controls button:last-child{background:#eaf1f8;color:#123e62}@media print{body{margin:0;max-width:none}.controls{display:none}h1{font-size:23px}th,td{padding:7px 9px}}
-      </style></head><body><div class="controls"><button onclick="print()">Print</button><button onclick="close()">Close</button></div><h1>Trade-In Inspection Record</h1><p class="sub">Global Trade Tool · Internal store worksheet</p><table>${table}</table><div class="stamp">FILE IN THE DESIGNATED STORE TRADE-IN RECORDS AREA</div><p class="disclaimer">Internal reference only. This document is not an official AT&T trade-in receipt, proof of acceptance, or guarantee of promotional eligibility. The promotional amount above is the amount quoted to the customer, not an AT&T-approved promise. Verify final values, condition and eligibility in approved systems. Handle and dispose of printed customer records according to company policy.</p></body></html>`);
+      @page{size:letter;margin:.55in}body{font:13px/1.35 -apple-system,BlinkMacSystemFont,Arial,sans-serif;color:#14253a;margin:24px auto;max-width:760px}h1{font-size:23px;color:#075d9b;margin:0 0 3px}.sub{margin:0 0 16px;color:#58718b}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #dbe3eb;padding:8px 10px;text-align:left;vertical-align:top}th{background:#f2f7fc;width:38%;font-weight:700}td{overflow-wrap:anywhere;height:19px}.print-line{display:block;min-height:14px}.print-checkbox{display:inline-block;vertical-align:middle;width:13px;height:13px;border:1px solid #536980;border-radius:2px}.stamp{margin-top:18px;border:2px solid #075d9b;border-radius:9px;padding:12px;text-align:center;font-weight:800;letter-spacing:.01em}.disclaimer{font-size:10px;color:#50667d;margin-top:10px}.controls{display:flex;gap:8px;margin:0 0 22px}.controls button{padding:11px 17px;border:0;border-radius:8px;background:#075d9b;color:#fff;font-weight:bold;cursor:pointer}.controls button:last-child{background:#eaf1f8;color:#123e62}@media print{body{margin:0;max-width:none}.controls{display:none}h1{font-size:23px}th,td{padding:7px 9px}}
+      </style></head><body><div class="controls"><button onclick="print()">Print</button><button onclick="close()">Close</button></div><h1>Trade-In Inspection Record</h1><p class="sub">Global Trade Tool · ${blankCopy?'Blank store worksheet':'Internal store worksheet'}</p><table>${table}</table><div class="stamp">FILE IN THE DESIGNATED STORE TRADE-IN RECORDS AREA</div><p class="disclaimer">Internal reference only. Not an official AT&T trade-in receipt, proof of acceptance or guarantee of promotional eligibility. Quoted credits must be verified in AT&T-approved systems. Handle printed customer records according to company policy.</p></body></html>`);
     page.document.close();
-    // Clear customer identifiers immediately after launching the print sheet.
-    if(standalone)mountRecordForm($('gttStandaloneRecordMount'),null,true);
-    else $('gttTradeRecordDialog')?.close();
+    // A blank copy must not destroy work already typed into the form.
+    if(!blankCopy){
+      if(standalone)mountRecordForm($('gttStandaloneRecordMount'),null,true);
+      else $('gttTradeRecordDialog')?.close();
+    }
   }
 
   document.addEventListener('gtt-language-change', ev=>{
@@ -385,6 +440,66 @@
     #gttStandaloneRecordMount .gtt-record-actions button{min-height:44px}
     .gtt-record-grid input:focus-visible,.gtt-record-notes textarea:focus-visible{outline:2px solid #0780c0;outline-offset:2px}
     @media(max-width:440px){.gtt-cust-content,.gtt-record-form{padding:16px}.gtt-cust-device{font-size:21px}.gtt-cust-price strong{font-size:30px}.gtt-cust-language{grid-template-columns:repeat(2,minmax(0,1fr))}.gtt-record-grid{grid-template-columns:1fr}}
+
+    /* Trade-In Record v2: consistent GTT surfaces, no oversized white fields.
+       Both standalone and quote-popup record forms share these styles. */
+    #v4Record{color:var(--v4-ink)}
+    #gttStandaloneRecordMount{max-width:820px;margin:0 auto 60px;background:var(--v4-surface);color:var(--v4-ink);border:1px solid var(--v4-line);border-radius:16px;overflow:visible;box-shadow:0 12px 34px rgba(0,0,0,.07)}
+    #gttTradeRecordDialog{max-width:730px;width:min(94vw,730px);background:var(--v4-surface);color:var(--v4-ink);border-color:var(--v4-line)}
+    #gttTradeRecordDialog .gtt-cust-head{background:var(--v4-alt);border-color:var(--v4-line);color:var(--v4-ink)}
+    #gttTradeRecordDialog .gtt-cust-x{color:var(--v4-muted)}
+    .gtt-record-form{--r-surface:var(--v4-surface,#fff);--r-alt:var(--v4-alt,#f6f9fc);--r-text:var(--v4-ink,#17232c);--r-muted:var(--v4-muted,#6c7b86);--r-line:var(--v4-line,#d6e0e7);--r-accent:var(--v4-blue,#0075ae);background:var(--r-surface);color:var(--r-text);padding:23px 25px!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
+    .gtt-record-form *{box-sizing:border-box}
+    .gtt-record-topline{display:flex;justify-content:space-between;gap:14px;align-items:start;margin:0 0 24px}
+    .gtt-record-topline p{margin:0;color:var(--r-muted);line-height:1.5;font-size:12px}
+    .gtt-record-topline>span{border:1px solid var(--r-line);border-radius:50px;padding:4px 10px;white-space:nowrap;color:var(--r-accent);font-size:11px;font-weight:700;background:var(--r-alt)}
+    .gtt-record-section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:17px 0 12px}
+    .gtt-record-section-heading h3{font-size:15px;font-weight:800;letter-spacing:-.01em;color:var(--r-text);margin:0}
+    .gtt-record-section-heading span{font-size:11px;color:var(--r-muted)}
+    .gtt-record-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px 16px;align-items:start}
+    .gtt-record-field{display:flex;min-width:0;flex-direction:column;gap:6px;position:relative;color:var(--r-text)}
+    .gtt-record-field>label{font-size:12px;font-weight:750;color:var(--r-text);line-height:1.3}
+    .gtt-record-field>small,.gtt-record-form .gtt-plan-help{color:var(--r-muted)!important;font-size:11px!important;line-height:1.35;font-weight:500}
+    .gtt-record-wide{grid-column:1/-1}
+    .gtt-record-form .gtt-record-field input,.gtt-record-form .gtt-record-field textarea{
+      display:block;width:100%;min-width:0;min-height:44px;border:1px solid var(--r-line);border-radius:10px;background:var(--r-alt);color:var(--r-text);font:500 14px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;padding:10px 12px;box-shadow:none;color-scheme:light dark;outline:none}
+    .gtt-record-form .gtt-record-field input::placeholder,.gtt-record-form .gtt-record-field textarea::placeholder{color:var(--r-muted);opacity:.75}
+    .gtt-record-form .gtt-record-field textarea{resize:vertical;min-height:74px}
+    .gtt-record-form .gtt-record-field input:focus,.gtt-record-form .gtt-record-field textarea:focus{border-color:var(--r-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--r-accent) 17%,transparent)}
+    .gtt-record-combobox{position:relative;min-width:0}
+    .gtt-record-combobox:focus-within{z-index:20}
+    .gtt-record-suggestions{position:absolute;left:0;top:calc(100% + 4px);z-index:22;width:100%;max-height:205px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--r-line);border-radius:10px;padding:4px;background:var(--r-surface);box-shadow:0 12px 25px #0003}
+    .gtt-record-suggestions[hidden]{display:none!important}
+    .gtt-record-option{display:block;width:100%;padding:10px 11px;border:0;border-radius:7px;text-align:left;background:transparent;color:var(--r-text);font-size:12px;font-family:inherit;min-height:38px;cursor:pointer}
+    .gtt-record-option:hover,.gtt-record-option:focus-visible{background:var(--r-alt);outline:1px solid var(--r-accent)}
+    .gtt-record-conditions{margin:22px 0 24px;padding:15px 17px 13px;background:var(--r-alt);border:1px solid var(--r-line);border-radius:12px;color:var(--r-text)}
+    .gtt-record-conditions .gtt-record-section-heading{margin:0 0 7px}
+    .gtt-record-condition{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;border:0;border-top:1px solid var(--r-line);padding:12px 0 10px;margin:0;min-width:0}
+    .gtt-record-condition legend{float:left;width:58%;color:var(--r-text);padding:0;margin:3px 0 0;font-size:12px;line-height:1.35;font-weight:650}
+    .gtt-record-choices{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+    .gtt-record-choices label{position:relative;display:inline-flex;cursor:pointer;align-items:center;gap:5px;margin:0;padding:6px 9px;border:1px solid var(--r-line);border-radius:8px;font-size:11px;font-weight:650;color:var(--r-muted);background:var(--r-surface);min-height:33px;white-space:nowrap}
+    .gtt-record-choices input{width:14px;height:14px;margin:0;accent-color:var(--r-accent)}
+    .gtt-record-choices label:has(input:checked){border-color:var(--r-accent);color:var(--r-text);background:color-mix(in srgb,var(--r-accent) 10%,var(--r-surface))}
+    .gtt-record-value-note{display:flex;flex-direction:column;justify-content:center;gap:2px;min-height:85px;margin:0;background:var(--r-alt);border:1px solid var(--r-line);border-radius:10px;padding:10px 13px;color:var(--r-muted);font-size:11px}
+    .gtt-record-value-note strong{font-size:17px;color:var(--r-text)}
+    .gtt-record-value-note small{font-size:10px;color:var(--r-muted);line-height:1.3}
+    .gtt-record-original{background:var(--r-alt);color:var(--r-muted);border-color:var(--r-line);margin:13px 0 0}
+    .gtt-record-original strong{color:var(--r-text)}
+    .gtt-record-more{margin:22px 0 0;padding:0;border:1px solid var(--r-line);border-radius:11px;background:var(--r-surface)}
+    .gtt-record-more>summary{display:flex;justify-content:space-between;gap:10px;align-items:center;cursor:pointer;padding:13px 15px;color:var(--r-text);font-size:12px;font-weight:750;min-height:46px;list-style:none}
+    .gtt-record-more>summary::-webkit-details-marker{display:none}
+    .gtt-record-more>summary:before{content:'+';font-size:18px;color:var(--r-accent);margin-right:4px}
+    .gtt-record-more[open]>summary:before{content:'−'}
+    .gtt-record-more>summary span{font-size:11px;color:var(--r-muted);font-weight:500;margin-left:auto}
+    .gtt-record-more>.gtt-record-grid{padding:6px 15px 16px}
+    .gtt-record-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:9px;margin:21px 0 0}
+    .gtt-record-actions button{min-height:44px;font-size:12px;font-weight:800;padding:10px 15px;cursor:pointer;border-radius:9px;box-shadow:none}
+    .gtt-record-actions .gtt-cust-primary{border:1px solid var(--r-accent)!important;background:var(--r-accent);color:var(--r-surface)}
+    .gtt-record-actions .gtt-cust-secondary{border:1px solid var(--r-line);background:var(--r-alt);color:var(--r-text)}
+    .gtt-record-actions .gtt-record-clear{margin-left:auto;border:0;background:transparent;color:var(--r-muted)}
+    .gtt-record-privacy{color:var(--r-muted);font-size:10px;line-height:1.4;margin:13px 0 0}
+    @media(max-width:650px){.gtt-record-form{padding:17px!important}.gtt-record-grid{gap:11px}.gtt-record-conditions{padding:13px}.gtt-record-condition{grid-template-columns:1fr}.gtt-record-condition legend{float:none;width:100%;margin:0}.gtt-record-choices{justify-content:flex-start}.gtt-record-topline{flex-direction:column;gap:7px}}
+    @media(max-width:470px){.gtt-record-grid{grid-template-columns:1fr}.gtt-record-wide{grid-column:auto}.gtt-record-actions .gtt-cust-primary{width:100%}.gtt-record-actions .gtt-cust-secondary{flex:1}.gtt-record-actions .gtt-record-clear{margin-left:0}.gtt-record-more>summary{align-items:flex-start}}
   `;
   document.head.appendChild(style);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
