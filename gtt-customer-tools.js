@@ -1,5 +1,5 @@
-/* Global Trade Tool customer presentation, printable trade worksheet & mail-app drafts.
-   No email API, no GTT record storage. Mail drafts only open through the device email handler.
+/* Global Trade Tool customer presentation, printable trade worksheet & native Slack sharing.
+   No customer uploads or browser storage. Sharing uses the device's native share sheet.
    Uses the existing GTTQuote engine so promotional arithmetic stays consistent. */
 (() => {
   'use strict';
@@ -190,8 +190,9 @@
       ${hint?`<small class="gtt-plan-help">${safe(hint)}</small>`:''}
     </div>`;
   }
-  function recordFormHTML(s,standalone){
+  function recordFormHTML(s,standalone,clearBlank=false){
     const f=recordFields(s);
+    if(clearBlank)f.date='';
     return `<form class="gtt-record-form ${standalone?'gtt-record-standalone':''}" id="${standalone?'gttRecordStandaloneForm':'gttRecordForm'}" autocomplete="off">
       <div class="gtt-record-topline"><p>${standalone?'Fill out what you know now, or print an empty worksheet for later.':'Details from the completed quote are prefilled. Edit or leave any field blank.'}</p><span>All fields optional</span></div>
       <div class="gtt-record-section-heading"><h3>Customer &amp; trade</h3></div>
@@ -221,13 +222,17 @@
           <div class="gtt-record-field gtt-record-wide"><label for="gttRecNotes">Additional notes</label><textarea id="gttRecNotes" name="notes" maxlength="350" rows="2" placeholder="Prior quote details, visible damage or other observations"></textarea></div>
         </div>
       </details>
-      <div class="gtt-record-actions"><button type="submit" class="gtt-cust-primary" data-record-print>🖨️ Print Record</button><a class="gtt-cust-secondary gtt-record-email" data-record-email href="mailto:ts8686@cmcnj.com" aria-label="Open email app with trade-in record">✉️ Email Record</a><button type="button" class="gtt-cust-secondary gtt-record-slack" data-record-slack aria-label="Share trade-in record to a Slack DM or group">↗ Share to Slack</button><button type="button" class="gtt-cust-secondary" data-record-blank>Print Blank Copy</button><button type="button" class="gtt-record-clear" data-record-reset>${standalone?'Clear form':'Cancel'}</button></div>
+      <div class="gtt-record-actions">
+        <button type="button" class="gtt-cust-secondary" data-record-copy>📋 Copy</button>
+        <button type="button" class="gtt-cust-primary gtt-record-slack" data-record-slack aria-label="Share record to a Slack DM or group">↗ Slack</button>
+        <button type="submit" class="gtt-cust-secondary" data-record-print>🖨️ Print</button>
+        <button type="button" class="gtt-record-clear" data-record-reset>Clear Form</button>
+      </div>
       <div class="gtt-record-share-help" data-record-share-help hidden aria-live="polite">
-        <p data-record-share-instruction>Choose Slack in the device share menu, then pick the DM or group and tap Send. If Slack isn't available, copy the record and paste it into a Slack conversation.</p>
-        <div class="gtt-record-share-help-actions"><button type="button" class="gtt-cust-secondary" data-record-copy>Copy Record</button><button type="button" class="gtt-cust-secondary" data-record-open-slack>Open Slack</button></div>
+        <p>Share unavailable? Use Copy, open Slack, and paste into the DM or group you choose.</p>
       </div>
       <small class="gtt-record-share-status" data-record-share-status role="status" aria-live="polite"></small>
-      <p class="gtt-record-privacy">Email creates a draft for ts8686@cmcnj.com. Share to Slack opens the device share menu (or lets you copy the record). Choose the recipients and review before sending. GTT does not store these records; your mail or Slack workspace may retain sent messages.</p>
+      <p class="gtt-record-privacy">No browser storage or automatic sending. Only Clear Form removes the current entries. Shared messages may be retained in Slack.</p>
     </form>`;
   }
   function populateRecordCatalog(form){
@@ -285,26 +290,18 @@
     }
     applyStorage();
   }
-  function mountRecordForm(target,s,standalone=false){
+  function mountRecordForm(target,s,standalone=false,clearBlank=false){
     if(!target)return;
-    target.innerHTML=recordFormHTML(s,standalone);
+    target.innerHTML=recordFormHTML(s,standalone,clearBlank);
     const form=target.querySelector('form');
-    form.addEventListener('submit',event=>{event.preventDefault();printTradeRecord(form,s,standalone,false);});
-    form.querySelector('[data-record-blank]').addEventListener('click',()=>printTradeRecord(form,s,standalone,true));
-    // Keep the form on-screen when composing an email; clicking this native
-    // mailto link preserves the user gesture required on iPad/iPhone.
-    form.querySelector('[data-record-email]').addEventListener('click',event=>{
-      event.currentTarget.href=tradeRecordMailto(form,s);
-    });
+    form.addEventListener('submit',event=>{event.preventDefault();printTradeRecord(form,s);});
     form.querySelector('[data-record-slack]').addEventListener('click',()=>shareTradeRecord(form,s));
     form.querySelector('[data-record-copy]').addEventListener('click',()=>copyTradeRecord(form,s));
-    form.querySelector('[data-record-open-slack]').addEventListener('click',()=>{
-      // No customer data is included in the URL.
-      window.open('https://app.slack.com/client/','_blank','noopener,noreferrer');
-    });
     form.querySelector('[data-record-reset]').addEventListener('click',()=>{
-      if(standalone)mountRecordForm(target,null,true);
-      else {const dlg=$('gttTradeRecordDialog');dlg?.close();dlg?.replaceChildren();activeContext=null;}
+      if(window.confirm('Clear this trade-in record? Entered details cannot be recovered.')){
+        // An explicit clear starts a truly blank record, including the date.
+        mountRecordForm(target,null,standalone,true);
+      }
     });
     populateRecordCatalog(form);
     window.GTTQuote?.ready?.then(()=>{if(form.isConnected)populateRecordCatalog(form);}).catch(()=>{});
@@ -312,13 +309,15 @@
   function openTradeRecord(){
     const s=quoteSnapshot();
     if(!s||!s.c.tradeDevice||s.c.noTrade)return;
-    activeContext=s;
     const d=$('gttTradeRecordDialog');
-    d.innerHTML='<div class="gtt-cust-head"><span>🖨️ Trade-In Inspection Record</span><button class="gtt-cust-x" type="button" data-cust-close aria-label="Close">×</button></div><div id="gttQuoteRecordMount"></div>';
-    mountRecordForm($('gttQuoteRecordMount'),s);
-    d.querySelector('[data-cust-close]').onclick=()=>d.close();
+    // Preserve the in-progress draft even if the dialog is closed and reopened.
+    // Clearing or refreshing the page are the only ways to discard the draft.
+    if(!d.querySelector('form')){
+      d.innerHTML='<div class="gtt-cust-head"><span>Trade-In Inspection Record</span><button class="gtt-cust-x" type="button" data-cust-close aria-label="Close">×</button></div><div id="gttQuoteRecordMount"></div>';
+      mountRecordForm($('gttQuoteRecordMount'),s);
+      d.querySelector('[data-cust-close]').onclick=()=>d.close();
+    }
     d.showModal();
-    d.querySelector('[name=accountHolder]')?.focus();
   }
   function readTradeRecord(form,s,blankCopy=false){
     const values=new FormData(form);
@@ -360,40 +359,37 @@
   }
   function tradeRecordMessage(form,s){
     const {account,report}=readTradeRecord(form,s);
-    const item=i=>String(report[i]?.[1]||'');
+    const item=i=>String(report[i]?.[1]||'').trim();
     const subject=tradeRecordLastName(account)||'Trade-In Record';
-    const body=[
-      'TRADE-IN INSPECTION RECORD','',
-      'Date: '+item(0),
-      'Account holder: '+item(1),
-      'Trade-in phone number: '+item(2),'',
-      'DEVICE',
-      'Phone being traded in: '+item(3),
-      'Trade-in IMEI: '+item(4),
-      'Estimated trade-in value: '+item(10),'',
-      'PLAN & PROMOTIONAL QUOTE',
-      'AT&T plan: '+item(5),
-      'Promotional credit quoted: '+item(9),
-      'New phone on original quote: '+item(12),'',
-      'DEVICE CONDITION',
-      'Powers on and functions: '+item(6),
-      'Activation Lock / Find My off: '+item(7),
-      'Free of cracks, chips and damage: '+item(8),'',
-      'REP & NOTES',
-      'Rep / initials: '+item(11),
-      'Notes: '+item(13),'',
-      'INTERNAL STORE RECORD — This is not an AT&T trade-in receipt or a guarantee of promotional eligibility. Verify all quoted offers in AT&T-approved systems.'
-    ].join('\r\n');
-    return {subject,body};
+    const parts=['TRADE-IN RECORD'+(account?' — '+account:'')];
+    // Put the amount actually quoted, plan and date first. Show every other
+    // available detail as one short line; omit empty fields entirely.
+    const date=item(0).replace(/^(January|February|March|April|May|June|July|August|September|October|November|December) (\d{1,2}), (\d{4})$/,(_,month,day,year)=>{
+      const n=['January','February','March','April','May','June','July','August','September','October','November','December'].indexOf(month)+1;
+      return n+'/'+day+'/'+year;
+    });
+    const quoted=item(9).replace(/\s*\(amount quoted; eligibility not guaranteed\)$/i,'');
+    const primary=[];
+    if(quoted)primary.push('Promo quoted: '+quoted);
+    if(item(5))primary.push('Plan: '+item(5));
+    if(date)primary.push('Date: '+date);
+    if(primary.length)parts.push(primary.join(' | '));
+    const add=(label,value)=>{if(value)parts.push(label+': '+String(value).replace(/\s+/g,' ').trim());};
+    if(item(2))add('Trade phone #',item(2));
+    const trade=item(3),value=item(10);
+    if(trade||value)parts.push('Trade: '+[trade,value?'Est. value '+value:''].filter(Boolean).join(' | '));
+    add('New phone',item(12));
+    const conditions=[['Power',item(6)],['Find My off',item(7)],['Damage-free',item(8)]]
+      .filter(([,value])=>value)
+      .map(([label,value])=>label+' '+(value==='Yes'?'✓':value==='No'?'✗':value));
+    if(conditions.length)parts.push('Condition: '+conditions.join(' · '));
+    add('IMEI',item(4));
+    add('Rep',item(11));
+    add('Notes',item(13));
+    parts.push('Internal record · Confirm promotion in AT&T systems.');
+    return {subject,body:parts.join('\n')};
   }
-  function tradeRecordMailto(form,s){
-    const {subject,body}=tradeRecordMessage(form,s);
-    return 'mailto:ts8686@cmcnj.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-  }
-  function slackShareText(form,s){
-    const {subject,body}=tradeRecordMessage(form,s);
-    return body.replace('TRADE-IN INSPECTION RECORD','TRADE-IN INSPECTION RECORD — '+subject);
-  }
+  function slackShareText(form,s){return tradeRecordMessage(form,s).body;}
   function shareStatus(form,message){
     const output=form.querySelector('[data-record-share-status]');
     if(output)output.textContent=message;
@@ -406,8 +402,7 @@
   async function shareTradeRecord(form,s){
     // Call Web Share directly inside the click callback: iOS requires a user gesture.
     // Sharing happens on the device; no customer information goes to a GTT endpoint.
-    const {subject,body}=tradeRecordMessage(form,s);
-    const text=body.replace('TRADE-IN INSPECTION RECORD','TRADE-IN INSPECTION RECORD — '+subject);
+    const {subject,body:text}=tradeRecordMessage(form,s);
     const area=form.querySelector('[data-record-share-help]');
     if(area)area.hidden=true;
     shareStatus(form,'');
@@ -450,7 +445,11 @@
     if(fallback){fallback.value=text;fallback.focus();fallback.select();}
     shareStatus(form,'Select and copy the highlighted text, then paste it into your Slack DM or group.');
   }
-  function printTradeRecord(form,s,standalone,blankCopy=false){
+  function printTradeRecord(form,s){
+    const entries=[...new FormData(form).entries()];
+    const fieldsFilled=entries.some(([key,value])=>key!=='date'&&String(value||'').trim());
+    const date=form.elements.namedItem('date')?.value||'';
+    const blankCopy=!s&&!fieldsFilled&&(!date||date===recordDate());
     const {report}=readTradeRecord(form,s,blankCopy);
     const table=report.map(([key,value,type])=>`<tr><th>${safe(key)}</th><td>${blankCopy&&type==='condition'?'<span class="print-checkbox"></span> Yes&nbsp;&nbsp;&nbsp;<span class="print-checkbox"></span> No':(value?safe(value):'<span class="print-line"></span>')}</td></tr>`).join('');
     // Open synchronously from the user click so iOS/Safari allows printing.
@@ -461,11 +460,7 @@
       @page{size:letter;margin:.55in}body{font:13px/1.35 -apple-system,BlinkMacSystemFont,Arial,sans-serif;color:#14253a;margin:24px auto;max-width:760px}h1{font-size:23px;color:#075d9b;margin:0 0 3px}.sub{margin:0 0 16px;color:#58718b}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #dbe3eb;padding:8px 10px;text-align:left;vertical-align:top}th{background:#f2f7fc;width:38%;font-weight:700}td{overflow-wrap:anywhere;height:19px}.print-line{display:block;min-height:14px}.print-checkbox{display:inline-block;vertical-align:middle;width:13px;height:13px;border:1px solid #536980;border-radius:2px}.stamp{margin-top:18px;border:2px solid #075d9b;border-radius:9px;padding:12px;text-align:center;font-weight:800;letter-spacing:.01em}.disclaimer{font-size:10px;color:#50667d;margin-top:10px}.controls{display:flex;gap:8px;margin:0 0 22px}.controls button{padding:11px 17px;border:0;border-radius:8px;background:#075d9b;color:#fff;font-weight:bold;cursor:pointer}.controls button:last-child{background:#eaf1f8;color:#123e62}@media print{body{margin:0;max-width:none}.controls{display:none}h1{font-size:23px}th,td{padding:7px 9px}}
       </style></head><body><div class="controls"><button onclick="print()">Print</button><button onclick="close()">Close</button></div><h1>Trade-In Inspection Record</h1><p class="sub">Global Trade Tool · ${blankCopy?'Blank store worksheet':'Internal store worksheet'}</p><table>${table}</table><div class="stamp">FILE IN THE DESIGNATED STORE TRADE-IN RECORDS AREA</div><p class="disclaimer">Internal reference only. Not an official AT&T trade-in receipt, proof of acceptance or guarantee of promotional eligibility. Quoted credits must be verified in AT&T-approved systems. Handle printed customer records according to company policy.</p></body></html>`);
     page.document.close();
-    // A blank copy must not destroy work already typed into the form.
-    if(!blankCopy){
-      if(standalone)mountRecordForm($('gttStandaloneRecordMount'),null,true);
-      else $('gttTradeRecordDialog')?.close();
-    }
+    // Printing never clears, closes, or changes the editable record.
   }
 
   document.addEventListener('gtt-language-change', ev=>{
@@ -493,12 +488,11 @@
     mount.after(actions);
     createDialog('gttLanguageDialog','Customer quote translation');
     const tradeDialog=createDialog('gttTradeRecordDialog','Trade-in record printing');
-    tradeDialog.addEventListener('close',()=>{tradeDialog.replaceChildren();activeContext=null;});
+    // Closing a dialog must never erase an unfinished customer record.
     window.addEventListener('gtt-page-change',event=>{
       const mount=$('gttStandaloneRecordMount');
-      if(!mount)return;
-      if(event.detail?.page==='record')mountRecordForm(mount,null,true);
-      else if(mount.childElementCount)mount.replaceChildren();
+      // Hidden pages retain their form in memory; only Clear Form or a page reload removes it.
+      if(mount&&event.detail?.page==='record'&&!mount.querySelector('form'))mountRecordForm(mount,null,true);
     });
     if($('v4Record')?.classList.contains('active'))mountRecordForm($('gttStandaloneRecordMount'),null,true);
     $('gttShowCustomerBtn').addEventListener('click',presentCustomer);
@@ -633,7 +627,9 @@
     .gtt-record-share-status:empty{display:none}
     .gtt-record-copy-text{display:block;margin-top:10px;width:100%;min-height:110px;padding:9px;border:1px solid var(--r-line);border-radius:7px;background:var(--r-surface);color:var(--r-text)}
     @media(max-width:650px){.gtt-record-form{padding:17px!important}.gtt-record-grid{gap:11px}.gtt-record-conditions{padding:13px}.gtt-record-condition{grid-template-columns:1fr}.gtt-record-condition legend{float:none;width:100%;margin:0}.gtt-record-choices{justify-content:flex-start}.gtt-record-topline{flex-direction:column;gap:7px}}
-    @media(max-width:470px){.gtt-record-grid{grid-template-columns:1fr}.gtt-record-wide{grid-column:auto}.gtt-record-actions .gtt-cust-primary{width:100%}.gtt-record-actions .gtt-cust-secondary{flex:1}.gtt-record-actions .gtt-record-clear{margin-left:0}.gtt-record-more>summary{align-items:flex-start}}
+    .gtt-record-actions button:not(.gtt-record-clear){flex:1 1 118px;min-width:0}
+    .gtt-record-actions .gtt-record-clear{font-size:11px}
+    @media(max-width:470px){.gtt-record-grid{grid-template-columns:1fr}.gtt-record-wide{grid-column:auto}.gtt-record-actions button:not(.gtt-record-clear){flex:1 1 90px}.gtt-record-actions .gtt-cust-primary{width:auto}.gtt-record-actions .gtt-record-clear{margin-left:0}.gtt-record-more>summary{align-items:flex-start}}
   `;
   document.head.appendChild(style);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();

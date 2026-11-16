@@ -1,41 +1,35 @@
-GLOBAL TRADE TOOL — Slack Share for Trade-In Record
+GLOBAL TRADE TOOL — COMPACT SLACK TRADE-IN RECORD
 November 16, 2026
 
-INSTALL — GitHub: GlobalHub9393/Tradetool
-1. Open the repo at github.com/GlobalHub9393/Tradetool.
-2. Replace ONLY the existing gtt-customer-tools.js with the supplied file.
-3. Commit the update. Refresh globaltradetool.com (hard refresh if cached).
+INSTALL
+1. Open the GlobalHub9393/Tradetool GitHub repository.
+2. Replace the existing root-level gtt-customer-tools.js with the file in this ZIP.
+3. Commit and wait for the Cloudflare Pages deployment; refresh GTT.
+4. On #3 Trade-In Record, test Copy, Slack, and Print on a store iPad.
 
-No changes needed to index.html, gtt-language.js, gtt-bundles.js, Supabase, or the Full Quote engine.
+WHAT CHANGED
+- Only four actions remain: Copy, Slack, Print, Clear Form.
+- Email Record and Print Blank Copy buttons are removed.
+- Slack / Copy message is a compact record: Promo Quoted, Plan, and Date first;
+  customer name, trade phone, trade model/value, conditions, IMEI, rep,
+  optional notes, and original new phone follow when available.
+- Empty fields are omitted from Slack/Copy message, not lost from the print template.
+- The single Print action prints current entries or a completely blank worksheet
+  if no record details have been entered. No automatic form reset.
+- Switching GTT pages, closing/reopening a quote record, printing, copying,
+  and sharing leave typed details in place. Only Clear Form (confirmed by the rep)
+  or refreshing/closing the browser page discards them.
+- Clear Form intentionally clears everything, including today's prefilled date.
+- Native Share opens the iPad/phone share menu; a rep selects Slack and the DM
+  or group. The OS determines whether Slack appears. Copy is the fallback.
+- No customer records are sent to a GTT backend or saved to localStorage.
+  Shared messages may be retained under your organization's Slack policies.
 
-WHAT'S NEW
-On both #3 Trade-In Record and the record accessed from a completed Full Quote, a new
-"Share to Slack" button sits beside Print Record, Email Record, and Print Blank Copy.
+SAFETY
+Trade-In Records may contain customer phone numbers and IMEIs. Share only to
+company-approved private conversations and follow your organization's data
+handling policies. The message is an internal record, not an official AT&T
+receipt or guarantee of promotion eligibility.
 
-- On supported devices, it opens the OS share menu with the formatted trade-in record.
-- Rep selects Slack, then the desired individual DM or group DM, reviews and taps Send.
-- Reps can share with whatever other destinations the OS provides; the website does
-  not force Slack or choose a DM on the rep's behalf.
-- If native sharing isn't supported, is canceled, or doesn't offer Slack, GTT shows
-  "Copy Record" and "Open Slack" actions. Copy/paste into the chosen DM/group.
-- All fields optional. Form stays filled in after sharing or copying.
-- Existing email-to-ts8686@cmcnj.com and print functionality remain unchanged.
-- No Slack login credentials, bot token, webhook, or customer record storage in GTT.
-
-IMPORTANT
-This is device-native sharing, NOT a direct Slack API integration. Slack must be
-installed, configured, and offered in the iPad's share menu for the quick flow;
-otherwise use Copy Record / Open Slack. The recipient chooses and sends in Slack.
-GTT cannot confirm delivery to Slack. Shared messages are stored in your Slack
-workspace under its retention and access rules; use only company-approved DMs/groups
-and follow customer-data policy. Clipboard copies can persist until overwritten.
-
-LOCAL CHECKS COMPLETED
-- JavaScript syntax check passed.
-- Browser test at 390, 834, and 1280 pixel widths passed.
-- Checked full/partial records, surname in title, trade phone number, credit, plan,
-  conditions, no form clearing, existing mailto link, fallback, and cancellations.
-- Full Quote prefill + share + subsequent print passed.
-- Actual iPad share-sheet and Slack app handoff must be tested on a store device.
-
-This ZIP is GitHub-ready; it does NOT publish the website automatically.
+FILES
+  gtt-customer-tools.js — only file to upload
