@@ -1,48 +1,45 @@
-GTT — Global Language Globe + Bundle What-If Phone Credit
-Prepared November 13, 2026
+GLOBAL TRADE TOOL — STANDALONE TRADE-IN RECORD
+Prepared November 16, 2026
 
-INSTALLATION — GitHub repository GlobalHub9393/Tradetool:
-
-1. Replace index.html in the root with the included index.html.
-2. Replace gtt-bundles.js in the root with the included gtt-bundles.js.
-3. Replace gtt-customer-tools.js in the root with the included gtt-customer-tools.js.
-4. ADD the new gtt-language.js in the root.
-5. Leave gtt-analytics.js and all other repository files unchanged.
-6. After Cloudflare Pages deploys the updated repository, refresh GTT.
-   If the old files stay cached, use a private tab or force reload.
-
-The included index.html is derived from the repository's live version
-(blob SHA 997e9588a57aec02b8f9648bbbd39ab2af1002b3) and differs only
-by a single script tag that loads gtt-language.js.
+INSTALLATION (GitHub repo GlobalHub9393/Tradetool)
+1. Open your repository and upload the four root-level files from this ZIP.
+2. Replace index.html, gtt-customer-tools.js and gtt-language.js.
+3. gtt-bundles.js is included UNCHANGED so the complete last working release is in one ZIP. Overwriting it is optional.
+4. Keep gtt-analytics.js, Supabase and all other files as they are.
+5. Refresh the website; if necessary, clear the website cache on the store tablet.
 
 FEATURES
-- Small 🌐 button on main pages and dialogs, including bundle and quote popups.
-- English, Spanish, Brazilian Portuguese, Turkish. The selection persists on device.
-- Fixed offline translations for primary GTT controls and bundle content. No
-  translation API or personal customer data is sent for translation.
-- Existing customer-facing language card follows the globe selection and
-  changing the language on that card updates the global choice.
-- Bundle explorer: optional 'What-if phone credit' editor.
-  Enter TOTAL estimated phone promotional credit (not an incremental credit).
-  It recalculates the hypothetical phone installment from full retail MSRP,
-  less entered total credit, divided by 36 months, for the BUNDLE comparison only.
-  It does NOT change the selected device, plan, trade value, promotion eligibility,
-  actual GTT phone quote, Supabase, analytics, trade worksheet or saved history.
-  Scenario resets whenever Bundle Explorer is closed and reopened.
-- Watch/tablet monthly amounts remain the values from the separate bundle table.
+- Home menu #3: Trade-In Record. Sales Tax Calculator moves to #4.
+- Also accessible in the More menu.
+- Standalone record: Date (defaults to Eastern today, editable), account holder,
+  trade-in phone number, trade-in device (searchable active trade catalog or
+  manual text), storage, IMEI, AT&T plan (catalog selection or manual text),
+  required Yes/No for three condition questions, promotional credit quoted
+  (manual, including prior quotes), optional rep initials and notes.
+- Original completed Full Quote Print Trade Record button remains available.
+  It pre-fills the trade-in phone, storage, condition, plan and available promo
+  credit; the entered promotional amount remains editable for the record.
+- Prints the same internal inspection sheet, with the amount clearly marked
+  as a CUSTOMER QUOTE, not a guaranteed AT&T credit.
+- No customer personal details are saved to browser storage or a database.
+  Form fields clear when leaving the standalone page, closing the record popup
+  or opening the print window. The printed page stays open until closed.
+- Live GTT trade catalog is used for dropdown options. A manually typed phone
+  is allowed if the model is absent from the catalog.
+- The globe and customer language features remain intact; new record labels
+  have translations for Spanish, Brazilian Portuguese and Turkish.
 
-IMPORTANT
-- The original phone quote remains the source of truth; what-if credits are
-  hypothetical and may not correspond to actual AT&T offer qualification.
-- Bundle amounts exclude service plans, taxes, fees and optional charges.
-- Product names and technical plan names remain unchanged. Some less-common
-  admin screens and historical/legal content may remain in English; core menus,
-  common quote controls and the bundle screen use the selected language.
-- Final amounts and stacking eligibility must be verified in OPUS/CCKM.
+NOT CHANGED
+- Main quote, credit calculations, Supabase data, Simple Tool, bundle offer
+  math or scenario changes, tax calculator math, and seasonal decorations.
 
-TESTING
-- Headless Chromium fixture tests at 390px, 834px, 1280px.
-- Tested 4-language switching while bundle modal open, quote state unchanged,
-  custom promo credit + watch selection, reset after reopening,
-  input maximum validation and zero console exceptions.
-- End-to-end Cloudflare Pages deployment not performed by ChatGPT.
+VALIDATION
+- Node syntax checks passed for all changed scripts and embedded index JS.
+- Static HTML navigation checked: #3 Trade-In Record; #4 Sales Tax Calculator.
+- JavaScript unit checks passed for date formatting, quoted credit print,
+  preserved quote prefill, phone formatting, condition fields and HTML escaping.
+- An interactive browser run was not possible in this environment because
+  the browser blocks local navigation. Verify visual fit on the store tablet.
+
+This ZIP is an update package, not a confirmed deployment. Nothing was
+published to GitHub automatically.
