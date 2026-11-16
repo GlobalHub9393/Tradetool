@@ -214,7 +214,10 @@
         <div class="gtt-record-field"><label for="gttRecPromo">Promotional credit quoted ($)</label><input id="gttRecPromo" name="promo" inputmode="decimal" maxlength="32" value="${safe(f.promo)}" placeholder="e.g. 930.00"><small class="gtt-plan-help">Enter the amount you actually quoted.</small></div>
         <div class="gtt-record-value-note" data-record-value><span>Reference trade value</span><strong>${s&&recordCurrencyValue(s.c.value)!==null?money(s.c.value):'Not selected'}</strong><small>From GTT when a matching device is selected</small></div>
       </div>
-      ${s?`<p class="gtt-record-original">New phone in the original quote: <strong>${safe(f.newPhone)}</strong></p>`:''}
+      <div class="gtt-record-grid gtt-record-new-phone"><div class="gtt-record-field gtt-record-wide">
+        <label for="gttRecNewPhone">New phone (optional)</label>
+        <input id="gttRecNewPhone" name="newPhone" maxlength="150" value="${safe(f.newPhone)}" placeholder="e.g. iPhone 18 Pro 256GB" autocomplete="off">
+      </div></div>
       <details class="gtt-record-more"><summary>Optional details <span>IMEI, rep &amp; notes</span></summary>
         <div class="gtt-record-grid">
           <div class="gtt-record-field"><label for="gttRecIMEI">Trade-in IMEI</label><input id="gttRecIMEI" name="imei" inputmode="numeric" maxlength="25" placeholder="Only if available" autocomplete="off"></div>
@@ -343,7 +346,7 @@
       ['Promotional credit quoted',promo?(promo+' (amount quoted; eligibility not guaranteed)'):''],
       ['Estimated trade-in value',val===null?'':money(val)],
       ['Rep / initials',input('rep')],
-      ['New phone on original quote',blankCopy?'':(s?.deviceLabel||'')],
+      ['New phone on original quote',input('newPhone')],
       ['Notes',input('notes')]
     ];
     return {account, report};
@@ -361,33 +364,29 @@
     const {account,report}=readTradeRecord(form,s);
     const item=i=>String(report[i]?.[1]||'').trim();
     const subject=tradeRecordLastName(account)||'Trade-In Record';
-    const parts=['TRADE-IN RECORD'+(account?' — '+account:'')];
-    // Put the amount actually quoted, plan and date first. Show every other
-    // available detail as one short line; omit empty fields entirely.
+    // Seven short lines in a fixed order. Blank fields never prevent sharing;
+    // use a dash so the recipient can see exactly what is still missing.
     const date=item(0).replace(/^(January|February|March|April|May|June|July|August|September|October|November|December) (\d{1,2}), (\d{4})$/,(_,month,day,year)=>{
       const n=['January','February','March','April','May','June','July','August','September','October','November','December'].indexOf(month)+1;
       return n+'/'+day+'/'+year;
     });
     const quoted=item(9).replace(/\s*\(amount quoted; eligibility not guaranteed\)$/i,'');
-    const primary=[];
-    if(quoted)primary.push('Promo quoted: '+quoted);
-    if(item(5))primary.push('Plan: '+item(5));
-    if(date)primary.push('Date: '+date);
-    if(primary.length)parts.push(primary.join(' | '));
-    const add=(label,value)=>{if(value)parts.push(label+': '+String(value).replace(/\s+/g,' ').trim());};
-    if(item(2))add('Trade phone #',item(2));
-    const trade=item(3),value=item(10);
-    if(trade||value)parts.push('Trade: '+[trade,value?'Est. value '+value:''].filter(Boolean).join(' | '));
-    add('New phone',item(12));
-    const conditions=[['Power',item(6)],['Find My off',item(7)],['Damage-free',item(8)]]
-      .filter(([,value])=>value)
-      .map(([label,value])=>label+' '+(value==='Yes'?'✓':value==='No'?'✗':value));
-    if(conditions.length)parts.push('Condition: '+conditions.join(' · '));
-    add('IMEI',item(4));
-    add('Rep',item(11));
-    add('Notes',item(13));
-    parts.push('Internal record · Confirm promotion in AT&T systems.');
-    return {subject,body:parts.join('\n')};
+    const trade=[item(3),item(2)].filter(Boolean).join(' · ');
+    const condition=[['Power',item(6)],['Find My off',item(7)],['Damage-free',item(8)]]
+      .filter(([,answer])=>answer)
+      .map(([label,answer])=>label+' '+(answer==='Yes'?'✓':answer==='No'?'✗':answer));
+    const field=(label,value)=>label+': '+(value||'—');
+    const body=[
+      'TRADE-IN RECORD',
+      field('Customer name',account),
+      field('Date',date),
+      field('Quoted price',quoted),
+      field('Plan',item(5)),
+      field('Trade phone',trade),
+      field('Condition',condition.join(' · ')),
+      field('New phone',item(12))
+    ].join('\n');
+    return {subject,body};
   }
   function slackShareText(form,s){return tradeRecordMessage(form,s).body;}
   function shareStatus(form,message){
@@ -600,6 +599,7 @@
     .gtt-record-value-note small{font-size:10px;color:var(--r-muted);line-height:1.3}
     .gtt-record-original{background:var(--r-alt);color:var(--r-muted);border-color:var(--r-line);margin:13px 0 0}
     .gtt-record-original strong{color:var(--r-text)}
+    .gtt-record-new-phone{margin-top:13px}
     .gtt-record-more{margin:22px 0 0;padding:0;border:1px solid var(--r-line);border-radius:11px;background:var(--r-surface)}
     .gtt-record-more>summary{display:flex;justify-content:space-between;gap:10px;align-items:center;cursor:pointer;padding:13px 15px;color:var(--r-text);font-size:12px;font-weight:750;min-height:46px;list-style:none}
     .gtt-record-more>summary::-webkit-details-marker{display:none}
