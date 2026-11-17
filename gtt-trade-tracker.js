@@ -96,7 +96,7 @@ function renderList(){
   <div class="gtt-trk-card-expanded" hidden data-tracker-expanded="${esc(r.id)}">
     <div class="gtt-trk-detail-grid"><span>Trade number</span><b>${esc(r.trade_phone||'—')}</b><span>IMEI</span><b>${esc(r.imei||'—')}</b><span>New phone</span><b>${esc(r.new_phone||'—')}</b><span>Condition</span><b>${esc(conditionOf(r))}</b><span>Rep</span><b>${esc(r.rep||'—')}</b><span>Received on</span><b>${esc(shortDate(r.received_at))}</b>${state.unlocked&&r.notes?`<span>Notes</span><b>${esc(r.notes)}</b>`:''}</div>
     <div class="gtt-trk-detail-actions"><label><input type="checkbox" data-tracker-received="${esc(r.id)}" ${r.received?'checked':''}> Trade received</label>
-      ${state.unlocked?`<button type="button" data-tracker-edit="${esc(r.id)}">Edit record</button>`:'<button type="button" data-tracker-unlock="yes">Unlock to edit</button>'}</div>
+      <div class="gtt-trk-manage-actions">${state.unlocked?`<button type="button" data-tracker-edit="${esc(r.id)}">Edit record</button><button type="button" class="gtt-trk-delete" data-tracker-delete="${esc(r.id)}" aria-label="Delete this trade record">Delete Trade</button>`:'<button type="button" data-tracker-unlock="yes">Unlock to edit or delete</button>'}</div></div>
   </div></article>`;
  }).join('');
  listContent.querySelectorAll('[data-tracker-details]').forEach(btn=>btn.addEventListener('click',()=>{
@@ -109,6 +109,16 @@ function renderList(){
   catch(e){alert(e.message);el.checked=!isReceived;el.disabled=false;}
  }));
  listContent.querySelectorAll('[data-tracker-edit]').forEach(el=>el.addEventListener('click',()=>openEdit(el.dataset.trackerEdit)));
+ listContent.querySelectorAll('[data-tracker-delete]').forEach(el=>el.addEventListener('click',async()=>{
+  const id=el.dataset.trackerDelete,row=state.rows.find(item=>item.id===id);
+  if(!state.unlocked||!state.token||!row){showKeypad();return;}
+  const who=row.customer_name||'this trade';
+  if(!confirm(`Permanently delete the trade record for ${who}?\n\nThis removes it from every store list and cannot be undone.`))return;
+  el.disabled=true;
+  const originalText=el.textContent;el.textContent='Deleting…';
+  try{await api('delete',{id,token:state.token});await refresh();setListStatus('Trade record permanently deleted.');}
+  catch(error){setListStatus(error.message,true);el.textContent=originalText;el.disabled=false;}
+ }));
  listContent.querySelectorAll('[data-tracker-unlock]').forEach(el=>el.addEventListener('click',showKeypad));
 }
 function showKeypad(){const d=$('gttTrackerPinDialog');d.showModal();const display=$('gttTrackerPinDots'),message=$('gttTrackerPinMessage');let pin='';message.textContent='';
@@ -150,6 +160,7 @@ const style=document.createElement('style');style.textContent=`
  .gtt-trk-card{background:var(--v4-surface,#fff);border:1px solid var(--v4-line,#d7e3ec);border-left:5px solid #7896a7;border-radius:13px;padding:13px 15px;box-shadow:0 4px 12px #0000000a}.gtt-trk-card.orange{border-left-color:#e69b31}.gtt-trk-card.red{border-left-color:#e15358}.gtt-trk-card.received{border-left-color:#23a36b}.gtt-trk-card-main{display:flex;justify-content:space-between;align-items:start;gap:14px}.gtt-trk-customer{font-size:15px;font-weight:800;display:flex;flex-direction:column;gap:3px}.gtt-trk-customer small{font-weight:500;font-size:11px;color:var(--v4-muted,#70818f)}.gtt-trk-promo{font-size:20px;font-weight:850;text-align:right;white-space:nowrap}.gtt-trk-promo small{display:block;font-size:10px;font-weight:500;color:var(--v4-muted,#70818f)}
  .gtt-trk-card-meta{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:12px;color:var(--v4-muted,#70818f);margin:11px 0}.gtt-trk-card-bottom{display:flex;align-items:center;gap:10px;border-top:1px solid var(--v4-line,#d7e3ec);padding-top:10px;font-size:11px}.gtt-trk-status{font-weight:800}.gtt-trk-card.orange .gtt-trk-status{color:#d78a20}.gtt-trk-card.red .gtt-trk-status{color:#e15358}.gtt-trk-card.received .gtt-trk-status{color:#20a46c}.gtt-trk-age{color:var(--v4-muted,#70818f)}.gtt-trk-details{margin-left:auto;border:0;background:transparent;color:var(--v4-blue,#0781be);cursor:pointer;font-weight:800}
  .gtt-trk-card-expanded{padding:13px 0 0;border-top:1px solid var(--v4-line,#d7e3ec);margin-top:11px}.gtt-trk-detail-grid{display:grid;grid-template-columns:120px minmax(0,1fr);gap:9px 12px;font-size:12px}.gtt-trk-detail-grid span{color:var(--v4-muted,#70818f)}.gtt-trk-detail-grid b{font-weight:650;overflow-wrap:anywhere}.gtt-trk-detail-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:17px}.gtt-trk-detail-actions label{font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px}.gtt-trk-detail-actions input{width:18px;height:18px;accent-color:#128761}.gtt-trk-detail-actions button{border:1px solid var(--v4-line,#d7e3ec);border-radius:8px;padding:8px 11px;color:var(--v4-ink,#1a3345);background:var(--v4-alt,#f4f7fa);font-size:12px;font-weight:800;cursor:pointer}
+ .gtt-trk-manage-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.gtt-trk-detail-actions .gtt-trk-delete{color:#b33b43;border-color:#cf777d;background:transparent}.gtt-trk-detail-actions .gtt-trk-delete:hover{background:rgba(205,60,74,.09)}.gtt-trk-detail-actions .gtt-trk-delete:disabled{opacity:.55;cursor:wait}
  .gtt-trk-empty{text-align:center;padding:45px 18px;color:var(--v4-muted,#71808c);font-size:13px;border:1px dashed var(--v4-line,#d7e3ec);border-radius:12px}
  .gtt-trk-dialog{background:var(--v4-surface,#fff);color:var(--v4-ink,#1a3345);border:1px solid var(--v4-line,#d7e3ec);border-radius:16px;max-height:88dvh;overflow-y:auto;box-shadow:0 20px 75px #0006;width:min(92vw,640px);padding:20px}.gtt-trk-dialog::backdrop{background:#071b30b8}.gtt-trk-dialog>div:first-child{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.gtt-trk-dialog h3{margin:0;font-size:18px}.gtt-trk-close{border:0;background:none;color:var(--v4-ink,#1a3345);font-size:25px;cursor:pointer}
  .gtt-trk-keypad{width:236px;max-width:100%;margin:13px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.gtt-trk-keypad button{min-height:52px;border:1px solid var(--v4-line,#d7e3ec);background:var(--v4-alt,#f4f7fa);color:var(--v4-ink,#1a3345);border-radius:11px;font-size:20px;font-weight:800;cursor:pointer}.gtt-trk-pin-dots{text-align:center;font-size:27px;letter-spacing:8px;margin:8px}.gtt-trk-pin-note{text-align:center;font-size:12px;color:#d65a4c;min-height:20px}
