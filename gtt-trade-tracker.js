@@ -76,7 +76,7 @@ async function refresh(){
  finally{state.loading=false;}
 }
 function ageOf(row){return Math.max(0,Math.floor((Date.now()-new Date(row.created_at).getTime())/86400000));}
-function labelOf(row){if(row.received)return 'Received';const age=ageOf(row);return age>=31?'Urgent · '+Math.max(0,40-age)+'d left':age>=25?'Follow up · '+Math.max(0,40-age)+'d left':'Pending · '+Math.max(0,40-age)+'d left';}
+function labelOf(row){if(row.received)return 'Received';const age=ageOf(row),remaining=30-age;const timing=remaining>0?remaining+' day'+(remaining===1?'':'s')+' left':remaining===0?'Due today':(-remaining)+' day'+(remaining===-1?'':'s')+' late';return (age>=31?'Urgent · ':age>=25?'Follow up · ':'Pending · ')+timing;}
 function gradeOf(row){return row.received?'received':ageOf(row)>=31?'red':ageOf(row)>=25?'orange':'normal';}
 function conditionOf(row){const vals=[['Power',row.power_ok],['Find My off',row.lock_off],['Damage-free',row.damage_free]];return vals.map(([n,v])=>`${n} ${v===true?'✓':v===false?'✕':'—'}`).join(' · ');}
 function renderList(){
