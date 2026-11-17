@@ -170,11 +170,15 @@
   }
   function conditionRadios(name,value,question){
     const selected=value===true?'yes':value===false?'no':'';
-    return `<fieldset class="gtt-record-condition"><legend>${safe(question)}</legend><div class="gtt-record-choices">
-      <label><input type="radio" name="${name}" value="yes" ${selected==='yes'?'checked':''}><span>Yes</span></label>
-      <label><input type="radio" name="${name}" value="no" ${selected==='no'?'checked':''}><span>No</span></label>
-      <label class="gtt-record-skip"><input type="radio" name="${name}" value="" ${selected===''?'checked':''}><span>Blank</span></label>
-    </div></fieldset>`;
+    const id='gttRecCondition'+name;
+    return `<div class="gtt-record-condition" role="group" aria-labelledby="${id}">
+      <span id="${id}" class="gtt-record-condition-title">${safe(question)}</span>
+      <div class="gtt-record-choices">
+        <label><input type="radio" name="${name}" value="yes" ${selected==='yes'?'checked':''}><span>Yes</span></label>
+        <label><input type="radio" name="${name}" value="no" ${selected==='no'?'checked':''}><span>No</span></label>
+        <label class="gtt-record-skip"><input type="radio" name="${name}" value="" ${selected===''?'checked':''}><span>Blank</span></label>
+      </div>
+    </div>`;
   }
   function recordSearchField(name,label,value,hint,standalone,wide=false){
     const suffix=standalone?'Standalone':'Quote';
@@ -183,7 +187,7 @@
       <label for="${id}">${safe(label)}</label>
       <div class="gtt-record-combobox" data-record-combo="${name}">
         <input id="${id}" name="${name}" maxlength="150" value="${safe(value)}" autocomplete="off" spellcheck="false"
-          placeholder="${name==='device'?'Search or type any phone':name==='plan'?'Search or enter plan':'e.g. 128 GB'}"
+          placeholder="${name==='device'?'Search or type any phone':name==='newPhone'?'Search or enter purchased phone':name==='plan'?'Search or enter plan':'e.g. 128 GB'}"
           role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="${id}Menu">
         <div id="${id}Menu" class="gtt-record-suggestions" role="listbox" hidden></div>
       </div>
@@ -194,54 +198,61 @@
     const f=recordFields(s);
     if(clearBlank)f.date='';
     return `<form class="gtt-record-form ${standalone?'gtt-record-standalone':''}" id="${standalone?'gttRecordStandaloneForm':'gttRecordForm'}" autocomplete="off">
-      <div class="gtt-record-topline"><p>${standalone?'Fill out what you know now, or print an empty worksheet for later.':'Details from the completed quote are prefilled. Edit or leave any field blank.'}</p><span>All fields optional</span></div>
-      <div class="gtt-record-section-heading"><h3>Customer &amp; trade</h3></div>
-      <div class="gtt-record-grid">
-        <div class="gtt-record-field"><label for="gttRecDate">Purchase / quote date</label><input id="gttRecDate" name="date" type="date" value="${safe(f.date)}"></div>
-        <div class="gtt-record-field"><label for="gttRecAccount">Account holder name</label><input id="gttRecAccount" name="accountHolder" maxlength="100" placeholder="Customer name" autocomplete="off"></div>
-        <div class="gtt-record-field"><label for="gttRecTradePhone">Trade-in phone number</label><input id="gttRecTradePhone" name="tradePhone" type="tel" inputmode="tel" maxlength="22" placeholder="(555) 555-0123" autocomplete="off"></div>
-        ${recordSearchField('plan','AT&T plan',f.plan,'',standalone)}
-        ${recordSearchField('device','Phone being traded in',f.device,'Search the device list or type one manually.',standalone,true)}
-        ${recordSearchField('storage','Storage / capacity',f.storage,'',standalone)}
+      <div class="gtt-record-topline">
+        <div class="gtt-rec-form-intro"><span class="gtt-rec-eyebrow">TRADE-IN WORKSHEET</span><strong>${standalone?'New trade record':'Trade details from quote'}</strong><p>Start with the quote. Add inspection details when available.</p></div>
+        <span class="gtt-rec-optional">Fields optional</span>
       </div>
-      <section class="gtt-record-conditions" aria-label="Device inspection"><div class="gtt-record-section-heading"><h3>Device condition</h3><span>Leave unanswered items blank</span></div>
-        ${conditionRadios('power',f.power,'Powers on and functions?')}
-        ${conditionRadios('lock',f.lock,'Activation Lock / Find My turned off?')}
-        ${conditionRadios('cracks',f.cracks,'Free of cracks, chips and damage?')}
+      <section class="gtt-rec-panel gtt-rec-panel-priority" aria-labelledby="gttRecEssentials">
+        <div class="gtt-record-section-heading"><h3 id="gttRecEssentials">Customer &amp; quote</h3><span>Start here</span></div>
+        <div class="gtt-record-grid gtt-rec-essentials-grid">
+          <div class="gtt-record-field"><label for="gttRecAccount">Customer name</label><input id="gttRecAccount" name="accountHolder" maxlength="100" placeholder="First and last name" autocomplete="off"></div>
+          <div class="gtt-record-field"><label for="gttRecDate">Purchase / quote date</label><input id="gttRecDate" name="date" type="date" value="${safe(f.date)}"></div>
+          <div class="gtt-record-field gtt-rec-promo-field"><label for="gttRecPromo">Promotional credit quoted ($)</label><input id="gttRecPromo" name="promo" inputmode="decimal" maxlength="32" value="${safe(f.promo)}" placeholder="e.g. 1200.00"></div>
+          ${recordSearchField('plan','AT&T plan',f.plan,'Search or enter plan',standalone)}
+          <div class="gtt-record-field"><label for="gttRecTradePhone">Trade-in phone number</label><input id="gttRecTradePhone" name="tradePhone" type="tel" inputmode="tel" maxlength="22" placeholder="(555) 555-0123" autocomplete="off"></div>
+          ${recordSearchField('newPhone','New phone purchased',f.newPhone,'Select from GTT phones or type a model.',standalone)}
+        </div>
       </section>
-      <div class="gtt-record-section-heading"><h3>Promotional quote</h3></div>
-      <div class="gtt-record-grid">
-        <div class="gtt-record-field"><label for="gttRecPromo">Promotional credit quoted ($)</label><input id="gttRecPromo" name="promo" inputmode="decimal" maxlength="32" value="${safe(f.promo)}" placeholder="e.g. 930.00"><small class="gtt-plan-help">Enter the amount you actually quoted.</small></div>
-        <div class="gtt-record-value-note" data-record-value><span>Reference trade value</span><strong>${s&&recordCurrencyValue(s.c.value)!==null?money(s.c.value):'Not selected'}</strong><small>From GTT when a matching device is selected</small></div>
-      </div>
-      <div class="gtt-record-grid gtt-record-new-phone"><div class="gtt-record-field gtt-record-wide">
-        <label for="gttRecNewPhone">New phone (optional)</label>
-        <input id="gttRecNewPhone" name="newPhone" maxlength="150" value="${safe(f.newPhone)}" placeholder="e.g. iPhone 18 Pro 256GB" autocomplete="off">
-      </div></div>
-      <details class="gtt-record-more"><summary>Optional details <span>IMEI, rep &amp; notes</span></summary>
+      <section class="gtt-rec-panel gtt-rec-panel-trade" aria-labelledby="gttRecTradeDeviceTitle">
+        <div class="gtt-record-section-heading"><h3 id="gttRecTradeDeviceTitle">Phone being traded in</h3><span>Device &amp; value</span></div>
+        <div class="gtt-record-grid gtt-rec-device-grid">
+          ${recordSearchField('device','Trade-in device',f.device,'Search the device list or type one manually.',standalone,true)}
+          ${recordSearchField('storage','Storage / capacity',f.storage,'',standalone)}
+          <div class="gtt-record-value-note" data-record-value><span>Reference trade value</span><strong>${s&&recordCurrencyValue(s.c.value)!==null?money(s.c.value):'Not verified'}</strong><small>Estimated from the device catalog</small></div>
+        </div>
+      </section>
+      <section class="gtt-record-conditions" aria-label="Device inspection">
+        <div class="gtt-record-section-heading"><h3>Device condition</h3><span>Yes / No / Blank</span></div>
+        ${conditionRadios('power',f.power,'Powers on and functions')}
+        ${conditionRadios('lock',f.lock,'Find My / Activation Lock off')}
+        ${conditionRadios('cracks',f.cracks,'No cracks, chips, or damage')}
+      </section>
+      <details class="gtt-record-more"><summary>Additional details <span>IMEI, rep &amp; notes</span></summary>
         <div class="gtt-record-grid">
           <div class="gtt-record-field"><label for="gttRecIMEI">Trade-in IMEI</label><input id="gttRecIMEI" name="imei" inputmode="numeric" maxlength="25" placeholder="Only if available" autocomplete="off"></div>
           <div class="gtt-record-field"><label for="gttRecRep">Rep / initials</label><input id="gttRecRep" name="rep" maxlength="60" placeholder="Rep" autocomplete="off"></div>
-          <div class="gtt-record-field gtt-record-wide"><label for="gttRecNotes">Additional notes</label><textarea id="gttRecNotes" name="notes" maxlength="350" rows="2" placeholder="Prior quote details, visible damage or other observations"></textarea></div>
+          <div class="gtt-record-field gtt-record-wide"><label for="gttRecNotes">Additional notes</label><textarea id="gttRecNotes" name="notes" maxlength="350" rows="2" placeholder="Prior quote details or device observations"></textarea></div>
         </div>
       </details>
       <div class="gtt-record-actions">
-        <button type="button" class="gtt-cust-secondary" data-record-copy>📋 Copy</button>
-        <button type="button" class="gtt-cust-primary gtt-record-slack" data-record-slack aria-label="Share record to a Slack DM or group">↗ Slack</button>
-        <button type="submit" class="gtt-cust-secondary" data-record-print>🖨️ Print</button>
+        <button type="button" class="gtt-cust-secondary" data-record-copy>Copy</button>
+        <button type="button" class="gtt-cust-primary gtt-record-slack" data-record-slack aria-label="Share record to a Slack DM or group">Share</button>
+        <button type="submit" class="gtt-cust-secondary" data-record-print>Print</button>
         <button type="button" class="gtt-record-clear" data-record-reset>Clear Form</button>
       </div>
-      <div class="gtt-record-share-help" data-record-share-help hidden aria-live="polite">
-        <p>Share unavailable? Use Copy, open Slack, and paste into the DM or group you choose.</p>
-      </div>
+      <div class="gtt-record-share-help" data-record-share-help hidden aria-live="polite"><p>Share unavailable? Use Copy, then paste in the Slack conversation you choose.</p></div>
       <small class="gtt-record-share-status" data-record-share-status role="status" aria-live="polite"></small>
-      <p class="gtt-record-privacy">No browser storage or automatic sending. Only Clear Form removes the current entries. Shared messages may be retained in Slack.</p>
+      <p class="gtt-record-privacy">Your entries stay here until you clear them or close the page. Sharing may retain a copy in Slack.</p>
     </form>`;
   }
   function populateRecordCatalog(form){
     if(!form?.isConnected)return;
     const device=form.elements.namedItem('device'),storage=form.elements.namedItem('storage');
     const deviceChoices=()=>[...new Set(tradeRows().map(r=>[r.brand,r.model].join(' ').trim()))].filter(Boolean).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+    const newPhoneChoices=()=>{
+      try {return [...new Set((window.GTTQuote?.phones?.()||[]).map(p=>[p.name,p.storage].filter(Boolean).join(' ').trim()))].filter(Boolean).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));}
+      catch(_){return [];}
+    };
     const plans=()=>[...new Set(planRows().map(r=>r.name))].filter(Boolean).sort((a,b)=>a.localeCompare(b));
     function storageChoices(){return [...new Set(tradeRows().filter(r=>normRecord(r.brand+' '+r.model)===normRecord(device.value)).map(r=>r.storage).filter(Boolean))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));}
     function applyStorage(){
@@ -253,7 +264,7 @@
     }
     // Native <datalist> menus are rendered by the browser and can be detached
     // from the input on iPads. Use in-form anchored, scrollable menus instead.
-    for(const [name,getChoices] of [['device',deviceChoices],['storage',storageChoices],['plan',plans]]){
+    for(const [name,getChoices] of [['device',deviceChoices],['newPhone',newPhoneChoices],['storage',storageChoices],['plan',plans]]){
       const input=form.elements.namedItem(name);
       const wrap=input.closest('.gtt-record-combobox'),menu=wrap?.querySelector('.gtt-record-suggestions');
       if(!menu||wrap.dataset.bound==='yes')continue;
@@ -630,6 +641,72 @@
     .gtt-record-actions button:not(.gtt-record-clear){flex:1 1 118px;min-width:0}
     .gtt-record-actions .gtt-record-clear{font-size:11px}
     @media(max-width:470px){.gtt-record-grid{grid-template-columns:1fr}.gtt-record-wide{grid-column:auto}.gtt-record-actions button:not(.gtt-record-clear){flex:1 1 90px}.gtt-record-actions .gtt-cust-primary{width:auto}.gtt-record-actions .gtt-record-clear{margin-left:0}.gtt-record-more>summary{align-items:flex-start}}
+
+    /* Mobile-first trade-entry refresh. Deliberately scoped to record forms only. */
+    .gtt-record-form{padding:18px 20px 22px!important}
+    .gtt-record-topline{align-items:center;margin-bottom:16px;gap:10px}
+    .gtt-rec-form-intro{min-width:0;display:flex;flex-direction:column;gap:3px}
+    .gtt-rec-eyebrow{font-size:9px;letter-spacing:.12em;font-weight:850;color:var(--r-accent)}
+    .gtt-rec-form-intro strong{font-size:18px;line-height:1.2;letter-spacing:-.03em;color:var(--r-text)}
+    .gtt-rec-form-intro p{font-size:11px;line-height:1.35;margin:2px 0 0;color:var(--r-muted)}
+    .gtt-record-topline>.gtt-rec-optional{font-size:10px;flex:none;padding:5px 9px}
+    .gtt-rec-panel{border:1px solid var(--r-line);border-radius:13px;padding:15px 16px;margin:0 0 13px;background:var(--r-surface)}
+    .gtt-rec-panel-priority{background:color-mix(in srgb,var(--r-accent) 4%,var(--r-surface));border-color:color-mix(in srgb,var(--r-accent) 23%,var(--r-line))}
+    .gtt-rec-panel .gtt-record-section-heading{margin:0 0 13px}
+    .gtt-rec-panel .gtt-record-section-heading h3{font-size:14px}
+    .gtt-rec-panel .gtt-record-section-heading span{font-size:10px}
+    .gtt-record-grid{gap:12px 14px}
+    .gtt-record-field{gap:5px}
+    .gtt-record-field>label{font-size:12px;font-weight:720}
+    .gtt-record-form .gtt-record-field input,.gtt-record-form .gtt-record-field textarea{min-height:45px;padding:10px 12px;border-radius:9px;font-size:15px;background:var(--r-surface)}
+    .gtt-record-form .gtt-record-field input:focus{background:var(--r-surface)}
+    .gtt-rec-promo-field input{border-color:color-mix(in srgb,var(--r-accent) 42%,var(--r-line))!important;font-weight:750!important;font-size:17px!important}
+    .gtt-record-suggestions{max-height:210px}
+    .gtt-record-option{min-height:45px;font-size:13px}
+    .gtt-rec-device-grid>.gtt-record-wide{grid-column:1/-1}
+    .gtt-rec-device-grid .gtt-record-value-note{min-height:45px;padding:8px 12px;border-radius:9px;gap:0;margin:0;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:10px}
+    .gtt-rec-device-grid .gtt-record-value-note span{font-size:10px}
+    .gtt-rec-device-grid .gtt-record-value-note strong{font-size:15px;grid-column:2;grid-row:1 / span 2}
+    .gtt-rec-device-grid .gtt-record-value-note small{font-size:9px;grid-column:1;line-height:1.25}
+    .gtt-record-conditions{margin:0 0 13px;padding:12px 16px 4px;background:var(--r-surface);border-radius:13px}
+    .gtt-record-conditions .gtt-record-section-heading{margin:0 0 8px}
+    .gtt-record-condition{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;margin:0;border:0;border-top:1px solid var(--r-line)}
+    .gtt-record-condition-title{flex:1;min-width:0;font-size:12px;line-height:1.35;font-weight:700;color:var(--r-text)}
+    .gtt-record-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;flex:0 0 242px;align-items:center;justify-content:initial}
+    .gtt-record-choices label{display:flex;align-items:center;justify-content:center;min-height:39px;gap:5px;padding:5px;border-radius:8px;font-size:11px}
+    .gtt-record-choices input{width:15px;height:15px;flex:none}
+    .gtt-record-more{margin:0;border-radius:12px}
+    .gtt-record-more>summary{min-height:46px;padding:11px 15px}
+    .gtt-record-actions{margin-top:15px;gap:8px}
+    .gtt-record-actions button,.gtt-record-actions a{min-height:45px;padding:9px 12px}
+    .gtt-record-actions .gtt-tracker-save{min-width:150px;border-radius:9px}
+    .gtt-record-actions .gtt-record-clear{margin-left:auto}
+    .gtt-record-privacy{margin-top:11px;font-size:10px}
+    @media(max-width:700px){
+      .gtt-record-form{padding:15px!important}
+      .gtt-record-form .gtt-record-field input,.gtt-record-form .gtt-record-field textarea{font-size:16px}
+      .gtt-rec-panel{padding:13px;margin-bottom:11px}
+      .gtt-record-grid{grid-template-columns:minmax(0,1fr);gap:11px}
+      .gtt-record-wide{grid-column:auto}
+      .gtt-record-topline{align-items:flex-start}
+      .gtt-record-topline>.gtt-rec-optional{margin-top:3px}
+      .gtt-rec-device-grid .gtt-record-value-note{min-height:44px}
+      .gtt-record-condition{display:flex;flex-direction:column;align-items:stretch;gap:8px;padding:11px 0}
+      .gtt-record-condition-title{font-size:12px;flex:none}
+      .gtt-record-choices{flex:none;width:100%;gap:7px}
+      .gtt-record-choices label{min-height:44px;font-size:12px}
+      .gtt-record-conditions{padding:11px 13px 2px}
+      .gtt-record-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+      .gtt-record-actions .gtt-tracker-save{grid-column:1/-1;width:100%;min-height:50px}
+      .gtt-record-actions button:not(.gtt-record-clear){min-width:0!important;flex:auto}
+      .gtt-record-actions .gtt-record-clear{grid-column:1/-1;justify-self:center;margin:0;min-height:38px}
+      #gttTradeRecordDialog .gtt-record-actions:not(:has(.gtt-tracker-save)) .gtt-cust-secondary,#gttTradeRecordDialog .gtt-record-actions:not(:has(.gtt-tracker-save)) .gtt-cust-primary{grid-column:auto}
+    }
+    @media(max-width:380px){
+      .gtt-record-topline>.gtt-rec-optional{white-space:normal;max-width:95px;text-align:center}
+      .gtt-record-choices label{font-size:11px;padding:4px}
+      .gtt-record-actions .gtt-cust-secondary,.gtt-record-actions .gtt-cust-primary{font-size:11px;padding:9px 5px}
+    }
   `;
   document.head.appendChild(style);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
