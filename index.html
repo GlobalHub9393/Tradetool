@@ -8,6 +8,7 @@
 <script defer src="/gtt-customer-tools.js"></script>
 <script defer src="/gtt-bundles.js"></script>
 <script defer src="/gtt-language.js"></script>
+<script defer src="/gtt-trade-tracker.js"></script>
 <style>
   :root{
     --blue:#0568AE; --blue-dark:#034b80; --navy1:#0b2a4a; --navy2:#06203b;
@@ -1633,12 +1634,38 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
   <header class="v4-brand"><div class="v4-brandrow"><div><div class="v4-kicker">AT&amp;T Authorized Retail</div><div class="v4-title"><h1>Global Trade Tool</h1><span id="v4DbDot" class="v4-db" title="Checking Supabase"></span></div><div class="v4-sub">Trade values, quotes and sales tools in one place.</div></div><div class="v4-ver">LIVE VERSION<strong id="v4Version">4.9</strong></div></div></header>
   <nav class="v4-topnav"><div class="v4-topnav-inner"><button class="v4-navbtn active" data-v4go="home">Home</button><button class="v4-navbtn" data-v4go="trade">Trade Tool</button><button class="v4-navbtn" data-v4go="simple">Simple Tool</button><button class="v4-navbtn" data-v4more>More</button></div></nav>
   <div class="v4-launch" data-v4go="news"><div><b>Apple Promo Updates</b><span>Duo is now available</span></div><em>View →</em></div>
-  <section id="v4Home" class="v4-page active v4-home"><div class="v4-homeintro"><h2>What do you need?</h2><p>Build a full quote, check a trade opportunity, print a trade-in record, or calculate sales tax.</p></div><div class="v4-lane" data-v4go="trade"><div class="v4-num">01</div><div class="v4-copy"><h3>Trade Tool</h3><p>The original GTT workflow with plans, activation type, device, trade value and current promotional result.</p><div class="v4-hint"><span>Full Quote</span><span>Current Promos</span><span>Exact Eligibility</span></div></div><div class="v4-arrow">›</div></div><div class="v4-lane" data-v4go="simple"><div class="v4-num">02</div><div class="v4-copy"><h3>Simple Tool</h3><p>Start with the customer's phone. See its current trade value and the strongest Apple, Samsung, Pixel, and Motorola opportunities.</p><div class="v4-hint"><span>Quick Lookup</span><span>Best Opportunity</span></div></div><div class="v4-arrow">›</div></div><button type="button" class="v4-lane" data-v4go="record"><div class="v4-num">03</div><div class="v4-copy"><h3>Trade-In Record</h3><p>Fill out an inspection record now or later. Choose a trade phone, document its condition and the promotional quote, then print.</p><div class="v4-hint"><span>Standalone</span><span>Print Only</span></div></div><div class="v4-arrow">›</div></button><button type="button" class="v4-lane" data-v4go="tax"><div class="v4-num">04</div><div class="v4-copy"><h3>Sales Tax Calculator</h3><p>Add phones, tablets, and watches to calculate the New Jersey sales tax due at checkout.</p><div class="v4-hint"><span>Multiple Devices</span><span>Browns Mills UEZ</span></div></div><div class="v4-arrow">›</div></button></section>
+  <section id="v4Home" class="v4-page active v4-home"><div class="v4-homeintro"><h2>What do you need?</h2><p>Build a full quote, check a trade opportunity, print a trade-in record, or calculate sales tax.</p></div><div class="v4-lane" data-v4go="trade"><div class="v4-num">01</div><div class="v4-copy"><h3>Trade Tool</h3><p>The original GTT workflow with plans, activation type, device, trade value and current promotional result.</p><div class="v4-hint"><span>Full Quote</span><span>Current Promos</span><span>Exact Eligibility</span></div></div><div class="v4-arrow">›</div></div><div class="v4-lane" data-v4go="simple"><div class="v4-num">02</div><div class="v4-copy"><h3>Simple Tool</h3><p>Start with the customer's phone. See its current trade value and the strongest Apple, Samsung, Pixel, and Motorola opportunities.</p><div class="v4-hint"><span>Quick Lookup</span><span>Best Opportunity</span></div></div><div class="v4-arrow">›</div></div><button type="button" class="v4-lane" data-v4go="record"><div class="v4-num">03</div><div class="v4-copy"><h3>Trade-In Record</h3><p>Create and track trade-in records by store. Follow pending phones, received trades, and 40-day deadlines.</p><div class="v4-hint"><span>Standalone</span><span>40-Day Tracker</span></div></div><div class="v4-arrow">›</div></button><button type="button" class="v4-lane" data-v4go="tax"><div class="v4-num">04</div><div class="v4-copy"><h3>Sales Tax Calculator</h3><p>Add phones, tablets, and watches to calculate the New Jersey sales tax due at checkout.</p><div class="v4-hint"><span>Multiple Devices</span><span>Browns Mills UEZ</span></div></div><div class="v4-arrow">›</div></button></section>
   <section id="v4Simple" class="v4-page v4-section"><button class="v4-back" data-v4go="home">← Home</button><h2>Simple Tool</h2><p class="v4-sectionlead">Search a phone, pick storage, and compare estimated maximum offers on select Apple, Samsung, Pixel, and Motorola devices. Expand a brand to compare plans.</p><input id="v4TradeSearch" class="v4-search" placeholder="Search trade-in phone…" autocomplete="off"><div id="v4Suggestions" class="v4-suggestions"></div><div id="v4Storage" class="v4-storage"></div>
   <div id="v4SimpleResult" class="v4-simple-result"><div class="v4-value"><small>Current trade value</small><strong id="v4RawValue">$—</strong><div id="v4SelectedTrade" style="font-size:10px;color:var(--v4-muted);margin-top:4px"></div></div><div id="v4Opps" class="v4-opps"></div>
   <p id="v4SimpleDisclaimer" class="v4-simple-disclaimer">Maximum promotional credits are for select new devices and qualifying plans. Build Full Quote to verify the exact device, plan, and eligibility in OPUS/CCKM.</p>
   <button id="v4BuildQuote" class="v4-primary">Build Full Quote →</button></div></section>
-  <section id="v4Record" class="v4-page v4-section" aria-labelledby="gttRecordTitle"><button class="v4-back" data-v4go="home">← Home</button><h2 id="gttRecordTitle">Trade-In Record</h2><p class="v4-sectionlead">Complete an inspection worksheet without building a quote. Print it for the designated Trade-In Records area. Nothing is saved.</p><div id="gttStandaloneRecordMount" aria-live="polite"></div></section>
+  <section id="v4Record" class="v4-page v4-section" aria-labelledby="gttRecordTitle">
+<button class="v4-back" data-v4go="home">← Home</button>
+<h2 id="gttRecordTitle">Trade-In Records</h2>
+<p class="v4-sectionlead">Create a trade, track its status, and follow outstanding phones for 40 days.</p>
+<div class="gtt-trk-top" id="gttTrackerToolbar">
+  <div class="gtt-trk-store-row"><label for="gttTrackerStore">Store</label><select id="gttTrackerStore" aria-label="Choose store"><option value="">All stores / choose for new trade</option></select></div>
+  <div class="gtt-trk-tabs"><button type="button" id="gttTrackerCreateTab" aria-pressed="true">＋ Create Trade</button><button type="button" id="gttTrackerListTab" aria-pressed="false">☷ View All</button></div>
+</div>
+<p id="gttTrackerNotice" class="gtt-trk-notice" role="status" hidden></p>
+<div id="gttTrackerCreate"><div id="gttStandaloneRecordMount" aria-live="polite"></div></div>
+<div id="gttTrackerList" hidden>
+ <div class="gtt-trk-list-head"><h3>Store Trade Tracker</h3><button id="gttTrackerLock" type="button">🔓 Unlock details</button></div>
+ <div class="gtt-trk-filter-row"><button id="gttTrackerFilterPending" type="button" aria-pressed="true">Pending</button><button id="gttTrackerFilterReceived" type="button" aria-pressed="false">Received</button><button id="gttTrackerFilterAll" type="button" aria-pressed="false">All</button></div>
+ <input type="search" class="gtt-trk-search" id="gttTrackerSearch" placeholder="Search customer, phone, store or plan…" autocomplete="off" aria-label="Search trade records">
+ <p id="gttTrackerListStatus" class="gtt-trk-list-status" role="status"></p><div class="gtt-trk-cards" id="gttTrackerCards"></div>
+</div>
+<dialog id="gttTrackerPinDialog" class="gtt-trk-dialog" aria-label="Unlock trade customer details">
+ <div><h3>Unlock Customer Details</h3><button id="gttTrackerPinClose" class="gtt-trk-close" type="button" aria-label="Close">×</button></div>
+ <p class="gtt-trk-pin-dots" id="gttTrackerPinDots">○○○○</p>
+ <div class="gtt-trk-keypad"><button type="button" data-tracker-key="1">1</button><button type="button" data-tracker-key="2">2</button><button type="button" data-tracker-key="3">3</button><button type="button" data-tracker-key="4">4</button><button type="button" data-tracker-key="5">5</button><button type="button" data-tracker-key="6">6</button><button type="button" data-tracker-key="7">7</button><button type="button" data-tracker-key="8">8</button><button type="button" data-tracker-key="9">9</button><span></span><button type="button" data-tracker-key="0">0</button><button type="button" data-tracker-key="delete" aria-label="Backspace">⌫</button></div>
+ <p id="gttTrackerPinMessage" class="gtt-trk-pin-note" role="status"></p>
+</dialog>
+<dialog id="gttTrackerEditDialog" class="gtt-trk-dialog" aria-label="Edit saved trade">
+ <div><h3>Edit Trade Record</h3><button id="gttTrackerEditClose" class="gtt-trk-close" type="button" aria-label="Close">×</button></div>
+ <form id="gttTrackerEditForm"></form>
+</dialog>
+</section>
 <section id="v4Tax" class="v4-page v4-section" aria-labelledby="taxTitle">
     <button class="v4-back" data-v4go="home">← Home</button>
     <div class="tax-heading"><h2 id="taxTitle">Sales Tax Calculator</h2><button id="taxClear" class="tax-quiet" type="button">Clear all</button></div>
