@@ -1,37 +1,24 @@
-GTT TRADE TRACKER — MANUAL DELETE UPDATE
-November 16, 2026
+GTT Trade Tracker — Calendar-Day Timer Fix
 
-DATABASE STATUS
-- All 13 previous Trade Tracker rows were deleted from the existing Supabase project.
-- Confirmed there are 0 trade records remaining across the 11 stores.
-- Database tables, store selector, and the active 40-day automatic cleanup remain intact.
+WHY THIS WAS NEEDED
+The previous display counted whole 24-hour intervals since the record's creation,
+so a trade entered yesterday could still show Day 0 today.
 
-BACKEND STATUS
-- Supabase Edge Function 'gtt-trade-tracker' version 2 is already deployed.
-- It supports a permanent delete operation only when provided a valid, unexpired
-  9393-unlocked server session. The PIN is checked server-side.
+NEW TIMER RULE
+- Day 0 on purchase/quote date entered on the record (New Jersey calendar date).
+- Day 1 on the following calendar date, regardless of the hour saved.
+- A confirmed Reset Timer starts Day 0 on the local date of the reset.
+- Original purchase/quote date remains unchanged when resetting.
+- Days 15–21 yellow; days 22–29 orange; day 30 onward red.
+- Received records remain green.
+- Deadline is 30 calendar days; automatic cleanup at day 40.
 
-INSTALL THIS WEBSITE UPDATE
-1. Open GitHub repository GlobalHub9393/Tradetool.
-2. Upload the provided gtt-trade-tracker.js to the repository ROOT, replacing
-   the existing gtt-trade-tracker.js. Commit the change.
-3. Refresh https://globaltradetool.com (hard refresh if the old script is cached).
+INSTALLATION
+Upload/replace ONLY gtt-trade-tracker.js at the root of
+GlobalHub9393/Tradetool on GitHub. This file includes the earlier store gate,
+manual delete, and reset-timer features. The backend and database are already updated.
+After publishing, completely reload Global Trade Tool (close the existing tab and
+reopen if necessary to clear browser script cache). No existing trade is modified.
 
-HOW TO DELETE A TRADE
-Trade-In Records > View All > Unlock details (9393) > expand a trade >
-Delete Trade > confirm permanent deletion.
-Canceling the confirmation does not delete anything.
-Deletion removes the trade from Pending, Received and All lists.
-
-UNCHANGED
-- The 30-day trade deadline and day-left/day-late label.
-- Orange on days 25–30; red on days 31–40; received remains green.
-- Automatic deletion after 40 days.
-- Existing create-trade, search, received, editing, copy, print and Slack features.
-
-IMPORTANT
-This is still a low-security prototype. Use fictional customer information until
-staff access and server-side authorization are strengthened.
-
-Only one website file needs replacing. The database and Edge Function changes
-are already live; the website Delete Trade button is not live until uploaded.
+NOTE
+The public no-staff-login test setup is not appropriate for real customer PII.

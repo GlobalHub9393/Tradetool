@@ -61,8 +61,36 @@ function watchForms(){
  if(quote){const attach=()=>injectSave(quote.querySelector('form'),true);
    new MutationObserver(attach).observe(quote,{childList:true,subtree:true});attach();}
 }
+function updateStoreGate(){
+ const creating=state.mode==='create';
+ const selected=!!state.store;
+ const mount=$('gttStandaloneRecordMount');
+ let gate=$('gttTrackerStoreGate');
+ if(!gate){
+   gate=document.createElement('div');gate.id='gttTrackerStoreGate';gate.className='gtt-trk-store-gate';
+   gate.innerHTML='<strong>Choose a store to start a trade</strong><p>Store selection is required before you can fill out and save a trade record.</p><button type="button">Select Store ↑</button>';
+   gate.querySelector('button').addEventListener('click',()=>storeInput.focus());
+   createPane.prepend(gate);
+ }
+ let banner=$('gttTrackerStoreSelected');
+ if(!banner){
+   banner=document.createElement('div');banner.id='gttTrackerStoreSelected';banner.className='gtt-trk-store-selected';
+   createPane.insertBefore(banner,mount);
+ }
+ gate.hidden=!creating||selected;
+ banner.hidden=!creating||!selected;
+ banner.textContent=selected?'Creating trade for '+state.store:'';
+ if(mount)mount.hidden=creating&&!selected;
+ const storeLabel=storeInput.closest('.gtt-trk-store-row')?.querySelector('label');
+ if(storeLabel)storeLabel.textContent=creating?'Store · Required for new trades':'Store · Optional filter';
+ storeInput.options[0].textContent=creating?'Choose a store to create trade…':'All stores';
+ storeInput.required=creating;
+ storeInput.setAttribute('aria-required',String(creating));
+ storeInput.classList.toggle('gtt-trk-store-missing',creating&&!selected);
+}
 function switchMode(next){state.mode=next;const isList=next==='list';createPane.hidden=isList;listPane.hidden=!isList;
  $('gttTrackerCreateTab').setAttribute('aria-pressed',String(!isList));$('gttTrackerListTab').setAttribute('aria-pressed',String(isList));setMessage('');
+ updateStoreGate();
  if(isList)refresh();else {injectSave($('gttStandaloneRecordMount')?.querySelector('form'));}
 }
 async function refresh(){
@@ -75,9 +103,29 @@ async function refresh(){
  }catch(e){setListStatus(e.message,true);}
  finally{state.loading=false;}
 }
-function ageOf(row){return Math.max(0,Math.floor((Date.now()-new Date(row.created_at).getTime())/86400000));}
-function labelOf(row){if(row.received)return 'Received';const age=ageOf(row),remaining=30-age;const timing=remaining>0?remaining+' day'+(remaining===1?'':'s')+' left':remaining===0?'Due today':(-remaining)+' day'+(remaining===-1?'':'s')+' late';return (age>=31?'Urgent · ':age>=25?'Follow up · ':'Pending · ')+timing;}
-function gradeOf(row){return row.received?'received':ageOf(row)>=31?'red':ageOf(row)>=25?'orange':'normal';}
+// Use calendar days in the store's NJ timezone, not completed 24-hour periods.
+// The original timer starts on purchase date; explicit resets start a fresh clock.
+function njCalendarDate(value){
+ if(typeof value==='string' && /^\d{4}-\d{2}-\d{2}$/.test(value))return value;
+ const date=new Date(value);
+ if(!Number.isFinite(date.getTime()))return '';
+ const parts=new Intl.DateTimeFormat('en-US', {timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+ const part=k=>parts.find(p=>p.type===k)?.value||'';
+ return `${part('year')}-${part('month')}-${part('day')}`;
+}
+function ageOf(row){
+ const start=njCalendarDate(row.timer_reset_at||row.record_date||row.created_at);
+ const today=njCalendarDate(new Date());
+ const startTime=Date.parse(start+'T00:00:00Z'),todayTime=Date.parse(today+'T00:00:00Z');
+ return Number.isFinite(startTime)&&Number.isFinite(todayTime)?Math.max(0,Math.round((todayTime-startTime)/86400000)):0;
+}
+function labelOf(row){
+ if(row.received)return 'Received';
+ const age=ageOf(row),remaining=30-age;
+ const timing=remaining>0?remaining+' day'+(remaining===1?'':'s')+' left':remaining===0?'Due today':(-remaining)+' day'+(remaining===-1?'':'s')+' late';
+ return (age>=30?'Urgent · ':age>=22?'Follow up · ':age>=15?'Attention · ':'Pending · ')+timing;
+}
+function gradeOf(row){if(row.received)return 'received';const age=ageOf(row);return age>=30?'red':age>=22?'orange':age>=15?'yellow':'normal';}
 function conditionOf(row){const vals=[['Power',row.power_ok],['Find My off',row.lock_off],['Damage-free',row.damage_free]];return vals.map(([n,v])=>`${n} ${v===true?'✓':v===false?'✕':'—'}`).join(' · ');}
 function renderList(){
  const all=state.rows;
@@ -94,7 +142,7 @@ function renderList(){
   <div class="gtt-trk-card-meta"><span>${esc(r.trade_device||'Trade phone not entered')}${r.storage?' · '+esc(r.storage):''}</span><span>${esc(r.plan||'Plan not entered')}</span></div>
   <div class="gtt-trk-card-bottom"><span class="gtt-trk-status">${esc(labelOf(r))}</span><span class="gtt-trk-age">Day ${age} of 40</span><button type="button" class="gtt-trk-details" data-tracker-details="${esc(r.id)}">Details ▾</button></div>
   <div class="gtt-trk-card-expanded" hidden data-tracker-expanded="${esc(r.id)}">
-    <div class="gtt-trk-detail-grid"><span>Trade number</span><b>${esc(r.trade_phone||'—')}</b><span>IMEI</span><b>${esc(r.imei||'—')}</b><span>New phone</span><b>${esc(r.new_phone||'—')}</b><span>Condition</span><b>${esc(conditionOf(r))}</b><span>Rep</span><b>${esc(r.rep||'—')}</b><span>Received on</span><b>${esc(shortDate(r.received_at))}</b>${state.unlocked&&r.notes?`<span>Notes</span><b>${esc(r.notes)}</b>`:''}</div>
+    <div class="gtt-trk-detail-grid"><span>Trade number</span><b>${esc(r.trade_phone||'—')}</b><span>IMEI</span><b>${esc(r.imei||'—')}</b><span>New phone</span><b>${esc(r.new_phone||'—')}</b><span>Condition</span><b>${esc(conditionOf(r))}</b><span>Rep</span><b>${esc(r.rep||'—')}</b><span>Received on</span><b>${esc(shortDate(r.received_at))}</b>${r.timer_reset_at?`<span>Timer last reset</span><b>${esc(shortDate(r.timer_reset_at))}</b>`:''}${state.unlocked&&r.notes?`<span>Notes</span><b>${esc(r.notes)}</b>`:''}</div>
     <div class="gtt-trk-detail-actions"><label><input type="checkbox" data-tracker-received="${esc(r.id)}" ${r.received?'checked':''}> Trade received</label>
       <div class="gtt-trk-manage-actions">${state.unlocked?`<button type="button" data-tracker-edit="${esc(r.id)}">Edit record</button><button type="button" class="gtt-trk-delete" data-tracker-delete="${esc(r.id)}" aria-label="Delete this trade record">Delete Trade</button>`:'<button type="button" data-tracker-unlock="yes">Unlock to edit or delete</button>'}</div></div>
   </div></article>`;
@@ -130,14 +178,29 @@ async function lock(){const token=state.token;state.token=null;state.unlocked=fa
 const EDIT_FIELDS=[['record_date','Date','date'],['customer_name','Account holder','text'],['trade_phone','Trade-in phone number','tel'],['trade_device','Trade-in device','text'],['storage','Storage','text'],['plan','Plan','text'],['promo_quoted','Promotional credit quoted','number'],['new_phone','New phone','text'],['imei','IMEI','text'],['rep','Rep','text'],['notes','Notes','textarea']];
 function openEdit(id){if(!state.unlocked)return showKeypad();const row=state.rows.find(r=>r.id===id);if(!row)return;
  const dlg=$('gttTrackerEditDialog');const form=$('gttTrackerEditForm');
- form.innerHTML='<div class="gtt-trk-edit-grid">'+EDIT_FIELDS.map(([key,label,type])=>`<label class="gtt-trk-edit-field">${esc(label)}${type==='textarea'?`<textarea name="${key}" rows="3">${esc(row[key]??'')}</textarea>`:`<input name="${key}" type="${type}" value="${esc(row[key]??'')}" ${type==='number'?'min="0" step="0.01"':''}>`}</label>`).join('')+'</div><fieldset class="gtt-trk-edit-condition"><legend>Condition</legend>'+[['power_ok','Powers on'],['lock_off','Find My off'],['damage_free','No damage']].map(([k,label])=>`<label>${esc(label)}<select name="${k}"><option value="">Blank</option><option value="yes" ${row[k]===true?'selected':''}>Yes</option><option value="no" ${row[k]===false?'selected':''}>No</option></select></label>`).join('')+'</fieldset><div class="gtt-trk-edit-actions"><button type="button" data-tracker-edit-cancel>Cancel</button><button type="submit">Save Changes</button></div><p class="gtt-trk-edit-status" aria-live="polite"></p>';
+ form.innerHTML='<div class="gtt-trk-edit-grid">'+EDIT_FIELDS.map(([key,label,type])=>`<label class="gtt-trk-edit-field">${esc(label)}${type==='textarea'?`<textarea name="${key}" rows="3">${esc(row[key]??'')}</textarea>`:`<input name="${key}" type="${type}" value="${esc(row[key]??'')}" ${type==='number'?'min="0" step="0.01"':''}>`}</label>`).join('')+'</div><fieldset class="gtt-trk-edit-condition"><legend>Condition</legend>'+[['power_ok','Powers on'],['lock_off','Find My off'],['damage_free','No damage']].map(([k,label])=>`<label>${esc(label)}<select name="${k}"><option value="">Blank</option><option value="yes" ${row[k]===true?'selected':''}>Yes</option><option value="no" ${row[k]===false?'selected':''}>No</option></select></label>`).join('')+'</fieldset><section class="gtt-trk-timer-panel"><div><strong>Follow-up timer</strong><small>30-day trade deadline · auto-removal after 40 days</small><small data-tracker-timer-status>Timer day '+ageOf(row)+' · Original purchase date '+esc(shortDate(row.record_date))+(row.timer_reset_at?' · Last reset '+esc(shortDate(row.timer_reset_at)):'')+'</small></div><button type="button" data-tracker-reset-timer>↻ Reset Timer</button></section><div class="gtt-trk-edit-actions"><button type="button" data-tracker-edit-cancel>Cancel</button><button type="submit">Save Changes</button></div><p class="gtt-trk-edit-status" aria-live="polite"></p>';
  form.querySelector('[data-tracker-edit-cancel]').onclick=()=>dlg.close();
+ form.querySelector('[data-tracker-reset-timer]').onclick=async ev=>{
+  if(!confirm('Reset this trade\'s 30-day deadline and 40-day removal timer to today?\n\nThe original purchase/quote date will NOT change. This reset cannot be undone.'))return;
+  const button=ev.currentTarget,status=form.querySelector('.gtt-trk-edit-status');
+  button.disabled=true;status.dataset.status='';status.textContent='Restarting timer…';
+  try{
+   const result=await api('reset_timer',{id,token:state.token});
+   await refresh();
+   const summary=form.querySelector('[data-tracker-timer-status]');
+   if(summary)summary.textContent='Timer day 0 · Original purchase date '+shortDate(result.row.record_date)+' · Last reset '+shortDate(result.row.timer_reset_at);
+   status.dataset.status='ok';
+   status.textContent='Timer restarted: 30 days to deadline, 40 days to automatic removal. Any other edits still need Save Changes.';
+  }catch(error){status.dataset.status='error';status.textContent=error.message;}
+  finally{button.disabled=false;}
+ };
+
  form.onsubmit=async ev=>{ev.preventDefault();const entries=new FormData(form);const record=Object.fromEntries(entries.entries());for(const k of ['power_ok','lock_off','damage_free'])record[k]=record[k]==='yes'?true:record[k]==='no'?false:null;const status=form.querySelector('.gtt-trk-edit-status');status.textContent='Saving…';try{await api('update',{id,token:state.token,record});dlg.close();await refresh();}catch(e){status.textContent=e.message;}};
  dlg.showModal();}
 function init(){root=$('v4Record');createPane=$('gttTrackerCreate');listPane=$('gttTrackerList');storeInput=$('gttTrackerStore');listContent=$('gttTrackerCards');listStatus=$('gttTrackerListStatus');lockButton=$('gttTrackerLock');if(!root||!storeInput||!listContent)return;
  storeInput.innerHTML='<option value="">All stores / choose for new trade</option>'+STORES.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('');
- storeInput.addEventListener('change',()=>{state.store=storeInput.value;setMessage('');if(state.mode==='list')refresh();});
- $('gttTrackerCreateTab').onclick=()=>switchMode('create');$('gttTrackerListTab').onclick=()=>switchMode('list');
+ storeInput.addEventListener('change',()=>{state.store=storeInput.value;setMessage('');updateStoreGate();if(state.mode==='list')refresh();});
+ $('gttTrackerCreateTab').onclick=()=>{switchMode('create');if(!state.store)storeInput.focus();};$('gttTrackerListTab').onclick=()=>switchMode('list');
  for(const name of ['pending','received','all'])$('gttTrackerFilter'+name[0].toUpperCase()+name.slice(1)).onclick=()=>{state.filter=name;renderList();};
  $('gttTrackerSearch').addEventListener('input',e=>{state.query=e.target.value;renderList();});
  lockButton.addEventListener('click',()=>state.unlocked?lock():showKeypad());
@@ -149,6 +212,10 @@ const style=document.createElement('style');style.textContent=`
  #v4Record [hidden]{display:none!important}
  .gtt-trk-top{max-width:820px;margin:13px auto 17px;padding:17px;border:1px solid var(--v4-line,#d7e3ec);border-radius:15px;background:var(--v4-surface,#fff);color:var(--v4-ink,#1a3345)}
  .gtt-trk-store-row{display:flex;align-items:center;gap:12px;margin-bottom:15px;flex-wrap:wrap}.gtt-trk-store-row label{font-size:12px;font-weight:800;white-space:nowrap}.gtt-trk-store-row select{flex:1;min-width:190px;border:1px solid var(--v4-line,#d7e3ec);background:var(--v4-alt,#f3f7fb);color:var(--v4-ink,#1a3345);border-radius:9px;min-height:42px;padding:8px 11px;font:600 13px inherit;color-scheme:light dark}
+ .gtt-trk-store-row select.gtt-trk-store-missing{border:2px solid #d48a27;box-shadow:0 0 0 3px rgba(226,159,64,.10)}
+ .gtt-trk-store-gate{max-width:820px;margin:13px auto;padding:24px 18px;border:1px dashed #d39b43;border-radius:12px;background:var(--v4-surface,#fff);text-align:center;color:var(--v4-ink,#1a3345)}
+ .gtt-trk-store-gate strong{font-size:17px;display:block;margin-bottom:6px}.gtt-trk-store-gate p{font-size:13px;color:var(--v4-muted,#70818f);line-height:1.5;margin:0 0 14px}.gtt-trk-store-gate button{min-height:40px;padding:8px 14px;border-radius:9px;border:1px solid var(--v4-blue,#0574b2);background:var(--v4-blue,#0574b2);color:#fff;font-size:13px;font-weight:800;cursor:pointer}
+ .gtt-trk-store-selected{max-width:820px;margin:9px auto 4px;border:1px solid var(--v4-line,#d7e3ec);border-left:4px solid #168764;border-radius:9px;padding:10px 12px;color:var(--v4-ink,#1a3345);background:var(--v4-surface,#fff);font-size:12px;font-weight:800}
  .gtt-trk-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.gtt-trk-tabs button{min-height:44px;border:1px solid var(--v4-line,#d7e3ec);border-radius:9px;color:var(--v4-ink,#1a3345);background:var(--v4-alt,#f4f7fa);font-size:13px;font-weight:800;cursor:pointer}.gtt-trk-tabs button[aria-pressed=true]{background:var(--v4-blue,#0574b2);color:#fff;border-color:var(--v4-blue,#0574b2)}
  .gtt-trk-notice{max-width:820px;margin:0 auto 10px;font-size:12px;color:#2d855f}.gtt-trk-notice.is-error,.gtt-tracker-save-status.is-error,.gtt-trk-edit-status{color:#d75b51}
  .gtt-tracker-save{border:1px solid #15986b!important;background:#138865!important;color:#fff!important;min-width:140px;font-weight:800}.gtt-tracker-save:disabled{opacity:.65;cursor:default}.gtt-tracker-save-status{font-size:12px;color:#14885c;margin-top:8px}.gtt-tracker-quote-store{margin:12px 0;display:flex;flex-direction:column;gap:7px}.gtt-tracker-quote-store label{font-size:12px;font-weight:700}.gtt-tracker-quote-store select{min-height:42px;padding:7px 10px;border:1px solid var(--v4-line,#d7e3ec);background:var(--v4-alt,#f5f8fa);color:var(--v4-ink,#172a3c);border-radius:8px}
@@ -157,14 +224,19 @@ const style=document.createElement('style');style.textContent=`
  .gtt-trk-filter-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}.gtt-trk-filter-row button{min-height:40px;border:1px solid var(--v4-line,#d7e3ec);border-radius:9px;background:var(--v4-alt,#f4f7fa);color:var(--v4-ink,#1a3345);font-size:12px;font-weight:800}.gtt-trk-filter-row button[aria-pressed=true]{border-color:var(--v4-blue,#0781be);color:var(--v4-blue,#0781be)}
  .gtt-trk-search{width:100%;min-height:45px;padding:10px 13px;border:1px solid var(--v4-line,#d7e3ec);border-radius:9px;margin:0 0 12px;background:var(--v4-surface,#fff);color:var(--v4-ink,#1a3345);font:500 13px inherit}
  .gtt-trk-list-status{font-size:12px;color:var(--v4-muted,#71808c)}.gtt-trk-list-status.is-error{color:#d75b51}.gtt-trk-cards{display:flex;flex-direction:column;gap:10px}
- .gtt-trk-card{background:var(--v4-surface,#fff);border:1px solid var(--v4-line,#d7e3ec);border-left:5px solid #7896a7;border-radius:13px;padding:13px 15px;box-shadow:0 4px 12px #0000000a}.gtt-trk-card.orange{border-left-color:#e69b31}.gtt-trk-card.red{border-left-color:#e15358}.gtt-trk-card.received{border-left-color:#23a36b}.gtt-trk-card-main{display:flex;justify-content:space-between;align-items:start;gap:14px}.gtt-trk-customer{font-size:15px;font-weight:800;display:flex;flex-direction:column;gap:3px}.gtt-trk-customer small{font-weight:500;font-size:11px;color:var(--v4-muted,#70818f)}.gtt-trk-promo{font-size:20px;font-weight:850;text-align:right;white-space:nowrap}.gtt-trk-promo small{display:block;font-size:10px;font-weight:500;color:var(--v4-muted,#70818f)}
- .gtt-trk-card-meta{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:12px;color:var(--v4-muted,#70818f);margin:11px 0}.gtt-trk-card-bottom{display:flex;align-items:center;gap:10px;border-top:1px solid var(--v4-line,#d7e3ec);padding-top:10px;font-size:11px}.gtt-trk-status{font-weight:800}.gtt-trk-card.orange .gtt-trk-status{color:#d78a20}.gtt-trk-card.red .gtt-trk-status{color:#e15358}.gtt-trk-card.received .gtt-trk-status{color:#20a46c}.gtt-trk-age{color:var(--v4-muted,#70818f)}.gtt-trk-details{margin-left:auto;border:0;background:transparent;color:var(--v4-blue,#0781be);cursor:pointer;font-weight:800}
+ .gtt-trk-card{background:var(--v4-surface,#fff);border:1px solid var(--v4-line,#d7e3ec);border-left:5px solid #7896a7;border-radius:13px;padding:13px 15px;box-shadow:0 4px 12px #0000000a}.gtt-trk-card.yellow{border-left-color:#e9b832}.gtt-trk-card.orange{border-left-color:#e69b31}.gtt-trk-card.red{border-left-color:#e15358}.gtt-trk-card.received{border-left-color:#23a36b}.gtt-trk-card-main{display:flex;justify-content:space-between;align-items:start;gap:14px}.gtt-trk-customer{font-size:15px;font-weight:800;display:flex;flex-direction:column;gap:3px}.gtt-trk-customer small{font-weight:500;font-size:11px;color:var(--v4-muted,#70818f)}.gtt-trk-promo{font-size:20px;font-weight:850;text-align:right;white-space:nowrap}.gtt-trk-promo small{display:block;font-size:10px;font-weight:500;color:var(--v4-muted,#70818f)}
+ .gtt-trk-card-meta{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:12px;color:var(--v4-muted,#70818f);margin:11px 0}.gtt-trk-card-bottom{display:flex;align-items:center;gap:10px;border-top:1px solid var(--v4-line,#d7e3ec);padding-top:10px;font-size:11px}.gtt-trk-status{font-weight:800}.gtt-trk-card.yellow .gtt-trk-status{color:#ae8209}.gtt-trk-card.orange .gtt-trk-status{color:#d78a20}.gtt-trk-card.red .gtt-trk-status{color:#e15358}.gtt-trk-card.received .gtt-trk-status{color:#20a46c}.gtt-trk-age{color:var(--v4-muted,#70818f)}.gtt-trk-details{margin-left:auto;border:0;background:transparent;color:var(--v4-blue,#0781be);cursor:pointer;font-weight:800}
  .gtt-trk-card-expanded{padding:13px 0 0;border-top:1px solid var(--v4-line,#d7e3ec);margin-top:11px}.gtt-trk-detail-grid{display:grid;grid-template-columns:120px minmax(0,1fr);gap:9px 12px;font-size:12px}.gtt-trk-detail-grid span{color:var(--v4-muted,#70818f)}.gtt-trk-detail-grid b{font-weight:650;overflow-wrap:anywhere}.gtt-trk-detail-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:17px}.gtt-trk-detail-actions label{font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px}.gtt-trk-detail-actions input{width:18px;height:18px;accent-color:#128761}.gtt-trk-detail-actions button{border:1px solid var(--v4-line,#d7e3ec);border-radius:8px;padding:8px 11px;color:var(--v4-ink,#1a3345);background:var(--v4-alt,#f4f7fa);font-size:12px;font-weight:800;cursor:pointer}
  .gtt-trk-manage-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.gtt-trk-detail-actions .gtt-trk-delete{color:#b33b43;border-color:#cf777d;background:transparent}.gtt-trk-detail-actions .gtt-trk-delete:hover{background:rgba(205,60,74,.09)}.gtt-trk-detail-actions .gtt-trk-delete:disabled{opacity:.55;cursor:wait}
  .gtt-trk-empty{text-align:center;padding:45px 18px;color:var(--v4-muted,#71808c);font-size:13px;border:1px dashed var(--v4-line,#d7e3ec);border-radius:12px}
  .gtt-trk-dialog{background:var(--v4-surface,#fff);color:var(--v4-ink,#1a3345);border:1px solid var(--v4-line,#d7e3ec);border-radius:16px;max-height:88dvh;overflow-y:auto;box-shadow:0 20px 75px #0006;width:min(92vw,640px);padding:20px}.gtt-trk-dialog::backdrop{background:#071b30b8}.gtt-trk-dialog>div:first-child{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.gtt-trk-dialog h3{margin:0;font-size:18px}.gtt-trk-close{border:0;background:none;color:var(--v4-ink,#1a3345);font-size:25px;cursor:pointer}
  .gtt-trk-keypad{width:236px;max-width:100%;margin:13px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.gtt-trk-keypad button{min-height:52px;border:1px solid var(--v4-line,#d7e3ec);background:var(--v4-alt,#f4f7fa);color:var(--v4-ink,#1a3345);border-radius:11px;font-size:20px;font-weight:800;cursor:pointer}.gtt-trk-pin-dots{text-align:center;font-size:27px;letter-spacing:8px;margin:8px}.gtt-trk-pin-note{text-align:center;font-size:12px;color:#d65a4c;min-height:20px}
- .gtt-trk-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gtt-trk-edit-field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:750}.gtt-trk-edit-field input,.gtt-trk-edit-field textarea,.gtt-trk-edit-condition select{width:100%;padding:10px;border:1px solid var(--v4-line,#d7e3ec);border-radius:8px;background:var(--v4-alt,#f4f7fa);color:var(--v4-ink,#1a3345);font-size:13px}.gtt-trk-edit-condition{border:1px solid var(--v4-line,#d7e3ec);border-radius:10px;margin-top:15px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.gtt-trk-edit-condition legend{font-weight:800;font-size:12px}.gtt-trk-edit-condition label{font-size:11px}.gtt-trk-edit-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}.gtt-trk-edit-actions button{min-height:42px;padding:9px 15px;border-radius:9px;border:1px solid var(--v4-line,#d7e3ec);background:var(--v4-alt,#f4f7fa);color:var(--v4-ink,#1a3345);font-weight:800}.gtt-trk-edit-actions button[type=submit]{background:var(--v4-blue,#0781be);color:white}
+ .gtt-trk-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gtt-trk-edit-field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:750}.gtt-trk-edit-field input,.gtt-trk-edit-field textarea,.gtt-trk-edit-condition select{width:100%;padding:10px;border:1px solid var(--v4-line,#d7e3ec);border-radius:8px;background:var(--v4-alt,#f4f7fa);color:var(--v4-ink,#1a3345);font-size:13px}.gtt-trk-edit-condition{border:1px solid var(--v4-line,#d7e3ec);border-radius:10px;margin-top:15px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.gtt-trk-edit-condition legend{font-weight:800;font-size:12px}.gtt-trk-edit-condition label{font-size:11px}.gtt-trk-timer-panel{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:16px;border:1px solid var(--v4-line,#d7e3ec);border-radius:11px;padding:13px;background:var(--v4-alt,#f4f7fa)}
+ .gtt-trk-timer-panel>div{display:flex;flex-direction:column;gap:4px;min-width:0}.gtt-trk-timer-panel strong{font-size:13px}.gtt-trk-timer-panel small{font-size:11px;color:var(--v4-muted,#70818f)}
+ .gtt-trk-timer-panel button{flex-shrink:0;padding:9px 13px;border-radius:9px;border:1px solid #ad8539;background:transparent;color:var(--v4-ink,#1a3345);font-weight:800;font-size:12px;cursor:pointer}.gtt-trk-timer-panel button:disabled{opacity:.55}
+ .gtt-trk-edit-status[data-status=ok]{color:#14835b}.gtt-trk-edit-status[data-status=error]{color:#d75b51}
+ @media(max-width:540px){.gtt-trk-timer-panel{align-items:stretch;flex-direction:column}.gtt-trk-timer-panel button{width:100%;min-height:42px}}
+ .gtt-trk-edit-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}.gtt-trk-edit-actions button{min-height:42px;padding:9px 15px;border-radius:9px;border:1px solid var(--v4-line,#d7e3ec);background:var(--v4-alt,#f4f7fa);color:var(--v4-ink,#1a3345);font-weight:800}.gtt-trk-edit-actions button[type=submit]{background:var(--v4-blue,#0781be);color:white}
  @media(max-width:540px){.gtt-trk-top{padding:12px}.gtt-trk-store-row{align-items:stretch}.gtt-trk-store-row label{width:100%}.gtt-trk-store-row select{width:100%}.gtt-trk-detail-grid{grid-template-columns:100px 1fr}.gtt-trk-edit-grid{grid-template-columns:1fr}.gtt-trk-edit-condition{grid-template-columns:1fr}.gtt-trk-card{padding:12px}}
 `;document.head.appendChild(style);
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
