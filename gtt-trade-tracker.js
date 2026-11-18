@@ -6,11 +6,16 @@
 'use strict';
 const API='https://uwomiirfvllcafijmkmk.supabase.co/functions/v1/gtt-trade-tracker';
 const STORES=['Bordentown','Browns Mills','Cinnaminson','East Windsor','Hamilton','Lawrenceville','Medford','Monmouth','Mount Laurel','Quaker Bridge','Skillman'];
+// Remember only the chosen store on this browser. Never store customer details.
+const STORE_PREF_KEY='gtt-trade-preferred-store-v1';
+function rememberedStore(){try{const v=window.localStorage.getItem(STORE_PREF_KEY);return STORES.includes(v)?v:'';}catch(_){return '';}}
+function rememberStore(store){if(!STORES.includes(store))return;try{window.localStorage.setItem(STORE_PREF_KEY,store);}catch(_){/* Storage can be disabled. The current selection still works. */}}
+
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const currency=v=>v===null||v===undefined||v===''?'—':Number(v).toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
 const shortDate=s=>s?new Date(s.length===10?s+'T12:00:00':s).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
-const state={mode:'create',store:'',filter:'pending',query:'',rows:[],token:null,unlocked:false,loading:false,savedForm:null};
+const state={mode:'create',store:rememberedStore(),filter:'pending',query:'',rows:[],token:null,unlocked:false,loading:false,savedForm:null};
 let root,createPane,listPane,storeInput,listContent,listStatus,lockButton;
 async function api(action,params={}){
  const response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,...params}),cache:'no-store'});
@@ -40,7 +45,26 @@ function injectSave(form,quote=false){
    storeSelect=document.createElement('select');storeSelect.id='gttQuoteRecordStore';
    storeSelect.innerHTML='<option value="">Choose store…</option>'+STORES.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
    storeSelect.value=state.store;
-   field.append(label,storeSelect);actions.before(field);
+   storeSelect.required=true;
+   const tip=document.createElement('small');
+   tip.textContent='Choose the store first. GTT remembers your choice on this browser.';
+   field.append(label,storeSelect,tip);
+   // From Full Quote, store choice must be made before entering, printing or sharing a record.
+   form.prepend(field);
+   const syncQuoteGate=()=>{
+     form.classList.toggle('gtt-trk-quote-awaiting-store',!storeSelect.value);
+     label.textContent=storeSelect.value?'Store · Required — '+storeSelect.value:'Store · Required to create a trade';
+   };
+   storeSelect.addEventListener('change',()=>{
+     const value=STORES.includes(storeSelect.value)?storeSelect.value:'';
+     state.store=value;
+     if(storeInput)storeInput.value=value;
+     if(value)rememberStore(value);
+     updateStoreGate();
+     syncQuoteGate();
+     if(state.mode==='list')refresh();
+   });
+   syncQuoteGate();
  }
  const reset=form.querySelector('[data-record-reset]');reset?.addEventListener('click',()=>{form.dataset.trackerSaved='';}, {capture:true});
  btn.addEventListener('click',async()=>{
@@ -199,7 +223,14 @@ function openEdit(id){if(!state.unlocked)return showKeypad();const row=state.row
  dlg.showModal();}
 function init(){root=$('v4Record');createPane=$('gttTrackerCreate');listPane=$('gttTrackerList');storeInput=$('gttTrackerStore');listContent=$('gttTrackerCards');listStatus=$('gttTrackerListStatus');lockButton=$('gttTrackerLock');if(!root||!storeInput||!listContent)return;
  storeInput.innerHTML='<option value="">All stores / choose for new trade</option>'+STORES.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('');
- storeInput.addEventListener('change',()=>{state.store=storeInput.value;setMessage('');updateStoreGate();if(state.mode==='list')refresh();});
+ storeInput.value=state.store; // Restore the last store before showing Create Trade.
+ storeInput.addEventListener('change',()=>{
+   state.store=STORES.includes(storeInput.value)?storeInput.value:'';
+   if(state.store)rememberStore(state.store);
+   const quoteStore=$('gttQuoteRecordStore');
+   if(quoteStore){quoteStore.value=state.store;quoteStore.dispatchEvent(new Event('change'));}
+   setMessage('');updateStoreGate();if(state.mode==='list')refresh();
+ });
  $('gttTrackerCreateTab').onclick=()=>{switchMode('create');if(!state.store)storeInput.focus();};$('gttTrackerListTab').onclick=()=>switchMode('list');
  for(const name of ['pending','received','all'])$('gttTrackerFilter'+name[0].toUpperCase()+name.slice(1)).onclick=()=>{state.filter=name;renderList();};
  $('gttTrackerSearch').addEventListener('input',e=>{state.query=e.target.value;renderList();});
@@ -213,6 +244,14 @@ const style=document.createElement('style');style.textContent=`
  .gtt-trk-top{max-width:820px;margin:13px auto 17px;padding:17px;border:1px solid var(--v4-line,#d7e3ec);border-radius:15px;background:var(--v4-surface,#fff);color:var(--v4-ink,#1a3345)}
  .gtt-trk-store-row{display:flex;align-items:center;gap:12px;margin-bottom:15px;flex-wrap:wrap}.gtt-trk-store-row label{font-size:12px;font-weight:800;white-space:nowrap}.gtt-trk-store-row select{flex:1;min-width:190px;border:1px solid var(--v4-line,#d7e3ec);background:var(--v4-alt,#f3f7fb);color:var(--v4-ink,#1a3345);border-radius:9px;min-height:42px;padding:8px 11px;font:600 13px inherit;color-scheme:light dark}
  .gtt-trk-store-row select.gtt-trk-store-missing{border:2px solid #d48a27;box-shadow:0 0 0 3px rgba(226,159,64,.10)}
+ /* Full Quote entry: first-time reps see ONLY the store selector until they choose. */
+ .gtt-record-form.gtt-trk-quote-awaiting-store > :not(.gtt-tracker-quote-store){display:none!important}
+ .gtt-record-form .gtt-tracker-quote-store{padding:12px 14px;margin:0 0 14px;border:1px solid var(--r-line,var(--v4-line,#cad7e3));border-left:3px solid var(--r-accent,var(--v4-blue,#0781be));border-radius:10px;background:var(--r-alt,var(--v4-alt,#f5f7fa))}
+ .gtt-record-form .gtt-tracker-quote-store label{font-size:13px;font-weight:800}
+ .gtt-record-form .gtt-tracker-quote-store select{width:100%;font-size:16px;max-width:100%;min-height:46px}
+ .gtt-record-form .gtt-tracker-quote-store small{color:var(--r-muted,var(--v4-muted,#73838d));font-size:11px;line-height:1.4}
+ .gtt-record-form.gtt-trk-quote-awaiting-store .gtt-tracker-quote-store{margin:6px 0;padding:18px;border-left-color:#d48a27}
+ .gtt-record-form.gtt-trk-quote-awaiting-store .gtt-tracker-quote-store select{border:2px solid #d48a27}
  .gtt-trk-store-gate{max-width:820px;margin:13px auto;padding:24px 18px;border:1px dashed #d39b43;border-radius:12px;background:var(--v4-surface,#fff);text-align:center;color:var(--v4-ink,#1a3345)}
  .gtt-trk-store-gate strong{font-size:17px;display:block;margin-bottom:6px}.gtt-trk-store-gate p{font-size:13px;color:var(--v4-muted,#70818f);line-height:1.5;margin:0 0 14px}.gtt-trk-store-gate button{min-height:40px;padding:8px 14px;border-radius:9px;border:1px solid var(--v4-blue,#0574b2);background:var(--v4-blue,#0574b2);color:#fff;font-size:13px;font-weight:800;cursor:pointer}
  .gtt-trk-store-selected{max-width:820px;margin:9px auto 4px;border:1px solid var(--v4-line,#d7e3ec);border-left:4px solid #168764;border-radius:9px;padding:10px 12px;color:var(--v4-ink,#1a3345);background:var(--v4-surface,#fff);font-size:12px;font-weight:800}

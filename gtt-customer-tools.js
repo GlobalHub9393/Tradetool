@@ -210,7 +210,8 @@
           <div class="gtt-record-field gtt-rec-promo-field"><label for="gttRecPromo">Promotional credit quoted ($)</label><input id="gttRecPromo" name="promo" inputmode="decimal" maxlength="32" value="${safe(f.promo)}" placeholder="e.g. 1200.00"></div>
           ${recordSearchField('plan','AT&T plan',f.plan,'Search or enter plan',standalone)}
           <div class="gtt-record-field"><label for="gttRecTradePhone">Trade-in phone number</label><input id="gttRecTradePhone" name="tradePhone" type="tel" inputmode="tel" maxlength="22" placeholder="(555) 555-0123" autocomplete="off"></div>
-          ${recordSearchField('newPhone','New phone purchased',f.newPhone,'Select from GTT phones or type a model.',standalone)}
+          <div class="gtt-record-field gtt-rec-rep-field"><label for="gttRecRep">Rep initials <span class="gtt-rec-inline-optional">(optional)</span></label><input id="gttRecRep" name="rep" maxlength="20" placeholder="e.g. TS" autocomplete="off" autocapitalize="characters"></div>
+          ${recordSearchField('newPhone','New phone purchased',f.newPhone,'Select from GTT phones or type a model.',standalone,true)}
         </div>
       </section>
       <section class="gtt-rec-panel gtt-rec-panel-trade" aria-labelledby="gttRecTradeDeviceTitle">
@@ -227,10 +228,9 @@
         ${conditionRadios('lock',f.lock,'Find My / Activation Lock off')}
         ${conditionRadios('cracks',f.cracks,'No cracks, chips, or damage')}
       </section>
-      <details class="gtt-record-more"><summary>Additional details <span>IMEI, rep &amp; notes</span></summary>
+      <details class="gtt-record-more"><summary>Additional details <span>IMEI &amp; notes</span></summary>
         <div class="gtt-record-grid">
           <div class="gtt-record-field"><label for="gttRecIMEI">Trade-in IMEI</label><input id="gttRecIMEI" name="imei" inputmode="numeric" maxlength="25" placeholder="Only if available" autocomplete="off"></div>
-          <div class="gtt-record-field"><label for="gttRecRep">Rep / initials</label><input id="gttRecRep" name="rep" maxlength="60" placeholder="Rep" autocomplete="off"></div>
           <div class="gtt-record-field gtt-record-wide"><label for="gttRecNotes">Additional notes</label><textarea id="gttRecNotes" name="notes" maxlength="350" rows="2" placeholder="Prior quote details or device observations"></textarea></div>
         </div>
       </details>
@@ -327,7 +327,7 @@
     // Preserve the in-progress draft even if the dialog is closed and reopened.
     // Clearing or refreshing the page are the only ways to discard the draft.
     if(!d.querySelector('form')){
-      d.innerHTML='<div class="gtt-cust-head"><span>Trade-In Inspection Record</span><button class="gtt-cust-x" type="button" data-cust-close aria-label="Close">×</button></div><div id="gttQuoteRecordMount"></div>';
+      d.innerHTML='<div class="gtt-cust-head"><span>Create Trade Record</span><button class="gtt-cust-x" type="button" data-cust-close aria-label="Close">×</button></div><div id="gttQuoteRecordMount"></div>';
       mountRecordForm($('gttQuoteRecordMount'),s);
       d.querySelector('[data-cust-close]').onclick=()=>d.close();
     }
@@ -487,6 +487,17 @@
     $('gttPrintTradeBtn').hidden = !s?.c?.tradeDevice || !!s?.c?.noTrade;
   }
   function init() {
+    // Shared guidance for Create Trade and View All. Never duplicate when navigation reloads.
+    const tradePage=$('v4Record');
+    const lead=tradePage?.querySelector('.v4-sectionlead');
+    if(lead&&!tradePage.querySelector('[data-gtt-trade-notice]')){
+      const note=document.createElement('aside');
+      note.className='gtt-trade-usage-notice';
+      note.setAttribute('role','note');
+      note.setAttribute('data-gtt-trade-notice','');
+      note.innerHTML='<strong>Trade tracker reminder</strong><p>Not needed for same-day trades. Add records at any time. This is an unofficial internal tracker to avoid unnecessary repeat green checks—not a replacement for required AT&amp;T trade-in steps.</p>';
+      lead.after(note);
+    }
     const dialog = $('quoteDialog');
     const mount = $('quoteMount');
     if (!dialog || !mount) return;
@@ -494,10 +505,10 @@
     const actions = document.createElement('div');
     actions.id = 'gttCustomerActions';
     actions.hidden = true;
-    actions.innerHTML = '<button type="button" id="gttShowCustomerBtn">🌐 Customer language</button><button type="button" id="gttPrintTradeBtn">🖨️ Print trade record</button>';
+    actions.innerHTML = '<button type="button" id="gttShowCustomerBtn">🌐 Customer language</button><button type="button" id="gttPrintTradeBtn">＋ Create Trade Record</button>';
     mount.after(actions);
     createDialog('gttLanguageDialog','Customer quote translation');
-    const tradeDialog=createDialog('gttTradeRecordDialog','Trade-in record printing');
+    const tradeDialog=createDialog('gttTradeRecordDialog','Create trade record');
     // Closing a dialog must never erase an unfinished customer record.
     window.addEventListener('gtt-page-change',event=>{
       const mount=$('gttStandaloneRecordMount');
@@ -641,6 +652,20 @@
     .gtt-record-actions button:not(.gtt-record-clear){flex:1 1 118px;min-width:0}
     .gtt-record-actions .gtt-record-clear{font-size:11px}
     @media(max-width:470px){.gtt-record-grid{grid-template-columns:1fr}.gtt-record-wide{grid-column:auto}.gtt-record-actions button:not(.gtt-record-clear){flex:1 1 90px}.gtt-record-actions .gtt-cust-primary{width:auto}.gtt-record-actions .gtt-record-clear{margin-left:0}.gtt-record-more>summary{align-items:flex-start}}
+
+    /* Internal trade tracker note and promoted rep details, styled for phones and tablets. */
+    #v4Record .gtt-trade-usage-notice{
+      max-width:820px;margin:8px auto 16px;padding:12px 15px;
+      border:1px solid var(--v4-line,#d7e3ec);border-left:3px solid var(--v4-blue,#0781be);
+      border-radius:10px;background:var(--v4-surface,#fff);color:var(--v4-ink,#1a3345);
+      font:500 12px/1.45 -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
+    #v4Record .gtt-trade-usage-notice strong{display:block;font-weight:800;margin-bottom:3px}
+    #v4Record .gtt-trade-usage-notice p{margin:0;color:var(--v4-muted,#6c7b86)}
+    .gtt-rec-inline-optional{color:var(--r-muted);font-size:10px;font-weight:500}
+    .gtt-rec-rep-field input{letter-spacing:.025em}
+    @media(max-width:700px){
+      #v4Record .gtt-trade-usage-notice{margin:8px 10px 13px;padding:11px 13px;font-size:11px}
+    }
 
     /* Mobile-first trade-entry refresh. Deliberately scoped to record forms only. */
     .gtt-record-form{padding:18px 20px 22px!important}

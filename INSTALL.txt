@@ -1,0 +1,24 @@
+GTT — Create Trade Record + Required Store + Remember Store
+
+FILES: Replace both files in the root of your GitHub Tradetool repository:
+  1. gtt-customer-tools.js
+  2. gtt-trade-tracker.js
+Do NOT replace index.html. GitHub/Cloudflare will deploy after commit.
+
+This package includes the prior Rep Initials + internal-use notice change to customer-tools.js,
+which was not yet in your GitHub copy when this update was prepared.
+
+WHAT CHANGED
+- Full Quote button is now "Create Trade Record" (Print remains INSIDE the record).
+- Creating from Full Quote requires selecting a store BEFORE the form is shown.
+- Creating from standalone #3 still requires a store before the form is shown.
+- Selecting a store remembers it locally on the same browser and device. This stores only
+  the store name, never customer details. You can change it at any time.
+- The two store selectors stay in sync.
+- The Supabase server still rejects a save without a valid store. No database changes.
+- Existing saved records are untouched; previous Copy/Share/Print, Edit/Delete, 30/40-day timers remain.
+- If your browser blocks localStorage, the dropdown still works, but may not be remembered.
+
+GIO'S RECORD
+A print or Slack share from Full Quote does not, by itself, save to Supabase.
+Look in View All for a saved record; if absent, it must be entered and saved.
