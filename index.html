@@ -2684,8 +2684,21 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
   const AIR_TRADE_START = new Date(2026, 7, 7, 0, 0, 0, 0);
   function isIphoneAir(phone){ return !!(phone && String(phone.id || '').startsWith('ipair')); }
   function isAirTradePromoActive(){ return new Date() >= AIR_TRADE_START; }
+  const NOV20_TIERED_PRICES={
+    ip17p:[9.99,14.99], 'ip17p-512':[15.99,20.99], 'ip17p-1tb':[21.99,26.99],
+    ip17pm:[14.99,19.99], 'ip17pm-512':[20.99,25.99], 'ip17pm-1tb':[26.99,31.99], 'ip17pm-2tb':[32.99,37.99],
+    s26fe:[0,12.99], 'p11-256':[0,2.99]
+  };
   function currentTieredRowsFor(phone){
-    if(!phone || !Array.isArray(phone.tieredPriceRows)) return [];
+    if(!phone) return [];
+    if(Date.now()>=Date.parse('2026-11-20T05:00:00Z') && NOV20_TIERED_PRICES[phone.id]){
+      const p=NOV20_TIERED_PRICES[phone.id];
+      const seg=state?.planSegment||'consumer';
+      if(phone.id==='s26fe'&&seg!=='consumer')return []; // Existing FE offer is consumer-only.
+      return [{activation_type:'new_line',monthly_price:p[0],active:true,starts_at:'2026-11-20T05:00:00Z'},
+              {activation_type:'upgrade',monthly_price:p[1],active:true,starts_at:'2026-11-20T05:00:00Z'}];
+    }
+    if(!Array.isArray(phone.tieredPriceRows)) return [];
     const now = new Date();
     return phone.tieredPriceRows.filter(r=>{
       if(r.active===false) return false;
@@ -3896,7 +3909,112 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
       quoteDataSources.promos=true;
     }catch(err){console.warn('Current trade promotions unavailable; using verified 10/2 fallback.',err);}
   }
+  // AT&T News & Updates: November 20, 2026 effective 12:00 AM Eastern.
+  // Preserve historical quotes in the separate Trade Tracker; new quotes use these dated rules.
+  const NOV20_START=Date.parse('2026-11-20T05:00:00Z');
+  const nov20Active=()=>Date.now()>=NOV20_START;
+  const NOV20_TRADE_LADDERS={
+    iphoneHigh:{
+      premium:[{min:230,credit:1200},{min:130,credit:930},{min:35,credit:350}],
+      extra:[{min:130,credit:930},{min:35,credit:350}],
+      starter:[{min:130,credit:930},{min:35,credit:350}],
+      value:[{min:130,credit:500},{min:35,credit:350}]
+    },
+    iphone17:{
+      premium:[{min:130,credit:930},{min:35,credit:350}],
+      extra:[{min:130,credit:930},{min:35,credit:350}],
+      starter:[{min:130,credit:930},{min:35,credit:350}],
+      value:[{min:130,credit:500},{min:35,credit:350}]
+    },
+    samsungHigh:{
+      premium:[{min:95,credit:1200},{min:35,credit:1000}],
+      extra:[{min:95,credit:1000},{min:35,credit:800}],
+      starter:[{min:95,credit:800},{min:35,credit:800}],
+      value:[{min:35,credit:500}]
+    },
+    fold8:{
+      premium:[{min:290,credit:1900},{min:95,credit:1200},{min:35,credit:1000}],
+      extra:[{min:95,credit:1000},{min:35,credit:800}],
+      starter:[{min:95,credit:800},{min:35,credit:800}],
+      value:[{min:35,credit:500}]
+    },
+    s26base:{
+      premium:[{min:95,credit:1000},{min:35,credit:1000}],
+      extra:[{min:95,credit:1000},{min:35,credit:800}],
+      starter:[{min:95,credit:800},{min:35,credit:800}],
+      value:[{min:35,credit:500}]
+    },
+    pixel11XL:{
+      premium:[{min:95,credit:1350},{min:35,credit:1150}],
+      extra:[{min:95,credit:1350},{min:35,credit:1150}],
+      starter:[{min:35,credit:1150}],
+      value:[{min:35,credit:500}]
+    },
+    pixel11Pro:{
+      premium:[{min:35,credit:1150}],
+      extra:[{min:35,credit:1150}],
+      starter:[{min:35,credit:1150}],
+      value:[{min:35,credit:500}]
+    }
+  };
+  function nov20PromoClass(phone){
+    if(!phone) return '';
+    const id=String(phone.id||'');
+    if(id==='iphoneduo'||id.startsWith('iphone18pro')||id.startsWith('iphone18promax'))return 'iphoneHigh';
+    if(id==='ip17'||id.startsWith('ip17-'))return 'iphone17';
+    if(id.startsWith('zfold8'))return 'fold8';
+    if(id.startsWith('zflip8')||id.startsWith('s26u')||id.startsWith('s26p'))return 'samsungHigh';
+    if(id.startsWith('s26-'))return 's26base';
+    if(id.startsWith('p11xl'))return 'pixel11XL';
+    if(id.startsWith('p11pro'))return 'pixel11Pro';
+    return '';
+  }
+  function nov20AnyConditionEligible(){
+    // Locked devices are not assumed eligible from an ANY CONDITION headline.
+    return !!state.tradeDevice && state.tradeCondition.lock===true;
+  }
+  function nov20AppleLevel(){
+    const trade=state.tradeDevice;
+    if(!trade||String(trade.brand||'').toLowerCase()!=='apple')return 0;
+    const model=String(trade.model||'');
+    const match=model.match(/iphone\s*(\d{1,2})\s*(.*)$/i);
+    if(!match)return 1; // Any iPhone: Value 2.0 $350 tier only.
+    const generation=Number(match[1]);
+    const variant=match[2]||'';
+    if(/\be\b|^e\b/i.test(variant))return 1; // iPhone 16e and 17e specifically excluded from upper tiers.
+    if(generation>=16)return 3;
+    if(generation===15)return /pro max/i.test(variant)?3:2;
+    if(generation===14&&/\bpro\b/i.test(variant))return 2;
+    return 1;
+  }
+  function nov20AnyConditionFloor(plan,phone){
+    if(!nov20Active()||!nov20AnyConditionEligible())return 0;
+    const kind=nov20PromoClass(phone),value=state.tradeDevice;
+    if(kind==='iphoneHigh'||kind==='iphone17'){
+      const level=nov20AppleLevel();
+      if(!level)return 0;
+      if(plan==='value')return level>=2?500:350;
+      if(kind==='iphoneHigh'&&plan==='premium'&&level>=3)return 1200;
+      if(level>=2&&(plan==='extra'||plan==='starter'||plan==='premium'))return 930;
+      return 0;
+    }
+    if(kind==='samsungHigh'||kind==='fold8'||kind==='s26base'){
+      const level=inferGalaxyAnyFromTradeDevice();
+      if(level!=='high'&&level!=='base')return 0;
+      const ladders=NOV20_TRADE_LADDERS[kind]?.[plan]||[];
+      const minValue=level==='high'?95:35;
+      const entry=ladders.find(t=>t.min<=minValue);
+      return entry?entry.credit:0;
+    }
+    if(kind==='pixel11Pro'&&String(value?.brand||'').toLowerCase()==='google'){
+      return plan==='value'?500:1150;
+    }
+    // Pixel 11 Pro XL announcement is $95/$35 trade-value based; NO ANY CONDITION shortcut.
+    return 0;
+  }
   function promoLadderFor(plan,cat,phone){
+    const override=nov20Active()&&NOV20_TRADE_LADDERS[nov20PromoClass(phone)];
+    if(override)return override[plan]||[];
     if(phone && phone.liveTradeLadders)return phone.liveTradeLadders[plan]||[];
     return (LADDERS[plan] && LADDERS[plan][cat]) || [];
   }
@@ -3935,7 +4053,11 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
     pixel11Pro:{ premium:1000, extra:1000, starter:1000, value:500 },
   };
   const isPixelCat = c => Object.prototype.hasOwnProperty.call(PIXEL_FLOORS, c);
-  function pixelFloor(cat, plan){ return (PIXEL_FLOORS[cat] && PIXEL_FLOORS[cat][plan]) || 0; }
+  function pixelFloor(cat, plan){
+    if(nov20Active() && cat==='pixel11XL')return 0; // November 20 Pro XL is trade-value qualified.
+    if(nov20Active() && cat==='pixel11Pro')return nov20AnyConditionFloor(plan,state.phone);
+    return (PIXEL_FLOORS[cat] && PIXEL_FLOORS[cat][plan]) || 0;
+  }
 
   function renderTierActionRow(){
     const existing = document.getElementById('tierActionRow');
@@ -3985,15 +4107,15 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
     return id.startsWith('s26u') || id.startsWith('s26p') || id.startsWith('s26-') || id.startsWith('zfold8') || id.startsWith('zflip8');
   }
   function samsungAnyConditionFloor(plan, phone, galaxyAny){
-    // 10/2/2026 Samsung guide is trade-value based; prior any-condition Galaxy bypass retired.
-    return 0;
+    if(!nov20Active())return 0;
+    return nov20AnyConditionFloor(plan,phone);
   }
   function samsungAnyConditionLabel(){
     return '';
   }
   function appleAnyConditionFloor(plan, phone){
-    // Effective 10/9/2026: iPhone any-condition alternate qualifiers ended.
-    return 0;
+    if(!nov20Active())return 0;
+    return nov20AnyConditionFloor(plan,phone);
   }
   function computeCredit(plan, cat, value, isPixelTrade, phone, galaxyAny){
     if(phone && phone.tradePromoEligible === false) return 0;
@@ -4227,7 +4349,8 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
     if(state.tradeValueMode==='manual'&&!hasValue)return {state:'needValue'};
     const pix = state.pixel && isPixelCat(cat);
     const samsungAny = isSamsungAnyConditionPhone(state.phone) && state.galaxyAny !== 'none';
-    if(!hasValue && !pix && !samsungAny) return { state:'needValue' };
+    const nov20ModelQualifier=nov20Active()&&nov20AnyConditionFloor(state.plan,state.phone)>0;
+    if(!hasValue && !pix && !samsungAny && !nov20ModelQualifier) return { state:'needValue' };
 
     const credit = computeCredit(state.plan, cat, promoTradeValue(), state.pixel, state.phone, state.galaxyAny);
     if(credit === 0) return { state:'zero' };
