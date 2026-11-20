@@ -6585,6 +6585,10 @@ body.gtt-fall{--v4-blue:#b65b22}body.gtt-fall .v4-num,body.gtt-fall .v4-navbtn.a
  const $=id=>document.getElementById(id), pages={home:$('v4Home'),quoteHelp:$('v4QuoteHelp'),tax:$('v4Tax'),record:$('v4Record'),simple:$('v4Simple'),news:$('v4News'),beta:$('v4Beta'),investigator:$('v4Investigator'),trade:$('tradePage')};
  function closeMore(){$('v4More').classList.remove('open')}
  function go(name){document.body.classList.toggle('gtt-trade-active',name==='trade');Object.values(pages).forEach(p=>p&&p.classList.remove('active')); if(pages[name])pages[name].classList.add('active'); document.querySelectorAll('.v4-navbtn[data-v4go]').forEach(b=>b.classList.toggle('active',b.dataset.v4go===name)); closeMore(); window.dispatchEvent(new CustomEvent('gtt-page-change',{detail:{page:name}})); window.scrollTo({top:0,behavior:'instant'});}
+ // A direct link uses the same tracker initialization as the home menu.
+ if (/^\/tradein\/?$/.test(location.pathname)) {
+   window.addEventListener('load', () => go('record'), {once:true});
+ }
  document.querySelectorAll('[data-v4go]').forEach(x=>x.addEventListener('click',e=>{e.preventDefault();go(x.dataset.v4go)}));
  document.querySelectorAll('[data-v4more]').forEach(x=>x.addEventListener('click',()=> $('v4More').classList.add('open'))); $('v4MoreClose').onclick=closeMore; $('v4More').addEventListener('click',e=>{if(e.target===$('v4More'))closeMore()});
  document.querySelector('[data-v4admin]').onclick=()=>{closeMore(); const b=$('adminOpenBtn'); if(b)b.click()};
