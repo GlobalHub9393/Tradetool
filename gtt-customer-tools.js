@@ -373,7 +373,10 @@
   }
   function tradeRecordMessage(form,s){
     const {account,report}=readTradeRecord(form,s);
-    const item=i=>String(report[i]?.[1]||'').trim();
+    return formatRecordMessage(account,report);
+  }
+  function formatRecordMessage(account,report){
+    const item=i=>String(report[i]?.[1]??'').trim();
     const subject=tradeRecordLastName(account)||'Trade-In Record';
     // Seven short lines in a fixed order. Blank fields never prevent sharing;
     // use a dash so the recipient can see exactly what is still missing.
@@ -399,7 +402,33 @@
     ].join('\n');
     return {subject,body};
   }
-  function slackShareText(form,s){return tradeRecordMessage(form,s).body;}
+  function savedRecordMessage(row){
+    const report=Array.from({length:13},()=>[]);
+    report[0]=['',row.record_date ? shortRecordDate(row.record_date) : ''];
+    report[2]=['',usPhone(row.trade_phone)||row.trade_phone];
+    report[3]=['',[row.trade_device,row.storage].filter(Boolean).join(' · ')];
+    report[5]=['',row.plan];
+    [row.power_ok,row.lock_off,row.damage_free].forEach((v,i)=>{report[6+i]=['',conditionText(v)];});
+    const price=recordCurrencyValue(row.promo_quoted);
+    report[9]=['',price===null?'':money(price)];
+    report[12]=['',row.new_phone];
+    return formatRecordMessage(row.customer_name,report);
+  }
+  function shortRecordDate(value){
+    const match=String(value).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return match?Number(match[2])+'/'+Number(match[3])+'/'+match[1]:String(value);
+  }
+  window.GTTRecordActions={
+    startAnother(target,standalone,row){
+      mountRecordForm(target,null,standalone);
+      const form=target.querySelector('form');
+      form.elements.accountHolder.value=row.customer_name||'';
+      form.elements.plan.value=row.plan||'';
+      return form;
+    },
+    shareSaved(panel,row){return shareMessage(panel,savedRecordMessage(row));},
+    copySaved(panel,row){return copyMessage(panel,savedRecordMessage(row).body);}
+  };
   function shareStatus(form,message){
     const output=form.querySelector('[data-record-share-status]');
     if(output)output.textContent=message;
@@ -412,7 +441,9 @@
   async function shareTradeRecord(form,s){
     // Call Web Share directly inside the click callback: iOS requires a user gesture.
     // Sharing happens on the device; no customer information goes to a GTT endpoint.
-    const {subject,body:text}=tradeRecordMessage(form,s);
+    return shareMessage(form,tradeRecordMessage(form,s));
+  }
+  async function shareMessage(form,{subject,body:text}){
     const area=form.querySelector('[data-record-share-help]');
     if(area)area.hidden=true;
     shareStatus(form,'');
@@ -434,7 +465,9 @@
     }
   }
   async function copyTradeRecord(form,s){
-    const text=slackShareText(form,s);
+    return copyMessage(form,tradeRecordMessage(form,s).body);
+  }
+  async function copyMessage(form,text){
     if(navigator.clipboard?.writeText){
       try {
         await navigator.clipboard.writeText(text);
@@ -443,6 +476,7 @@
       } catch(_){ /* Some devices deny clipboard writes. Offer a manual select/copy fallback. */ }
     }
     const area=form.querySelector('[data-record-share-help]');
+    if(area)area.hidden=false;
     if(area && !area.querySelector('[data-record-copy-text]')){
       const fallback=document.createElement('textarea');
       fallback.setAttribute('data-record-copy-text','');

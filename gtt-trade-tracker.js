@@ -73,7 +73,18 @@ function injectSave(form,quote=false){
    if(form.dataset.trackerSaved==='true'){info.textContent='Already saved. Use Clear Form to start another record.';return;}
    const data=getFormData(form);data.store=selected;
    info.classList.remove('is-error');info.textContent='Saving…';btn.disabled=true;
-   try{await api('create',{record:data});form.dataset.trackerSaved='true';info.textContent=`Saved to ${selected}. The record is available in View All.`;btn.textContent='Saved ✓';setMessage('Trade saved. Open View All to find and update it.');}
+   try{await api('create',{record:data});form.dataset.trackerSaved='true';info.textContent=`Saved to ${selected}. The record is available in View All.`;btn.textContent='Saved ✓';setMessage('Trade saved. Open View All to find and update it.');
+     const another=document.createElement('button');
+     another.type='button';
+     another.textContent='Create another for this customer';
+     another.onclick=()=>{
+       if(quote && storeSelect.value!==selected){storeSelect.value=selected;storeSelect.dispatchEvent(new Event('change'));}
+       if(!quote){state.store=selected;storeInput.value=selected;rememberStore(selected);updateStoreGate();}
+       const next=window.GTTRecordActions.startAnother(form.parentElement,!quote,data);
+       injectSave(next,quote);
+       next.elements.tradePhone.focus();
+     };
+     actions.append(another);}
    catch(e){info.textContent=e.message;info.classList.add('is-error');btn.disabled=false;}
  });
 }
@@ -168,7 +179,8 @@ function renderList(){
   <div class="gtt-trk-card-expanded" hidden data-tracker-expanded="${esc(r.id)}">
     <div class="gtt-trk-detail-grid"><span>Trade number</span><b>${esc(r.trade_phone||'—')}</b><span>IMEI</span><b>${esc(r.imei||'—')}</b><span>New phone</span><b>${esc(r.new_phone||'—')}</b><span>Condition</span><b>${esc(conditionOf(r))}</b><span>Rep</span><b>${esc(r.rep||'—')}</b><span>Received on</span><b>${esc(shortDate(r.received_at))}</b>${r.timer_reset_at?`<span>Timer last reset</span><b>${esc(shortDate(r.timer_reset_at))}</b>`:''}${state.unlocked&&r.notes?`<span>Notes</span><b>${esc(r.notes)}</b>`:''}</div>
     <div class="gtt-trk-detail-actions"><label><input type="checkbox" data-tracker-received="${esc(r.id)}" ${r.received?'checked':''}> Trade received</label>
-      <div class="gtt-trk-manage-actions">${state.unlocked?`<button type="button" data-tracker-edit="${esc(r.id)}">Edit record</button><button type="button" class="gtt-trk-delete" data-tracker-delete="${esc(r.id)}" aria-label="Delete this trade record">Delete Trade</button>`:'<button type="button" data-tracker-unlock="yes">Unlock to edit or delete</button>'}</div></div>
+      <div class="gtt-trk-manage-actions">${state.unlocked?`<button type="button" data-saved-action="another">Create another for this customer</button><button type="button" data-saved-action="share">Share</button><button type="button" data-tracker-edit="${esc(r.id)}">Edit record</button><button type="button" class="gtt-trk-delete" data-tracker-delete="${esc(r.id)}" aria-label="Delete this trade record">Delete Trade</button>`:'<button type="button" data-tracker-unlock="yes">Unlock for record actions</button>'}</div></div>
+    ${state.unlocked?`<div data-record-share-help hidden><button type="button" data-saved-action="copy">Copy record for Slack</button></div><p data-record-share-status role="status"></p>`:''}
   </div></article>`;
  }).join('');
  listContent.querySelectorAll('[data-tracker-details]').forEach(btn=>btn.addEventListener('click',()=>{
@@ -180,6 +192,27 @@ function renderList(){
   try{await api('receive',{id:el.dataset.trackerReceived,received:isReceived});await refresh();}
   catch(e){alert(e.message);el.checked=!isReceived;el.disabled=false;}
  }));
+ listContent.querySelectorAll('[data-saved-action]').forEach(button=>button.onclick=()=>{
+  if(!state.unlocked)return showKeypad();
+  const card=button.closest('[data-tracker-id]');
+  const row=state.rows.find(item=>String(item.id)===card.dataset.trackerId);
+  if(!row)return;
+  const action=button.dataset.savedAction;
+  if(action==='share')return window.GTTRecordActions.shareSaved(card,row);
+  if(action==='copy')return window.GTTRecordActions.copySaved(card,row);
+  const target=$('gttStandaloneRecordMount');
+  const previous=target.querySelector('form');
+  if(previous?.querySelector('[data-tracker-save]:disabled') && previous.dataset.trackerSaved!=='true')return;
+  if(previous && previous.dataset.trackerSaved!=='true' &&
+     Array.from(new FormData(previous)).some(([key,value])=>key!=='date' && String(value).trim()) &&
+     !confirm('Replace the unsaved trade form with another trade for this customer?'))return;
+  storeInput.value=STORES.includes(row.store)?row.store:(state.store||rememberedStore());
+  switchMode('create');
+  storeInput.dispatchEvent(new Event('change'));
+  const next=window.GTTRecordActions.startAnother(target,true,row);
+  injectSave(next);
+  if(state.store)next.elements.tradePhone.focus();else storeInput.focus();
+ });
  listContent.querySelectorAll('[data-tracker-edit]').forEach(el=>el.addEventListener('click',()=>openEdit(el.dataset.trackerEdit)));
  listContent.querySelectorAll('[data-tracker-delete]').forEach(el=>el.addEventListener('click',async()=>{
   const id=el.dataset.trackerDelete,row=state.rows.find(item=>item.id===id);
